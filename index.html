@@ -6,7 +6,7 @@
     <title>جدارية مليون سيلفي | Million Selfie Wall</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700;900&family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
             --bg-color: #0b0f19;
@@ -24,6 +24,8 @@
         * {
             user-select: none;
             box-sizing: border-box;
+            margin: 0;
+            padding: 0;
         }
 
         body {
@@ -32,7 +34,7 @@
             background-image: radial-gradient(circle at top, #1e1b4b 0%, #0b0f19 70%);
             color: var(--text-color);
             margin: 0;
-            padding: 6px;
+            padding: 8px;
             display: flex;
             flex-direction: column;
             height: 100vh;
@@ -45,7 +47,7 @@
             justify-content: space-between;
             align-items: center;
             flex-shrink: 0;
-            padding: 2px 6px;
+            padding: 4px 8px;
             margin-bottom: 2px;
         }
 
@@ -53,11 +55,11 @@
             background: rgba(245, 158, 11, 0.15);
             color: var(--accent-color);
             border: 1px solid var(--accent-color);
-            padding: 3px 10px;
+            padding: 6px 16px;
             font-weight: bold;
-            border-radius: 14px;
+            border-radius: 20px;
             cursor: pointer;
-            font-size: 0.65rem;
+            font-size: 0.8rem;
             transition: all 0.3s ease;
         }
         
@@ -68,44 +70,49 @@
 
         .title-area {
             text-align: center;
+            flex: 1;
         }
 
         .title-area h1 {
             color: var(--accent-color);
-            font-size: 1.1rem;
+            font-size: 2rem;
             margin: 0;
-            text-shadow: 0 0 20px rgba(245, 158, 11, 0.3);
+            text-shadow: 0 0 30px rgba(245, 158, 11, 0.4);
+            font-weight: 900;
+            letter-spacing: 1px;
         }
 
         .title-area p {
-            font-size: 0.6rem;
-            opacity: 0.7;
+            font-size: 0.95rem;
+            opacity: 0.8;
             margin: 0;
+            font-weight: 400;
         }
 
         .spacer {
-            width: 50px;
+            width: 60px;
         }
 
         /* ===== شريط الحالة ===== */
         .status-bar {
             background: rgba(15, 23, 42, 0.8);
-            border: 1px solid var(--accent-color);
-            padding: 3px 10px;
-            border-radius: 16px;
-            font-size: 0.65rem;
+            border: 2px solid var(--accent-color);
+            padding: 8px 16px;
+            border-radius: 30px;
+            font-size: 1rem;
             display: flex;
             align-items: center;
-            gap: 5px;
+            gap: 10px;
             flex-shrink: 0;
-            margin-bottom: 3px;
+            margin-bottom: 6px;
             justify-content: center;
-            min-height: 26px;
+            min-height: 40px;
+            font-weight: 700;
         }
 
         .live-dot {
-            width: 5px;
-            height: 5px;
+            width: 10px;
+            height: 10px;
             background-color: #10b981;
             border-radius: 50%;
             animation: pulse 1.5s ease-in-out infinite;
@@ -113,18 +120,22 @@
         }
 
         @keyframes pulse {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.3; }
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.3; transform: scale(0.8); }
+        }
+
+        #liveStatus {
+            color: #10b981;
         }
 
         /* ===== أدوات التحكم ===== */
         .controls-bar {
             display: flex;
-            gap: 3px;
+            gap: 6px;
             align-items: center;
             justify-content: center;
             flex-shrink: 0;
-            margin-bottom: 3px;
+            margin-bottom: 4px;
             flex-wrap: wrap;
         }
 
@@ -132,12 +143,13 @@
             background: rgba(30, 41, 59, 0.8);
             border: 1px solid var(--grid-line);
             color: white;
-            padding: 2px 8px;
-            border-radius: 6px;
+            padding: 4px 14px;
+            border-radius: 10px;
             cursor: pointer;
-            font-size: 0.6rem;
+            font-size: 0.8rem;
             font-family: var(--primary-font);
             transition: all 0.3s ease;
+            font-weight: 600;
         }
 
         .controls-bar button:hover {
@@ -148,25 +160,26 @@
         .zoom-display {
             color: var(--accent-color);
             font-weight: bold;
-            font-size: 0.65rem;
-            min-width: 40px;
+            font-size: 0.9rem;
+            min-width: 50px;
             text-align: center;
         }
 
-        /* ===== حاوية الشبكة (Canvas) ===== */
+        /* ===== حاوية الشبكة (Canvas) - أكبر حجم ===== */
         .grid-wrapper {
             flex: 1;
-            min-height: 35vh;
-            max-height: 55vh;
+            min-height: 45vh;
+            max-height: 65vh;
             width: 100%;
             overflow: hidden;
             position: relative;
             background-color: #0b0f19;
-            border-radius: 10px;
-            border: 1px solid rgba(255,255,255,0.05);
-            margin-bottom: 3px;
+            border-radius: 16px;
+            border: 2px solid rgba(255,255,255,0.08);
+            margin-bottom: 6px;
             touch-action: none;
             cursor: grab;
+            box-shadow: 0 0 40px rgba(0,0,0,0.5);
         }
 
         .grid-wrapper:active {
@@ -184,23 +197,24 @@
         /* ===== شريط التنقل ===== */
         .nav-bar {
             display: flex;
-            gap: 3px;
+            gap: 5px;
             justify-content: center;
             flex-wrap: wrap;
             flex-shrink: 0;
-            margin-bottom: 3px;
+            margin-bottom: 4px;
         }
 
         .nav-bar button {
-            padding: 2px 6px;
+            padding: 4px 12px;
             background: rgba(30, 41, 59, 0.6);
             border: 1px solid var(--grid-line);
-            border-radius: 5px;
+            border-radius: 8px;
             color: white;
             cursor: pointer;
-            font-size: 0.55rem;
+            font-size: 0.7rem;
             font-family: var(--primary-font);
             transition: all 0.3s ease;
+            font-weight: 600;
         }
 
         .nav-bar button:hover {
@@ -208,52 +222,62 @@
             color: #000;
         }
 
-        /* ===== منطقة الاختيار ===== */
+        /* ===== منطقة الاختيار - في الأسفل ===== */
         .selection-area {
             background-color: var(--card-bg);
-            border-radius: 10px;
-            padding: 5px 10px;
+            border-radius: 16px;
+            padding: 12px 16px;
             backdrop-filter: blur(10px);
-            border: 1px solid rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.08);
             flex-shrink: 0;
-            margin-bottom: 3px;
+            margin-bottom: 4px;
         }
 
         .selection-controls {
             display: flex;
-            gap: 4px;
+            gap: 8px;
             flex-wrap: wrap;
             justify-content: center;
             align-items: center;
         }
 
+        .selection-controls label {
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--accent-color);
+        }
+
         .selection-controls input {
-            padding: 3px 8px;
-            border-radius: 5px;
-            border: 1px solid var(--grid-line);
+            padding: 8px 14px;
+            border-radius: 10px;
+            border: 2px solid var(--grid-line);
             background: #0f172a;
             color: white;
-            font-size: 0.7rem;
-            width: 100px;
+            font-size: 1rem;
+            width: 160px;
             font-family: var(--primary-font);
+            font-weight: 600;
+            text-align: center;
+            transition: all 0.3s ease;
         }
 
         .selection-controls input:focus {
             outline: none;
             border-color: var(--accent-color);
+            box-shadow: 0 0 20px rgba(245, 158, 11, 0.2);
         }
 
         .selection-controls button {
-            padding: 3px 10px;
-            border-radius: 5px;
+            padding: 8px 20px;
+            border-radius: 10px;
             border: none;
             background: var(--accent-color);
             color: #000;
-            font-weight: bold;
+            font-weight: 700;
             cursor: pointer;
             font-family: var(--primary-font);
             transition: all 0.3s ease;
-            font-size: 0.65rem;
+            font-size: 0.9rem;
         }
 
         .selection-controls button:hover {
@@ -261,11 +285,20 @@
             transform: scale(1.05);
         }
 
+        .selection-controls .random-btn {
+            background: linear-gradient(135deg, #8b5cf6, #6d28d9);
+            color: white;
+        }
+
+        .selection-controls .random-btn:hover {
+            background: linear-gradient(135deg, #7c3aed, #5b21b6);
+        }
+
         .info-text {
-            font-size: 0.6rem;
-            opacity: 0.7;
-            margin-top: 3px;
+            font-size: 0.85rem;
+            margin-top: 6px;
             text-align: center;
+            font-weight: 600;
         }
 
         .info-text .available {
@@ -276,10 +309,15 @@
             color: #ef4444;
         }
 
+        .info-text .pixel-number {
+            color: var(--accent-color);
+            font-size: 1.1rem;
+        }
+
         /* ===== التذييل ===== */
         footer {
             padding: 2px;
-            font-size: 0.5rem;
+            font-size: 0.6rem;
             opacity: 0.4;
             text-align: center;
             flex-shrink: 0;
@@ -287,18 +325,24 @@
 
         /* ===== تحسينات للجوال ===== */
         @media (max-width: 600px) {
-            .title-area h1 { font-size: 0.9rem; }
-            .title-area p { font-size: 0.5rem; }
-            .selection-controls input { width: 80px; font-size: 0.6rem; }
-            .controls-bar button { padding: 2px 6px; font-size: 0.5rem; }
-            .nav-bar button { padding: 2px 5px; font-size: 0.5rem; }
-            .grid-wrapper { min-height: 30vh; max-height: 50vh; }
-            .status-bar { font-size: 0.55rem; padding: 2px 8px; }
+            .title-area h1 { font-size: 1.4rem; }
+            .title-area p { font-size: 0.7rem; }
+            .status-bar { font-size: 0.75rem; padding: 6px 12px; min-height: 32px; }
+            .selection-controls input { width: 120px; font-size: 0.85rem; padding: 6px 10px; }
+            .selection-controls button { padding: 6px 14px; font-size: 0.75rem; }
+            .controls-bar button { padding: 3px 10px; font-size: 0.65rem; }
+            .nav-bar button { padding: 3px 8px; font-size: 0.6rem; }
+            .grid-wrapper { min-height: 40vh; max-height: 55vh; }
+            .lang-switch-btn { font-size: 0.65rem; padding: 4px 12px; }
+            .spacer { width: 40px; }
+            .info-text { font-size: 0.7rem; }
         }
 
         @media (max-width: 400px) {
-            .selection-controls input { width: 65px; }
-            .controls-bar button { padding: 1px 5px; font-size: 0.45rem; }
+            .title-area h1 { font-size: 1.1rem; }
+            .selection-controls input { width: 90px; font-size: 0.75rem; }
+            .selection-controls button { padding: 4px 10px; font-size: 0.65rem; }
+            .status-bar { font-size: 0.6rem; padding: 4px 8px; min-height: 28px; }
         }
     </style>
 </head>
@@ -309,7 +353,7 @@
         <button class="lang-switch-btn" id="langBtn" onclick="toggleLanguage()">English</button>
         <div class="title-area">
             <h1 id="mainTitle">جدارية مليون سيلفي</h1>
-            <p id="subTitle">احجز مربعك في أكبر لوحة رقمية</p>
+            <p id="subTitle">احجز مربعك في أكبر لوحة رقمية للتاريخ</p>
         </div>
         <div class="spacer"></div>
     </div>
@@ -323,9 +367,9 @@
     <!-- أدوات التحكم -->
     <div class="controls-bar">
         <button onclick="resetView()" id="resetBtn">🔄 إعادة تعيين</button>
-        <button onclick="zoomIn()" id="zoomInBtn">➕</button>
+        <button onclick="zoomIn()" id="zoomInBtn">➕ تكبير</button>
         <span class="zoom-display" id="zoomDisplay">100%</span>
-        <button onclick="zoomOut()" id="zoomOutBtn">➖</button>
+        <button onclick="zoomOut()" id="zoomOutBtn">➖ تصغير</button>
         <button onclick="fitToScreen()" id="fitBtn">📐 ملاءمة</button>
     </div>
 
@@ -343,18 +387,19 @@
         <button onclick="goToPixel(1000000)">النهاية ➡️</button>
     </div>
 
-    <!-- منطقة الاختيار -->
+    <!-- منطقة الاختيار - في الأسفل -->
     <div class="selection-area">
         <div class="selection-controls">
-            <input type="number" id="pixelNumberInput" min="1" max="1000000" placeholder="رقم المربع">
+            <label>🔢 رقم المربع:</label>
+            <input type="number" id="pixelNumberInput" min="1" max="1000000" placeholder="مثال: 48429">
             <button onclick="selectPixelByNumber()" id="selectBtn">اختر</button>
-            <button onclick="selectRandomPixel()" id="randomBtn">🎲 عشوائي</button>
+            <button onclick="selectRandomPixel()" class="random-btn" id="randomBtn">🎲 عشوائي</button>
         </div>
-        <div id="selectedPixelInfo" class="info-text">لم يتم اختيار مربع بعد</div>
+        <div id="selectedPixelInfo" class="info-text">✨ اختر مربعاً من الشبكة أو أدخل رقمه</div>
     </div>
 
     <footer>
-        <span id="footerText">© 2026 جدارية مليون سيلفي</span>
+        <span id="footerText">© 2026 جدارية مليون سيلفي - جميع الحقوق محفوظة</span>
     </footer>
 
     <script>
@@ -365,7 +410,7 @@
         const COLS = 1000;
         const ROWS = 1000;
 
-        // توليد بيانات المحجوزات (نسبة صغيرة)
+        // توليد بيانات المحجوزات
         const RESERVED_COUNT = 458;
         const RESERVED_INDICES = new Set();
         
@@ -381,9 +426,9 @@
         const RESERVED_COLORS = {};
         RESERVED_INDICES.forEach(idx => {
             const rand = Math.random();
-            if (rand < 0.33) RESERVED_COLORS[idx] = '#eab308'; // vip - ذهبي
-            else if (rand < 0.66) RESERVED_COLORS[idx] = '#f59e0b'; // gold - برتقالي
-            else RESERVED_COLORS[idx] = '#94a3b8'; // silver - رمادي
+            if (rand < 0.33) RESERVED_COLORS[idx] = '#eab308';
+            else if (rand < 0.66) RESERVED_COLORS[idx] = '#f59e0b';
+            else RESERVED_COLORS[idx] = '#94a3b8';
         });
 
         // ============================================
@@ -413,46 +458,46 @@
         var translations = {
             ar: {
                 title: "جدارية مليون سيلفي",
-                subtitle: "احجز مربعك في أكبر لوحة رقمية",
+                subtitle: "احجز مربعك في أكبر لوحة رقمية للتاريخ",
                 liveStatus: "اضغط على مربع لاختياره",
                 alertMsg: "أهلاً بك! نقوم حالياً ببرمجة لوحة تحكم لتتيح لك رفع صورتك الخاصة واختيار موقعك وربطها ببوابة الدفع. انتظرنا قريباً جداً!",
-                footer: "© 2026 جدارية مليون سيلفي",
+                footer: "© 2026 جدارية مليون سيلفي - جميع الحقوق محفوظة",
                 langBtn: "English",
-                selectedTxt: "✅ تم اختيار المربع رقم #",
+                selectedTxt: "✅ تم اختيار المربع رقم ",
                 takenTxt: "❌ هذا المربع محجوز بالفعل!",
                 selectBtn: "اختر",
                 randomBtn: "🎲 عشوائي",
-                noSelection: "لم يتم اختيار مربع بعد",
-                available: "متاح ✅",
-                reserved: "محجوز ❌",
+                noSelection: "✨ اختر مربعاً من الشبكة أو أدخل رقمه",
+                available: "✅ متاح",
+                reserved: "❌ محجوز",
                 resetBtn: "🔄 إعادة تعيين",
-                zoomInBtn: "➕",
-                zoomOutBtn: "➖",
+                zoomInBtn: "➕ تكبير",
+                zoomOutBtn: "➖ تصغير",
                 fitBtn: "📐 ملاءمة"
             },
             en: {
                 title: "Million Selfie Wall",
-                subtitle: "Reserve your pixel in the biggest digital wall",
+                subtitle: "Reserve your pixel in the biggest digital wall in history",
                 liveStatus: "Tap on any pixel to select it",
                 alertMsg: "Welcome! We are currently building the dashboard to let you upload your selfie, pick your exact coordinates, and complete payment. Launching very soon!",
-                footer: "© 2026 Million Selfie Wall",
+                footer: "© 2026 Million Selfie Wall - All Rights Reserved",
                 langBtn: "العربية",
                 selectedTxt: "✅ Selected pixel #",
                 takenTxt: "❌ This pixel is already reserved!",
                 selectBtn: "Select",
                 randomBtn: "🎲 Random",
-                noSelection: "No pixel selected yet",
-                available: "Available ✅",
-                reserved: "Reserved ❌",
+                noSelection: "✨ Select a pixel from the grid or enter its number",
+                available: "✅ Available",
+                reserved: "❌ Reserved",
                 resetBtn: "🔄 Reset",
-                zoomInBtn: "➕",
-                zoomOutBtn: "➖",
+                zoomInBtn: "➕ Zoom In",
+                zoomOutBtn: "➖ Zoom Out",
                 fitBtn: "📐 Fit"
             }
         };
 
         // ============================================
-        // تهيئة Canvas ورسم الشبكة
+        // تهيئة Canvas
         // ============================================
         function initCanvas() {
             canvas = document.getElementById('pixelCanvas');
@@ -478,22 +523,22 @@
         function drawGrid() {
             ctx.clearRect(0, 0, canvasWidth, canvasHeight);
             
-            // حساب حجم المربع
-            const pixelSize = Math.max(1, Math.min(8, (canvasWidth / COLS) * scale));
+            const pixelSize = Math.max(1, Math.min(12, (canvasWidth / COLS) * scale));
             const totalWidth = COLS * pixelSize;
             const totalHeight = ROWS * pixelSize;
             
-            // حساب الإزاحة
             const offsetX = panX + (canvasWidth - totalWidth) / 2;
             const offsetY = panY + (canvasHeight - totalHeight) / 2;
             
-            // تحديد المربعات المرئية فقط
             const startCol = Math.max(0, Math.floor(-offsetX / pixelSize));
-            const endCol = Math.min(COLS, Math.ceil((canvasWidth - offsetX) / pixelSize));
+            const endCol = Math.min(COLS, Math.ceil((canvasWidth - offsetX) / pixelSize) + 1);
             const startRow = Math.max(0, Math.floor(-offsetY / pixelSize));
-            const endRow = Math.min(ROWS, Math.ceil((canvasHeight - offsetY) / pixelSize));
+            const endRow = Math.min(ROWS, Math.ceil((canvasHeight - offsetY) / pixelSize) + 1);
             
-            // رسم المربعات المرئية
+            // رسم الخلفية
+            ctx.fillStyle = '#0b0f19';
+            ctx.fillRect(0, 0, canvasWidth, canvasHeight);
+            
             for (let row = startRow; row < endRow; row++) {
                 for (let col = startCol; col < endCol; col++) {
                     const index = row * COLS + col;
@@ -502,28 +547,46 @@
                     const x = offsetX + col * pixelSize;
                     const y = offsetY + row * pixelSize;
                     
-                    // اختيار اللون
-                    let color = '#131c2e'; // لون افتراضي
+                    let color = '#131c2e';
                     if (RESERVED_INDICES.has(index)) {
                         color = RESERVED_COLORS[index] || '#ec4899';
                     }
                     
-                    // المربع المختار
-                    if (index === selectedPixelIndex && !RESERVED_INDICES.has(index)) {
-                        color = '#10b981';
-                        // رسم إضاءة حول المربع المختار
+                    const isSelected = (index === selectedPixelIndex && !RESERVED_INDICES.has(index));
+                    
+                    if (isSelected) {
+                        // إضاءة قوية للمربع المختار
+                        const gradient = ctx.createRadialGradient(
+                            x + pixelSize/2, y + pixelSize/2, 0,
+                            x + pixelSize/2, y + pixelSize/2, pixelSize * 3
+                        );
+                        gradient.addColorStop(0, 'rgba(16, 185, 129, 0.9)');
+                        gradient.addColorStop(0.3, 'rgba(16, 185, 129, 0.5)');
+                        gradient.addColorStop(1, 'rgba(16, 185, 129, 0)');
+                        
+                        ctx.fillStyle = gradient;
+                        ctx.fillRect(x - pixelSize, y - pixelSize, pixelSize * 3, pixelSize * 3);
+                        
+                        // المربع نفسه باللون الأخضر المضيء
                         ctx.shadowColor = 'rgba(16, 185, 129, 0.9)';
-                        ctx.shadowBlur = 15;
+                        ctx.shadowBlur = 30;
+                        ctx.fillStyle = '#10b981';
+                        ctx.fillRect(x, y, pixelSize, pixelSize);
+                        ctx.shadowBlur = 0;
+                        
+                        // حدود بيضاء حول المربع المختار
+                        ctx.strokeStyle = 'rgba(255,255,255,0.8)';
+                        ctx.lineWidth = Math.max(1, pixelSize * 0.2);
+                        ctx.strokeRect(x, y, pixelSize, pixelSize);
                     } else {
                         ctx.shadowBlur = 0;
+                        ctx.fillStyle = color;
+                        ctx.fillRect(x, y, pixelSize, pixelSize);
                     }
                     
-                    ctx.fillStyle = color;
-                    ctx.fillRect(x, y, pixelSize, pixelSize);
-                    
                     // حدود بين المربعات
-                    if (pixelSize > 3) {
-                        ctx.strokeStyle = 'rgba(30, 41, 59, 0.3)';
+                    if (pixelSize > 3 && !isSelected) {
+                        ctx.strokeStyle = 'rgba(30, 41, 59, 0.2)';
                         ctx.lineWidth = 0.5;
                         ctx.strokeRect(x, y, pixelSize, pixelSize);
                     }
@@ -535,14 +598,14 @@
         }
 
         // ============================================
-        // تحويل إحداثيات الشاشة إلى مؤشر المربع
+        // تحويل الإحداثيات
         // ============================================
         function getPixelIndexFromScreen(screenX, screenY) {
             const rect = canvas.getBoundingClientRect();
             const x = screenX - rect.left;
             const y = screenY - rect.top;
             
-            const pixelSize = Math.max(1, Math.min(8, (canvasWidth / COLS) * scale));
+            const pixelSize = Math.max(1, Math.min(12, (canvasWidth / COLS) * scale));
             const totalWidth = COLS * pixelSize;
             const totalHeight = ROWS * pixelSize;
             
@@ -559,13 +622,9 @@
         }
 
         // ============================================
-        // معالجة النقر على المربع
+        // معالجة النقر
         // ============================================
         function handleCanvasClick(e) {
-            const rect = canvas.getBoundingClientRect();
-            const x = e.clientX - rect.left;
-            const y = e.clientY - rect.top;
-            
             const index = getPixelIndexFromScreen(e.clientX, e.clientY);
             if (index === -1) return;
             
@@ -573,7 +632,7 @@
                 document.getElementById('liveStatus').textContent = 
                     translations[currentLang].takenTxt;
                 document.getElementById('selectedPixelInfo').innerHTML = 
-                    `❌ المربع #${index + 1} - <strong class="reserved">محجوز</strong>`;
+                    `❌ المربع #<span class="pixel-number">${index + 1}</span> - <strong class="reserved">${translations[currentLang].reserved}</strong>`;
                 selectedPixelIndex = -1;
                 drawGrid();
                 return;
@@ -583,7 +642,7 @@
             document.getElementById('liveStatus').textContent = 
                 translations[currentLang].selectedTxt + (index + 1);
             document.getElementById('selectedPixelInfo').innerHTML = 
-                `📍 المربع #${index + 1} - <strong class="available">${translations[currentLang].available}</strong>`;
+                `📍 المربع #<span class="pixel-number">${index + 1}</span> - <strong class="available">${translations[currentLang].available}</strong>`;
             document.getElementById('pixelNumberInput').value = index + 1;
             
             centerOnPixel(index);
@@ -640,7 +699,7 @@
         }
 
         function centerOnPixel(index) {
-            const pixelSize = Math.max(1, Math.min(8, (canvasWidth / COLS) * scale));
+            const pixelSize = Math.max(1, Math.min(12, (canvasWidth / COLS) * scale));
             const totalWidth = COLS * pixelSize;
             const totalHeight = ROWS * pixelSize;
             
@@ -659,7 +718,7 @@
         }
 
         // ============================================
-        // أحداث السحب والتحريك
+        // أحداث السحب
         // ============================================
         function setupPanning() {
             const wrapper = document.getElementById('gridWrapper');
@@ -674,7 +733,6 @@
             
             wrapper.addEventListener('wheel', handleWheel, { passive: false });
             
-            // النقر على الكانفاس
             canvas.addEventListener('click', handleCanvasClick);
         }
 
@@ -787,7 +845,7 @@
                 document.getElementById('liveStatus').textContent = 
                     translations[currentLang].takenTxt;
                 document.getElementById('selectedPixelInfo').innerHTML = 
-                    `❌ المربع #${num} - <strong class="reserved">محجوز</strong>`;
+                    `❌ المربع #<span class="pixel-number">${num}</span> - <strong class="reserved">${translations[currentLang].reserved}</strong>`;
                 selectedPixelIndex = -1;
                 drawGrid();
                 return;
@@ -797,7 +855,7 @@
             document.getElementById('liveStatus').textContent = 
                 translations[currentLang].selectedTxt + (index + 1);
             document.getElementById('selectedPixelInfo').innerHTML = 
-                `📍 المربع #${index + 1} - <strong class="available">${translations[currentLang].available}</strong>`;
+                `📍 المربع #<span class="pixel-number">${index + 1}</span> - <strong class="available">${translations[currentLang].available}</strong>`;
             
             centerOnPixel(index);
             drawGrid();
@@ -821,7 +879,7 @@
             document.getElementById('liveStatus').textContent = 
                 translations[currentLang].selectedTxt + (index + 1);
             document.getElementById('selectedPixelInfo').innerHTML = 
-                `📍 المربع #${index + 1} - <strong class="available">${translations[currentLang].available}</strong>`;
+                `📍 المربع #<span class="pixel-number">${index + 1}</span> - <strong class="available">${translations[currentLang].available}</strong>`;
             document.getElementById('pixelNumberInput').value = index + 1;
             
             centerOnPixel(index);
@@ -837,7 +895,7 @@
                 document.getElementById('liveStatus').textContent = 
                     translations[currentLang].takenTxt;
                 document.getElementById('selectedPixelInfo').innerHTML = 
-                    `❌ المربع #${num} - <strong class="reserved">محجوز</strong>`;
+                    `❌ المربع #<span class="pixel-number">${num}</span> - <strong class="reserved">${translations[currentLang].reserved}</strong>`;
                 selectedPixelIndex = -1;
                 drawGrid();
                 return;
@@ -847,7 +905,7 @@
             document.getElementById('liveStatus').textContent = 
                 translations[currentLang].selectedTxt + (index + 1);
             document.getElementById('selectedPixelInfo').innerHTML = 
-                `📍 المربع #${index + 1} - <strong class="available">${translations[currentLang].available}</strong>`;
+                `📍 المربع #<span class="pixel-number">${index + 1}</span> - <strong class="available">${translations[currentLang].available}</strong>`;
             document.getElementById('pixelNumberInput').value = index + 1;
             
             centerOnPixel(index);
@@ -859,73 +917,3 @@
         // ============================================
         function toggleLanguage() {
             const newLang = currentLang === 'ar' ? 'en' : 'ar';
-            currentLang = newLang;
-            
-            document.documentElement.dir = newLang === 'ar' ? 'rtl' : 'ltr';
-            document.documentElement.lang = newLang;
-            
-            document.getElementById('mainTitle').textContent = translations[newLang].title;
-            document.getElementById('subTitle').textContent = translations[newLang].subtitle;
-            document.getElementById('footerText').textContent = translations[newLang].footer;
-            document.getElementById('langBtn').textContent = translations[newLang].langBtn;
-            document.getElementById('selectBtn').textContent = translations[newLang].selectBtn;
-            document.getElementById('randomBtn').textContent = translations[newLang].randomBtn;
-            document.getElementById('resetBtn').textContent = translations[newLang].resetBtn;
-            document.getElementById('zoomInBtn').textContent = translations[newLang].zoomInBtn;
-            document.getElementById('zoomOutBtn').textContent = translations[newLang].zoomOutBtn;
-            document.getElementById('fitBtn').textContent = translations[newLang].fitBtn;
-            
-            if (selectedPixelIndex !== -1 && !pixelStatus[selectedPixelIndex]) {
-                document.getElementById('liveStatus').textContent = 
-                    translations[newLang].selectedTxt + (selectedPixelIndex + 1);
-                document.getElementById('selectedPixelInfo').innerHTML = 
-                    `📍 المربع #${selectedPixelIndex + 1} - <strong class="available">${translations[newLang].available}</strong>`;
-            } else {
-                document.getElementById('liveStatus').textContent = translations[newLang].liveStatus;
-                document.getElementById('selectedPixelInfo').textContent = translations[newLang].noSelection;
-            }
-        }
-
-        // ============================================
-        // تحميل الصفحة
-        // ============================================
-        window.onload = function() {
-            initCanvas();
-            setupPanning();
-            fitToScreen();
-            
-            window.addEventListener('resize', () => {
-                initCanvas();
-                fitToScreen();
-            });
-            
-            // اختيار مربع افتراضي
-            setTimeout(() => {
-                for (let i = 0; i < TOTAL_PIXELS; i++) {
-                    if (!pixelStatus[i]) {
-                        selectedPixelIndex = i;
-                        document.getElementById('pixelNumberInput').value = i + 1;
-                        document.getElementById('liveStatus').textContent = 
-                            translations[currentLang].selectedTxt + (i + 1);
-                        document.getElementById('selectedPixelInfo').innerHTML = 
-                            `📍 المربع #${i + 1} - <strong class="available">${translations[currentLang].available}</strong>`;
-                        centerOnPixel(i);
-                        drawGrid();
-                        break;
-                    }
-                }
-            }, 200);
-        };
-
-        // جعل التوابع عالمية
-        window.toggleLanguage = toggleLanguage;
-        window.selectPixelByNumber = selectPixelByNumber;
-        window.selectRandomPixel = selectRandomPixel;
-        window.goToPixel = goToPixel;
-        window.zoomIn = zoomIn;
-        window.zoomOut = zoomOut;
-        window.resetView = resetView;
-        window.fitToScreen = fitToScreen;
-    </script>
-</body>
-</html>
