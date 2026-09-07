@@ -5,9 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>جدارية مليون سيلفي | Million Selfie Wall</title>
     <!-- استدعاء خطوط Google لجعل المظهر احترافي جداً -->
-    <link rel="preconnect" href="https://googleapis.com">
-    <link rel="preconnect" href="https://gstatic.com" crossorigin>
-    <link href="https://googleapis.com/css2?family=Cairo:wght@400;700&family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&family=Poppins:wght@400;600&display=swap" rel="stylesheet">
     <style>
         :root {
             --bg-color: #0b0f19;
@@ -200,6 +200,8 @@
             max-width: 450px;
             overflow: auto;
             box-sizing: border-box;
+            display: flex;
+            justify-content: center;
         }
 
         .pixel-grid {
@@ -218,12 +220,21 @@
             background-color: #131c2e;
             border-radius: 2px;
             cursor: pointer;
+            transition: transform 0.1s ease;
+        }
+
+        .pixel:hover {
+            transform: scale(1.15);
         }
 
         /* المربعات المحجوزة مسبقاً */
         .pixel.taken-vip { background-color: #ec4899; } 
         .pixel.taken-user { background-color: #3b82f6; } 
         .pixel.taken-gold { background-color: #eab308; } 
+        .pixel.selected { 
+            background-color: #10b981; 
+            box-shadow: 0 0 12px rgba(16, 185, 129, 0.6);
+        }
 
         footer {
             margin-top: auto;
@@ -263,10 +274,10 @@
         </div>
 
         <div class="progress-container">
-            <div class="progress-bar"></div>
+            <div class="progress-bar" id="progressBar"></div>
         </div>
 
-        <div class="percentage-text">0.045%</div>
+        <div class="percentage-text" id="percentageText">0.045%</div>
         
         <button class="cta-btn" id="ctaBtn" onclick="bookPixelAlert()">احجز مكانك في الجدارية الآن 🚀</button>
     </div>
@@ -306,3 +317,135 @@
                 footer: "© 2026 Million Selfie Wall. All rights reserved.",
                 langBtn: "العربية",
                 selectedTxt: "You selected available pixel code: #",
+                takenTxt: "This pixel is already reserved with a selfie!"
+            }
+        };
+
+        var currentLang = 'ar';
+        var selectedPixelIndex = -1;
+
+        // بيانات المربعات - محاكاة
+        const TOTAL_PIXELS = 25 * 25;
+        const RESERVED_COUNT = 458;
+        const RESERVED_INDICES = new Set();
+
+        // توليد مؤشرات محجوزة عشوائية (باستثناء المربع الأول)
+        while (RESERVED_INDICES.size < RESERVED_COUNT) {
+            const idx = Math.floor(Math.random() * TOTAL_PIXELS);
+            if (idx !== 0) { // نخلي المربع الأول متاح دائماً للتجربة
+                RESERVED_INDICES.add(idx);
+            }
+        }
+
+        // تعيين الفئات للمربعات المحجوزة
+        function getPixelClass(index) {
+            if (!RESERVED_INDICES.has(index)) return '';
+            const rand = Math.random();
+            if (rand < 0.33) return 'taken-vip';
+            if (rand < 0.66) return 'taken-user';
+            return 'taken-gold';
+        }
+
+        // إنشاء الشبكة
+        function createGrid() {
+            const grid = document.getElementById('pixelGrid');
+            grid.innerHTML = '';
+            for (let i = 0; i < TOTAL_PIXELS; i++) {
+                const pixel = document.createElement('div');
+                pixel.className = 'pixel';
+                pixel.dataset.index = i;
+                
+                const cls = getPixelClass(i);
+                if (cls) pixel.classList.add(cls);
+                
+                pixel.addEventListener('click', function() {
+                    handlePixelClick(parseInt(this.dataset.index));
+                });
+                
+                grid.appendChild(pixel);
+            }
+            updateStats();
+        }
+
+        // معالجة النقر على المربع
+        function handlePixelClick(index) {
+            const pixels = document.querySelectorAll('.pixel');
+            
+            // إزالة التحديد السابق
+            pixels.forEach(p => p.classList.remove('selected'));
+            
+            // التحقق إذا كان المربع محجوز
+            if (RESERVED_INDICES.has(index)) {
+                document.getElementById('liveStatus').textContent = 
+                    translations[currentLang].takenTxt;
+                return;
+            }
+            
+            // تحديد المربع الجديد
+            pixels[index].classList.add('selected');
+            selectedPixelIndex = index;
+            
+            // تحديث النص
+            const msg = translations[currentLang].selectedTxt + (index + 1);
+            document.getElementById('liveStatus').textContent = msg;
+        }
+
+        // تحديث الإحصائيات
+        function updateStats() {
+            const remaining = TOTAL_PIXELS - RESERVED_COUNT;
+            document.getElementById('valRemaining').textContent = remaining.toLocaleString();
+            document.getElementById('valReserved').textContent = RESERVED_COUNT.toLocaleString();
+            
+            const percent = ((RESERVED_COUNT / TOTAL_PIXELS) * 100);
+            document.getElementById('percentageText').textContent = percent.toFixed(3) + '%';
+            document.getElementById('progressBar').style.width = percent + '%';
+        }
+
+        // زر الحجز
+        function bookPixelAlert() {
+            alert(translations[currentLang].alertMsg);
+        }
+
+        // تبديل اللغة
+        function toggleLanguage() {
+            const newLang = currentLang === 'ar' ? 'en' : 'ar';
+            currentLang = newLang;
+            
+            // تحديث اتجاه الصفحة
+            document.documentElement.dir = newLang === 'ar' ? 'rtl' : 'ltr';
+            document.documentElement.lang = newLang;
+            
+            // تحديث النصوص
+            document.getElementById('mainTitle').textContent = translations[newLang].title;
+            document.getElementById('subTitle').textContent = translations[newLang].subtitle;
+            document.getElementById('lblRemaining').textContent = translations[newLang].lblRemaining;
+            document.getElementById('lblReserved').textContent = translations[newLang].lblReserved;
+            document.getElementById('ctaBtn').textContent = translations[newLang].bookBtn;
+            document.getElementById('footerText').textContent = translations[newLang].footer;
+            document.getElementById('langBtn').textContent = translations[newLang].langBtn;
+            
+            // تحديث حالة المربع المحدد
+            if (selectedPixelIndex !== -1 && !RESERVED_INDICES.has(selectedPixelIndex)) {
+                document.getElementById('liveStatus').textContent = 
+                    translations[newLang].selectedTxt + (selectedPixelIndex + 1);
+            } else {
+                document.getElementById('liveStatus').textContent = translations[newLang].liveStatus;
+            }
+        }
+
+        // تحميل الشبكة عند بدء الصفحة
+        window.onload = function() {
+            createGrid();
+            
+            // تحديد مربع افتراضي (المربع الأول)
+            setTimeout(() => {
+                handlePixelClick(0);
+            }, 100);
+        };
+
+        // جعل التابعين عالميين
+        window.toggleLanguage = toggleLanguage;
+        window.bookPixelAlert = bookPixelAlert;
+    </script>
+</body>
+</html>
