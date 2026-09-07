@@ -1,551 +1,293 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
-  <title>جدارية مليون سيلفي | احجز مكانك في التاريخ الرقمي</title>
-  <style>
-    /* ==== إعادة تعيين وتنسيق عام ===== */
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>جدارية مليون سيلفي | Million Selfie Wall</title>
+    <style>
+        :root {
+            --bg-color: #0f172a;
+            --card-bg: #1e293b;
+            --text-color: #f8fafc;
+            --accent-color: #f59e0b;
+            --grid-line: #334155;
+        }
 
-    body {
-      background: #0b0d15;
-      background-image: radial-gradient(circle at 20% 20%, #1a1f2e 0%, #080a0f 95%);
-      font-family: 'Segoe UI', Tahoma, 'Cairo', system-ui, sans-serif;
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      color: #eef2ff;
-      padding: 2rem 1rem 3rem;
-      direction: rtl;
-    }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+            transition: all 0.3s ease;
+        }
 
-    /* حاوية رئيسية */
-    .container {
-      max-width: 1400px;
-      width: 100%;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-    }
+        /* زر تبديل اللغة */
+        .lang-switch-btn {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            background-color: var(--accent-color);
+            color: #000;
+            border: none;
+            padding: 8px 16px;
+            font-weight: bold;
+            border-radius: 20px;
+            cursor: pointer;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        html[dir="ltr"] .lang-switch-btn {
+            left: auto;
+            right: 20px;
+        }
 
-    /* ===== العنوان الفخم ===== */
-    .hero-title {
-      font-size: clamp(2.2rem, 7vw, 4.5rem);
-      font-weight: 800;
-      letter-spacing: -0.02em;
-      background: linear-gradient(135deg, #ffd966 0%, #f0b35a 25%, #e08a3c 55%, #d95f43 80%);
-      -webkit-background-clip: text;
-      background-clip: text;
-      color: transparent;
-      margin-bottom: 0.5rem;
-      text-shadow: 0 0 25px rgba(255, 190, 70, 0.25);
-      text-align: center;
-      line-height: 1.2;
-    }
+        /* الهيدر والعناوين */
+        header {
+            text-align: center;
+            margin-top: 40px;
+            margin-bottom: 20px;
+            max-width: 600px;
+        }
 
-    .subtitle {
-      font-size: 1.3rem;
-      color: #b6c2e6;
-      margin-bottom: 2rem;
-      font-weight: 400;
-      background: rgba(20, 25, 40, 0.6);
-      padding: 0.8rem 2rem;
-      border-radius: 60px;
-      backdrop-filter: blur(5px);
-      border: 1px solid #2e3b55;
-      box-shadow: 0 10px 25px rgba(0,0,0,0.5);
-    }
+        h1 {
+            color: var(--accent-color);
+            font-size: 2.2rem;
+            margin-bottom: 10px;
+        }
 
-    /* ===== شريط التقدم والعداد ===== */
-    .stats-panel {
-      background: rgba(15, 20, 35, 0.8);
-      backdrop-filter: blur(15px);
-      border: 1px solid #2f3f60;
-      border-radius: 60px;
-      padding: 1rem 2.5rem;
-      margin-bottom: 2.5rem;
-      display: flex;
-      flex-wrap: wrap;
-      align-items: center;
-      justify-content: center;
-      gap: 2rem;
-      box-shadow: 0 20px 40px rgba(0,0,0,0.7), 0 0 0 1px rgba(255,215,0,0.1);
-    }
+        p.subtitle {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
 
-    .counter-box {
-      display: flex;
-      align-items: baseline;
-      gap: 0.75rem;
-      background: #0f1322;
-      padding: 0.5rem 1.5rem;
-      border-radius: 40px;
-      border: 1px solid #3a4a6b;
-    }
+        /* لوحة التحكم والعدادات */
+        .dashboard {
+            background-color: var(--card-bg);
+            border-radius: 16px;
+            padding: 20px;
+            width: 100%;
+            max-width: 450px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+            margin-bottom: 30px;
+            text-align: center;
+            box-sizing: border-box;
+        }
 
-    .counter-label {
-      font-size: 1.1rem;
-      color: #bfc9ea;
-      font-weight: 500;
-    }
+        .counter-box {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
 
-    .counter-number {
-      font-size: 2.2rem;
-      font-weight: 800;
-      background: linear-gradient(180deg, #fff7c0, #ffc857);
-      -webkit-background-clip: text;
-      background-clip: text;
-      color: transparent;
-      letter-spacing: -0.5px;
-      min-width: 120px;
-      text-align: center;
-    }
+        .counter-value {
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: var(--accent-color);
+        }
 
-    .progress-wrapper {
-      flex: 1;
-      min-width: 200px;
-      max-width: 400px;
-    }
+        .counter-label {
+            font-size: 1.1rem;
+        }
 
-    .progress-bar-bg {
-      background: #1e2539;
-      height: 18px;
-      border-radius: 30px;
-      overflow: hidden;
-      box-shadow: inset 0 3px 8px rgba(0,0,0,0.6);
-      border: 1px solid #3f5073;
-    }
+        /* شريط التقدم */
+        .progress-container {
+            background-color: #0f172a;
+            border-radius: 10px;
+            height: 20px;
+            width: 100%;
+            overflow: hidden;
+            margin-bottom: 10px;
+            border: 1px solid var(--grid-line);
+        }
 
-    .progress-fill {
-      height: 100%;
-      width: 0%;
-      background: linear-gradient(90deg, #f7b731, #f58b2d, #e85d26);
-      border-radius: 30px;
-      box-shadow: 0 0 15px #f79d2e;
-      transition: width 0.4s ease;
-    }
+        .progress-bar {
+            background: linear-gradient(90deg, #f59e0b, #ef4444);
+            width: 0.01%; /* ستتغير برمجياً */
+            height: 100%;
+            transition: width 1s ease-in-out;
+        }
 
-    .progress-percent {
-      font-weight: 700;
-      color: #ffd966;
-      font-size: 1.3rem;
-      margin-inline-start: 12px;
-    }
+        .percentage-text {
+            font-weight: bold;
+            color: var(--accent-color);
+            font-size: 1.2rem;
+        }
 
-    /* ===== شبكة الجدارية ===== */
-    .mosaic-grid {
-      display: grid;
-      grid-template-columns: repeat(100, 10px); /* 100 عمود × 10px = 1000px عرض أساس */
-      grid-template-rows: repeat(100, 10px);    /* 100 صف × 10px = 1000px ارتفاع */
-      width: fit-content;
-      max-width: 100%;
-      background: #0c0f1c;
-      border: 2px solid #2a3650;
-      border-radius: 16px;
-      overflow: hidden;
-      box-shadow: 0 30px 60px rgba(0, 0, 0, 0.8), 0 0 0 1px #37435e;
-      margin-bottom: 3rem;
-      transition: all 0.2s;
-    }
+        /* زر الحجز الرئيسي */
+        .cta-btn {
+            background-color: #10b981;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            border-radius: 8px;
+            cursor: pointer;
+            margin-top: 15px;
+            width: 100%;
+            transition: transform 0.2s;
+        }
 
-    /* خلية أساسية (مربع 10×10) */
-    .pixel-block {
-      background-color: #1a1f2c;  /* رمادي غامق جداً */
-      border: 0.5px solid #2a3145;
-      cursor: pointer;
-      transition: background 0.1s ease, box-shadow 0.1s ease, transform 0.1s;
-      position: relative;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 7px;
-      color: #bbbbbb;
-      user-select: none;
-      overflow: hidden;
-      line-height: 1;
-      text-shadow: 0 1px 2px black;
-      font-weight: 600;
-    }
+        .cta-btn:hover {
+            transform: scale(1.02);
+            background-color: #059669;
+        }
 
-    /* تأثير hover على المربعات الفارغة */
-    .pixel-block.empty:hover {
-      background-color: #4a3b1f;
-      box-shadow: inset 0 0 0 1px #ffbb33;
-      z-index: 5;
-      transform: scale(1.03);
-      color: #ffffff;
-    }
+        /* جدارية الشبكة للمربعات */
+        .grid-container {
+            background-color: var(--card-bg);
+            padding: 10px;
+            border-radius: 12px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+            margin-bottom: 40px;
+        }
 
-    /* تلميح "احجزني بدولار" */
-    .pixel-block.empty:hover::after {
-      content: "احجزني بدولار";
-      position: absolute;
-      bottom: -18px;
-      left: 50%;
-      transform: translateX(-50%);
-      background: #1e1e1e;
-      color: #ffd966;
-      padding: 4px 10px;
-      border-radius: 30px;
-      font-size: 9px;
-      white-space: nowrap;
-      font-weight: bold;
-      box-shadow: 0 4px 15px rgba(0,0,0,0.8);
-      border: 1px solid #c98a2c;
-      z-index: 100;
-      pointer-events: none;
-    }
+        .pixel-grid {
+            display: grid;
+            grid-template-columns: repeat(20, 15px);
+            grid-template-rows: repeat(20, 15px);
+            gap: 2px;
+            background-color: #0f172a;
+            padding: 5px;
+            border: 2px solid var(--grid-line);
+        }
 
-    /* المربعات المحجوزة / الصور */
-    .pixel-block.reserved {
-      background-size: cover;
-      background-position: center;
-      background-repeat: no-repeat;
-      border: 0.5px solid #2e3d5a;
-      cursor: pointer;
-      transition: filter 0.15s, box-shadow 0.15s;
-    }
+        .pixel {
+            background-color: #1e293b;
+            border: 1px solid rgba(255,255,255,0.03);
+            cursor: pointer;
+            transition: all 0.2s;
+        }
 
-    .pixel-block.reserved:hover {
-      filter: brightness(1.25);
-      box-shadow: 0 0 0 2px rgba(255, 215, 0, 0.9);
-      z-index: 10;
-    }
+        .pixel:hover {
+            background-color: var(--accent-color);
+            transform: scale(1.2);
+            z-index: 10;
+        }
 
-    /* دعم دمج المربعات (عبر grid-column / grid-row) */
-    .merged-block {
-      background-size: cover;
-      background-position: center;
-      background-repeat: no-repeat;
-      border: 1px solid #2c3854;
-      cursor: pointer;
-      transition: filter 0.15s, box-shadow 0.15s;
-      z-index: 2;
-    }
-
-    .merged-block:hover {
-      filter: brightness(1.3);
-      box-shadow: 0 0 0 3px rgba(255, 200, 50, 0.95);
-      z-index: 20;
-    }
-
-    /* ===== نافذة منبثقة (Modal) ===== */
-    .modal-overlay {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: rgba(0, 0, 0, 0.85);
-      backdrop-filter: blur(8px);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      z-index: 1000;
-      visibility: hidden;
-      opacity: 0;
-      transition: opacity 0.3s ease, visibility 0.3s;
-    }
-
-    .modal-overlay.active {
-      visibility: visible;
-      opacity: 1;
-    }
-
-    .modal-card {
-      background: #121722;
-      border: 2px solid #ffbb33;
-      border-radius: 40px;
-      padding: 2.5rem 3rem;
-      max-width: 500px;
-      width: 90%;
-      text-align: center;
-      box-shadow: 0 40px 80px rgba(0,0,0,0.9), 0 0 0 6px rgba(255, 180, 40, 0.2);
-      transform: scale(0.9);
-      transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
-    }
-
-    .modal-overlay.active .modal-card {
-      transform: scale(1);
-    }
-
-    .modal-title {
-      font-size: 2.2rem;
-      font-weight: 800;
-      background: linear-gradient(135deg, #ffd966, #f09b3e);
-      -webkit-background-clip: text;
-      background-clip: text;
-      color: transparent;
-      margin-bottom: 1rem;
-    }
-
-    .modal-text {
-      color: #d0d9f0;
-      font-size: 1.3rem;
-      margin-bottom: 2rem;
-      line-height: 1.6;
-    }
-
-    .modal-close-btn {
-      background: #ffbb33;
-      border: none;
-      color: #0b0f1a;
-      font-weight: bold;
-      font-size: 1.1rem;
-      padding: 0.9rem 2.5rem;
-      border-radius: 50px;
-      cursor: pointer;
-      transition: background 0.2s, transform 0.2s;
-      box-shadow: 0 8px 20px rgba(255, 170, 0, 0.4);
-      letter-spacing: 0.5px;
-    }
-
-    .modal-close-btn:hover {
-      background: #ffca4d;
-      transform: translateY(-3px);
-    }
-
-    /* أزرار عامة */
-    .footer-note {
-      margin-top: 1rem;
-      font-size: 0.9rem;
-      color: #818aa8;
-      text-align: center;
-    }
-
-    /* التجاوب مع الشاشات الصغيرة */
-    @media (max-width: 700px) {
-      .stats-panel {
-        flex-direction: column;
-        gap: 1rem;
-        padding: 1rem;
-        border-radius: 30px;
-      }
-      .mosaic-grid {
-        grid-template-columns: repeat(100, 8px);
-        grid-template-rows: repeat(100, 8px);
-      }
-      .pixel-block {
-        font-size: 4px;
-      }
-    }
-  </style>
+        /* نموذج لمربعات محجوزة مسبقاً للعرض */
+        .pixel.taken {
+            background-color: #ef4444;
+        }
+    </style>
 </head>
 <body>
-<div class="container">
-  <!-- العنوان -->
-  <h1 class="hero-title">جدارية مليون سيلفي</h1>
-  <div class="subtitle">احجز مربعك في أكبر لوحة رقمية للتاريخ</div>
 
-  <!-- لوحة الإحصائيات -->
-  <div class="stats-panel">
-    <div class="counter-box">
-      <span class="counter-label">المربعات المتبقية:</span>
-      <span class="counter-number" id="remainingCounter">1,000,000</span>
+    <!-- زر التبديل للغات -->
+    <button class="lang-switch-btn" id="langBtn" onclick="toggleLanguage()">English</button>
+
+    <header>
+        <h1 id="mainTitle">جدارية مليون سيلفي</h1>
+        <p class="subtitle" id="subTitle">احجز مربعك في أكبر لوحة رقمية للتاريخ</p>
+    </header>
+
+    <div class="dashboard">
+        <div class="counter-box">
+            <span class="counter-label" id="counterLabel">المربعات المتبقية:</span>
+            <span class="counter-value" id="counterValue">999,952</span>
+        </div>
+
+        <div class="progress-container">
+            <div class="progress-bar" id="progressBar"></div>
+        </div>
+
+        <div class="percentage-text" id="percentText">0.005%</div>
+        
+        <button class="cta-btn" id="ctaBtn" onclick="bookPixelAlert()">احجز مربعك الآن 🚀</button>
     </div>
-    <div class="progress-wrapper">
-      <div class="progress-bar-bg">
-        <div class="progress-fill" id="progressFill" style="width: 0%;"></div>
-      </div>
+
+    <!-- شبكة المربعات التفاعلية المعروضة -->
+    <div class="grid-container">
+        <div class="pixel-grid" id="pixelGrid"></div>
     </div>
-    <span class="progress-percent" id="progressPercent">0%</span>
-  </div>
 
-  <!-- شبكة الجدارية العملاقة -->
-  <div class="mosaic-grid" id="mosaicGrid"></div>
-  <div class="footer-note">اضغط على أي مربع فارغ لبدء الحجز • المربعات الداكنة محجوزة</div>
-</div>
+    <script>
+        // نصوص اللغتين
+        const translations = {
+            ar: {
+                title: "جدارية مليون سيلفي",
+                subtitle: "احجز مربعك في أكبر لوحة رقمية للتاريخ",
+                remaining: "المربعات المتبقية:",
+                bookBtn: "احجز مربعك الآن 🚀",
+                alertMsg: "سيتم فتح باب الحجز المباشر وتحديث اللوحة وربطها بنظام الدفع قريباً جداً!",
+                langBtn: "English"
+            },
+            en: {
+                title: "Million Selfie Wall",
+                subtitle: "Reserve your pixel in the biggest digital wall in history",
+                remaining: "Remaining Pixels:",
+                bookBtn: "Book Your Pixel Now 🚀",
+                alertMsg: "Live bookings, wall updates, and payment integration are coming very soon!",
+                langBtn: "العربية"
+            }
+        };
 
-<!-- نافذة منبثقة -->
-<div class="modal-overlay" id="modalOverlay">
-  <div class="modal-card">
-    <div class="modal-title">📸 احجز مكانك في التاريخ الرقمي</div>
-    <div class="modal-text">مربع واحد بدولار واحد. ادمج عدة مربعات لعرض صورتك بحجم أكبر!</div>
-    <button class="modal-close-btn" id="closeModalBtn">إغلاق</button>
-  </div>
-</div>
+        let currentLang = 'ar';
 
-<script>
-  (function() {
-    // ====== إعدادات الشبكة ======
-    const TOTAL_BLOCKS = 1_000_000;       // مليون مربع نظري
-    const GRID_COLUMNS = 100;             // 100 عمود
-    const GRID_ROWS = 100;                // 100 صف => 10,000 مربع مرئي (يمكن التمرير افتراضياً)
-    const BASE_SIZE = 10;                // بكسل لكل مربع أساسي
+        // دالة تبديل اللغة وإعادة توجيه العناصر والاتجاهات
+        function toggleLanguage() {
+            if (currentLang === 'ar') {
+                currentLang = 'en';
+                document.documentElement.lang = 'en';
+                document.documentElement.dir = 'ltr';
+            } else {
+                currentLang = 'ar';
+                document.documentElement.lang = 'ar';
+                document.documentElement.dir = 'rtl';
+            }
 
-    // ====== عناصر DOM ======
-    const mosaicGrid = document.getElementById('mosaicGrid');
-    const remainingCounter = document.getElementById('remainingCounter');
-    const progressFill = document.getElementById('progressFill');
-    const progressPercent = document.getElementById('progressPercent');
-    const modalOverlay = document.getElementById('modalOverlay');
-    const closeModalBtn = document.getElementById('closeModalBtn');
-
-    // ====== محاكاة المربعات المحجوزة مسبقاً (reservedBlocks) ======
-    // نستخدم مصفوفة للإحداثيات (row, col) لحجز بعض المربعات، وبعضها مدموج
-    // مثال: 1) مربع واحد 2) مجموعة مدموجة 4x4 3) مربع آخر 4) صورة كبيرة 5x5
-    const reservedBlocks = [
-      // صورة منفردة (10×10) في الصف 2 العمود 3
-      { row: 2, col: 3, rowSpan: 1, colSpan: 1, imageUrl: 'https://picsum.photos/seed/selfie1/200/200', link: 'https://instagram.com/selfie.one' },
-      // مجموعة مدموجة 4×4 (40×40 بكسل) تبدأ الصف 10 العمود 10
-      { row: 10, col: 10, rowSpan: 4, colSpan: 4, imageUrl: 'https://picsum.photos/seed/group4x4/400/400', link: 'https://twitter.com/groupfan' },
-      // مربع منفرد آخر الصف 25 العمود 40
-      { row: 25, col: 40, rowSpan: 1, colSpan: 1, imageUrl: 'https://picsum.photos/seed/selfie2/200/200', link: 'https://facebook.com/profile2' },
-      // صورة كبيرة 5×5 (50×50 بكسل) الصف 50 العمود 60
-      { row: 50, col: 60, rowSpan: 5, colSpan: 5, imageUrl: 'https://picsum.photos/seed/big5x5/500/500', link: 'https://linkedin.com/in/bigphoto' },
-      // مربع إضافي صغير
-      { row: 70, col: 15, rowSpan: 1, colSpan: 1, imageUrl: 'https://picsum.photos/seed/selfie3/200/200', link: 'https://youtube.com/@creator' },
-      // مجموعة 2×2 (20×20 بكسل)
-      { row: 80, col: 80, rowSpan: 2, colSpan: 2, imageUrl: 'https://picsum.photos/seed/2x2grid/200/200', link: 'https://github.com/devmosaic' },
-    ];
-
-    // ====== بناء الشبكة ======
-    function buildGrid() {
-      mosaicGrid.style.gridTemplateColumns = `repeat(${GRID_COLUMNS}, ${BASE_SIZE}px)`;
-      mosaicGrid.style.gridTemplateRows = `repeat(${GRID_ROWS}, ${BASE_SIZE}px)`;
-
-      // إنشاء جميع المربعات الأساسية (100×100 = 10,000 خلية)
-      for (let row = 0; row < GRID_ROWS; row++) {
-        for (let col = 0; col < GRID_COLUMNS; col++) {
-          const cell = document.createElement('div');
-          cell.className = 'pixel-block empty';
-          cell.dataset.row = row;
-          cell.dataset.col = col;
-          cell.dataset.baseIndex = row * GRID_COLUMNS + col;
-          cell.style.gridRow = row + 1;
-          cell.style.gridColumn = col + 1;
-          cell.addEventListener('click', handleEmptyClick);
-          cell.addEventListener('mouseenter', () => {}); // hover يتم عبر css
-          mosaicGrid.appendChild(cell);
+            // تحديث النصوص بناءً على اللغة المختارة
+            document.getElementById('mainTitle').innerText = translations[currentLang].title;
+            document.getElementById('subTitle').innerText = translations[currentLang].subtitle;
+            document.getElementById('counterLabel').innerText = translations[currentLang].remaining;
+            document.getElementById('ctaBtn').innerText = translations[currentLang].bookBtn;
+            document.getElementById('langBtn').innerText = translations[currentLang].langBtn;
         }
-      }
 
-      // تطبيق الحجوزات المسبقة (reservedBlocks) فوق الخلايا الأساسية
-      applyReservedBlocks();
-    }
+        // تفاعلية تنشيط شريط التقدم البرمجي عند تحميل الموقع
+        window.onload = function() {
+            setTimeout(() => {
+                // تفعيل حركة شريط التحميل تلقائياً بنسبة واقعية بسيطة للتجربة
+                document.getElementById('progressBar').style.width = '2.5%'; 
+                document.getElementById('percentText').innerText = '0.005%';
+            }, 500);
 
-    // ====== تطبيق الحجوزات المسبقة ======
-    function applyReservedBlocks() {
-      // نمر عبر reservedBlocks وننشئ عناصر مدموجة أو نستبدل الخلايا
-      reservedBlocks.forEach((block) => {
-        const { row, col, rowSpan, colSpan, imageUrl, link } = block;
-        
-        // إنشاء عنصر جديد يمثل المنطقة المحجوزة
-        const reservedDiv = document.createElement('div');
-        reservedDiv.className = 'merged-block';
-        reservedDiv.style.gridRow = `${row + 1} / span ${rowSpan}`;
-        reservedDiv.style.gridColumn = `${col + 1} / span ${colSpan}`;
-        reservedDiv.style.backgroundImage = `url('${imageUrl}')`;
-        reservedDiv.style.backgroundSize = 'cover';
-        reservedDiv.style.backgroundPosition = 'center';
-        reservedDiv.style.backgroundRepeat = 'no-repeat';
-        reservedDiv.style.cursor = 'pointer';
-        reservedDiv.dataset.reserved = 'true';
-        reservedDiv.dataset.link = link || 'https://example.com';
-        reservedDiv.style.zIndex = '10';
-        
-        // نضيف تلميح أو تفاعل
-        reservedDiv.title = 'صورة محجوزة - اضغط لزيارة الحساب';
-        
-        // عند النقر على الصورة المحجوزة: فتح الرابط في تبويب جديد
-        reservedDiv.addEventListener('click', (e) => {
-          e.stopPropagation();
-          const url = reservedDiv.dataset.link;
-          if (url && url !== '#') {
-            window.open(url, '_blank', 'noopener,noreferrer');
-          } else {
-            alert('هذه الصورة محجوزة، لكن الرابط غير متاح حالياً.');
-          }
-        });
+            // توليد شبكة المربعات تفاعلياً تلقائياً
+            const grid = document.getElementById('pixelGrid');
+            for (let i = 0; i < 400; i++) {
+                const pixel = document.createElement('div');
+                pixel.classList.add('pixel');
+                
+                // إضافة مربعات عشوائية محجوزة باللون الأحمر لتعطي طابع الحجز الحقيقي للموقع
+                if (Math.random() < 0.08) {
+                    pixel.classList.add('taken');
+                    pixel.title = currentLang === 'ar' ? "مربع محجوز" : "Reserved Pixel";
+                } else {
+                    pixel.title = currentLang === 'ar' ? `مربع متاح #${i+1}` : `Available Pixel #${i+1}`;
+                }
 
-        // حذف الخلايا الأساسية التي تتداخل مع المنطقة المحجوزة
-        const startRow = row;
-        const endRow = row + rowSpan - 1;
-        const startCol = col;
-        const endCol = col + colSpan - 1;
+                // حدث الضغط على المربع الفردي في الشبكة
+                pixel.addEventListener('click', () => {
+                    if(pixel.classList.contains('taken')) {
+                        alert(currentLang === 'ar' ? "هذا المربع محجوز بالفعل!" : "This pixel is already reserved!");
+                    } else {
+                        alert(currentLang === 'ar' ? `لقد قمت باختيار المربع رقم # ${i+1} للقرع واحجز المربع بالكامل عند الإطلاق.` : `You selected pixel #${i+1}.`);
+                    }
+                });
 
-        // نزيل الخلايا الفارغة داخل هذه المنطقة (لن تظهر خلف الصورة)
-        const existingCells = mosaicGrid.querySelectorAll('.pixel-block.empty');
-        existingCells.forEach(cell => {
-          const r = parseInt(cell.dataset.row);
-          const c = parseInt(cell.dataset.col);
-          if (r >= startRow && r <= endRow && c >= startCol && c <= endCol) {
-            cell.remove(); // نزيلها نهائياً لتحل محلها الصورة
-          }
-        });
+                grid.appendChild(pixel);
+            }
+        };
 
-        // إضافة العنصر المحجوز إلى الشبكة
-        mosaicGrid.appendChild(reservedDiv);
-
-        // تحديث العداد: عدد المربعات الأساسية التي تم حجزها = rowSpan * colSpan
-        // سنحسبها لاحقاً في updateStats()
-      });
-
-      // بعد بناء الشبكة وتطبيق الحجوزات، نحدّث الإحصائيات
-      updateStats();
-    }
-
-    // ====== تحديث العداد وشريط التقدم ======
-    function updateStats() {
-      // عدد الخلايا الفارغة المتبقية في الشبكة = العدد الإجمالي للمربعات الأساسية - المحجوزة
-      const totalVisibleCells = GRID_ROWS * GRID_COLUMNS; // 100*100 = 10,000 مربع افتراضي
-      // المحجوزات تأخذ مساحة منفصلة: سنحسب عدد المربعات الأساسية المحجوزة يدويًا من reservedBlocks
-      let occupiedBaseUnits = 0;
-      reservedBlocks.forEach(b => {
-        occupiedBaseUnits += b.rowSpan * b.colSpan;
-      });
-
-      // المربعات المتبقية الفعلية المعروضة (كل خلية أساسية تمثل 1)
-      const remainingVisible = totalVisibleCells - occupiedBaseUnits;
-
-      // لكن نريد عرض مليون في البداية بشكل رمزي، مع انخفاض طفيف كلما حجزنا
-      // نستخدم نسبة مئوية بسيطة: نخفض المليون حسب عدد الوحدات المحجوزة (كل وحدة 1$)
-      const totalMillion = 1_000_000;
-      const adjustedRemaining = Math.max(0, totalMillion - occupiedBaseUnits);
-      
-      // تنسيق الرقم بفواصل
-      remainingCounter.textContent = adjustedRemaining.toLocaleString('en-US');
-
-      // نسبة التقدم: كم تم حجزه من المليون (نسبة occupied من المليون)
-      const occupiedPercent = Math.min(100, (occupiedBaseUnits / totalMillion) * 100);
-      const progressValue = occupiedPercent; // البداية 0% ثم يزيد
-      progressFill.style.width = progressValue + '%';
-      progressPercent.textContent = progressValue.toFixed(2) + '%';
-    }
-
-    // ====== النقر على مربع فارغ ======
-    function handleEmptyClick(e) {
-      e.stopPropagation();
-      // فتح النافذة المنبثقة
-      modalOverlay.classList.add('active');
-    }
-
-    // ====== إغلاق المودال ======
-    function closeModal() {
-      modalOverlay.classList.remove('active');
-    }
-
-    closeModalBtn.addEventListener('click', closeModal);
-    modalOverlay.addEventListener('click', (e) => {
-      if (e.target === modalOverlay) {
-        closeModal();
-      }
-    });
-
-    // ====== معالجة تغيير حجم الشاشة (اختياري) ======
-    // لا حاجة لتغيير البنية، فقط الشبكة تبقى ثابتة.
-
-    // ====== بدء البناء ======
-    buildGrid();
-
-    // تحديث الإحصائيات بعد فترة قصيرة للتأكد
-    setTimeout(() => updateStats(), 100);
-  })();
-</script>
+        // رسالة عند الضغط على زر احجز الآن الرئيسي
+        function bookPixelAlert() {
+            alert(translations[currentLang].alertMsg);
+        }
+    </script>
 </body>
 </html>
