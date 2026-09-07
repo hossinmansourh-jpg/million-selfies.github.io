@@ -42,8 +42,7 @@
             width: 100%;
             max-width: 800px;
             display: flex;
-            justify-content: space-between;
-            align-items: center;
+            justify-content: flex-end;
             margin-bottom: 20px;
         }
 
@@ -85,6 +84,28 @@
             opacity: 0.85;
             margin: 0;
             line-height: 1.6;
+        }
+
+        /* لوحة العرض التفاعلية المباشرة (Live Preview Box) */
+        .live-preview-box {
+            background: rgba(15, 23, 42, 0.8);
+            border: 1px solid var(--accent-color);
+            padding: 10px 20px;
+            border-radius: 30px;
+            font-size: 0.95rem;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            animation: pulse 2s infinite alternate;
+        }
+
+        .live-dot {
+            width: 8px;
+            height: 8px;
+            background-color: #10b981;
+            border-radius: 50%;
+            display: inline-block;
         }
 
         /* لوحة التحكم والعدادات المتقدمة */
@@ -142,9 +163,8 @@
 
         .progress-bar {
             background: linear-gradient(90deg, #f59e0b, #ef4444, #ec4899);
-            width: 0%;
+            width: 4.5%;
             height: 100%;
-            transition: width 1.5s cubic-bezier(0.1, 0.8, 0.25, 1);
             box-shadow: 0 0 10px rgba(245, 158, 11, 0.5);
         }
 
@@ -177,28 +197,6 @@
             box-shadow: 0 6px 20px rgba(16, 185, 129, 0.5);
         }
 
-        /* لوحة العرض التفاعلية المباشرة (Live Preview Box) */
-        .live-preview-box {
-            background: rgba(15, 23, 42, 0.8);
-            border: 1px solid var(--accent-color);
-            padding: 10px 20px;
-            border-radius: 30px;
-            font-size: 0.95rem;
-            margin-bottom: 20px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            animation: pulse 2s infinite alternate;
-        }
-
-        .live-dot {
-            width: 8px;
-            height: 8px;
-            background-color: #10b981;
-            border-radius: 50%;
-            display: inline-block;
-        }
-
         /* جدارية الشبكة للمربعات */
         .grid-container {
             background-color: rgba(30, 41, 59, 0.4);
@@ -208,10 +206,9 @@
             margin-bottom: 40px;
             border: 1px solid rgba(255,255,255,0.05);
             max-width: 100%;
-            overflow: auto; /* يتيح السحب والتحريك المريح على الجوال */
+            overflow: auto;
         }
 
-        /* تعديل جوهري: تم تحديث الأعمدة والصفوف إلى 25 لتستوعب الـ 625 مربعاً بالكامل */
         .pixel-grid {
             display: grid;
             grid-template-columns: repeat(25, 14px);
@@ -305,11 +302,16 @@
         const translations = {
             ar: {
                 title: "جدارية مليون سيلفي",
-                subtitle: "احجز مربعك في أكبر لوحة رقمية للتاريخ والإنترنت",
+                subtitle: "احجز مربعك في أكبر لوحة رقمية للتاريخ",
                 lblRemaining: "المربعات المتبقية",
                 lblReserved: "المربعات المحجوزة",
                 bookBtn: "احجز مكانك في الجدارية الآن 🚀",
-                liveStatus: "اضغط على أي مربع في الشبكة بالأسفل لاختياره واستعراضه",
+                liveStatus: "اضغط على أي مربع في الشبكة بالأسفل لاختياره",
                 alertMsg: "أهلاً بك! نقوم حالياً ببرمجة لوحة تحكم لتتيح لك رفع صورتك الخاصة واختيار موقعك وربطها ببوابة الدفع. انتظرنا قريباً جداً!",
                 footer: "© 2026 جدارية مليون سيلفي. جميع الحقوق محفوظة.",
                 langBtn: "English",
+                selectedTxt: "قمت باختيار مربع متاح برقم: #",
+                takenTxt: "هذا المربع محجوز ومثبت عليه صورة سيلفي بالفعل!"
+            },
+            en: {
+                title: "Million Selfie Wall",
