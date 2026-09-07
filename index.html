@@ -40,13 +40,13 @@
         /* شريط علوي أنيق */
         .top-bar {
             width: 100%;
-            max-width: 800px;
+            max-width: 500px;
             display: flex;
             justify-content: flex-end;
             margin-bottom: 20px;
         }
 
-        /* زر تبديل اللغة */
+        /* زر تبديل اللغة المضمون */
         .lang-switch-btn {
             background: rgba(245, 158, 11, 0.15);
             color: var(--accent-color);
@@ -57,12 +57,12 @@
             cursor: pointer;
             backdrop-filter: blur(5px);
             transition: all 0.3s ease;
+            z-index: 999;
         }
         
         .lang-switch-btn:hover {
             background: var(--accent-color);
             color: #000;
-            box-shadow: 0 0 15px rgba(245, 158, 11, 0.4);
         }
 
         /* الهيدر والعناوين */
@@ -86,7 +86,7 @@
             line-height: 1.6;
         }
 
-        /* لوحة العرض التفاعلية المباشرة (Live Preview Box) */
+        /* لوحة العرض التفاعلية المباشرة */
         .live-preview-box {
             background: rgba(15, 23, 42, 0.8);
             border: 1px solid var(--accent-color);
@@ -97,7 +97,6 @@
             display: flex;
             align-items: center;
             gap: 10px;
-            animation: pulse 2s infinite alternate;
         }
 
         .live-dot {
@@ -158,12 +157,11 @@
             overflow: hidden;
             margin-bottom: 12px;
             border: 1px solid var(--grid-line);
-            position: relative;
         }
 
         .progress-bar {
             background: linear-gradient(90deg, #f59e0b, #ef4444, #ec4899);
-            width: 4.5%;
+            width: 4.5%; /* ثابتة كـ CSS لضمان الظهور الفوري */
             height: 100%;
             box-shadow: 0 0 10px rgba(245, 158, 11, 0.5);
         }
@@ -172,7 +170,6 @@
             font-weight: bold;
             color: var(--accent-color);
             font-size: 1.3rem;
-            text-shadow: 0 0 10px rgba(245, 158, 11, 0.2);
         }
 
         /* زر الحجز المضيء */
@@ -188,13 +185,7 @@
             cursor: pointer;
             margin-top: 15px;
             width: 100%;
-            transition: all 0.3s ease;
             box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3);
-        }
-
-        .cta-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(16, 185, 129, 0.5);
         }
 
         /* جدارية الشبكة للمربعات */
@@ -205,32 +196,28 @@
             box-shadow: 0 15px 35px rgba(0,0,0,0.4);
             margin-bottom: 40px;
             border: 1px solid rgba(255,255,255,0.05);
-            max-width: 100%;
+            width: 100%;
+            max-width: 450px;
             overflow: auto;
+            box-sizing: border-box;
         }
 
         .pixel-grid {
             display: grid;
-            grid-template-columns: repeat(25, 14px);
-            grid-template-rows: repeat(25, 14px);
+            grid-template-columns: repeat(25, 15px);
+            grid-template-rows: repeat(25, 15px);
             gap: 2px;
             background-color: #0b0f19;
             padding: 6px;
             border: 1px solid var(--grid-line);
+            width: max-content;
+            margin: 0 auto;
         }
 
         .pixel {
             background-color: #131c2e;
-            border-radius: 1px;
+            border-radius: 2px;
             cursor: pointer;
-            transition: all 0.2s ease;
-        }
-
-        .pixel:hover {
-            background-color: var(--accent-color) !important;
-            box-shadow: 0 0 12px var(--accent-color);
-            transform: scale(1.3);
-            z-index: 10;
         }
 
         /* المربعات المحجوزة مسبقاً */
@@ -238,18 +225,12 @@
         .pixel.taken-user { background-color: #3b82f6; } 
         .pixel.taken-gold { background-color: #eab308; } 
 
-        /* ذيل الصفحة */
         footer {
             margin-top: auto;
             padding: 20px;
             font-size: 0.85rem;
             opacity: 0.6;
             text-align: center;
-        }
-
-        @keyframes pulse {
-            0% { box-shadow: 0 0 5px rgba(245, 158, 11, 0.2); }
-            100% { box-shadow: 0 0 15px rgba(245, 158, 11, 0.5); }
         }
     </style>
 </head>
@@ -282,10 +263,10 @@
         </div>
 
         <div class="progress-container">
-            <div class="progress-bar" id="progressBar"></div>
+            <div class="progress-bar"></div>
         </div>
 
-        <div class="percentage-text" id="percentText">0.045%</div>
+        <div class="percentage-text">0.045%</div>
         
         <button class="cta-btn" id="ctaBtn" onclick="bookPixelAlert()">احجز مكانك في الجدارية الآن 🚀</button>
     </div>
@@ -299,7 +280,8 @@
     </footer>
 
     <script>
-        const translations = {
+        // قواميس اللغات الجاهزة للعمل الفوري
+        var translations = {
             ar: {
                 title: "جدارية مليون سيلفي",
                 subtitle: "احجز مربعك في أكبر لوحة رقمية للتاريخ",
@@ -315,3 +297,12 @@
             },
             en: {
                 title: "Million Selfie Wall",
+                subtitle: "Reserve your pixel in the biggest digital wall in history",
+                lblRemaining: "Remaining Pixels",
+                lblReserved: "Reserved Pixels",
+                bookBtn: "Book Your Pixel Now 🚀",
+                liveStatus: "Tap on any pixel in the grid below to view or select it",
+                alertMsg: "Welcome! We are currently building the dashboard to let you upload your selfie, pick your exact coordinates, and complete payment. Launching very soon!",
+                footer: "© 2026 Million Selfie Wall. All rights reserved.",
+                langBtn: "العربية",
+                selectedTxt: "You selected available pixel code: #",
