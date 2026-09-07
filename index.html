@@ -34,7 +34,7 @@
             background-image: radial-gradient(circle at top, #1e1b4b 0%, #0b0f19 70%);
             color: var(--text-color);
             margin: 0;
-            padding: 8px;
+            padding: 6px;
             display: flex;
             flex-direction: column;
             height: 100vh;
@@ -47,7 +47,7 @@
             justify-content: space-between;
             align-items: center;
             flex-shrink: 0;
-            padding: 4px 8px;
+            padding: 2px 6px;
             margin-bottom: 2px;
         }
 
@@ -55,11 +55,11 @@
             background: rgba(245, 158, 11, 0.15);
             color: var(--accent-color);
             border: 1px solid var(--accent-color);
-            padding: 6px 16px;
+            padding: 4px 12px;
             font-weight: bold;
-            border-radius: 20px;
+            border-radius: 16px;
             cursor: pointer;
-            font-size: 0.8rem;
+            font-size: 0.7rem;
             transition: all 0.3s ease;
         }
         
@@ -75,44 +75,73 @@
 
         .title-area h1 {
             color: var(--accent-color);
-            font-size: 2rem;
+            font-size: 1.6rem;
             margin: 0;
-            text-shadow: 0 0 30px rgba(245, 158, 11, 0.4);
+            text-shadow: 0 0 30px rgba(245, 158, 11, 0.3);
             font-weight: 900;
-            letter-spacing: 1px;
         }
 
         .title-area p {
-            font-size: 0.95rem;
-            opacity: 0.8;
+            font-size: 0.75rem;
+            opacity: 0.7;
             margin: 0;
-            font-weight: 400;
         }
 
         .spacer {
-            width: 60px;
+            width: 50px;
+        }
+
+        /* ===== شريط الإحصائيات ===== */
+        .stats-bar {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr 1fr;
+            gap: 6px;
+            flex-shrink: 0;
+            margin-bottom: 4px;
+        }
+
+        .stat-item {
+            background: rgba(15, 23, 42, 0.7);
+            border-radius: 10px;
+            padding: 4px 6px;
+            text-align: center;
+            border: 1px solid rgba(255,255,255,0.05);
+        }
+
+        .stat-item .number {
+            font-size: 1.1rem;
+            font-weight: 900;
+            color: var(--accent-color);
+            display: block;
+            line-height: 1.2;
+        }
+
+        .stat-item .label {
+            font-size: 0.5rem;
+            opacity: 0.6;
+            display: block;
         }
 
         /* ===== شريط الحالة ===== */
         .status-bar {
             background: rgba(15, 23, 42, 0.8);
-            border: 2px solid var(--accent-color);
-            padding: 8px 16px;
-            border-radius: 30px;
-            font-size: 1rem;
+            border: 1px solid var(--accent-color);
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.75rem;
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 8px;
             flex-shrink: 0;
-            margin-bottom: 6px;
+            margin-bottom: 4px;
             justify-content: center;
-            min-height: 40px;
-            font-weight: 700;
+            min-height: 30px;
+            font-weight: 600;
         }
 
         .live-dot {
-            width: 10px;
-            height: 10px;
+            width: 8px;
+            height: 8px;
             background-color: #10b981;
             border-radius: 50%;
             animation: pulse 1.5s ease-in-out infinite;
@@ -131,11 +160,11 @@
         /* ===== أدوات التحكم ===== */
         .controls-bar {
             display: flex;
-            gap: 6px;
+            gap: 4px;
             align-items: center;
             justify-content: center;
             flex-shrink: 0;
-            margin-bottom: 4px;
+            margin-bottom: 3px;
             flex-wrap: wrap;
         }
 
@@ -143,10 +172,10 @@
             background: rgba(30, 41, 59, 0.8);
             border: 1px solid var(--grid-line);
             color: white;
-            padding: 4px 14px;
-            border-radius: 10px;
+            padding: 3px 10px;
+            border-radius: 8px;
             cursor: pointer;
-            font-size: 0.8rem;
+            font-size: 0.65rem;
             font-family: var(--primary-font);
             transition: all 0.3s ease;
             font-weight: 600;
@@ -160,26 +189,26 @@
         .zoom-display {
             color: var(--accent-color);
             font-weight: bold;
-            font-size: 0.9rem;
-            min-width: 50px;
+            font-size: 0.75rem;
+            min-width: 40px;
             text-align: center;
         }
 
-        /* ===== حاوية الشبكة (Canvas) - أكبر حجم ===== */
+        /* ===== حاوية الشبكة ===== */
         .grid-wrapper {
             flex: 1;
-            min-height: 45vh;
-            max-height: 65vh;
+            min-height: 40vh;
+            max-height: 60vh;
             width: 100%;
             overflow: hidden;
             position: relative;
             background-color: #0b0f19;
-            border-radius: 16px;
-            border: 2px solid rgba(255,255,255,0.08);
-            margin-bottom: 6px;
+            border-radius: 12px;
+            border: 2px solid rgba(255,255,255,0.06);
+            margin-bottom: 4px;
             touch-action: none;
             cursor: grab;
-            box-shadow: 0 0 40px rgba(0,0,0,0.5);
+            box-shadow: inset 0 0 60px rgba(0,0,0,0.5);
         }
 
         .grid-wrapper:active {
@@ -197,21 +226,21 @@
         /* ===== شريط التنقل ===== */
         .nav-bar {
             display: flex;
-            gap: 5px;
+            gap: 4px;
             justify-content: center;
             flex-wrap: wrap;
             flex-shrink: 0;
-            margin-bottom: 4px;
+            margin-bottom: 3px;
         }
 
         .nav-bar button {
-            padding: 4px 12px;
+            padding: 3px 8px;
             background: rgba(30, 41, 59, 0.6);
             border: 1px solid var(--grid-line);
-            border-radius: 8px;
+            border-radius: 6px;
             color: white;
             cursor: pointer;
-            font-size: 0.7rem;
+            font-size: 0.55rem;
             font-family: var(--primary-font);
             transition: all 0.3s ease;
             font-weight: 600;
@@ -222,39 +251,39 @@
             color: #000;
         }
 
-        /* ===== منطقة الاختيار - في الأسفل ===== */
+        /* ===== منطقة الاختيار ===== */
         .selection-area {
             background-color: var(--card-bg);
-            border-radius: 16px;
-            padding: 12px 16px;
+            border-radius: 12px;
+            padding: 8px 12px;
             backdrop-filter: blur(10px);
-            border: 1px solid rgba(255,255,255,0.08);
+            border: 1px solid rgba(255,255,255,0.06);
             flex-shrink: 0;
-            margin-bottom: 4px;
+            margin-bottom: 3px;
         }
 
         .selection-controls {
             display: flex;
-            gap: 8px;
+            gap: 6px;
             flex-wrap: wrap;
             justify-content: center;
             align-items: center;
         }
 
         .selection-controls label {
-            font-size: 0.9rem;
+            font-size: 0.75rem;
             font-weight: 600;
             color: var(--accent-color);
         }
 
         .selection-controls input {
-            padding: 8px 14px;
-            border-radius: 10px;
+            padding: 5px 10px;
+            border-radius: 8px;
             border: 2px solid var(--grid-line);
             background: #0f172a;
             color: white;
-            font-size: 1rem;
-            width: 160px;
+            font-size: 0.85rem;
+            width: 130px;
             font-family: var(--primary-font);
             font-weight: 600;
             text-align: center;
@@ -264,12 +293,12 @@
         .selection-controls input:focus {
             outline: none;
             border-color: var(--accent-color);
-            box-shadow: 0 0 20px rgba(245, 158, 11, 0.2);
+            box-shadow: 0 0 20px rgba(245, 158, 11, 0.15);
         }
 
         .selection-controls button {
-            padding: 8px 20px;
-            border-radius: 10px;
+            padding: 5px 16px;
+            border-radius: 8px;
             border: none;
             background: var(--accent-color);
             color: #000;
@@ -277,7 +306,7 @@
             cursor: pointer;
             font-family: var(--primary-font);
             transition: all 0.3s ease;
-            font-size: 0.9rem;
+            font-size: 0.75rem;
         }
 
         .selection-controls button:hover {
@@ -295,8 +324,8 @@
         }
 
         .info-text {
-            font-size: 0.85rem;
-            margin-top: 6px;
+            font-size: 0.7rem;
+            margin-top: 4px;
             text-align: center;
             font-weight: 600;
         }
@@ -311,38 +340,43 @@
 
         .info-text .pixel-number {
             color: var(--accent-color);
-            font-size: 1.1rem;
+            font-size: 0.9rem;
         }
 
         /* ===== التذييل ===== */
         footer {
             padding: 2px;
-            font-size: 0.6rem;
-            opacity: 0.4;
+            font-size: 0.5rem;
+            opacity: 0.3;
             text-align: center;
             flex-shrink: 0;
         }
 
         /* ===== تحسينات للجوال ===== */
         @media (max-width: 600px) {
-            .title-area h1 { font-size: 1.4rem; }
-            .title-area p { font-size: 0.7rem; }
-            .status-bar { font-size: 0.75rem; padding: 6px 12px; min-height: 32px; }
-            .selection-controls input { width: 120px; font-size: 0.85rem; padding: 6px 10px; }
-            .selection-controls button { padding: 6px 14px; font-size: 0.75rem; }
-            .controls-bar button { padding: 3px 10px; font-size: 0.65rem; }
-            .nav-bar button { padding: 3px 8px; font-size: 0.6rem; }
-            .grid-wrapper { min-height: 40vh; max-height: 55vh; }
-            .lang-switch-btn { font-size: 0.65rem; padding: 4px 12px; }
-            .spacer { width: 40px; }
-            .info-text { font-size: 0.7rem; }
+            .title-area h1 { font-size: 1.2rem; }
+            .title-area p { font-size: 0.6rem; }
+            .stats-bar { grid-template-columns: 1fr 1fr; gap: 4px; }
+            .stat-item .number { font-size: 0.9rem; }
+            .stat-item .label { font-size: 0.45rem; }
+            .status-bar { font-size: 0.65rem; padding: 3px 8px; min-height: 26px; }
+            .selection-controls input { width: 100px; font-size: 0.75rem; padding: 4px 8px; }
+            .selection-controls button { padding: 4px 12px; font-size: 0.65rem; }
+            .controls-bar button { padding: 2px 8px; font-size: 0.55rem; }
+            .nav-bar button { padding: 2px 6px; font-size: 0.5rem; }
+            .grid-wrapper { min-height: 35vh; max-height: 50vh; }
+            .lang-switch-btn { font-size: 0.6rem; padding: 3px 10px; }
+            .spacer { width: 35px; }
+            .info-text { font-size: 0.6rem; }
+            .selection-controls label { font-size: 0.65rem; }
         }
 
         @media (max-width: 400px) {
-            .title-area h1 { font-size: 1.1rem; }
-            .selection-controls input { width: 90px; font-size: 0.75rem; }
-            .selection-controls button { padding: 4px 10px; font-size: 0.65rem; }
-            .status-bar { font-size: 0.6rem; padding: 4px 8px; min-height: 28px; }
+            .title-area h1 { font-size: 1rem; }
+            .selection-controls input { width: 80px; font-size: 0.65rem; }
+            .selection-controls button { padding: 3px 8px; font-size: 0.55rem; }
+            .status-bar { font-size: 0.55rem; padding: 2px 6px; min-height: 22px; }
+            .stat-item .number { font-size: 0.75rem; }
         }
     </style>
 </head>
@@ -358,6 +392,26 @@
         <div class="spacer"></div>
     </div>
 
+    <!-- شريط الإحصائيات -->
+    <div class="stats-bar">
+        <div class="stat-item">
+            <span class="number" id="statTotal">1,000,000</span>
+            <span class="label" id="lblTotal">إجمالي المربعات</span>
+        </div>
+        <div class="stat-item">
+            <span class="number" id="statReserved">458</span>
+            <span class="label" id="lblReserved">محجوزة</span>
+        </div>
+        <div class="stat-item">
+            <span class="number" id="statAvailable">999,542</span>
+            <span class="label" id="lblAvailable">متاحة</span>
+        </div>
+        <div class="stat-item">
+            <span class="number" id="statPercent">0.05%</span>
+            <span class="label" id="lblPercent">نسبة الحجز</span>
+        </div>
+    </div>
+
     <!-- شريط الحالة -->
     <div class="status-bar">
         <span class="live-dot"></span>
@@ -367,13 +421,13 @@
     <!-- أدوات التحكم -->
     <div class="controls-bar">
         <button onclick="resetView()" id="resetBtn">🔄 إعادة تعيين</button>
-        <button onclick="zoomIn()" id="zoomInBtn">➕ تكبير</button>
+        <button onclick="zoomIn()" id="zoomInBtn">➕</button>
         <span class="zoom-display" id="zoomDisplay">100%</span>
-        <button onclick="zoomOut()" id="zoomOutBtn">➖ تصغير</button>
+        <button onclick="zoomOut()" id="zoomOutBtn">➖</button>
         <button onclick="fitToScreen()" id="fitBtn">📐 ملاءمة</button>
     </div>
 
-    <!-- حاوية الشبكة (Canvas) -->
+    <!-- حاوية الشبكة -->
     <div class="grid-wrapper" id="gridWrapper">
         <canvas id="pixelCanvas"></canvas>
     </div>
@@ -387,7 +441,7 @@
         <button onclick="goToPixel(1000000)">النهاية ➡️</button>
     </div>
 
-    <!-- منطقة الاختيار - في الأسفل -->
+    <!-- منطقة الاختيار -->
     <div class="selection-area">
         <div class="selection-controls">
             <label>🔢 رقم المربع:</label>
@@ -471,9 +525,13 @@
                 available: "✅ متاح",
                 reserved: "❌ محجوز",
                 resetBtn: "🔄 إعادة تعيين",
-                zoomInBtn: "➕ تكبير",
-                zoomOutBtn: "➖ تصغير",
-                fitBtn: "📐 ملاءمة"
+                zoomInBtn: "➕",
+                zoomOutBtn: "➖",
+                fitBtn: "📐 ملاءمة",
+                lblTotal: "إجمالي المربعات",
+                lblReserved: "محجوزة",
+                lblAvailable: "متاحة",
+                lblPercent: "نسبة الحجز"
             },
             en: {
                 title: "Million Selfie Wall",
@@ -490,11 +548,29 @@
                 available: "✅ Available",
                 reserved: "❌ Reserved",
                 resetBtn: "🔄 Reset",
-                zoomInBtn: "➕ Zoom In",
-                zoomOutBtn: "➖ Zoom Out",
-                fitBtn: "📐 Fit"
+                zoomInBtn: "➕",
+                zoomOutBtn: "➖",
+                fitBtn: "📐 Fit",
+                lblTotal: "Total Pixels",
+                lblReserved: "Reserved",
+                lblAvailable: "Available",
+                lblPercent: "Reserved %"
             }
         };
+
+        // ============================================
+        // تحديث الإحصائيات
+        // ============================================
+        function updateStats() {
+            const reserved = RESERVED_INDICES.size;
+            const available = TOTAL_PIXELS - reserved;
+            const percent = ((reserved / TOTAL_PIXELS) * 100);
+            
+            document.getElementById('statTotal').textContent = TOTAL_PIXELS.toLocaleString();
+            document.getElementById('statReserved').textContent = reserved.toLocaleString();
+            document.getElementById('statAvailable').textContent = available.toLocaleString();
+            document.getElementById('statPercent').textContent = percent.toFixed(3) + '%';
+        }
 
         // ============================================
         // تهيئة Canvas
@@ -515,15 +591,20 @@
             ctx.scale(window.devicePixelRatio, window.devicePixelRatio);
             
             drawGrid();
+            updateStats();
         }
 
         // ============================================
-        // رسم الشبكة
+        // رسم الشبكة - محسنة للوضوح
         // ============================================
         function drawGrid() {
             ctx.clearRect(0, 0, canvasWidth, canvasHeight);
             
-            const pixelSize = Math.max(1, Math.min(12, (canvasWidth / COLS) * scale));
+            // خلفية داكنة
+            ctx.fillStyle = '#0b0f19';
+            ctx.fillRect(0, 0, canvasWidth, canvasHeight);
+            
+            const pixelSize = Math.max(2, Math.min(14, (canvasWidth / COLS) * scale));
             const totalWidth = COLS * pixelSize;
             const totalHeight = ROWS * pixelSize;
             
@@ -535,10 +616,7 @@
             const startRow = Math.max(0, Math.floor(-offsetY / pixelSize));
             const endRow = Math.min(ROWS, Math.ceil((canvasHeight - offsetY) / pixelSize) + 1);
             
-            // رسم الخلفية
-            ctx.fillStyle = '#0b0f19';
-            ctx.fillRect(0, 0, canvasWidth, canvasHeight);
-            
+            // رسم المربعات المرئية فقط
             for (let row = startRow; row < endRow; row++) {
                 for (let col = startCol; col < endCol; col++) {
                     const index = row * COLS + col;
@@ -547,7 +625,8 @@
                     const x = offsetX + col * pixelSize;
                     const y = offsetY + row * pixelSize;
                     
-                    let color = '#131c2e';
+                    let color = '#1a2340'; // لون المربع الفارغ
+                    
                     if (RESERVED_INDICES.has(index)) {
                         color = RESERVED_COLORS[index] || '#ec4899';
                     }
@@ -555,40 +634,44 @@
                     const isSelected = (index === selectedPixelIndex && !RESERVED_INDICES.has(index));
                     
                     if (isSelected) {
-                        // إضاءة قوية للمربع المختار
+                        // تأثير إضاءة قوي للمربع المختار
                         const gradient = ctx.createRadialGradient(
                             x + pixelSize/2, y + pixelSize/2, 0,
-                            x + pixelSize/2, y + pixelSize/2, pixelSize * 3
+                            x + pixelSize/2, y + pixelSize/2, pixelSize * 4
                         );
                         gradient.addColorStop(0, 'rgba(16, 185, 129, 0.9)');
-                        gradient.addColorStop(0.3, 'rgba(16, 185, 129, 0.5)');
+                        gradient.addColorStop(0.2, 'rgba(16, 185, 129, 0.5)');
+                        gradient.addColorStop(0.5, 'rgba(16, 185, 129, 0.15)');
                         gradient.addColorStop(1, 'rgba(16, 185, 129, 0)');
                         
                         ctx.fillStyle = gradient;
-                        ctx.fillRect(x - pixelSize, y - pixelSize, pixelSize * 3, pixelSize * 3);
+                        ctx.fillRect(x - pixelSize*2, y - pixelSize*2, pixelSize*5, pixelSize*5);
                         
-                        // المربع نفسه باللون الأخضر المضيء
-                        ctx.shadowColor = 'rgba(16, 185, 129, 0.9)';
-                        ctx.shadowBlur = 30;
+                        // المربع الأخضر المضيء
+                        ctx.shadowColor = 'rgba(16, 185, 129, 0.8)';
+                        ctx.shadowBlur = 40;
                         ctx.fillStyle = '#10b981';
                         ctx.fillRect(x, y, pixelSize, pixelSize);
                         ctx.shadowBlur = 0;
                         
-                        // حدود بيضاء حول المربع المختار
-                        ctx.strokeStyle = 'rgba(255,255,255,0.8)';
-                        ctx.lineWidth = Math.max(1, pixelSize * 0.2);
+                        // حدود بيضاء لامعة
+                        ctx.strokeStyle = 'rgba(255,255,255,0.9)';
+                        ctx.lineWidth = Math.max(2, pixelSize * 0.25);
+                        ctx.shadowColor = 'rgba(255,255,255,0.3)';
+                        ctx.shadowBlur = 10;
                         ctx.strokeRect(x, y, pixelSize, pixelSize);
+                        ctx.shadowBlur = 0;
                     } else {
                         ctx.shadowBlur = 0;
                         ctx.fillStyle = color;
                         ctx.fillRect(x, y, pixelSize, pixelSize);
-                    }
-                    
-                    // حدود بين المربعات
-                    if (pixelSize > 3 && !isSelected) {
-                        ctx.strokeStyle = 'rgba(30, 41, 59, 0.2)';
-                        ctx.lineWidth = 0.5;
-                        ctx.strokeRect(x, y, pixelSize, pixelSize);
+                        
+                        // حدود رفيعة بين المربعات
+                        if (pixelSize > 4) {
+                            ctx.strokeStyle = 'rgba(30, 41, 59, 0.25)';
+                            ctx.lineWidth = 0.5;
+                            ctx.strokeRect(x, y, pixelSize, pixelSize);
+                        }
                     }
                 }
             }
@@ -605,7 +688,7 @@
             const x = screenX - rect.left;
             const y = screenY - rect.top;
             
-            const pixelSize = Math.max(1, Math.min(12, (canvasWidth / COLS) * scale));
+            const pixelSize = Math.max(2, Math.min(14, (canvasWidth / COLS) * scale));
             const totalWidth = COLS * pixelSize;
             const totalHeight = ROWS * pixelSize;
             
@@ -686,8 +769,8 @@
 
         function fitToScreen() {
             const wrapper = document.getElementById('gridWrapper');
-            const w = wrapper.clientWidth;
-            const h = wrapper.clientHeight;
+            const w = wrapper.clientWidth - 4;
+            const h = wrapper.clientHeight - 4;
             
             const scaleX = w / COLS;
             const scaleY = h / ROWS;
@@ -699,7 +782,7 @@
         }
 
         function centerOnPixel(index) {
-            const pixelSize = Math.max(1, Math.min(12, (canvasWidth / COLS) * scale));
+            const pixelSize = Math.max(2, Math.min(14, (canvasWidth / COLS) * scale));
             const totalWidth = COLS * pixelSize;
             const totalHeight = ROWS * pixelSize;
             
@@ -932,6 +1015,10 @@
             document.getElementById('zoomInBtn').textContent = translations[newLang].zoomInBtn;
             document.getElementById('zoomOutBtn').textContent = translations[newLang].zoomOutBtn;
             document.getElementById('fitBtn').textContent = translations[newLang].fitBtn;
+            document.getElementById('lblTotal').textContent = translations[newLang].lblTotal;
+            document.getElementById('lblReserved').textContent = translations[newLang].lblReserved;
+            document.getElementById('lblAvailable').textContent = translations[newLang].lblAvailable;
+            document.getElementById('lblPercent').textContent = translations[newLang].lblPercent;
             
             if (selectedPixelIndex !== -1 && !pixelStatus[selectedPixelIndex]) {
                 document.getElementById('liveStatus').textContent = 
@@ -950,11 +1037,14 @@
         window.onload = function() {
             initCanvas();
             setupPanning();
-            fitToScreen();
+            
+            setTimeout(() => {
+                fitToScreen();
+            }, 50);
             
             window.addEventListener('resize', () => {
                 initCanvas();
-                fitToScreen();
+                setTimeout(fitToScreen, 50);
             });
             
             // اختيار مربع افتراضي
