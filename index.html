@@ -211,6 +211,7 @@
             overflow: auto; /* يتيح السحب والتحريك المريح على الجوال */
         }
 
+        /* تعديل جوهري: تم تحديث الأعمدة والصفوف إلى 25 لتستوعب الـ 625 مربعاً بالكامل */
         .pixel-grid {
             display: grid;
             grid-template-columns: repeat(25, 14px);
@@ -235,12 +236,12 @@
             z-index: 10;
         }
 
-        /* المربعات المحجوزة مسبقاً (أنواع متعددة للمحاكاة الاحترافية) */
-        .pixel.taken-vip { background-color: #ec4899; } /* VIP */
-        .pixel.taken-user { background-color: #3b82f6; } /* مستخدمين */
-        .pixel.taken-gold { background-color: #eab308; } /* ذهبي */
+        /* المربعات المحجوزة مسبقاً */
+        .pixel.taken-vip { background-color: #ec4899; } 
+        .pixel.taken-user { background-color: #3b82f6; } 
+        .pixel.taken-gold { background-color: #eab308; } 
 
-        /* ذيل الصفحة لحفظ الحقوق للجمهورين */
+        /* ذيل الصفحة */
         footer {
             margin-top: auto;
             padding: 20px;
@@ -258,7 +259,6 @@
 <body>
 
     <div class="top-bar">
-        <!-- زر اللغات المطور -->
         <button class="lang-switch-btn" id="langBtn" onclick="toggleLanguage()">English</button>
     </div>
 
@@ -267,7 +267,6 @@
         <p class="subtitle" id="subTitle">احجز مربعك في أكبر لوحة رقمية للتاريخ</p>
     </header>
 
-    <!-- شريط يعرض تفاعلية المربعات المحددة حالياً -->
     <div class="live-preview-box">
         <span class="live-dot"></span>
         <span id="liveStatus">اضغط على أي مربع في الشبكة بالأسفل لاختياره</span>
@@ -294,7 +293,6 @@
         <button class="cta-btn" id="ctaBtn" onclick="bookPixelAlert()">احجز مكانك في الجدارية الآن 🚀</button>
     </div>
 
-    <!-- جدارية الشبكة للمربعات (قابلة للتحريك والسحب لسهولة الاستخدام على الجوال) -->
     <div class="grid-container">
         <div class="pixel-grid" id="pixelGrid"></div>
     </div>
@@ -304,7 +302,6 @@
     </footer>
 
     <script>
-        // مصفوفة اللغات الكاملة للموقع
         const translations = {
             ar: {
                 title: "جدارية مليون سيلفي",
@@ -313,3 +310,6 @@
                 lblReserved: "المربعات المحجوزة",
                 bookBtn: "احجز مكانك في الجدارية الآن 🚀",
                 liveStatus: "اضغط على أي مربع في الشبكة بالأسفل لاختياره واستعراضه",
+                alertMsg: "أهلاً بك! نقوم حالياً ببرمجة لوحة تحكم لتتيح لك رفع صورتك الخاصة واختيار موقعك وربطها ببوابة الدفع. انتظرنا قريباً جداً!",
+                footer: "© 2026 جدارية مليون سيلفي. جميع الحقوق محفوظة.",
+                langBtn: "English",
