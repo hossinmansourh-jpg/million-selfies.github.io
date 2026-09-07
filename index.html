@@ -1,0 +1,1411 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>جدارية مليون صورة سيلفي | One Million Selfies Mosaic</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-primary: #0a0a0f;
+            --bg-secondary: #111118;
+            --bg-card: #1a1a25;
+            --bg-grid: #1e1e2a;
+            --cell-border: rgba(255, 255, 255, 0.04);
+            --cell-hover: rgba(255, 215, 0, 0.25);
+            --text-primary: #ffffff;
+            --text-secondary: #b0b0c0;
+            --text-muted: #707080;
+            --accent-gold: #f5c542;
+            --accent-gold-dark: #d4a82a;
+            --accent-gradient: linear-gradient(135deg, #f5c542 0%, #e8a020 40%, #c47b0f 100%);
+            --accent-glow: rgba(245, 197, 66, 0.35);
+            --progress-bg: #1a1a25;
+            --progress-fill: linear-gradient(90deg, #f5c542, #e8a020, #d48a0f);
+            --modal-bg: #1a1a25;
+            --modal-overlay: rgba(0, 0, 0, 0.75);
+            --grid-size: 1000;
+            --cell-size: 10px;
+            --scrollbar-thumb: #333345;
+            --scrollbar-track: #111118;
+            --tooltip-bg: rgba(20, 20, 30, 0.95);
+            --tooltip-border: #f5c542;
+            --shadow-sm: 0 2px 12px rgba(0, 0, 0, 0.4);
+            --shadow-md: 0 8px 32px rgba(0, 0, 0, 0.5);
+            --shadow-lg: 0 20px 60px rgba(0, 0, 0, 0.7);
+            --radius-sm: 8px;
+            --radius-md: 16px;
+            --radius-lg: 24px;
+            --transition-fast: 0.2s ease;
+            --transition-med: 0.35s ease;
+            --transition-slow: 0.5s ease;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+            font-size: 16px;
+        }
+
+        body {
+            font-family: 'Cairo', sans-serif;
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
+            min-height: 100vh;
+            overflow-x: hidden;
+            line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        /* === SCROLLBAR STYLING === */
+        ::-webkit-scrollbar {
+            width: 10px;
+            height: 10px;
+        }
+        ::-webkit-scrollbar-track {
+            background: var(--scrollbar-track);
+        }
+        ::-webkit-scrollbar-thumb {
+            background: var(--scrollbar-thumb);
+            border-radius: 6px;
+            border: 2px solid var(--scrollbar-track);
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #4a4a60;
+        }
+
+        /* === SELECTION === */
+        ::selection {
+            background: rgba(245, 197, 66, 0.3);
+            color: #fff;
+        }
+
+        /* === HERO SECTION === */
+        .hero {
+            position: relative;
+            padding: 48px 24px 32px;
+            text-align: center;
+            background: radial-gradient(ellipse 80% 60% at 50% -10%, rgba(245, 197, 66, 0.08) 0%, transparent 70%),
+                linear-gradient(180deg, #0d0d14 0%, #0a0a0f 100%);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: repeating-linear-gradient(90deg,
+                    transparent,
+                    transparent 39px,
+                    rgba(255, 255, 255, 0.01) 40px,
+                    rgba(255, 255, 255, 0.01) 40px);
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .hero>* {
+            position: relative;
+            z-index: 1;
+        }
+
+        .hero-badge {
+            display: inline-block;
+            padding: 6px 18px;
+            border-radius: 50px;
+            background: rgba(245, 197, 66, 0.1);
+            border: 1px solid rgba(245, 197, 66, 0.3);
+            color: var(--accent-gold);
+            font-size: 0.8rem;
+            font-weight: 700;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            margin-bottom: 20px;
+            animation: fadeInDown 0.8s ease;
+        }
+
+        .hero-title {
+            font-size: clamp(2rem, 5.5vw, 3.8rem);
+            font-weight: 900;
+            line-height: 1.2;
+            margin-bottom: 12px;
+            background: var(--accent-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-shadow: none;
+            animation: fadeInDown 0.8s ease 0.1s both;
+            letter-spacing: -0.5px;
+        }
+
+        .hero-title .highlight {
+            display: inline-block;
+            background: var(--accent-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            position: relative;
+        }
+
+        .hero-subtitle {
+            font-size: clamp(1rem, 2vw, 1.25rem);
+            color: var(--text-secondary);
+            max-width: 720px;
+            margin: 0 auto 24px;
+            font-weight: 400;
+            animation: fadeInDown 0.8s ease 0.2s both;
+            line-height: 1.8;
+        }
+
+        .hero-subtitle strong {
+            color: var(--accent-gold);
+            font-weight: 700;
+        }
+
+        /* === STATS SECTION === */
+        .stats-section {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 24px;
+            padding: 24px 16px 20px;
+            max-width: 900px;
+            margin: 0 auto;
+            animation: fadeInUp 0.8s ease 0.3s both;
+        }
+
+        .stat-card {
+            background: var(--bg-card);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: var(--radius-md);
+            padding: 20px 28px;
+            text-align: center;
+            min-width: 180px;
+            flex: 1;
+            max-width: 280px;
+            box-shadow: var(--shadow-sm);
+            transition: all var(--transition-fast);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .stat-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: var(--accent-gradient);
+            opacity: 0.7;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-md);
+            border-color: rgba(245, 197, 66, 0.3);
+        }
+
+        .stat-number {
+            font-size: 2.4rem;
+            font-weight: 900;
+            color: var(--accent-gold);
+            line-height: 1.2;
+            letter-spacing: -1px;
+            font-variant-numeric: tabular-nums;
+        }
+
+        .stat-number.remaining {
+            animation: pulse-gold 2s ease-in-out infinite;
+        }
+
+        .stat-label {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            font-weight: 600;
+            letter-spacing: 0.5px;
+            margin-top: 4px;
+            text-transform: uppercase;
+        }
+
+        /* === PROGRESS BAR === */
+        .progress-wrapper {
+            max-width: 700px;
+            margin: 8px auto 24px;
+            padding: 0 16px;
+            animation: fadeInUp 0.8s ease 0.4s both;
+        }
+
+        .progress-label-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px;
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            font-weight: 600;
+        }
+
+        .progress-percent {
+            color: var(--accent-gold);
+            font-weight: 800;
+            font-size: 1.1rem;
+        }
+
+        .progress-bar-outer {
+            width: 100%;
+            height: 10px;
+            background: var(--progress-bg);
+            border-radius: 50px;
+            overflow: hidden;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            position: relative;
+            box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .progress-bar-inner {
+            height: 100%;
+            background: var(--progress-fill);
+            border-radius: 50px;
+            transition: width 1s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            position: relative;
+            min-width: 0;
+            box-shadow: 0 0 16px var(--accent-glow);
+        }
+
+        .progress-bar-inner::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(180deg, rgba(255, 255, 255, 0.25) 0%, transparent 60%);
+            border-radius: 50px;
+        }
+
+        /* === GRID SECTION === */
+        .grid-section {
+            padding: 16px 16px 32px;
+            max-width: 1200px;
+            margin: 0 auto;
+            animation: fadeInUp 0.8s ease 0.5s both;
+        }
+
+        .grid-section-header {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+            gap: 12px;
+        }
+
+        .grid-section-title {
+            font-size: 1.2rem;
+            font-weight: 800;
+            color: var(--text-primary);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .grid-section-title .icon {
+            font-size: 1.5rem;
+        }
+
+        .grid-hint {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            font-weight: 400;
+            letter-spacing: 0.3px;
+        }
+
+        .grid-legend {
+            display: flex;
+            gap: 16px;
+            flex-wrap: wrap;
+            align-items: center;
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .legend-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 3px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        .legend-dot.empty {
+            background: var(--bg-grid);
+        }
+        .legend-dot.reserved {
+            background: var(--accent-gradient);
+        }
+
+        /* === GRID CONTAINER === */
+        .grid-wrapper {
+            position: relative;
+            border-radius: var(--radius-md);
+            overflow: hidden;
+            border: 2px solid rgba(255, 255, 255, 0.08);
+            box-shadow: var(--shadow-lg);
+            background: var(--bg-grid);
+            cursor: crosshair;
+            user-select: none;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            max-height: 70vh;
+            overflow: auto;
+            position: relative;
+        }
+
+        .grid-wrapper:focus {
+            outline: none;
+            border-color: rgba(245, 197, 66, 0.4);
+        }
+
+        .grid-container {
+            display: grid;
+            grid-template-columns: repeat(var(--grid-size), var(--cell-size));
+            grid-template-rows: repeat(var(--grid-size), var(--cell-size));
+            background-color: var(--bg-grid);
+            background-image:
+                linear-gradient(to right, var(--cell-border) 1px, transparent 1px),
+                linear-gradient(to bottom, var(--cell-border) 1px, transparent 1px);
+            background-size: var(--cell-size) var(--cell-size);
+            width: fit-content;
+            min-width: 100%;
+            position: relative;
+            direction: ltr;
+        }
+
+        /* === RESERVED BLOCKS === */
+        .reserved-block {
+            position: relative;
+            overflow: hidden;
+            border-radius: 2px;
+            cursor: pointer;
+            transition: all var(--transition-fast);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+            z-index: 1;
+            animation: blockAppear 0.5s ease both;
+        }
+
+        .reserved-block:hover {
+            z-index: 10;
+            box-shadow: 0 6px 24px rgba(245, 197, 66, 0.4);
+            transform: scale(1.04);
+            filter: brightness(1.1);
+            border-radius: 4px;
+        }
+
+        .reserved-block img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+            pointer-events: none;
+            transition: transform var(--transition-med);
+        }
+
+        .reserved-block:hover img {
+            transform: scale(1.08);
+        }
+
+        .reserved-block .block-overlay {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            padding: 6px 10px;
+            background: linear-gradient(transparent, rgba(0, 0, 0, 0.85));
+            color: #fff;
+            font-size: 0.65rem;
+            font-weight: 700;
+            letter-spacing: 0.3px;
+            opacity: 0;
+            transition: opacity var(--transition-fast);
+            pointer-events: none;
+            text-align: left;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .reserved-block:hover .block-overlay {
+            opacity: 1;
+        }
+
+        .reserved-block .block-size-badge {
+            position: absolute;
+            top: 4px;
+            right: 4px;
+            background: rgba(0, 0, 0, 0.7);
+            color: var(--accent-gold);
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-size: 0.55rem;
+            font-weight: 800;
+            letter-spacing: 0.3px;
+            opacity: 0;
+            transition: opacity var(--transition-fast);
+            pointer-events: none;
+        }
+
+        .reserved-block:hover .block-size-badge {
+            opacity: 1;
+        }
+
+        /* === TOOLTIP === */
+        .grid-tooltip {
+            position: fixed;
+            pointer-events: none;
+            background: var(--tooltip-bg);
+            border: 1px solid var(--tooltip-border);
+            border-radius: var(--radius-sm);
+            padding: 8px 16px;
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: var(--accent-gold);
+            z-index: 1000;
+            opacity: 0;
+            transition: opacity 0.15s ease;
+            box-shadow: var(--shadow-md);
+            letter-spacing: 0.5px;
+            white-space: nowrap;
+            direction: rtl;
+        }
+
+        .grid-tooltip.visible {
+            opacity: 1;
+        }
+
+        .grid-tooltip .tooltip-arrow {
+            position: absolute;
+            bottom: -6px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 0;
+            height: 0;
+            border-left: 6px solid transparent;
+            border-right: 6px solid transparent;
+            border-top: 6px solid var(--tooltip-border);
+        }
+
+        /* === MODAL === */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--modal-overlay);
+            z-index: 2000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+            backdrop-filter: blur(6px);
+            -webkit-backdrop-filter: blur(6px);
+            padding: 20px;
+        }
+
+        .modal-overlay.active {
+            opacity: 1;
+            pointer-events: all;
+        }
+
+        .modal-content {
+            background: var(--modal-bg);
+            border: 1px solid rgba(245, 197, 66, 0.25);
+            border-radius: var(--radius-lg);
+            padding: 40px 32px 32px;
+            max-width: 480px;
+            width: 100%;
+            text-align: center;
+            box-shadow: var(--shadow-lg);
+            transform: scale(0.85) translateY(20px);
+            transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .modal-overlay.active .modal-content {
+            transform: scale(1) translateY(0);
+        }
+
+        .modal-content::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: var(--accent-gradient);
+        }
+
+        .modal-icon {
+            font-size: 3.5rem;
+            margin-bottom: 16px;
+            display: block;
+            animation: bounce 2s ease-in-out infinite;
+        }
+
+        .modal-title {
+            font-size: 1.6rem;
+            font-weight: 900;
+            margin-bottom: 12px;
+            background: var(--accent-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            letter-spacing: -0.5px;
+        }
+
+        .modal-description {
+            font-size: 0.95rem;
+            color: var(--text-secondary);
+            margin-bottom: 24px;
+            line-height: 1.8;
+        }
+
+        .modal-description strong {
+            color: var(--accent-gold);
+            font-weight: 700;
+        }
+
+        .modal-btn {
+            display: inline-block;
+            padding: 14px 36px;
+            border-radius: 50px;
+            background: var(--accent-gradient);
+            color: #0a0a0f;
+            font-weight: 800;
+            font-size: 1rem;
+            border: none;
+            cursor: pointer;
+            letter-spacing: 0.5px;
+            transition: all var(--transition-fast);
+            box-shadow: 0 4px 20px var(--accent-glow);
+            text-transform: uppercase;
+            font-family: 'Cairo', sans-serif;
+        }
+
+        .modal-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 32px rgba(245, 197, 66, 0.5);
+            filter: brightness(1.05);
+        }
+
+        .modal-btn:active {
+            transform: translateY(0);
+            box-shadow: 0 2px 10px rgba(245, 197, 66, 0.3);
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 16px;
+            left: 16px;
+            background: none;
+            border: none;
+            color: var(--text-muted);
+            font-size: 1.5rem;
+            cursor: pointer;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all var(--transition-fast);
+            font-family: 'Cairo', sans-serif;
+            line-height: 1;
+        }
+
+        .modal-close:hover {
+            background: rgba(255, 255, 255, 0.1);
+            color: var(--text-primary);
+        }
+
+        /* === ANIMATIONS === */
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes pulse-gold {
+            0%,
+            100% {
+                text-shadow: 0 0 20px rgba(245, 197, 66, 0.3);
+            }
+            50% {
+                text-shadow: 0 0 40px rgba(245, 197, 66, 0.7);
+            }
+        }
+
+        @keyframes bounce {
+            0%,
+            100% {
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(-10px);
+            }
+        }
+
+        @keyframes blockAppear {
+            from {
+                opacity: 0;
+                transform: scale(0.5);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        /* === FOOTER === */
+        .site-footer {
+            text-align: center;
+            padding: 24px 16px 32px;
+            color: var(--text-muted);
+            font-size: 0.8rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            letter-spacing: 0.3px;
+        }
+
+        .site-footer a {
+            color: var(--accent-gold);
+            text-decoration: none;
+            font-weight: 600;
+            transition: color var(--transition-fast);
+        }
+
+        .site-footer a:hover {
+            color: var(--accent-gold-dark);
+        }
+
+        /* === RESPONSIVE === */
+        @media (max-width: 768px) {
+            .hero {
+                padding: 32px 16px 20px;
+            }
+            .hero-title {
+                font-size: 2rem;
+            }
+            .stats-section {
+                gap: 12px;
+                padding: 16px 8px;
+            }
+            .stat-card {
+                padding: 14px 18px;
+                min-width: 120px;
+            }
+            .stat-number {
+                font-size: 1.8rem;
+            }
+            .grid-section {
+                padding: 8px 8px 16px;
+            }
+            .grid-wrapper {
+                max-height: 55vh;
+                border-radius: var(--radius-sm);
+            }
+            .modal-content {
+                padding: 28px 20px 24px;
+                margin: 12px;
+            }
+            .modal-title {
+                font-size: 1.3rem;
+            }
+            .grid-legend {
+                font-size: 0.65rem;
+                gap: 8px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .hero-title {
+                font-size: 1.5rem;
+            }
+            .hero-subtitle {
+                font-size: 0.9rem;
+            }
+            .stat-card {
+                padding: 10px 12px;
+                min-width: 90px;
+                border-radius: var(--radius-sm);
+            }
+            .stat-number {
+                font-size: 1.4rem;
+            }
+            .stat-label {
+                font-size: 0.7rem;
+            }
+            .grid-wrapper {
+                max-height: 45vh;
+            }
+            .modal-btn {
+                padding: 12px 24px;
+                font-size: 0.85rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ===== HERO SECTION ===== -->
+    <header class="hero">
+        <div class="hero-badge">🚀 تحدي رقمي تاريخي</div>
+        <h1 class="hero-title">
+            جدارية <span class="highlight">مليون</span> صورة سيلفي
+        </h1>
+        <p class="hero-subtitle">
+            كن جزءاً من <strong>أكبر لوحة رقمية تفاعلية</strong> في العالم العربي.<br>
+            احجز مربعاتك على الجدارية الخالدة، واترك <strong>بصمتك للأبد</strong>.
+            كل مربع 10×10 بكسل بـ <strong>دولار واحد فقط</strong>.
+        </p>
+    </header>
+
+    <!-- ===== STATS & PROGRESS ===== -->
+    <section class="stats-section" aria-label="إحصائيات الجدارية">
+        <div class="stat-card">
+            <div class="stat-number remaining" id="counter-remaining">1,000,000</div>
+            <div class="stat-label">مربعات متبقية</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-number" id="counter-reserved">0</div>
+            <div class="stat-label">مربعات محجوزة</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-number" id="counter-blocks">0</div>
+            <div class="stat-label">صورة سيلفي</div>
+        </div>
+    </section>
+
+    <!-- ===== PROGRESS BAR ===== -->
+    <div class="progress-wrapper">
+        <div class="progress-label-row">
+            <span>نسبة الحجز</span>
+            <span class="progress-percent" id="progress-percent-text">0.00%</span>
+        </div>
+        <div class="progress-bar-outer">
+            <div class="progress-bar-inner" id="progress-bar-inner" style="width: 0%;"></div>
+        </div>
+    </div>
+
+    <!-- ===== GRID SECTION ===== -->
+    <section class="grid-section" aria-label="شبكة الجدارية">
+        <div class="grid-section-header">
+            <h2 class="grid-section-title">
+                <span class="icon">🖼️</span> لوحة الجدارية التفاعلية
+            </h2>
+            <div class="grid-legend">
+                <span class="legend-item">
+                    <span class="legend-dot empty"></span> مربع فارغ
+                </span>
+                <span class="legend-item">
+                    <span class="legend-dot reserved"></span> محجوز
+                </span>
+                <span class="grid-hint">⬅ مرر للاستكشاف | انقر للحجز</span>
+            </div>
+        </div>
+
+        <div class="grid-wrapper" id="grid-wrapper" tabindex="0" role="grid" aria-label="جدارية مليون سيلفي">
+            <div class="grid-container" id="grid-container">
+                <!-- Reserved blocks will be rendered here via JavaScript -->
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== FOOTER ===== -->
+    <footer class="site-footer">
+        <p>© 2025 جدارية مليون سيلفي — جميع الحقوق محفوظة | فكرة مستوحاة من The Million Dollar Homepage | <a href="#" target="_blank">سياسة الخصوصية</a></p>
+    </footer>
+
+    <!-- ===== TOOLTIP ===== -->
+    <div class="grid-tooltip" id="grid-tooltip">
+        احجزني بدولار
+        <div class="tooltip-arrow"></div>
+    </div>
+
+    <!-- ===== MODAL ===== -->
+    <div class="modal-overlay" id="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+        <div class="modal-content">
+            <button class="modal-close" id="modal-close" aria-label="إغلاق النافذة">✕</button>
+            <span class="modal-icon">📸</span>
+            <h2 class="modal-title" id="modal-title">احجز مكانك في التاريخ الرقمي</h2>
+            <p class="modal-description">
+                هذا المربع <strong>فارغ</strong> وينتظر صورتك!<br>
+                احجز مساحتك الآن وكن جزءاً من هذه الجدارية الخالدة.<br>
+                كل 10×10 بكسل بـ <strong>دولار واحد</strong> فقط.
+            </p>
+            <button class="modal-btn" id="modal-reserve-btn">احجز الآن 🔥</button>
+        </div>
+    </div>
+
+    <script>
+        (function() {
+            'use strict';
+
+            // ===== CONFIGURATION =====
+            const GRID_SIZE = 1000; // 1000 × 1000 cells
+            const CELL_SIZE = 10; // pixels per cell
+            const TOTAL_CELLS = GRID_SIZE * GRID_SIZE; // 1,000,000
+
+            // ===== SAMPLE RESERVED BLOCKS (مصفوفة محدثة ببيانات واقعية) =====
+            // كل كتلة: { id, row, col, widthCells, heightCells, name, link, image }
+            // row & col هما موضع البداية (0-based) في الشبكة
+            const reservedBlocks = [{
+                id: 'selfie-001',
+                row: 5,
+                col: 8,
+                widthCells: 5,
+                heightCells: 5,
+                name: 'أحمد السالم',
+                link: 'https://instagram.com/ahmed_alsalem',
+                image: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=50&h=50&fit=crop&crop=faces'
+            }, {
+                id: 'selfie-002',
+                row: 20,
+                col: 30,
+                widthCells: 10,
+                heightCells: 10,
+                name: 'سارة الخالد',
+                link: 'https://instagram.com/sara_alkhaled',
+                image: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100&h=100&fit=crop&crop=faces'
+            }, {
+                id: 'selfie-003',
+                row: 45,
+                col: 60,
+                widthCells: 20,
+                heightCells: 20,
+                name: 'محمد العتيبي',
+                link: 'https://twitter.com/mohd_alotaibi',
+                image: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=200&h=200&fit=crop&crop=faces'
+            }, {
+                id: 'selfie-004',
+                row: 80,
+                col: 15,
+                widthCells: 3,
+                heightCells: 3,
+                name: 'نورة الشمري',
+                link: 'https://instagram.com/noura_shamri',
+                image: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=30&h=30&fit=crop&crop=faces'
+            }, {
+                id: 'selfie-005',
+                row: 100,
+                col: 200,
+                widthCells: 15,
+                heightCells: 15,
+                name: 'عبدالله الحربي',
+                link: 'https://twitter.com/abdullah_harbi',
+                image: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=150&h=150&fit=crop&crop=faces'
+            }, {
+                id: 'selfie-006',
+                row: 150,
+                col: 350,
+                widthCells: 8,
+                heightCells: 8,
+                name: 'ريم القحطاني',
+                link: 'https://instagram.com/reem_alqahtani',
+                image: 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=80&h=80&fit=crop&crop=faces'
+            }, {
+                id: 'selfie-007',
+                row: 200,
+                col: 100,
+                widthCells: 25,
+                heightCells: 25,
+                name: 'خالد الدوسري',
+                link: 'https://twitter.com/khalid_dosari',
+                image: 'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=250&h=250&fit=crop&crop=faces'
+            }, {
+                id: 'selfie-008',
+                row: 300,
+                col: 500,
+                widthCells: 4,
+                heightCells: 4,
+                name: 'ليلى العنزي',
+                link: 'https://instagram.com/laila_anzi',
+                image: 'https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=40&h=40&fit=crop&crop=faces'
+            }, {
+                id: 'selfie-009',
+                row: 350,
+                col: 250,
+                widthCells: 12,
+                heightCells: 12,
+                name: 'فهد المطيري',
+                link: 'https://twitter.com/fahad_mutairi',
+                image: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=120&h=120&fit=crop&crop=faces'
+            }, {
+                id: 'selfie-010',
+                row: 400,
+                col: 700,
+                widthCells: 30,
+                heightCells: 30,
+                name: 'منيرة السبيعي',
+                link: 'https://instagram.com/munira_subaie',
+                image: 'https://images.unsplash.com/photo-1517841905240-472988babdf9?w=300&h=300&fit=crop&crop=faces'
+            }, {
+                id: 'selfie-011',
+                row: 500,
+                col: 50,
+                widthCells: 6,
+                heightCells: 6,
+                name: 'عمر الشريف',
+                link: 'https://twitter.com/omar_shareef',
+                image: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=60&h=60&fit=crop&crop=faces'
+            }, {
+                id: 'selfie-012',
+                row: 550,
+                col: 400,
+                widthCells: 18,
+                heightCells: 18,
+                name: 'هند الراشد',
+                link: 'https://instagram.com/hind_alrashed',
+                image: 'https://images.unsplash.com/photo-1524504388940-b1c1722653e1?w=180&h=180&fit=crop&crop=faces'
+            }, {
+                id: 'selfie-013',
+                row: 600,
+                col: 600,
+                widthCells: 2,
+                heightCells: 2,
+                name: 'بدر المالكي',
+                link: 'https://twitter.com/bader_maliki',
+                image: 'https://images.unsplash.com/photo-1552058544-f2b08422138a?w=20&h=20&fit=crop&crop=faces'
+            }, {
+                id: 'selfie-014',
+                row: 650,
+                col: 150,
+                widthCells: 14,
+                heightCells: 14,
+                name: 'جواهر النعيمي',
+                link: 'https://instagram.com/jawaher_naimi',
+                image: 'https://images.unsplash.com/photo-1531123897727-8f129e1688ce?w=140&h=140&fit=crop&crop=faces'
+            }, {
+                id: 'selfie-015',
+                row: 700,
+                col: 800,
+                widthCells: 22,
+                heightCells: 22,
+                name: 'سعود القرني',
+                link: 'https://twitter.com/saud_qarni',
+                image: 'https://images.unsplash.com/photo-1521119989659-a83eee488004?w=220&h=220&fit=crop&crop=faces'
+            }, {
+                id: 'selfie-016',
+                row: 780,
+                col: 300,
+                widthCells: 7,
+                heightCells: 7,
+                name: 'دانة الفيصل',
+                link: 'https://instagram.com/dana_faisal',
+                image: 'https://images.unsplash.com/photo-1517841905240-472988babdf9?w=70&h=70&fit=crop&crop=faces'
+            }, {
+                id: 'selfie-017',
+                row: 850,
+                col: 550,
+                widthCells: 16,
+                heightCells: 16,
+                name: 'طلال العنقري',
+                link: 'https://twitter.com/talal_anqari',
+                image: 'https://images.unsplash.com/photo-1463453091185-61582044d556?w=160&h=160&fit=crop&crop=faces'
+            }, {
+                id: 'selfie-018',
+                row: 900,
+                col: 100,
+                widthCells: 9,
+                heightCells: 9,
+                name: 'شهد العبدالله',
+                link: 'https://instagram.com/shahad_abdullah',
+                image: 'https://images.unsplash.com/photo-1524250502761-1ac6f2e30d43?w=90&h=90&fit=crop&crop=faces'
+            }, {
+                id: 'selfie-019',
+                row: 120,
+                col: 650,
+                widthCells: 11,
+                heightCells: 11,
+                name: 'ماجد الزهراني',
+                link: 'https://twitter.com/majid_zahrani',
+                image: 'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=110&h=110&fit=crop&crop=faces'
+            }, {
+                id: 'selfie-020',
+                row: 250,
+                col: 800,
+                widthCells: 28,
+                heightCells: 28,
+                name: 'غادة اليمني',
+                link: 'https://instagram.com/ghada_yamani',
+                image: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=280&h=280&fit=crop&crop=faces'
+            }];
+
+            // ===== DOM REFERENCES =====
+            const gridContainer = document.getElementById('grid-container');
+            const gridWrapper = document.getElementById('grid-wrapper');
+            const tooltip = document.getElementById('grid-tooltip');
+            const modalOverlay = document.getElementById('modal-overlay');
+            const modalClose = document.getElementById('modal-close');
+            const modalReserveBtn = document.getElementById('modal-reserve-btn');
+            const counterRemaining = document.getElementById('counter-remaining');
+            const counterReserved = document.getElementById('counter-reserved');
+            const counterBlocks = document.getElementById('counter-blocks');
+            const progressBarInner = document.getElementById('progress-bar-inner');
+            const progressPercentText = document.getElementById('progress-percent-text');
+
+            // ===== STATE =====
+            let totalReservedCells = 0;
+            let hoveredBlockId = null;
+            let isTooltipVisible = false;
+
+            // ===== CALCULATE TOTAL RESERVED CELLS =====
+            reservedBlocks.forEach(block => {
+                totalReservedCells += block.widthCells * block.heightCells;
+            });
+
+            const remainingCells = TOTAL_CELLS - totalReservedCells;
+            const reservedPercentage = (totalReservedCells / TOTAL_CELLS) * 100;
+
+            // ===== FORMAT NUMBERS =====
+            function formatNumber(num) {
+                return num.toLocaleString('en-US');
+            }
+
+            function formatPercentage(pct) {
+                return pct.toFixed(2) + '%';
+            }
+
+            // ===== UPDATE COUNTERS & PROGRESS =====
+            function updateStats() {
+                counterRemaining.textContent = formatNumber(remainingCells);
+                counterReserved.textContent = formatNumber(totalReservedCells);
+                counterBlocks.textContent = formatNumber(reservedBlocks.length);
+                progressBarInner.style.width = reservedPercentage + '%';
+                progressPercentText.textContent = formatPercentage(reservedPercentage);
+
+                // Animate the progress bar
+                requestAnimationFrame(() => {
+                    progressBarInner.style.transition = 'width 1.2s cubic-bezier(0.25, 0.46, 0.45, 0.94)';
+                    progressBarInner.style.width = reservedPercentage + '%';
+                });
+            }
+
+            // ===== RENDER RESERVED BLOCKS =====
+            function renderReservedBlocks() {
+                reservedBlocks.forEach((block, index) => {
+                    const div = document.createElement('div');
+                    div.className = 'reserved-block';
+                    div.id = 'block-' + block.id;
+                    div.dataset.blockId = block.id;
+                    div.dataset.index = index;
+
+                    // Calculate grid position (1-based for CSS Grid)
+                    const gridRowStart = block.row + 1;
+                    const gridRowEnd = gridRowStart + block.heightCells;
+                    const gridColStart = block.col + 1;
+                    const gridColEnd = gridColStart + block.widthCells;
+
+                    div.style.gridRow = gridRowStart + ' / ' + gridRowEnd;
+                    div.style.gridColumn = gridColStart + ' / ' + gridColEnd;
+                    div.style.animationDelay = (index * 0.06) + 's';
+
+                    // Add image
+                    const img = document.createElement('img');
+                    img.src = block.image;
+                    img.alt = 'صورة ' + block.name;
+                    img.loading = 'lazy';
+                    img.draggable = false;
+                    img.onerror = function() {
+                        // Fallback if image fails to load
+                        this.style.display = 'none';
+                        div.style.background =
+                            'linear-gradient(135deg, #f5c542 0%, #e8a020 50%, #c47b0f 100%)';
+                        div.innerHTML =
+                            '<span style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-size:1.5em;">📸</span>';
+                    };
+                    div.appendChild(img);
+
+                    // Add overlay with name
+                    const overlay = document.createElement('div');
+                    overlay.className = 'block-overlay';
+                    overlay.textContent = block.name;
+                    div.appendChild(overlay);
+
+                    // Add size badge
+                    const badge = document.createElement('div');
+                    badge.className = 'block-size-badge';
+                    const pixelWidth = block.widthCells * CELL_SIZE;
+                    const pixelHeight = block.heightCells * CELL_SIZE;
+                    badge.textContent = pixelWidth + '×' + pixelHeight + 'px';
+                    div.appendChild(badge);
+
+                    // Click handler for reserved blocks
+                    div.addEventListener('click', function(e) {
+                        e.stopPropagation();
+                        e.preventDefault();
+                        window.open(block.link, '_blank', 'noopener,noreferrer');
+                    });
+
+                    // Hover handlers for reserved blocks
+                    div.addEventListener('mouseenter', function() {
+                        hoveredBlockId = block.id;
+                        hideTooltip();
+                    });
+
+                    div.addEventListener('mouseleave', function() {
+                        hoveredBlockId = null;
+                    });
+
+                    gridContainer.appendChild(div);
+                });
+            }
+
+            // ===== TOOLTIP FUNCTIONS =====
+            function showTooltip(x, y) {
+                tooltip.style.left = x + 'px';
+                tooltip.style.top = y + 'px';
+                tooltip.classList.add('visible');
+                isTooltipVisible = true;
+            }
+
+            function hideTooltip() {
+                tooltip.classList.remove('visible');
+                isTooltipVisible = false;
+            }
+
+            function updateTooltipPosition(x, y) {
+                tooltip.style.left = x + 'px';
+                tooltip.style.top = y + 'px';
+            }
+
+            // ===== CHECK IF CELL IS WITHIN A RESERVED BLOCK =====
+            function findBlockAtCell(row, col) {
+                for (let i = 0; i < reservedBlocks.length; i++) {
+                    const block = reservedBlocks[i];
+                    if (row >= block.row && row < block.row + block.heightCells &&
+                        col >= block.col && col < block.col + block.widthCells) {
+                        return block;
+                    }
+                }
+                return null;
+            }
+
+            // ===== GET CELL FROM MOUSE POSITION =====
+            function getCellFromMouseEvent(e) {
+                const rect = gridContainer.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+
+                // Account for scroll position of the wrapper
+                const scrollLeft = gridWrapper.scrollLeft;
+                const scrollTop = gridWrapper.scrollTop;
+
+                const adjustedX = x + scrollLeft;
+                const adjustedY = y + scrollTop;
+
+                const col = Math.floor(adjustedX / CELL_SIZE);
+                const row = Math.floor(adjustedY / CELL_SIZE);
+
+                if (row >= 0 && row < GRID_SIZE && col >= 0 && col < GRID_SIZE) {
+                    return { row, col };
+                }
+                return null;
+            }
+
+            // ===== MOUSE MOVE HANDLER (for hover tooltip) =====
+            gridWrapper.addEventListener('mousemove', function(e) {
+                const cell = getCellFromMouseEvent(e);
+                if (!cell) {
+                    hideTooltip();
+                    return;
+                }
+
+                const block = findBlockAtCell(cell.row, cell.col);
+                if (block) {
+                    hoveredBlockId = block.id;
+                    hideTooltip();
+                } else {
+                    hoveredBlockId = null;
+                    // Show tooltip near the mouse position
+                    const tooltipX = e.clientX + 12;
+                    const tooltipY = e.clientY - 10;
+
+                    // Keep tooltip within viewport
+                    const tooltipWidth = tooltip.offsetWidth || 120;
+                    const tooltipHeight = tooltip.offsetHeight || 40;
+                    const viewportW = window.innerWidth;
+                    const viewportH = window.innerHeight;
+
+                    let finalX = tooltipX;
+                    let finalY = tooltipY;
+
+                    if (finalX + tooltipWidth > viewportW - 10) {
+                        finalX = e.clientX - tooltipWidth - 12;
+                    }
+                    if (finalY + tooltipHeight > viewportH - 10) {
+                        finalY = e.clientY - tooltipHeight - 12;
+                    }
+                    if (finalX < 10) finalX = 10;
+                    if (finalY < 10) finalY = 10;
+
+                    showTooltip(finalX, finalY);
+                }
+            });
+
+            // Hide tooltip when mouse leaves the grid
+            gridWrapper.addEventListener('mouseleave', function() {
+                hideTooltip();
+                hoveredBlockId = null;
+            });
+
+            // ===== CLICK HANDLER FOR GRID =====
+            gridWrapper.addEventListener('click', function(e) {
+                // Check if the click was on a reserved block (those have their own handlers)
+                if (e.target.closest('.reserved-block')) {
+                    return; // Already handled by the block's click handler
+                }
+
+                const cell = getCellFromMouseEvent(e);
+                if (!cell) return;
+
+                const block = findBlockAtCell(cell.row, cell.col);
+                if (block) {
+                    // Should not happen because reserved blocks handle their own clicks
+                    window.open(block.link, '_blank', 'noopener,noreferrer');
+                    return;
+                }
+
+                // Empty cell clicked — show modal
+                openModal();
+            });
+
+            // ===== MODAL FUNCTIONS =====
+            function openModal() {
+                hideTooltip();
+                modalOverlay.classList.add('active');
+                document.body.style.overflow = 'hidden';
+                // Focus the close button for accessibility
+                setTimeout(() => modalClose.focus(), 100);
+            }
+
+            function closeModal() {
+                modalOverlay.classList.remove('active');
+                document.body.style.overflow = '';
+                gridWrapper.focus();
+            }
+
+            modalClose.addEventListener('click', closeModal);
+            modalReserveBtn.addEventListener('click', function() {
+                // في النسخة الحقيقية: توجيه لبوابة الدفع
+                alert('🎉 رائع! سيتم توجيهك لصفحة الحجز الآن.\n(هذه نسخة تجريبية — في النسخة الحقيقية ستنتقل لبوابة الدفع)');
+                closeModal();
+            });
+
+            // Close modal when clicking overlay background
+            modalOverlay.addEventListener('click', function(e) {
+                if (e.target === modalOverlay) {
+                    closeModal();
+                }
+            });
+
+            // Close modal with Escape key
+            document.addEventListener('keydown', function(e) {
+                if (e.key === 'Escape' && modalOverlay.classList.contains('active')) {
+                    closeModal();
+                }
+            });
+
+            // ===== INITIAL SCROLL POSITION =====
+            function setInitialScroll() {
+                // التمرير إلى منطقة مثيرة للاهتمام
+                const targetScrollX = 20 * CELL_SIZE;
+                const targetScrollY = 30 * CELL_SIZE;
+                gridWrapper.scrollLeft = targetScrollX;
+                gridWrapper.scrollTop = targetScrollY;
+            }
+
+            // ===== INITIALIZE =====
+            function init() {
+                renderReservedBlocks();
+                updateStats();
+                setInitialScroll();
+
+                // Smooth animation for the progress bar on load
+                setTimeout(() => {
+                    progressBarInner.style.transition = 'width 1.5s cubic-bezier(0.25, 0.46, 0.45, 0.94)';
+                    progressBarInner.style.width = reservedPercentage + '%';
+                }, 200);
+
+                // Add focus outline styles
+                gridWrapper.addEventListener('focus', function() {
+                    gridWrapper.style.borderColor = 'rgba(245, 197, 66, 0.5)';
+                });
+                gridWrapper.addEventListener('blur', function() {
+                    gridWrapper.style.borderColor = 'rgba(255, 255, 255, 0.08)';
+                });
+
+                console.log('✅ جدارية مليون سيلفي تم تحميلها بنجاح');
+                console.log('📊 إجمالي المربعات:', formatNumber(TOTAL_CELLS));
+                console.log('🖼️ الصور المحجوزة:', reservedBlocks.length);
+                console.log('📌 المربعات المحجوزة:', formatNumber(totalReservedCells));
+                console.log('💡 المربعات المتبقية:', formatNumber(remainingCells));
+            }
+
+            // ===== START =====
+            if (document.readyState === 'loading') {
+                document.addEventListener('DOMContentLoaded', init);
+            } else {
+                init();
+            }
+
+            // ===== EXPOSE FOR DEBUGGING =====
+            window.mosaicApp = {
+                gridSize: GRID_SIZE,
+                cellSize: CELL_SIZE,
+                totalCells: TOTAL_CELLS,
+                reservedBlocks: reservedBlocks,
+                totalReservedCells: totalReservedCells,
+                remainingCells: remainingCells,
+                reservedPercentage: reservedPercentage,
+                formatNumber: formatNumber,
+                findBlockAtCell: findBlockAtCell
+            };
+
+        })();
+    </script>
+</body>
+</html>
