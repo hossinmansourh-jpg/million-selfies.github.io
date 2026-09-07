@@ -917,3 +917,73 @@
         // ============================================
         function toggleLanguage() {
             const newLang = currentLang === 'ar' ? 'en' : 'ar';
+            currentLang = newLang;
+            
+            document.documentElement.dir = newLang === 'ar' ? 'rtl' : 'ltr';
+            document.documentElement.lang = newLang;
+            
+            document.getElementById('mainTitle').textContent = translations[newLang].title;
+            document.getElementById('subTitle').textContent = translations[newLang].subtitle;
+            document.getElementById('footerText').textContent = translations[newLang].footer;
+            document.getElementById('langBtn').textContent = translations[newLang].langBtn;
+            document.getElementById('selectBtn').textContent = translations[newLang].selectBtn;
+            document.getElementById('randomBtn').textContent = translations[newLang].randomBtn;
+            document.getElementById('resetBtn').textContent = translations[newLang].resetBtn;
+            document.getElementById('zoomInBtn').textContent = translations[newLang].zoomInBtn;
+            document.getElementById('zoomOutBtn').textContent = translations[newLang].zoomOutBtn;
+            document.getElementById('fitBtn').textContent = translations[newLang].fitBtn;
+            
+            if (selectedPixelIndex !== -1 && !pixelStatus[selectedPixelIndex]) {
+                document.getElementById('liveStatus').textContent = 
+                    translations[newLang].selectedTxt + (selectedPixelIndex + 1);
+                document.getElementById('selectedPixelInfo').innerHTML = 
+                    `📍 المربع #<span class="pixel-number">${selectedPixelIndex + 1}</span> - <strong class="available">${translations[newLang].available}</strong>`;
+            } else {
+                document.getElementById('liveStatus').textContent = translations[newLang].liveStatus;
+                document.getElementById('selectedPixelInfo').textContent = translations[newLang].noSelection;
+            }
+        }
+
+        // ============================================
+        // تحميل الصفحة
+        // ============================================
+        window.onload = function() {
+            initCanvas();
+            setupPanning();
+            fitToScreen();
+            
+            window.addEventListener('resize', () => {
+                initCanvas();
+                fitToScreen();
+            });
+            
+            // اختيار مربع افتراضي
+            setTimeout(() => {
+                for (let i = 0; i < TOTAL_PIXELS; i++) {
+                    if (!pixelStatus[i]) {
+                        selectedPixelIndex = i;
+                        document.getElementById('pixelNumberInput').value = i + 1;
+                        document.getElementById('liveStatus').textContent = 
+                            translations[currentLang].selectedTxt + (i + 1);
+                        document.getElementById('selectedPixelInfo').innerHTML = 
+                            `📍 المربع #<span class="pixel-number">${i + 1}</span> - <strong class="available">${translations[currentLang].available}</strong>`;
+                        centerOnPixel(i);
+                        drawGrid();
+                        break;
+                    }
+                }
+            }, 300);
+        };
+
+        // جعل التوابع عالمية
+        window.toggleLanguage = toggleLanguage;
+        window.selectPixelByNumber = selectPixelByNumber;
+        window.selectRandomPixel = selectRandomPixel;
+        window.goToPixel = goToPixel;
+        window.zoomIn = zoomIn;
+        window.zoomOut = zoomOut;
+        window.resetView = resetView;
+        window.fitToScreen = fitToScreen;
+    </script>
+</body>
+</html>
