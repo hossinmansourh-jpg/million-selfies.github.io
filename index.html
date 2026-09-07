@@ -10,7 +10,7 @@
     <style>
         :root {
             --bg-color: #0b0f19;
-            --card-bg: rgba(30, 41, 59, 0.7);
+            --card-bg: rgba(30, 41, 59, 0.85);
             --text-color: #f1f5f9;
             --accent-color: #f59e0b;
             --grid-line: #1e293b;
@@ -194,17 +194,17 @@
             text-align: center;
         }
 
-        /* ===== حاوية الشبكة ===== */
+        /* ===== حاوية الشبكة - أكبر وأوضح ===== */
         .grid-wrapper {
             flex: 1;
-            min-height: 40vh;
-            max-height: 60vh;
+            min-height: 50vh;
+            max-height: 70vh;
             width: 100%;
             overflow: hidden;
             position: relative;
             background-color: #0b0f19;
             border-radius: 12px;
-            border: 2px solid rgba(255,255,255,0.06);
+            border: 2px solid rgba(255,255,255,0.08);
             margin-bottom: 4px;
             touch-action: none;
             cursor: grab;
@@ -343,6 +343,227 @@
             font-size: 0.9rem;
         }
 
+        /* ============================================
+           نافذة رفع الصورة المنبثقة
+           ============================================ */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.85);
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .modal-overlay.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: linear-gradient(145deg, #1a2340, #0b0f19);
+            border-radius: 24px;
+            padding: 30px;
+            max-width: 480px;
+            width: 100%;
+            border: 2px solid var(--accent-color);
+            box-shadow: 0 0 60px rgba(245, 158, 11, 0.15);
+            position: relative;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 12px;
+            left: 16px;
+            background: none;
+            border: none;
+            color: #94a3b8;
+            font-size: 1.8rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-family: var(--primary-font);
+        }
+
+        .modal-close:hover {
+            color: #ef4444;
+            transform: rotate(90deg);
+        }
+
+        .modal-title {
+            color: var(--accent-color);
+            font-size: 1.4rem;
+            font-weight: 900;
+            text-align: center;
+            margin-bottom: 4px;
+        }
+
+        .modal-subtitle {
+            text-align: center;
+            font-size: 0.8rem;
+            opacity: 0.6;
+            margin-bottom: 20px;
+        }
+
+        .modal-pixel-info {
+            background: rgba(15, 23, 42, 0.6);
+            border-radius: 12px;
+            padding: 10px 16px;
+            text-align: center;
+            margin-bottom: 20px;
+            border: 1px solid rgba(255,255,255,0.05);
+        }
+
+        .modal-pixel-info .label {
+            font-size: 0.65rem;
+            opacity: 0.5;
+        }
+
+        .modal-pixel-info .number {
+            font-size: 1.6rem;
+            font-weight: 900;
+            color: var(--accent-color);
+        }
+
+        .modal-pixel-info .status {
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        .modal-pixel-info .status.available {
+            color: #10b981;
+        }
+
+        .modal-pixel-info .status.reserved {
+            color: #ef4444;
+        }
+
+        .form-group {
+            margin-bottom: 16px;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 0.75rem;
+            font-weight: 600;
+            margin-bottom: 4px;
+            color: #94a3b8;
+        }
+
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: 10px 14px;
+            border-radius: 10px;
+            border: 2px solid var(--grid-line);
+            background: #0f172a;
+            color: white;
+            font-size: 0.9rem;
+            font-family: var(--primary-font);
+            transition: all 0.3s ease;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: var(--accent-color);
+            box-shadow: 0 0 20px rgba(245, 158, 11, 0.1);
+        }
+
+        .form-group textarea {
+            min-height: 60px;
+            resize: vertical;
+        }
+
+        .form-group .file-upload {
+            position: relative;
+            display: block;
+        }
+
+        .form-group .file-upload input[type="file"] {
+            position: absolute;
+            opacity: 0;
+            width: 100%;
+            height: 100%;
+            cursor: pointer;
+        }
+
+        .form-group .file-upload .upload-area {
+            border: 2px dashed var(--grid-line);
+            border-radius: 10px;
+            padding: 20px;
+            text-align: center;
+            transition: all 0.3s ease;
+            background: rgba(15, 23, 42, 0.3);
+        }
+
+        .form-group .file-upload .upload-area:hover {
+            border-color: var(--accent-color);
+            background: rgba(245, 158, 11, 0.05);
+        }
+
+        .form-group .file-upload .upload-area .icon {
+            font-size: 2rem;
+            display: block;
+            margin-bottom: 4px;
+        }
+
+        .form-group .file-upload .upload-area .text {
+            font-size: 0.75rem;
+            opacity: 0.6;
+        }
+
+        .form-group .file-upload .upload-area .filename {
+            font-size: 0.7rem;
+            color: var(--accent-color);
+            margin-top: 4px;
+        }
+
+        .modal-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .modal-actions button {
+            flex: 1;
+            padding: 12px;
+            border-radius: 10px;
+            border: none;
+            font-size: 0.9rem;
+            font-weight: 700;
+            cursor: pointer;
+            font-family: var(--primary-font);
+            transition: all 0.3s ease;
+        }
+
+        .modal-actions .btn-confirm {
+            background: linear-gradient(135deg, #10b981, #059669);
+            color: white;
+        }
+
+        .modal-actions .btn-confirm:hover {
+            transform: scale(1.02);
+            box-shadow: 0 0 30px rgba(16, 185, 129, 0.3);
+        }
+
+        .modal-actions .btn-cancel {
+            background: rgba(30, 41, 59, 0.6);
+            color: white;
+            border: 1px solid var(--grid-line);
+        }
+
+        .modal-actions .btn-cancel:hover {
+            background: rgba(239, 68, 68, 0.2);
+            border-color: #ef4444;
+        }
+
         /* ===== التذييل ===== */
         footer {
             padding: 2px;
@@ -364,11 +585,13 @@
             .selection-controls button { padding: 4px 12px; font-size: 0.65rem; }
             .controls-bar button { padding: 2px 8px; font-size: 0.55rem; }
             .nav-bar button { padding: 2px 6px; font-size: 0.5rem; }
-            .grid-wrapper { min-height: 35vh; max-height: 50vh; }
+            .grid-wrapper { min-height: 45vh; max-height: 60vh; }
             .lang-switch-btn { font-size: 0.6rem; padding: 3px 10px; }
             .spacer { width: 35px; }
             .info-text { font-size: 0.6rem; }
-            .selection-controls label { font-size: 0.65rem; }
+            .modal-content { padding: 20px; margin: 10px; }
+            .modal-title { font-size: 1.1rem; }
+            .modal-pixel-info .number { font-size: 1.2rem; }
         }
 
         @media (max-width: 400px) {
@@ -452,6 +675,56 @@
         <div id="selectedPixelInfo" class="info-text">✨ اختر مربعاً من الشبكة أو أدخل رقمه</div>
     </div>
 
+    <!-- نافذة رفع الصورة المنبثقة -->
+    <div class="modal-overlay" id="uploadModal">
+        <div class="modal-content">
+            <button class="modal-close" onclick="closeModal()">✕</button>
+            
+            <div class="modal-title">📸 رفع سيلفي</div>
+            <div class="modal-subtitle">املأ البيانات التالية لحجز مربعك</div>
+            
+            <div class="modal-pixel-info">
+                <div class="label">رقم المربع</div>
+                <div class="number" id="modalPixelNumber">#1</div>
+                <div class="status available" id="modalPixelStatus">✅ متاح</div>
+            </div>
+
+            <form id="uploadForm" onsubmit="submitReservation(event)">
+                <div class="form-group">
+                    <label>📷 رفع صورة السيلفي</label>
+                    <div class="file-upload">
+                        <input type="file" id="selfieImage" accept="image/*" required>
+                        <div class="upload-area">
+                            <span class="icon">🖼️</span>
+                            <div class="text">اضغط لاختيار صورة سيلفي</div>
+                            <div class="filename" id="fileNameDisplay">لم يتم اختيار صورة</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>🔗 رابط الملف الشخصي</label>
+                    <input type="url" id="profileLink" placeholder="https://example.com/profile" required>
+                </div>
+
+                <div class="form-group">
+                    <label>✏️ اسمك (اختياري)</label>
+                    <input type="text" id="userName" placeholder="أدخل اسمك">
+                </div>
+
+                <div class="form-group">
+                    <label>📝 رسالة (اختياري)</label>
+                    <textarea id="userMessage" placeholder="اكتب رسالة قصيرة..." rows="2"></textarea>
+                </div>
+
+                <div class="modal-actions">
+                    <button type="button" class="btn-cancel" onclick="closeModal()">إلغاء</button>
+                    <button type="submit" class="btn-confirm">✅ تأكيد الحجز</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
     <footer>
         <span id="footerText">© 2026 جدارية مليون سيلفي - جميع الحقوق محفوظة</span>
     </footer>
@@ -475,6 +748,9 @@
 
         const pixelStatus = new Array(TOTAL_PIXELS).fill(false);
         RESERVED_INDICES.forEach(idx => pixelStatus[idx] = true);
+
+        // بيانات المربعات المحجوزة مع معلومات المستخدم
+        const pixelData = {};
 
         // ألوان المربعات المحجوزة
         const RESERVED_COLORS = {};
@@ -503,6 +779,7 @@
         let canvas, ctx;
         let canvasWidth, canvasHeight;
         let selectedPixelIndex = -1;
+        let pendingPixelIndex = -1;
 
         // ============================================
         // متغيرات اللغة
@@ -514,7 +791,7 @@
                 title: "جدارية مليون سيلفي",
                 subtitle: "احجز مربعك في أكبر لوحة رقمية للتاريخ",
                 liveStatus: "اضغط على مربع لاختياره",
-                alertMsg: "أهلاً بك! نقوم حالياً ببرمجة لوحة تحكم لتتيح لك رفع صورتك الخاصة واختيار موقعك وربطها ببوابة الدفع. انتظرنا قريباً جداً!",
+                alertMsg: "تم حجز مربعك بنجاح! 🎉 سيتم تحديث الجدارية قريباً.",
                 footer: "© 2026 جدارية مليون سيلفي - جميع الحقوق محفوظة",
                 langBtn: "English",
                 selectedTxt: "✅ تم اختيار المربع رقم ",
@@ -531,13 +808,26 @@
                 lblTotal: "إجمالي المربعات",
                 lblReserved: "محجوزة",
                 lblAvailable: "متاحة",
-                lblPercent: "نسبة الحجز"
+                lblPercent: "نسبة الحجز",
+                modalTitle: "📸 رفع سيلفي",
+                modalSubtitle: "املأ البيانات التالية لحجز مربعك",
+                pixelLabel: "رقم المربع",
+                statusAvailable: "✅ متاح",
+                statusReserved: "❌ محجوز",
+                uploadLabel: "📷 رفع صورة السيلفي",
+                uploadText: "اضغط لاختيار صورة سيلفي",
+                profileLabel: "🔗 رابط الملف الشخصي",
+                nameLabel: "✏️ اسمك (اختياري)",
+                messageLabel: "📝 رسالة (اختياري)",
+                confirmBtn: "✅ تأكيد الحجز",
+                cancelBtn: "إلغاء",
+                noFile: "لم يتم اختيار صورة"
             },
             en: {
                 title: "Million Selfie Wall",
                 subtitle: "Reserve your pixel in the biggest digital wall in history",
                 liveStatus: "Tap on any pixel to select it",
-                alertMsg: "Welcome! We are currently building the dashboard to let you upload your selfie, pick your exact coordinates, and complete payment. Launching very soon!",
+                alertMsg: "Your pixel has been reserved successfully! 🎉 The wall will be updated soon.",
                 footer: "© 2026 Million Selfie Wall - All Rights Reserved",
                 langBtn: "العربية",
                 selectedTxt: "✅ Selected pixel #",
@@ -554,7 +844,20 @@
                 lblTotal: "Total Pixels",
                 lblReserved: "Reserved",
                 lblAvailable: "Available",
-                lblPercent: "Reserved %"
+                lblPercent: "Reserved %",
+                modalTitle: "📸 Upload Selfie",
+                modalSubtitle: "Fill in the details below to reserve your pixel",
+                pixelLabel: "Pixel Number",
+                statusAvailable: "✅ Available",
+                statusReserved: "❌ Reserved",
+                uploadLabel: "📷 Upload Selfie Image",
+                uploadText: "Click to select a selfie image",
+                profileLabel: "🔗 Profile Link",
+                nameLabel: "✏️ Your Name (Optional)",
+                messageLabel: "📝 Message (Optional)",
+                confirmBtn: "✅ Confirm Reservation",
+                cancelBtn: "Cancel",
+                noFile: "No file selected"
             }
         };
 
@@ -600,11 +903,10 @@
         function drawGrid() {
             ctx.clearRect(0, 0, canvasWidth, canvasHeight);
             
-            // خلفية داكنة
             ctx.fillStyle = '#0b0f19';
             ctx.fillRect(0, 0, canvasWidth, canvasHeight);
             
-            const pixelSize = Math.max(2, Math.min(14, (canvasWidth / COLS) * scale));
+            const pixelSize = Math.max(3, Math.min(16, (canvasWidth / COLS) * scale));
             const totalWidth = COLS * pixelSize;
             const totalHeight = ROWS * pixelSize;
             
@@ -616,7 +918,6 @@
             const startRow = Math.max(0, Math.floor(-offsetY / pixelSize));
             const endRow = Math.min(ROWS, Math.ceil((canvasHeight - offsetY) / pixelSize) + 1);
             
-            // رسم المربعات المرئية فقط
             for (let row = startRow; row < endRow; row++) {
                 for (let col = startCol; col < endCol; col++) {
                     const index = row * COLS + col;
@@ -625,7 +926,7 @@
                     const x = offsetX + col * pixelSize;
                     const y = offsetY + row * pixelSize;
                     
-                    let color = '#1a2340'; // لون المربع الفارغ
+                    let color = '#1a2340';
                     
                     if (RESERVED_INDICES.has(index)) {
                         color = RESERVED_COLORS[index] || '#ec4899';
@@ -634,31 +935,29 @@
                     const isSelected = (index === selectedPixelIndex && !RESERVED_INDICES.has(index));
                     
                     if (isSelected) {
-                        // تأثير إضاءة قوي للمربع المختار
+                        // تأثير إضاءة قوي
                         const gradient = ctx.createRadialGradient(
                             x + pixelSize/2, y + pixelSize/2, 0,
-                            x + pixelSize/2, y + pixelSize/2, pixelSize * 4
+                            x + pixelSize/2, y + pixelSize/2, pixelSize * 5
                         );
-                        gradient.addColorStop(0, 'rgba(16, 185, 129, 0.9)');
+                        gradient.addColorStop(0, 'rgba(16, 185, 129, 0.95)');
                         gradient.addColorStop(0.2, 'rgba(16, 185, 129, 0.5)');
                         gradient.addColorStop(0.5, 'rgba(16, 185, 129, 0.15)');
                         gradient.addColorStop(1, 'rgba(16, 185, 129, 0)');
                         
                         ctx.fillStyle = gradient;
-                        ctx.fillRect(x - pixelSize*2, y - pixelSize*2, pixelSize*5, pixelSize*5);
+                        ctx.fillRect(x - pixelSize*2.5, y - pixelSize*2.5, pixelSize*6, pixelSize*6);
                         
-                        // المربع الأخضر المضيء
                         ctx.shadowColor = 'rgba(16, 185, 129, 0.8)';
-                        ctx.shadowBlur = 40;
+                        ctx.shadowBlur = 50;
                         ctx.fillStyle = '#10b981';
                         ctx.fillRect(x, y, pixelSize, pixelSize);
                         ctx.shadowBlur = 0;
                         
-                        // حدود بيضاء لامعة
                         ctx.strokeStyle = 'rgba(255,255,255,0.9)';
-                        ctx.lineWidth = Math.max(2, pixelSize * 0.25);
+                        ctx.lineWidth = Math.max(2, pixelSize * 0.3);
                         ctx.shadowColor = 'rgba(255,255,255,0.3)';
-                        ctx.shadowBlur = 10;
+                        ctx.shadowBlur = 15;
                         ctx.strokeRect(x, y, pixelSize, pixelSize);
                         ctx.shadowBlur = 0;
                     } else {
@@ -666,9 +965,8 @@
                         ctx.fillStyle = color;
                         ctx.fillRect(x, y, pixelSize, pixelSize);
                         
-                        // حدود رفيعة بين المربعات
                         if (pixelSize > 4) {
-                            ctx.strokeStyle = 'rgba(30, 41, 59, 0.25)';
+                            ctx.strokeStyle = 'rgba(30, 41, 59, 0.3)';
                             ctx.lineWidth = 0.5;
                             ctx.strokeRect(x, y, pixelSize, pixelSize);
                         }
@@ -676,7 +974,6 @@
                 }
             }
             
-            // إعادة تعيين الظل
             ctx.shadowBlur = 0;
         }
 
@@ -688,7 +985,7 @@
             const x = screenX - rect.left;
             const y = screenY - rect.top;
             
-            const pixelSize = Math.max(2, Math.min(14, (canvasWidth / COLS) * scale));
+            const pixelSize = Math.max(3, Math.min(16, (canvasWidth / COLS) * scale));
             const totalWidth = COLS * pixelSize;
             const totalHeight = ROWS * pixelSize;
             
@@ -705,31 +1002,122 @@
         }
 
         // ============================================
-        // معالجة النقر
+        // فتح نافذة رفع الصورة
         // ============================================
-        function handleCanvasClick(e) {
-            const index = getPixelIndexFromScreen(e.clientX, e.clientY);
-            if (index === -1) return;
-            
+        function openUploadModal(index) {
             if (pixelStatus[index]) {
                 document.getElementById('liveStatus').textContent = 
                     translations[currentLang].takenTxt;
                 document.getElementById('selectedPixelInfo').innerHTML = 
                     `❌ المربع #<span class="pixel-number">${index + 1}</span> - <strong class="reserved">${translations[currentLang].reserved}</strong>`;
-                selectedPixelIndex = -1;
-                drawGrid();
                 return;
             }
             
-            selectedPixelIndex = index;
-            document.getElementById('liveStatus').textContent = 
-                translations[currentLang].selectedTxt + (index + 1);
-            document.getElementById('selectedPixelInfo').innerHTML = 
-                `📍 المربع #<span class="pixel-number">${index + 1}</span> - <strong class="available">${translations[currentLang].available}</strong>`;
-            document.getElementById('pixelNumberInput').value = index + 1;
+            pendingPixelIndex = index;
             
-            centerOnPixel(index);
+            document.getElementById('modalPixelNumber').textContent = `#${index + 1}`;
+            document.getElementById('modalPixelStatus').textContent = translations[currentLang].statusAvailable;
+            document.getElementById('modalPixelStatus').className = 'status available';
+            
+            document.getElementById('selfieImage').value = '';
+            document.getElementById('fileNameDisplay').textContent = translations[currentLang].noFile;
+            document.getElementById('profileLink').value = '';
+            document.getElementById('userName').value = '';
+            document.getElementById('userMessage').value = '';
+            
+            document.getElementById('uploadModal').classList.add('active');
+        }
+
+        // ============================================
+        // إغلاق النافذة
+        // ============================================
+        function closeModal() {
+            document.getElementById('uploadModal').classList.remove('active');
+            pendingPixelIndex = -1;
+        }
+
+        // ============================================
+        // عرض اسم الملف
+        // ============================================
+        document.getElementById('selfieImage').addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (file) {
+                document.getElementById('fileNameDisplay').textContent = `📷 ${file.name}`;
+            } else {
+                document.getElementById('fileNameDisplay').textContent = translations[currentLang].noFile;
+            }
+        });
+
+        // ============================================
+        // تأكيد الحجز
+        // ============================================
+        function submitReservation(e) {
+            e.preventDefault();
+            
+            if (pendingPixelIndex === -1) return;
+            
+            const file = document.getElementById('selfieImage').files[0];
+            const profileLink = document.getElementById('profileLink').value;
+            const userName = document.getElementById('userName').value;
+            const userMessage = document.getElementById('userMessage').value;
+            
+            if (!file) {
+                alert('الرجاء اختيار صورة سيلفي');
+                return;
+            }
+            
+            if (!profileLink) {
+                alert('الرجاء إدخال رابط الملف الشخصي');
+                return;
+            }
+            
+            // تخزين بيانات المربع
+            pixelData[pendingPixelIndex] = {
+                image: file.name,
+                profileLink: profileLink,
+                userName: userName || 'مستخدم مجهول',
+                message: userMessage || '',
+                timestamp: new Date().toLocaleString()
+            };
+            
+            // حجز المربع
+            RESERVED_INDICES.add(pendingPixelIndex);
+            pixelStatus[pendingPixelIndex] = true;
+            
+            // تحديث اللون
+            const rand = Math.random();
+            if (rand < 0.33) RESERVED_COLORS[pendingPixelIndex] = '#eab308';
+            else if (rand < 0.66) RESERVED_COLORS[pendingPixelIndex] = '#f59e0b';
+            else RESERVED_COLORS[pendingPixelIndex] = '#94a3b8';
+            
+            selectedPixelIndex = pendingPixelIndex;
+            
+            // تحديث الواجهة
+            updateStats();
             drawGrid();
+            
+            document.getElementById('liveStatus').textContent = 
+                translations[currentLang].selectedTxt + (pendingPixelIndex + 1);
+            document.getElementById('selectedPixelInfo').innerHTML = 
+                `📍 المربع #<span class="pixel-number">${pendingPixelIndex + 1}</span> - ✅ تم الحجز بنجاح!`;
+            
+            closeModal();
+            
+            alert(translations[currentLang].alertMsg);
+        }
+
+        // ============================================
+        // معالجة النقر على المربع
+        // ============================================
+        function handleCanvasClick(e) {
+            const index = getPixelIndexFromScreen(e.clientX, e.clientY);
+            if (index === -1) return;
+            
+            selectedPixelIndex = index;
+            drawGrid();
+            
+            // فتح نافذة رفع الصورة
+            openUploadModal(index);
         }
 
         // ============================================
@@ -782,7 +1170,7 @@
         }
 
         function centerOnPixel(index) {
-            const pixelSize = Math.max(2, Math.min(14, (canvasWidth / COLS) * scale));
+            const pixelSize = Math.max(3, Math.min(16, (canvasWidth / COLS) * scale));
             const totalWidth = COLS * pixelSize;
             const totalHeight = ROWS * pixelSize;
             
@@ -942,6 +1330,11 @@
             
             centerOnPixel(index);
             drawGrid();
+            
+            // فتح نافذة رفع الصورة
+            setTimeout(() => {
+                openUploadModal(index);
+            }, 300);
         }
 
         function selectRandomPixel() {
@@ -967,6 +1360,10 @@
             
             centerOnPixel(index);
             drawGrid();
+            
+            setTimeout(() => {
+                openUploadModal(index);
+            }, 300);
         }
 
         function goToPixel(num) {
@@ -993,6 +1390,10 @@
             
             centerOnPixel(index);
             drawGrid();
+            
+            setTimeout(() => {
+                openUploadModal(index);
+            }, 300);
         }
 
         // ============================================
@@ -1028,6 +1429,28 @@
             } else {
                 document.getElementById('liveStatus').textContent = translations[newLang].liveStatus;
                 document.getElementById('selectedPixelInfo').textContent = translations[newLang].noSelection;
+            }
+            
+            // تحديث النافذة المنبثقة إذا كانت مفتوحة
+            if (document.getElementById('uploadModal').classList.contains('active') && pendingPixelIndex !== -1) {
+                document.querySelector('.modal-title').textContent = translations[newLang].modalTitle;
+                document.querySelector('.modal-subtitle').textContent = translations[newLang].modalSubtitle;
+                document.querySelector('.modal-pixel-info .label').textContent = translations[newLang].pixelLabel;
+                document.querySelector('.form-group:nth-child(2) label').textContent = translations[newLang].uploadLabel;
+                document.querySelector('.file-upload .upload-area .text').textContent = translations[newLang].uploadText;
+                document.querySelector('.form-group:nth-child(3) label').textContent = translations[newLang].profileLabel;
+                document.querySelector('.form-group:nth-child(4) label').textContent = translations[newLang].nameLabel;
+                document.querySelector('.form-group:nth-child(5) label').textContent = translations[newLang].messageLabel;
+                document.querySelector('.btn-confirm').textContent = translations[newLang].confirmBtn;
+                document.querySelector('.btn-cancel').textContent = translations[newLang].cancelBtn;
+                
+                if (pixelStatus[pendingPixelIndex]) {
+                    document.getElementById('modalPixelStatus').textContent = translations[newLang].statusReserved;
+                    document.getElementById('modalPixelStatus').className = 'status reserved';
+                } else {
+                    document.getElementById('modalPixelStatus').textContent = translations[newLang].statusAvailable;
+                    document.getElementById('modalPixelStatus').className = 'status available';
+                }
             }
         }
 
@@ -1074,6 +1497,9 @@
         window.zoomOut = zoomOut;
         window.resetView = resetView;
         window.fitToScreen = fitToScreen;
+        window.openUploadModal = openUploadModal;
+        window.closeModal = closeModal;
+        window.submitReservation = submitReservation;
     </script>
 </body>
 </html>
