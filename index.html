@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>جدارية مليون سيلفي | Million Selfie Wall</title>
-    <!-- استدعاء خطوط Google لجعل المظهر احترافي جداً -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&family=Poppins:wght@400;600&display=swap" rel="stylesheet">
@@ -37,7 +36,6 @@
             box-sizing: border-box;
         }
 
-        /* شريط علوي أنيق */
         .top-bar {
             width: 100%;
             max-width: 500px;
@@ -46,7 +44,6 @@
             margin-bottom: 20px;
         }
 
-        /* زر تبديل اللغة المضمون */
         .lang-switch-btn {
             background: rgba(245, 158, 11, 0.15);
             color: var(--accent-color);
@@ -65,7 +62,6 @@
             color: #000;
         }
 
-        /* الهيدر والعناوين */
         header {
             text-align: center;
             margin-bottom: 25px;
@@ -86,7 +82,6 @@
             line-height: 1.6;
         }
 
-        /* لوحة العرض التفاعلية المباشرة */
         .live-preview-box {
             background: rgba(15, 23, 42, 0.8);
             border: 1px solid var(--accent-color);
@@ -105,9 +100,14 @@
             background-color: #10b981;
             border-radius: 50%;
             display: inline-block;
+            animation: pulse 1.5s ease-in-out infinite;
         }
 
-        /* لوحة التحكم والعدادات المتقدمة */
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.3; }
+        }
+
         .dashboard {
             background-color: var(--card-bg);
             border-radius: 20px;
@@ -124,7 +124,7 @@
 
         .stats-grid {
             display: grid;
-            grid-template-columns: 1fr 1fr;
+            grid-template-columns: 1fr 1fr 1fr;
             gap: 15px;
             margin-bottom: 20px;
         }
@@ -137,18 +137,17 @@
         }
 
         .counter-value {
-            font-size: 1.8rem;
+            font-size: 1.5rem;
             font-weight: bold;
             color: var(--accent-color);
             display: block;
         }
 
         .counter-label {
-            font-size: 0.9rem;
+            font-size: 0.8rem;
             opacity: 0.7;
         }
 
-        /* شريط التقدم النيون */
         .progress-container {
             background-color: #0f172a;
             border-radius: 12px;
@@ -161,9 +160,9 @@
 
         .progress-bar {
             background: linear-gradient(90deg, #f59e0b, #ef4444, #ec4899);
-            width: 4.5%; /* ثابتة كـ CSS لضمان الظهور الفوري */
             height: 100%;
             box-shadow: 0 0 10px rgba(245, 158, 11, 0.5);
+            transition: width 0.5s ease;
         }
 
         .percentage-text {
@@ -172,7 +171,6 @@
             font-size: 1.3rem;
         }
 
-        /* زر الحجز المضيء */
         .cta-btn {
             background: linear-gradient(135deg, #10b981, #059669);
             color: white;
@@ -186,9 +184,63 @@
             margin-top: 15px;
             width: 100%;
             box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3);
+            transition: transform 0.2s ease;
         }
 
-        /* جدارية الشبكة للمربعات */
+        .cta-btn:hover {
+            transform: scale(1.02);
+        }
+
+        /* منطقة اختيار المربع */
+        .selection-area {
+            background-color: var(--card-bg);
+            border-radius: 20px;
+            padding: 25px;
+            width: 100%;
+            max-width: 500px;
+            margin-bottom: 30px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.05);
+            box-sizing: border-box;
+        }
+
+        .selection-controls {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .selection-controls input {
+            padding: 10px 15px;
+            border-radius: 10px;
+            border: 1px solid var(--grid-line);
+            background: #0f172a;
+            color: white;
+            font-size: 1rem;
+            width: 150px;
+            font-family: var(--primary-font);
+        }
+
+        .selection-controls button {
+            padding: 10px 20px;
+            border-radius: 10px;
+            border: none;
+            background: var(--accent-color);
+            color: #000;
+            font-weight: bold;
+            cursor: pointer;
+            font-family: var(--primary-font);
+            transition: all 0.3s ease;
+        }
+
+        .selection-controls button:hover {
+            background: #d97706;
+            transform: scale(1.05);
+        }
+
+        /* شبكة صغيرة للعرض التمثيلي */
         .grid-container {
             background-color: rgba(30, 41, 59, 0.4);
             padding: 15px;
@@ -206,11 +258,11 @@
 
         .pixel-grid {
             display: grid;
-            grid-template-columns: repeat(25, 15px);
-            grid-template-rows: repeat(25, 15px);
-            gap: 2px;
+            grid-template-columns: repeat(40, 10px);
+            grid-template-rows: repeat(25, 10px);
+            gap: 1px;
             background-color: #0b0f19;
-            padding: 6px;
+            padding: 4px;
             border: 1px solid var(--grid-line);
             width: max-content;
             margin: 0 auto;
@@ -218,22 +270,33 @@
 
         .pixel {
             background-color: #131c2e;
-            border-radius: 2px;
+            border-radius: 1px;
             cursor: pointer;
-            transition: transform 0.1s ease;
+            transition: all 0.15s ease;
         }
 
         .pixel:hover {
-            transform: scale(1.15);
+            transform: scale(1.3);
+            z-index: 2;
         }
 
-        /* المربعات المحجوزة مسبقاً */
-        .pixel.taken-vip { background-color: #ec4899; } 
-        .pixel.taken-user { background-color: #3b82f6; } 
-        .pixel.taken-gold { background-color: #eab308; } 
+        .pixel.taken { background-color: #ec4899; }
         .pixel.selected { 
             background-color: #10b981; 
-            box-shadow: 0 0 12px rgba(16, 185, 129, 0.6);
+            box-shadow: 0 0 12px rgba(16, 185, 129, 0.8);
+            transform: scale(1.5);
+            z-index: 3;
+        }
+
+        .pixel.vip { background-color: #eab308; }
+        .pixel.gold { background-color: #f59e0b; }
+        .pixel.silver { background-color: #94a3b8; }
+
+        .info-text {
+            font-size: 0.85rem;
+            opacity: 0.7;
+            margin-top: 10px;
+            text-align: center;
         }
 
         footer {
@@ -242,6 +305,20 @@
             font-size: 0.85rem;
             opacity: 0.6;
             text-align: center;
+        }
+
+        /* تحسينات للجوال */
+        @media (max-width: 600px) {
+            .stats-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+            .pixel-grid {
+                grid-template-columns: repeat(30, 8px);
+                grid-template-rows: repeat(20, 8px);
+            }
+            .selection-controls input {
+                width: 120px;
+            }
         }
     </style>
 </head>
@@ -258,11 +335,15 @@
 
     <div class="live-preview-box">
         <span class="live-dot"></span>
-        <span id="liveStatus">اضغط على أي مربع في الشبكة بالأسفل لاختياره</span>
+        <span id="liveStatus">اضغط على مربع في الشبكة لاختياره</span>
     </div>
 
     <div class="dashboard">
         <div class="stats-grid">
+            <div class="stat-card">
+                <span class="counter-label" id="lblTotal">إجمالي المربعات</span>
+                <span class="counter-value" id="valTotal">1,000,000</span>
+            </div>
             <div class="stat-card">
                 <span class="counter-label" id="lblRemaining">المربعات المتبقية</span>
                 <span class="counter-value" id="valRemaining">999,542</span>
@@ -282,6 +363,18 @@
         <button class="cta-btn" id="ctaBtn" onclick="bookPixelAlert()">احجز مكانك في الجدارية الآن 🚀</button>
     </div>
 
+    <!-- منطقة اختيار المربع -->
+    <div class="selection-area">
+        <h3 style="margin-top: 0; color: var(--accent-color);" id="selectTitle">اختر مربعك بالرقم</h3>
+        <div class="selection-controls">
+            <input type="number" id="pixelNumberInput" min="1" max="1000000" placeholder="رقم المربع (1-1,000,000)">
+            <button onclick="selectPixelByNumber()" id="selectBtn">اختر</button>
+            <button onclick="selectRandomPixel()" id="randomBtn">🎲 عشوائي</button>
+        </div>
+        <div id="selectedPixelInfo" class="info-text">لم يتم اختيار مربع بعد</div>
+    </div>
+
+    <!-- شبكة تمثيلية -->
     <div class="grid-container">
         <div class="pixel-grid" id="pixelGrid"></div>
     </div>
@@ -291,24 +384,58 @@
     </footer>
 
     <script>
-        // قواميس اللغات الجاهزة للعمل الفوري
+        // ============================================
+        // بيانات مليون مربع
+        // ============================================
+        const TOTAL_PIXELS = 1000000; // مليون مربع
+        const DISPLAY_ROWS = 25;
+        const DISPLAY_COLS = 40;
+        const DISPLAY_TOTAL = DISPLAY_ROWS * DISPLAY_COLS; // 1000 مربع للعرض
+
+        // توليد بيانات المحجوزات (نسبة صغيرة للعرض)
+        const RESERVED_COUNT = 458;
+        const RESERVED_INDICES = new Set();
+        
+        // توليد محجوزات عشوائية
+        while (RESERVED_INDICES.size < RESERVED_COUNT) {
+            const idx = Math.floor(Math.random() * TOTAL_PIXELS);
+            RESERVED_INDICES.add(idx);
+        }
+
+        // تخزين حالة المربعات في مصفوفة (للوصول السريع)
+        const pixelStatus = new Array(TOTAL_PIXELS).fill(false);
+        RESERVED_INDICES.forEach(idx => pixelStatus[idx] = true);
+
+        // ============================================
+        // متغيرات اللغة والتحكم
+        // ============================================
+        var currentLang = 'ar';
+        var selectedPixelIndex = -1;
+
         var translations = {
             ar: {
                 title: "جدارية مليون سيلفي",
                 subtitle: "احجز مربعك في أكبر لوحة رقمية للتاريخ",
+                lblTotal: "إجمالي المربعات",
                 lblRemaining: "المربعات المتبقية",
                 lblReserved: "المربعات المحجوزة",
                 bookBtn: "احجز مكانك في الجدارية الآن 🚀",
-                liveStatus: "اضغط على أي مربع في الشبكة بالأسفل لاختياره",
+                liveStatus: "اضغط على مربع في الشبكة لاختياره",
                 alertMsg: "أهلاً بك! نقوم حالياً ببرمجة لوحة تحكم لتتيح لك رفع صورتك الخاصة واختيار موقعك وربطها ببوابة الدفع. انتظرنا قريباً جداً!",
                 footer: "© 2026 جدارية مليون سيلفي. جميع الحقوق محفوظة.",
                 langBtn: "English",
-                selectedTxt: "قمت باختيار مربع متاح برقم: #",
-                takenTxt: "هذا المربع محجوز ومثبت عليه صورة سيلفي بالفعل!"
+                selectedTxt: "✅ تم اختيار المربع رقم #",
+                takenTxt: "❌ هذا المربع محجوز بالفعل!",
+                selectTitle: "اختر مربعك بالرقم",
+                selectBtn: "اختر",
+                randomBtn: "🎲 عشوائي",
+                noSelection: "لم يتم اختيار مربع بعد",
+                pixelInfo: "المربع #${num} - ${status}"
             },
             en: {
                 title: "Million Selfie Wall",
                 subtitle: "Reserve your pixel in the biggest digital wall in history",
+                lblTotal: "Total Pixels",
                 lblRemaining: "Remaining Pixels",
                 lblReserved: "Reserved Pixels",
                 bookBtn: "Book Your Pixel Now 🚀",
@@ -316,50 +443,44 @@
                 alertMsg: "Welcome! We are currently building the dashboard to let you upload your selfie, pick your exact coordinates, and complete payment. Launching very soon!",
                 footer: "© 2026 Million Selfie Wall. All rights reserved.",
                 langBtn: "العربية",
-                selectedTxt: "You selected available pixel code: #",
-                takenTxt: "This pixel is already reserved with a selfie!"
+                selectedTxt: "✅ Selected pixel #",
+                takenTxt: "❌ This pixel is already reserved!",
+                selectTitle: "Select your pixel by number",
+                selectBtn: "Select",
+                randomBtn: "🎲 Random",
+                noSelection: "No pixel selected yet",
+                pixelInfo: "Pixel #${num} - ${status}"
             }
         };
 
-        var currentLang = 'ar';
-        var selectedPixelIndex = -1;
-
-        // بيانات المربعات - محاكاة
-        const TOTAL_PIXELS = 25 * 25;
-        const RESERVED_COUNT = 458;
-        const RESERVED_INDICES = new Set();
-
-        // توليد مؤشرات محجوزة عشوائية (باستثناء المربع الأول)
-        while (RESERVED_INDICES.size < RESERVED_COUNT) {
-            const idx = Math.floor(Math.random() * TOTAL_PIXELS);
-            if (idx !== 0) { // نخلي المربع الأول متاح دائماً للتجربة
-                RESERVED_INDICES.add(idx);
-            }
-        }
-
-        // تعيين الفئات للمربعات المحجوزة
-        function getPixelClass(index) {
-            if (!RESERVED_INDICES.has(index)) return '';
-            const rand = Math.random();
-            if (rand < 0.33) return 'taken-vip';
-            if (rand < 0.66) return 'taken-user';
-            return 'taken-gold';
-        }
-
-        // إنشاء الشبكة
+        // ============================================
+        // إنشاء الشبكة التمثيلية
+        // ============================================
         function createGrid() {
             const grid = document.getElementById('pixelGrid');
             grid.innerHTML = '';
-            for (let i = 0; i < TOTAL_PIXELS; i++) {
+            
+            // نأخذ عينة من المربعات للعرض (1000 مربع)
+            const sampleSize = DISPLAY_TOTAL;
+            const step = Math.floor(TOTAL_PIXELS / sampleSize);
+            
+            for (let i = 0; i < sampleSize; i++) {
                 const pixel = document.createElement('div');
                 pixel.className = 'pixel';
-                pixel.dataset.index = i;
+                const originalIndex = i * step;
+                pixel.dataset.index = originalIndex;
                 
-                const cls = getPixelClass(i);
-                if (cls) pixel.classList.add(cls);
+                // تحديد لون المربع حسب حالته
+                if (RESERVED_INDICES.has(originalIndex)) {
+                    const rand = Math.random();
+                    if (rand < 0.33) pixel.classList.add('vip');
+                    else if (rand < 0.66) pixel.classList.add('gold');
+                    else pixel.classList.add('silver');
+                }
                 
                 pixel.addEventListener('click', function() {
-                    handlePixelClick(parseInt(this.dataset.index));
+                    const idx = parseInt(this.dataset.index);
+                    handlePixelClick(idx);
                 });
                 
                 grid.appendChild(pixel);
@@ -367,7 +488,9 @@
             updateStats();
         }
 
+        // ============================================
         // معالجة النقر على المربع
+        // ============================================
         function handlePixelClick(index) {
             const pixels = document.querySelectorAll('.pixel');
             
@@ -375,77 +498,165 @@
             pixels.forEach(p => p.classList.remove('selected'));
             
             // التحقق إذا كان المربع محجوز
-            if (RESERVED_INDICES.has(index)) {
+            if (pixelStatus[index]) {
                 document.getElementById('liveStatus').textContent = 
                     translations[currentLang].takenTxt;
+                document.getElementById('selectedPixelInfo').textContent = 
+                    translations[currentLang].takenTxt;
+                selectedPixelIndex = -1;
                 return;
             }
             
             // تحديد المربع الجديد
-            pixels[index].classList.add('selected');
             selectedPixelIndex = index;
+            
+            // نبحث عن المربع في الشبكة التمثيلية
+            const step = Math.floor(TOTAL_PIXELS / DISPLAY_TOTAL);
+            const displayIndex = Math.floor(index / step);
+            const displayPixels = document.querySelectorAll('.pixel');
+            if (displayPixels[displayIndex]) {
+                displayPixels[displayIndex].classList.add('selected');
+            }
             
             // تحديث النص
             const msg = translations[currentLang].selectedTxt + (index + 1);
             document.getElementById('liveStatus').textContent = msg;
+            document.getElementById('selectedPixelInfo').textContent = 
+                `📍 المربع #${index + 1} - متاح ✅`;
         }
 
-        // تحديث الإحصائيات
-        function updateStats() {
-            const remaining = TOTAL_PIXELS - RESERVED_COUNT;
-            document.getElementById('valRemaining').textContent = remaining.toLocaleString();
-            document.getElementById('valReserved').textContent = RESERVED_COUNT.toLocaleString();
+        // ============================================
+        // اختيار مربع بالرقم
+        // ============================================
+        function selectPixelByNumber() {
+            const input = document.getElementById('pixelNumberInput');
+            const num = parseInt(input.value);
             
-            const percent = ((RESERVED_COUNT / TOTAL_PIXELS) * 100);
+            if (isNaN(num) || num < 1 || num > TOTAL_PIXELS) {
+                alert(`الرجاء إدخال رقم بين 1 و ${TOTAL_PIXELS.toLocaleString()}`);
+                return;
+            }
+            
+            const index = num - 1;
+            
+            if (pixelStatus[index]) {
+                document.getElementById('liveStatus').textContent = 
+                    translations[currentLang].takenTxt;
+                document.getElementById('selectedPixelInfo').textContent = 
+                    `❌ المربع #${num} محجوز بالفعل!`;
+                return;
+            }
+            
+            handlePixelClick(index);
+        }
+
+        // ============================================
+        // اختيار مربع عشوائي
+        // ============================================
+        function selectRandomPixel() {
+            let attempts = 0;
+            let index;
+            
+            do {
+                index = Math.floor(Math.random() * TOTAL_PIXELS);
+                attempts++;
+            } while (pixelStatus[index] && attempts < 100);
+            
+            if (pixelStatus[index]) {
+                alert('جميع المربعات العشوائية محجوزة! حاول مرة أخرى.');
+                return;
+            }
+            
+            handlePixelClick(index);
+            document.getElementById('pixelNumberInput').value = index + 1;
+        }
+
+        // ============================================
+        // تحديث الإحصائيات
+        // ============================================
+        function updateStats() {
+            const reserved = RESERVED_INDICES.size;
+            const remaining = TOTAL_PIXELS - reserved;
+            
+            document.getElementById('valTotal').textContent = TOTAL_PIXELS.toLocaleString();
+            document.getElementById('valRemaining').textContent = remaining.toLocaleString();
+            document.getElementById('valReserved').textContent = reserved.toLocaleString();
+            
+            const percent = ((reserved / TOTAL_PIXELS) * 100);
             document.getElementById('percentageText').textContent = percent.toFixed(3) + '%';
             document.getElementById('progressBar').style.width = percent + '%';
         }
 
+        // ============================================
         // زر الحجز
+        // ============================================
         function bookPixelAlert() {
+            if (selectedPixelIndex === -1) {
+                alert('الرجاء اختيار مربع أولاً!');
+                return;
+            }
             alert(translations[currentLang].alertMsg);
         }
 
+        // ============================================
         // تبديل اللغة
+        // ============================================
         function toggleLanguage() {
             const newLang = currentLang === 'ar' ? 'en' : 'ar';
             currentLang = newLang;
             
-            // تحديث اتجاه الصفحة
             document.documentElement.dir = newLang === 'ar' ? 'rtl' : 'ltr';
             document.documentElement.lang = newLang;
             
             // تحديث النصوص
             document.getElementById('mainTitle').textContent = translations[newLang].title;
             document.getElementById('subTitle').textContent = translations[newLang].subtitle;
+            document.getElementById('lblTotal').textContent = translations[newLang].lblTotal;
             document.getElementById('lblRemaining').textContent = translations[newLang].lblRemaining;
             document.getElementById('lblReserved').textContent = translations[newLang].lblReserved;
             document.getElementById('ctaBtn').textContent = translations[newLang].bookBtn;
             document.getElementById('footerText').textContent = translations[newLang].footer;
             document.getElementById('langBtn').textContent = translations[newLang].langBtn;
+            document.getElementById('selectTitle').textContent = translations[newLang].selectTitle;
+            document.getElementById('selectBtn').textContent = translations[newLang].selectBtn;
+            document.getElementById('randomBtn').textContent = translations[newLang].randomBtn;
             
             // تحديث حالة المربع المحدد
-            if (selectedPixelIndex !== -1 && !RESERVED_INDICES.has(selectedPixelIndex)) {
+            if (selectedPixelIndex !== -1 && !pixelStatus[selectedPixelIndex]) {
                 document.getElementById('liveStatus').textContent = 
                     translations[newLang].selectedTxt + (selectedPixelIndex + 1);
+                document.getElementById('selectedPixelInfo').textContent = 
+                    `📍 Pixel #${selectedPixelIndex + 1} - Available ✅`;
             } else {
                 document.getElementById('liveStatus').textContent = translations[newLang].liveStatus;
+                document.getElementById('selectedPixelInfo').textContent = translations[newLang].noSelection;
             }
         }
 
-        // تحميل الشبكة عند بدء الصفحة
+        // ============================================
+        // تحميل الصفحة
+        // ============================================
         window.onload = function() {
             createGrid();
             
-            // تحديد مربع افتراضي (المربع الأول)
+            // اختيار مربع افتراضي
             setTimeout(() => {
-                handlePixelClick(0);
+                // نبحث عن أول مربع غير محجوز
+                for (let i = 0; i < TOTAL_PIXELS; i++) {
+                    if (!pixelStatus[i]) {
+                        handlePixelClick(i);
+                        document.getElementById('pixelNumberInput').value = i + 1;
+                        break;
+                    }
+                }
             }, 100);
         };
 
-        // جعل التابعين عالميين
+        // جعل التوابع عالمية
         window.toggleLanguage = toggleLanguage;
         window.bookPixelAlert = bookPixelAlert;
+        window.selectPixelByNumber = selectPixelByNumber;
+        window.selectRandomPixel = selectRandomPixel;
     </script>
 </body>
 </html>
