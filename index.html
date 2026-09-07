@@ -32,7 +32,7 @@
             background-image: radial-gradient(circle at top, #1e1b4b 0%, #0b0f19 70%);
             color: var(--text-color);
             margin: 0;
-            padding: 8px;
+            padding: 6px;
             display: flex;
             flex-direction: column;
             height: 100vh;
@@ -45,19 +45,19 @@
             justify-content: space-between;
             align-items: center;
             flex-shrink: 0;
-            padding: 4px 8px;
-            margin-bottom: 4px;
+            padding: 2px 6px;
+            margin-bottom: 2px;
         }
 
         .lang-switch-btn {
             background: rgba(245, 158, 11, 0.15);
             color: var(--accent-color);
             border: 1px solid var(--accent-color);
-            padding: 4px 12px;
+            padding: 3px 10px;
             font-weight: bold;
-            border-radius: 16px;
+            border-radius: 14px;
             cursor: pointer;
-            font-size: 0.75rem;
+            font-size: 0.65rem;
             transition: all 0.3s ease;
         }
         
@@ -72,35 +72,40 @@
 
         .title-area h1 {
             color: var(--accent-color);
-            font-size: 1.2rem;
+            font-size: 1.1rem;
             margin: 0;
             text-shadow: 0 0 20px rgba(245, 158, 11, 0.3);
         }
 
         .title-area p {
-            font-size: 0.7rem;
+            font-size: 0.6rem;
             opacity: 0.7;
             margin: 0;
+        }
+
+        .spacer {
+            width: 50px;
         }
 
         /* ===== شريط الحالة ===== */
         .status-bar {
             background: rgba(15, 23, 42, 0.8);
             border: 1px solid var(--accent-color);
-            padding: 4px 12px;
-            border-radius: 20px;
-            font-size: 0.7rem;
+            padding: 3px 10px;
+            border-radius: 16px;
+            font-size: 0.65rem;
             display: flex;
             align-items: center;
-            gap: 6px;
+            gap: 5px;
             flex-shrink: 0;
-            margin-bottom: 4px;
+            margin-bottom: 3px;
             justify-content: center;
+            min-height: 26px;
         }
 
         .live-dot {
-            width: 6px;
-            height: 6px;
+            width: 5px;
+            height: 5px;
             background-color: #10b981;
             border-radius: 50%;
             animation: pulse 1.5s ease-in-out infinite;
@@ -112,14 +117,14 @@
             50% { opacity: 0.3; }
         }
 
-        /* ===== أدوات التحكم بالتكبير ===== */
+        /* ===== أدوات التحكم ===== */
         .controls-bar {
             display: flex;
-            gap: 4px;
+            gap: 3px;
             align-items: center;
             justify-content: center;
             flex-shrink: 0;
-            margin-bottom: 4px;
+            margin-bottom: 3px;
             flex-wrap: wrap;
         }
 
@@ -127,10 +132,10 @@
             background: rgba(30, 41, 59, 0.8);
             border: 1px solid var(--grid-line);
             color: white;
-            padding: 3px 10px;
-            border-radius: 8px;
+            padding: 2px 8px;
+            border-radius: 6px;
             cursor: pointer;
-            font-size: 0.7rem;
+            font-size: 0.6rem;
             font-family: var(--primary-font);
             transition: all 0.3s ease;
         }
@@ -140,109 +145,60 @@
             color: #000;
         }
 
-        .controls-bar button.active {
-            background: var(--accent-color);
-            color: #000;
-        }
-
         .zoom-display {
             color: var(--accent-color);
             font-weight: bold;
-            font-size: 0.75rem;
-            min-width: 45px;
+            font-size: 0.65rem;
+            min-width: 40px;
             text-align: center;
         }
 
-        /* ===== حاوية الشبكة (نصف الشاشة) ===== */
+        /* ===== حاوية الشبكة (Canvas) ===== */
         .grid-wrapper {
             flex: 1;
-            min-height: 40vh;
+            min-height: 35vh;
             max-height: 55vh;
             width: 100%;
             overflow: hidden;
             position: relative;
-            background-color: rgba(30, 41, 59, 0.3);
-            border-radius: 12px;
+            background-color: #0b0f19;
+            border-radius: 10px;
             border: 1px solid rgba(255,255,255,0.05);
-            margin-bottom: 4px;
+            margin-bottom: 3px;
             touch-action: none;
-        }
-
-        .grid-viewport {
-            width: 100%;
-            height: 100%;
-            overflow: hidden;
-            position: relative;
             cursor: grab;
         }
 
-        .grid-viewport:active {
+        .grid-wrapper:active {
             cursor: grabbing;
         }
 
-        .pixel-grid-container {
-            position: absolute;
-            top: 0;
-            left: 0;
-            transform-origin: 0 0;
-            will-change: transform;
-        }
-
-        .pixel-grid {
-            display: grid;
-            gap: 1px;
+        #pixelCanvas {
+            width: 100%;
+            height: 100%;
+            display: block;
             background-color: #0b0f19;
-            padding: 2px;
-            border: 1px solid var(--grid-line);
-            width: max-content;
-        }
-
-        .pixel {
-            background-color: #131c2e;
-            border-radius: 1px;
-            cursor: pointer;
-            transition: all 0.1s ease;
-            min-width: 3px;
-            min-height: 3px;
-        }
-
-        .pixel:hover {
-            transform: scale(1.3);
-            z-index: 2;
-            box-shadow: 0 0 8px rgba(255,255,255,0.2);
-        }
-
-        .pixel.taken { background-color: #ec4899; }
-        .pixel.vip { background-color: #eab308; }
-        .pixel.gold { background-color: #f59e0b; }
-        .pixel.silver { background-color: #94a3b8; }
-        
-        .pixel.selected { 
-            background-color: #10b981 !important; 
-            box-shadow: 0 0 20px rgba(16, 185, 129, 0.9), 0 0 40px rgba(16, 185, 129, 0.4);
-            transform: scale(1.6);
-            z-index: 5;
-            border: 2px solid #fff;
+            image-rendering: pixelated;
         }
 
         /* ===== شريط التنقل ===== */
         .nav-bar {
             display: flex;
-            gap: 4px;
+            gap: 3px;
             justify-content: center;
             flex-wrap: wrap;
             flex-shrink: 0;
-            margin-bottom: 4px;
+            margin-bottom: 3px;
         }
 
         .nav-bar button {
-            padding: 3px 8px;
+            padding: 2px 6px;
             background: rgba(30, 41, 59, 0.6);
             border: 1px solid var(--grid-line);
-            border-radius: 6px;
+            border-radius: 5px;
             color: white;
             cursor: pointer;
-            font-size: 0.6rem;
+            font-size: 0.55rem;
             font-family: var(--primary-font);
             transition: all 0.3s ease;
         }
@@ -255,30 +211,30 @@
         /* ===== منطقة الاختيار ===== */
         .selection-area {
             background-color: var(--card-bg);
-            border-radius: 12px;
-            padding: 8px 12px;
+            border-radius: 10px;
+            padding: 5px 10px;
             backdrop-filter: blur(10px);
             border: 1px solid rgba(255,255,255,0.05);
             flex-shrink: 0;
-            margin-bottom: 4px;
+            margin-bottom: 3px;
         }
 
         .selection-controls {
             display: flex;
-            gap: 6px;
+            gap: 4px;
             flex-wrap: wrap;
             justify-content: center;
             align-items: center;
         }
 
         .selection-controls input {
-            padding: 4px 10px;
-            border-radius: 6px;
+            padding: 3px 8px;
+            border-radius: 5px;
             border: 1px solid var(--grid-line);
             background: #0f172a;
             color: white;
-            font-size: 0.8rem;
-            width: 120px;
+            font-size: 0.7rem;
+            width: 100px;
             font-family: var(--primary-font);
         }
 
@@ -288,8 +244,8 @@
         }
 
         .selection-controls button {
-            padding: 4px 12px;
-            border-radius: 6px;
+            padding: 3px 10px;
+            border-radius: 5px;
             border: none;
             background: var(--accent-color);
             color: #000;
@@ -297,7 +253,7 @@
             cursor: pointer;
             font-family: var(--primary-font);
             transition: all 0.3s ease;
-            font-size: 0.75rem;
+            font-size: 0.65rem;
         }
 
         .selection-controls button:hover {
@@ -306,15 +262,10 @@
         }
 
         .info-text {
-            font-size: 0.7rem;
+            font-size: 0.6rem;
             opacity: 0.7;
-            margin-top: 4px;
+            margin-top: 3px;
             text-align: center;
-        }
-
-        .info-text strong {
-            color: var(--accent-color);
-            opacity: 1;
         }
 
         .info-text .available {
@@ -328,7 +279,7 @@
         /* ===== التذييل ===== */
         footer {
             padding: 2px;
-            font-size: 0.55rem;
+            font-size: 0.5rem;
             opacity: 0.4;
             text-align: center;
             flex-shrink: 0;
@@ -336,17 +287,18 @@
 
         /* ===== تحسينات للجوال ===== */
         @media (max-width: 600px) {
-            .title-area h1 { font-size: 1rem; }
-            .title-area p { font-size: 0.6rem; }
-            .selection-controls input { width: 90px; font-size: 0.7rem; }
-            .controls-bar button { padding: 2px 8px; font-size: 0.6rem; }
-            .nav-bar button { padding: 2px 6px; font-size: 0.55rem; }
-            .grid-wrapper { min-height: 35vh; max-height: 50vh; }
+            .title-area h1 { font-size: 0.9rem; }
+            .title-area p { font-size: 0.5rem; }
+            .selection-controls input { width: 80px; font-size: 0.6rem; }
+            .controls-bar button { padding: 2px 6px; font-size: 0.5rem; }
+            .nav-bar button { padding: 2px 5px; font-size: 0.5rem; }
+            .grid-wrapper { min-height: 30vh; max-height: 50vh; }
+            .status-bar { font-size: 0.55rem; padding: 2px 8px; }
         }
 
         @media (max-width: 400px) {
-            .selection-controls input { width: 70px; }
-            .controls-bar button { padding: 2px 6px; font-size: 0.55rem; }
+            .selection-controls input { width: 65px; }
+            .controls-bar button { padding: 1px 5px; font-size: 0.45rem; }
         }
     </style>
 </head>
@@ -359,7 +311,7 @@
             <h1 id="mainTitle">جدارية مليون سيلفي</h1>
             <p id="subTitle">احجز مربعك في أكبر لوحة رقمية</p>
         </div>
-        <div style="width:60px;"></div>
+        <div class="spacer"></div>
     </div>
 
     <!-- شريط الحالة -->
@@ -377,13 +329,9 @@
         <button onclick="fitToScreen()" id="fitBtn">📐 ملاءمة</button>
     </div>
 
-    <!-- حاوية الشبكة -->
+    <!-- حاوية الشبكة (Canvas) -->
     <div class="grid-wrapper" id="gridWrapper">
-        <div class="grid-viewport" id="gridViewport">
-            <div class="pixel-grid-container" id="gridContainer">
-                <div class="pixel-grid" id="pixelGrid"></div>
-            </div>
-        </div>
+        <canvas id="pixelCanvas"></canvas>
     </div>
 
     <!-- شريط التنقل -->
@@ -417,7 +365,7 @@
         const COLS = 1000;
         const ROWS = 1000;
 
-        // توليد بيانات المحجوزات
+        // توليد بيانات المحجوزات (نسبة صغيرة)
         const RESERVED_COUNT = 458;
         const RESERVED_INDICES = new Set();
         
@@ -429,14 +377,23 @@
         const pixelStatus = new Array(TOTAL_PIXELS).fill(false);
         RESERVED_INDICES.forEach(idx => pixelStatus[idx] = true);
 
+        // ألوان المربعات المحجوزة
+        const RESERVED_COLORS = {};
+        RESERVED_INDICES.forEach(idx => {
+            const rand = Math.random();
+            if (rand < 0.33) RESERVED_COLORS[idx] = '#eab308'; // vip - ذهبي
+            else if (rand < 0.66) RESERVED_COLORS[idx] = '#f59e0b'; // gold - برتقالي
+            else RESERVED_COLORS[idx] = '#94a3b8'; // silver - رمادي
+        });
+
         // ============================================
-        // متغيرات التحكم في التكبير والتحريك
+        // متغيرات التحكم
         // ============================================
         let scale = 1;
         let panX = 0;
         let panY = 0;
         const MIN_SCALE = 0.02;
-        const MAX_SCALE = 8;
+        const MAX_SCALE = 10;
         
         let isDragging = false;
         let startX = 0;
@@ -444,11 +401,14 @@
         let startPanX = 0;
         let startPanY = 0;
 
+        let canvas, ctx;
+        let canvasWidth, canvasHeight;
+        let selectedPixelIndex = -1;
+
         // ============================================
         // متغيرات اللغة
         // ============================================
         var currentLang = 'ar';
-        var selectedPixelIndex = -1;
 
         var translations = {
             ar: {
@@ -492,53 +452,122 @@
         };
 
         // ============================================
-        // إنشاء الشبكة
+        // تهيئة Canvas ورسم الشبكة
         // ============================================
-        function createGrid() {
-            const grid = document.getElementById('pixelGrid');
-            grid.innerHTML = '';
+        function initCanvas() {
+            canvas = document.getElementById('pixelCanvas');
+            ctx = canvas.getContext('2d');
             
-            // حجم المربع بناءً على عدد الأعمدة
-            const pixelSize = Math.max(3, Math.min(6, 600 / COLS));
+            const wrapper = document.getElementById('gridWrapper');
+            canvasWidth = wrapper.clientWidth;
+            canvasHeight = wrapper.clientHeight;
             
-            grid.style.gridTemplateColumns = `repeat(${COLS}, ${pixelSize}px)`;
-            grid.style.gridTemplateRows = `repeat(${ROWS}, ${pixelSize}px)`;
+            canvas.width = canvasWidth * window.devicePixelRatio;
+            canvas.height = canvasHeight * window.devicePixelRatio;
+            canvas.style.width = canvasWidth + 'px';
+            canvas.style.height = canvasHeight + 'px';
             
-            for (let i = 0; i < TOTAL_PIXELS; i++) {
-                const pixel = document.createElement('div');
-                pixel.className = 'pixel';
-                pixel.dataset.index = i;
-                pixel.style.width = pixelSize + 'px';
-                pixel.style.height = pixelSize + 'px';
-                
-                if (RESERVED_INDICES.has(i)) {
-                    const rand = Math.random();
-                    if (rand < 0.33) pixel.classList.add('vip');
-                    else if (rand < 0.66) pixel.classList.add('gold');
-                    else pixel.classList.add('silver');
+            ctx.scale(window.devicePixelRatio, window.devicePixelRatio);
+            
+            drawGrid();
+        }
+
+        // ============================================
+        // رسم الشبكة
+        // ============================================
+        function drawGrid() {
+            ctx.clearRect(0, 0, canvasWidth, canvasHeight);
+            
+            // حساب حجم المربع
+            const pixelSize = Math.max(1, Math.min(8, (canvasWidth / COLS) * scale));
+            const totalWidth = COLS * pixelSize;
+            const totalHeight = ROWS * pixelSize;
+            
+            // حساب الإزاحة
+            const offsetX = panX + (canvasWidth - totalWidth) / 2;
+            const offsetY = panY + (canvasHeight - totalHeight) / 2;
+            
+            // تحديد المربعات المرئية فقط
+            const startCol = Math.max(0, Math.floor(-offsetX / pixelSize));
+            const endCol = Math.min(COLS, Math.ceil((canvasWidth - offsetX) / pixelSize));
+            const startRow = Math.max(0, Math.floor(-offsetY / pixelSize));
+            const endRow = Math.min(ROWS, Math.ceil((canvasHeight - offsetY) / pixelSize));
+            
+            // رسم المربعات المرئية
+            for (let row = startRow; row < endRow; row++) {
+                for (let col = startCol; col < endCol; col++) {
+                    const index = row * COLS + col;
+                    if (index >= TOTAL_PIXELS) continue;
+                    
+                    const x = offsetX + col * pixelSize;
+                    const y = offsetY + row * pixelSize;
+                    
+                    // اختيار اللون
+                    let color = '#131c2e'; // لون افتراضي
+                    if (RESERVED_INDICES.has(index)) {
+                        color = RESERVED_COLORS[index] || '#ec4899';
+                    }
+                    
+                    // المربع المختار
+                    if (index === selectedPixelIndex && !RESERVED_INDICES.has(index)) {
+                        color = '#10b981';
+                        // رسم إضاءة حول المربع المختار
+                        ctx.shadowColor = 'rgba(16, 185, 129, 0.9)';
+                        ctx.shadowBlur = 15;
+                    } else {
+                        ctx.shadowBlur = 0;
+                    }
+                    
+                    ctx.fillStyle = color;
+                    ctx.fillRect(x, y, pixelSize, pixelSize);
+                    
+                    // حدود بين المربعات
+                    if (pixelSize > 3) {
+                        ctx.strokeStyle = 'rgba(30, 41, 59, 0.3)';
+                        ctx.lineWidth = 0.5;
+                        ctx.strokeRect(x, y, pixelSize, pixelSize);
+                    }
                 }
-                
-                pixel.addEventListener('click', function(e) {
-                    e.stopPropagation();
-                    const idx = parseInt(this.dataset.index);
-                    handlePixelClick(idx);
-                });
-                
-                grid.appendChild(pixel);
             }
             
-            // تهيئة العرض
-            setTimeout(() => {
-                fitToScreen();
-            }, 100);
+            // إعادة تعيين الظل
+            ctx.shadowBlur = 0;
+        }
+
+        // ============================================
+        // تحويل إحداثيات الشاشة إلى مؤشر المربع
+        // ============================================
+        function getPixelIndexFromScreen(screenX, screenY) {
+            const rect = canvas.getBoundingClientRect();
+            const x = screenX - rect.left;
+            const y = screenY - rect.top;
+            
+            const pixelSize = Math.max(1, Math.min(8, (canvasWidth / COLS) * scale));
+            const totalWidth = COLS * pixelSize;
+            const totalHeight = ROWS * pixelSize;
+            
+            const offsetX = panX + (canvasWidth - totalWidth) / 2;
+            const offsetY = panY + (canvasHeight - totalHeight) / 2;
+            
+            const col = Math.floor((x - offsetX) / pixelSize);
+            const row = Math.floor((y - offsetY) / pixelSize);
+            
+            if (col >= 0 && col < COLS && row >= 0 && row < ROWS) {
+                return row * COLS + col;
+            }
+            return -1;
         }
 
         // ============================================
         // معالجة النقر على المربع
         // ============================================
-        function handlePixelClick(index) {
-            const pixels = document.querySelectorAll('.pixel');
-            pixels.forEach(p => p.classList.remove('selected'));
+        function handleCanvasClick(e) {
+            const rect = canvas.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
+            
+            const index = getPixelIndexFromScreen(e.clientX, e.clientY);
+            if (index === -1) return;
             
             if (pixelStatus[index]) {
                 document.getElementById('liveStatus').textContent = 
@@ -546,43 +575,33 @@
                 document.getElementById('selectedPixelInfo').innerHTML = 
                     `❌ المربع #${index + 1} - <strong class="reserved">محجوز</strong>`;
                 selectedPixelIndex = -1;
-                
-                const pixelElement = document.querySelector(`.pixel[data-index="${index}"]`);
-                if (pixelElement) {
-                    pixelElement.style.boxShadow = '0 0 20px #ef4444';
-                    pixelElement.style.border = '2px solid #ef4444';
-                }
+                drawGrid();
                 return;
             }
             
             selectedPixelIndex = index;
-            const pixelElement = document.querySelector(`.pixel[data-index="${index}"]`);
-            if (pixelElement) {
-                pixelElement.classList.add('selected');
-                centerOnPixel(index);
-            }
-            
-            const msg = translations[currentLang].selectedTxt + (index + 1);
-            document.getElementById('liveStatus').textContent = msg;
+            document.getElementById('liveStatus').textContent = 
+                translations[currentLang].selectedTxt + (index + 1);
             document.getElementById('selectedPixelInfo').innerHTML = 
                 `📍 المربع #${index + 1} - <strong class="available">${translations[currentLang].available}</strong>`;
             document.getElementById('pixelNumberInput').value = index + 1;
+            
+            centerOnPixel(index);
+            drawGrid();
         }
 
         // ============================================
         // التحكم في التكبير والتحريك
         // ============================================
         function updateTransform() {
-            const container = document.getElementById('gridContainer');
-            container.style.transform = `translate(${panX}px, ${panY}px) scale(${scale})`;
             document.getElementById('zoomDisplay').textContent = Math.round(scale * 100) + '%';
+            drawGrid();
         }
 
         function zoomIn() {
-            const rect = document.getElementById('gridWrapper').getBoundingClientRect();
-            const centerX = rect.width / 2;
-            const centerY = rect.height / 2;
             const newScale = Math.min(scale * 1.4, MAX_SCALE);
+            const centerX = canvasWidth / 2;
+            const centerY = canvasHeight / 2;
             panX = centerX - (centerX - panX) * (newScale / scale);
             panY = centerY - (centerY - panY) * (newScale / scale);
             scale = newScale;
@@ -590,10 +609,9 @@
         }
 
         function zoomOut() {
-            const rect = document.getElementById('gridWrapper').getBoundingClientRect();
-            const centerX = rect.width / 2;
-            const centerY = rect.height / 2;
             const newScale = Math.max(scale / 1.4, MIN_SCALE);
+            const centerX = canvasWidth / 2;
+            const centerY = canvasHeight / 2;
             panX = centerX - (centerX - panX) * (newScale / scale);
             panY = centerY - (centerY - panY) * (newScale / scale);
             scale = newScale;
@@ -609,43 +627,34 @@
 
         function fitToScreen() {
             const wrapper = document.getElementById('gridWrapper');
-            const grid = document.getElementById('pixelGrid');
+            const w = wrapper.clientWidth;
+            const h = wrapper.clientHeight;
             
-            const wrapperWidth = wrapper.clientWidth - 10;
-            const wrapperHeight = wrapper.clientHeight - 10;
-            
-            const gridWidth = grid.scrollWidth || 1000;
-            const gridHeight = grid.scrollHeight || 1000;
-            
-            const scaleX = wrapperWidth / gridWidth;
-            const scaleY = wrapperHeight / gridHeight;
+            const scaleX = w / COLS;
+            const scaleY = h / ROWS;
             scale = Math.min(scaleX, scaleY, 1);
             
-            panX = (wrapperWidth - gridWidth * scale) / 2;
-            panY = (wrapperHeight - gridHeight * scale) / 2;
-            
+            panX = 0;
+            panY = 0;
             updateTransform();
         }
 
         function centerOnPixel(index) {
-            const grid = document.getElementById('pixelGrid');
-            const pixels = grid.children;
-            if (index >= pixels.length) return;
+            const pixelSize = Math.max(1, Math.min(8, (canvasWidth / COLS) * scale));
+            const totalWidth = COLS * pixelSize;
+            const totalHeight = ROWS * pixelSize;
             
-            const pixel = pixels[index];
-            const wrapper = document.getElementById('gridWrapper');
-            const wrapperRect = wrapper.getBoundingClientRect();
-            const pixelRect = pixel.getBoundingClientRect();
+            const col = index % COLS;
+            const row = Math.floor(index / COLS);
             
-            const centerX = wrapperRect.width / 2;
-            const centerY = wrapperRect.height / 2;
+            const offsetX = panX + (canvasWidth - totalWidth) / 2;
+            const offsetY = panY + (canvasHeight - totalHeight) / 2;
             
-            const pixelCenterX = pixelRect.left + pixelRect.width / 2 - wrapperRect.left;
-            const pixelCenterY = pixelRect.top + pixelRect.height / 2 - wrapperRect.top;
+            const targetX = -offsetX + canvasWidth / 2 - col * pixelSize - pixelSize / 2;
+            const targetY = -offsetY + canvasHeight / 2 - row * pixelSize - pixelSize / 2;
             
-            panX += centerX - pixelCenterX;
-            panY += centerY - pixelCenterY;
-            
+            panX = targetX;
+            panY = targetY;
             updateTransform();
         }
 
@@ -653,18 +662,20 @@
         // أحداث السحب والتحريك
         // ============================================
         function setupPanning() {
-            const viewport = document.getElementById('gridViewport');
+            const wrapper = document.getElementById('gridWrapper');
             
-            viewport.addEventListener('mousedown', startDrag);
-            viewport.addEventListener('mousemove', drag);
-            viewport.addEventListener('mouseup', endDrag);
-            viewport.addEventListener('mouseleave', endDrag);
+            wrapper.addEventListener('mousedown', startDrag);
+            window.addEventListener('mousemove', drag);
+            window.addEventListener('mouseup', endDrag);
             
-            viewport.addEventListener('touchstart', handleTouchStart, { passive: false });
-            viewport.addEventListener('touchmove', handleTouchMove, { passive: false });
-            viewport.addEventListener('touchend', handleTouchEnd, { passive: false });
+            wrapper.addEventListener('touchstart', handleTouchStart, { passive: false });
+            window.addEventListener('touchmove', handleTouchMove, { passive: false });
+            window.addEventListener('touchend', handleTouchEnd, { passive: false });
             
-            viewport.addEventListener('wheel', handleWheel, { passive: false });
+            wrapper.addEventListener('wheel', handleWheel, { passive: false });
+            
+            // النقر على الكانفاس
+            canvas.addEventListener('click', handleCanvasClick);
         }
 
         function startDrag(e) {
@@ -673,7 +684,7 @@
             startY = e.clientY;
             startPanX = panX;
             startPanY = panY;
-            document.getElementById('gridViewport').style.cursor = 'grabbing';
+            document.getElementById('gridWrapper').style.cursor = 'grabbing';
         }
 
         function drag(e) {
@@ -682,12 +693,12 @@
             const dy = e.clientY - startY;
             panX = startPanX + dx;
             panY = startPanY + dy;
-            updateTransform();
+            drawGrid();
         }
 
         function endDrag() {
             isDragging = false;
-            document.getElementById('gridViewport').style.cursor = 'grab';
+            document.getElementById('gridWrapper').style.cursor = 'grab';
         }
 
         let touchStartX = 0, touchStartY = 0;
@@ -717,14 +728,18 @@
                 const dy = touches[0].clientY - touchStartY;
                 panX = touchStartPanX + dx;
                 panY = touchStartPanY + dy;
-                updateTransform();
+                drawGrid();
             } else if (touches.length === 2) {
                 const dist = getTouchDistance(touches);
                 const delta = dist - lastTouchDist;
                 const newScale = Math.min(Math.max(scale * (1 + delta / 400), MIN_SCALE), MAX_SCALE);
+                const centerX = canvasWidth / 2;
+                const centerY = canvasHeight / 2;
+                panX = centerX - (centerX - panX) * (newScale / scale);
+                panY = centerY - (centerY - panY) * (newScale / scale);
                 scale = newScale;
                 lastTouchDist = dist;
-                updateTransform();
+                drawGrid();
             }
         }
 
@@ -743,7 +758,7 @@
             const delta = e.deltaY > 0 ? 0.9 : 1.1;
             const newScale = Math.min(Math.max(scale * delta, MIN_SCALE), MAX_SCALE);
             
-            const rect = document.getElementById('gridWrapper').getBoundingClientRect();
+            const rect = canvas.getBoundingClientRect();
             const mouseX = e.clientX - rect.left;
             const mouseY = e.clientY - rect.top;
             
@@ -751,7 +766,7 @@
             panY = mouseY - (mouseY - panY) * (newScale / scale);
             scale = newScale;
             
-            updateTransform();
+            drawGrid();
         }
 
         // ============================================
@@ -773,10 +788,19 @@
                     translations[currentLang].takenTxt;
                 document.getElementById('selectedPixelInfo').innerHTML = 
                     `❌ المربع #${num} - <strong class="reserved">محجوز</strong>`;
+                selectedPixelIndex = -1;
+                drawGrid();
                 return;
             }
             
-            handlePixelClick(index);
+            selectedPixelIndex = index;
+            document.getElementById('liveStatus').textContent = 
+                translations[currentLang].selectedTxt + (index + 1);
+            document.getElementById('selectedPixelInfo').innerHTML = 
+                `📍 المربع #${index + 1} - <strong class="available">${translations[currentLang].available}</strong>`;
+            
+            centerOnPixel(index);
+            drawGrid();
         }
 
         function selectRandomPixel() {
@@ -793,8 +817,15 @@
                 return;
             }
             
-            handlePixelClick(index);
+            selectedPixelIndex = index;
+            document.getElementById('liveStatus').textContent = 
+                translations[currentLang].selectedTxt + (index + 1);
+            document.getElementById('selectedPixelInfo').innerHTML = 
+                `📍 المربع #${index + 1} - <strong class="available">${translations[currentLang].available}</strong>`;
             document.getElementById('pixelNumberInput').value = index + 1;
+            
+            centerOnPixel(index);
+            drawGrid();
         }
 
         function goToPixel(num) {
@@ -807,10 +838,20 @@
                     translations[currentLang].takenTxt;
                 document.getElementById('selectedPixelInfo').innerHTML = 
                     `❌ المربع #${num} - <strong class="reserved">محجوز</strong>`;
+                selectedPixelIndex = -1;
+                drawGrid();
                 return;
             }
             
-            handlePixelClick(index);
+            selectedPixelIndex = index;
+            document.getElementById('liveStatus').textContent = 
+                translations[currentLang].selectedTxt + (index + 1);
+            document.getElementById('selectedPixelInfo').innerHTML = 
+                `📍 المربع #${index + 1} - <strong class="available">${translations[currentLang].available}</strong>`;
+            document.getElementById('pixelNumberInput').value = index + 1;
+            
+            centerOnPixel(index);
+            drawGrid();
         }
 
         // ============================================
@@ -849,10 +890,12 @@
         // تحميل الصفحة
         // ============================================
         window.onload = function() {
-            createGrid();
+            initCanvas();
             setupPanning();
+            fitToScreen();
             
             window.addEventListener('resize', () => {
+                initCanvas();
                 fitToScreen();
             });
             
@@ -860,12 +903,18 @@
             setTimeout(() => {
                 for (let i = 0; i < TOTAL_PIXELS; i++) {
                     if (!pixelStatus[i]) {
-                        handlePixelClick(i);
+                        selectedPixelIndex = i;
                         document.getElementById('pixelNumberInput').value = i + 1;
+                        document.getElementById('liveStatus').textContent = 
+                            translations[currentLang].selectedTxt + (i + 1);
+                        document.getElementById('selectedPixelInfo').innerHTML = 
+                            `📍 المربع #${i + 1} - <strong class="available">${translations[currentLang].available}</strong>`;
+                        centerOnPixel(i);
+                        drawGrid();
                         break;
                     }
                 }
-            }, 300);
+            }, 200);
         };
 
         // جعل التوابع عالمية
