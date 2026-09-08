@@ -25,7 +25,7 @@
             --modal-bg: #1a1a25;
             --modal-overlay: rgba(0, 0, 0, 0.75);
             --grid-size: 1000;
-            --cell-size: 10px; /* الحجم الافتراضي */
+            --cell-size: 10px;
             --scrollbar-thumb: #333345;
             --scrollbar-track: #111118;
             --tooltip-bg: rgba(20, 20, 30, 0.95);
@@ -39,6 +39,7 @@
             --transition-fast: 0.2s ease;
             --transition-med: 0.35s ease;
             --transition-slow: 0.5s ease;
+            --grid-scale: 1;
         }
 
         * {
@@ -84,7 +85,7 @@
             color: #fff;
         }
 
-        /* ===== LANGUAGE SWITCH - SINGLE BUTTON ===== */
+        /* ===== LANGUAGE SWITCH ===== */
         .lang-switch-container {
             position: fixed;
             top: 20px;
@@ -119,28 +120,12 @@
             transform: translateY(-2px);
         }
 
-        .lang-switch-btn:active {
-            transform: translateY(0);
-            box-shadow: var(--shadow-sm);
-        }
-
         .lang-icon {
             font-size: 1.2rem;
-            display: flex;
-            align-items: center;
-            justify-content: center;
         }
 
         .lang-text {
             font-size: 0.9rem;
-            letter-spacing: 0.5px;
-        }
-
-        .lang-switch-btn .lang-divider {
-            width: 1px;
-            height: 20px;
-            background: rgba(255, 255, 255, 0.2);
-            margin: 0 4px;
         }
 
         /* ===== HERO SECTION ===== */
@@ -356,8 +341,7 @@
             max-width: 1200px;
             margin: 0 auto;
             animation: fadeInUp 0.8s ease 0.5s both;
-            /* هامش علوي إضافي لمنع تداخل زر اللغة */
-            margin-top: 60px; /* تعديل مقترح */
+            margin-top: 25px; /* التعديل المطلوب: هامش علوي لمنع التداخل */
         }
 
         .grid-section-header {
@@ -367,6 +351,7 @@
             align-items: center;
             margin-bottom: 16px;
             gap: 12px;
+            margin-top: 25px; /* هامش إضافي لشريط الإرشادات */
         }
 
         .grid-section-title {
@@ -386,7 +371,6 @@
             font-size: 0.8rem;
             color: var(--text-muted);
             font-weight: 400;
-            letter-spacing: 0.3px;
         }
 
         .grid-legend {
@@ -432,7 +416,7 @@
             -ms-user-select: none;
             max-height: 100vh;
             overflow: auto;
-            -webkit-overflow-scrolling: touch; /* تمت الإضافة */
+            -webkit-overflow-scrolling: touch; /* التعديل المطلوب: تمرير سلس */
             position: relative;
         }
 
@@ -454,9 +438,99 @@
             min-width: 100%;
             position: relative;
             direction: ltr;
+            transform: scale(var(--grid-scale)); /* التعديل: دعم التكبير */
+            transform-origin: top left; /* التعديل: نقطة التكبير */
+            transition: transform 0.3s ease;
+            will-change: transform;
         }
 
-        /* === RESERVED BLOCKS === */
+        /* ===== ZOOM CONTROLS ===== */
+        .zoom-controls {
+            position: absolute;
+            bottom: 16px;
+            right: 16px;
+            display: flex;
+            gap: 8px;
+            z-index: 100;
+        }
+
+        .zoom-btn {
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            border: 1px solid rgba(245, 197, 66, 0.4);
+            background: rgba(26, 26, 37, 0.95);
+            color: var(--accent-gold);
+            cursor: pointer;
+            font-family: 'Cairo', sans-serif;
+            font-weight: 900;
+            font-size: 1.2rem;
+            transition: all var(--transition-fast);
+            box-shadow: var(--shadow-sm);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .zoom-btn:hover {
+            background: var(--accent-gradient);
+            color: #0a0a0f;
+            border-color: var(--accent-gold);
+            box-shadow: 0 0 20px rgba(245, 197, 66, 0.4);
+            transform: scale(1.1);
+        }
+
+        .zoom-btn:active {
+            transform: scale(0.9);
+        }
+
+        /* ===== SKELETON LOADER ===== */
+        .skeleton-loader {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: var(--bg-grid);
+            z-index: 50;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: opacity 0.5s ease;
+        }
+
+        .skeleton-loader.hidden {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .skeleton-pulse {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: var(--accent-gradient);
+            animation: skeletonPulse 1.5s ease-in-out infinite;
+            box-shadow: 0 0 40px rgba(245, 197, 66, 0.5);
+        }
+
+        @keyframes skeletonPulse {
+            0%, 100% {
+                transform: scale(0.8);
+                opacity: 0.6;
+            }
+            50% {
+                transform: scale(1.2);
+                opacity: 1;
+            }
+        }
+
+        /* ===== EMPTY CELL HOVER ===== */
+        .grid-container:not(.reserved-block):hover {
+            /* تأثير عام للشبكة */
+        }
+
         .reserved-block {
             position: relative;
             overflow: hidden;
@@ -533,7 +607,7 @@
             opacity: 1;
         }
 
-        /* === TOOLTIP === */
+        /* ===== TOOLTIP ===== */
         .grid-tooltip {
             position: fixed;
             pointer-events: none;
@@ -569,7 +643,7 @@
             border-top: 6px solid var(--tooltip-border);
         }
 
-        /* === MODAL === */
+        /* ===== MODAL ===== */
         .modal-overlay {
             position: fixed;
             top: 0;
@@ -704,7 +778,7 @@
             color: var(--text-primary);
         }
 
-        /* === PAYMENT METHODS === */
+        /* ===== PAYMENT METHODS ===== */
         .payment-methods {
             display: flex;
             gap: 12px;
@@ -837,7 +911,7 @@
             color: var(--accent-gold);
         }
 
-        /* === ANIMATIONS === */
+        /* ===== ANIMATIONS ===== */
         @keyframes fadeInDown {
             from { opacity: 0; transform: translateY(-20px); }
             to { opacity: 1; transform: translateY(0); }
@@ -859,7 +933,7 @@
             to { opacity: 1; transform: scale(1); }
         }
 
-        /* === FOOTER === */
+        /* ===== FOOTER ===== */
         .site-footer {
             text-align: center;
             padding: 24px 16px 32px;
@@ -880,7 +954,7 @@
             color: var(--accent-gold-dark);
         }
 
-        /* === RESPONSIVE === */
+        /* ===== RESPONSIVE ===== */
         @media (max-width: 768px) {
             .hero {
                 padding: 32px 16px 20px;
@@ -901,7 +975,10 @@
             }
             .grid-section {
                 padding: 8px 8px 16px;
-                margin-top: 50px; /* تصغير الهامش العلوي للشبكة */
+                margin-top: 25px;
+            }
+            .grid-section-header {
+                margin-top: 25px;
             }
             .grid-wrapper {
                 max-height: 85vh;
@@ -926,10 +1003,10 @@
                 padding: 8px 14px;
                 font-size: 0.8rem;
             }
-
-            /* تكبير حجم الخلايا لتسهيل اللمس */
-            :root {
-                --cell-size: 12px; /* زيادة 20% */
+            .zoom-btn {
+                width: 38px;
+                height: 38px;
+                font-size: 1rem;
             }
         }
 
@@ -965,17 +1042,12 @@
             .lang-icon {
                 font-size: 1rem;
             }
-
-            /* زيادة أكبر للخلايا في الشاشات الصغيرة جداً */
-            :root {
-                --cell-size: 14px;
-            }
         }
     </style>
 </head>
 <body>
 
-    <!-- ===== LANGUAGE SWITCH - SINGLE BUTTON ===== -->
+    <!-- ===== LANGUAGE SWITCH ===== -->
     <div class="lang-switch-container">
         <button class="lang-switch-btn" id="lang-toggle-btn" onclick="toggleLanguage()">
             <span class="lang-icon" id="lang-icon">🇸🇦</span>
@@ -992,7 +1064,7 @@
         <p class="hero-subtitle">
             <span data-ar="كن جزءاً من" data-en="Be part of">كن جزءاً من</span> <strong data-ar="أكبر لوحة رقمية تفاعلية" data-en="the largest interactive digital wall">أكبر لوحة رقمية تفاعلية</strong> <span data-ar="في العالم." data-en="in the world.">في العالم.</span><br>
             <span data-ar="احجز مربعاتك على الجدارية الخالدة، واترك" data-en="Reserve your squares on the eternal wall and leave">احجز مربعاتك على الجدارية الخالدة، واترك</span> <strong data-ar="بصمتك للأبد" data-en="your mark forever">بصمتك للأبد</strong>.<br>
-            <span data-ar="كل مربع 10×10 بكسل بـ" data-en="Each 10×10 pixel square costs">كل مربع 10×10 بكسل بـ</span> <strong data-ar="دولار واحد فقط" data-en="only $1">دولار واحد فقط</strong>.
+            <span data-ar="كل مربع 10x10 بكسل بـ" data-en="Each 10x10 pixel square costs">كل مربع 10x10 بكسل بـ</span> <strong data-ar="1 دولار فقط" data-en="only $1">1 دولار فقط</strong>.
         </p>
     </header>
 
@@ -1041,8 +1113,19 @@
         </div>
 
         <div class="grid-wrapper" id="grid-wrapper" tabindex="0" role="grid" aria-label="جدارية مليون سيلفي">
+            <!-- Skeleton Loader -->
+            <div class="skeleton-loader" id="skeleton-loader">
+                <div class="skeleton-pulse"></div>
+            </div>
+
+            <!-- Zoom Controls -->
+            <div class="zoom-controls">
+                <button class="zoom-btn" onclick="zoomGrid(0.2)" title="تكبير">+</button>
+                <button class="zoom-btn" onclick="zoomGrid(-0.2)" title="تصغير">−</button>
+            </div>
+
             <div class="grid-container" id="grid-container">
-                <!-- Reserved blocks will be rendered here via JavaScript -->
+                <!-- Reserved blocks will be rendered here -->
             </div>
         </div>
     </section>
@@ -1091,7 +1174,7 @@
 
             <!-- Payment Details Container -->
             <div class="payment-details" id="payment-details">
-                <!-- Dynamic content based on selected payment method -->
+                <!-- Dynamic content -->
             </div>
 
             <!-- Review Notice -->
@@ -1107,6 +1190,28 @@
     <script>
         // ===== تحديث السنة تلقائياً =====
         document.getElementById("year").textContent = new Date().getFullYear();
+
+        // ===== ZOOM FUNCTION =====
+        let currentScale = 1;
+        const MIN_SCALE = 0.5;
+        const MAX_SCALE = 3;
+
+        function zoomGrid(delta) {
+            currentScale = Math.min(MAX_SCALE, Math.max(MIN_SCALE, currentScale + delta));
+            document.getElementById('grid-container').style.setProperty('--grid-scale', currentScale);
+            document.getElementById('grid-container').style.transform = `scale(${currentScale})`;
+        }
+
+        // ===== SKELETON LOADER =====
+        function hideSkeletonLoader() {
+            setTimeout(() => {
+                const loader = document.getElementById('skeleton-loader');
+                if (loader) {
+                    loader.classList.add('hidden');
+                    setTimeout(() => loader.remove(), 500);
+                }
+            }, 800); // محاكاة وقت التحميل
+        }
 
         // ===== LANGUAGE MANAGEMENT =====
         let currentLanguage = 'ar';
@@ -1225,7 +1330,7 @@
             });
         }
 
-        // ===== SUBMIT RESERVATION (Mockup) =====
+        // ===== SUBMIT RESERVATION =====
         function submitReservation() {
             const fileInput = document.getElementById('selfie-upload');
             const socialLink = document.getElementById('social-link').value;
@@ -1262,7 +1367,7 @@
             }
         }
 
-        // ===== FILE UPLOAD CLICK =====
+        // ===== FILE UPLOAD =====
         document.getElementById('file-upload').addEventListener('click', function() {
             document.getElementById('selfie-upload').click();
         });
@@ -1291,65 +1396,25 @@
             }
         });
 
-        // ===== GRID SYSTEM (Existing code) =====
+        // ===== GRID SYSTEM =====
         (function() {
             'use strict';
 
             const GRID_SIZE = 1000;
-            const CELL_SIZE = 10; // سيتم تحديثها من CSS عبر --cell-size
+            const CELL_SIZE = 10;
             const TOTAL_CELLS = GRID_SIZE * GRID_SIZE;
 
             const reservedBlocks = [
-                {
-                    id: 'selfie-001', row: 5, col: 8, widthCells: 5, heightCells: 5,
-                    name: 'Ahmed AlSalem', link: 'https://instagram.com/ahmed_alsalem',
-                    image: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=50&h=50&fit=crop&crop=faces'
-                },
-                {
-                    id: 'selfie-002', row: 20, col: 30, widthCells: 10, heightCells: 10,
-                    name: 'Sara AlKhaled', link: 'https://instagram.com/sara_alkhaled',
-                    image: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100&h=100&fit=crop&crop=faces'
-                },
-                {
-                    id: 'selfie-003', row: 45, col: 60, widthCells: 20, heightCells: 20,
-                    name: 'Mohammed AlOtaibi', link: 'https://twitter.com/mohd_alotaibi',
-                    image: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=200&h=200&fit=crop&crop=faces'
-                },
-                {
-                    id: 'selfie-004', row: 80, col: 15, widthCells: 3, heightCells: 3,
-                    name: 'Noura AlShammari', link: 'https://instagram.com/noura_shamri',
-                    image: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=30&h=30&fit=crop&crop=faces'
-                },
-                {
-                    id: 'selfie-005', row: 100, col: 200, widthCells: 15, heightCells: 15,
-                    name: 'Abdullah AlHarbi', link: 'https://twitter.com/abdullah_harbi',
-                    image: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=150&h=150&fit=crop&crop=faces'
-                },
-                {
-                    id: 'selfie-006', row: 150, col: 350, widthCells: 8, heightCells: 8,
-                    name: 'Reem AlQahtani', link: 'https://instagram.com/reem_alqahtani',
-                    image: 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=80&h=80&fit=crop&crop=faces'
-                },
-                {
-                    id: 'selfie-007', row: 200, col: 100, widthCells: 25, heightCells: 25,
-                    name: 'Khaled AlDosari', link: 'https://twitter.com/khalid_dosari',
-                    image: 'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=250&h=250&fit=crop&crop=faces'
-                },
-                {
-                    id: 'selfie-008', row: 300, col: 500, widthCells: 4, heightCells: 4,
-                    name: 'Laila AlAnzi', link: 'https://instagram.com/laila_anzi',
-                    image: 'https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=40&h=40&fit=crop&crop=faces'
-                },
-                {
-                    id: 'selfie-009', row: 350, col: 250, widthCells: 12, heightCells: 12,
-                    name: 'Fahad AlMutairi', link: 'https://twitter.com/fahad_mutairi',
-                    image: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=120&h=120&fit=crop&crop=faces'
-                },
-                {
-                    id: 'selfie-010', row: 400, col: 700, widthCells: 30, heightCells: 30,
-                    name: 'Munira AlSubaie', link: 'https://instagram.com/munira_subaie',
-                    image: 'https://images.unsplash.com/photo-1517841905240-472988babdf9?w=300&h=300&fit=crop&crop=faces'
-                }
+                { id: 'selfie-001', row: 5, col: 8, widthCells: 5, heightCells: 5, name: 'Ahmed AlSalem', link: 'https://instagram.com/ahmed_alsalem', image: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=50&h=50&fit=crop&crop=faces' },
+                { id: 'selfie-002', row: 20, col: 30, widthCells: 10, heightCells: 10, name: 'Sara AlKhaled', link: 'https://instagram.com/sara_alkhaled', image: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100&h=100&fit=crop&crop=faces' },
+                { id: 'selfie-003', row: 45, col: 60, widthCells: 20, heightCells: 20, name: 'Mohammed AlOtaibi', link: 'https://twitter.com/mohd_alotaibi', image: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=200&h=200&fit=crop&crop=faces' },
+                { id: 'selfie-004', row: 80, col: 15, widthCells: 3, heightCells: 3, name: 'Noura AlShammari', link: 'https://instagram.com/noura_shamri', image: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=30&h=30&fit=crop&crop=faces' },
+                { id: 'selfie-005', row: 100, col: 200, widthCells: 15, heightCells: 15, name: 'Abdullah AlHarbi', link: 'https://twitter.com/abdullah_harbi', image: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=150&h=150&fit=crop&crop=faces' },
+                { id: 'selfie-006', row: 150, col: 350, widthCells: 8, heightCells: 8, name: 'Reem AlQahtani', link: 'https://instagram.com/reem_alqahtani', image: 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=80&h=80&fit=crop&crop=faces' },
+                { id: 'selfie-007', row: 200, col: 100, widthCells: 25, heightCells: 25, name: 'Khaled AlDosari', link: 'https://twitter.com/khalid_dosari', image: 'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=250&h=250&fit=crop&crop=faces' },
+                { id: 'selfie-008', row: 300, col: 500, widthCells: 4, heightCells: 4, name: 'Laila AlAnzi', link: 'https://instagram.com/laila_anzi', image: 'https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=40&h=40&fit=crop&crop=faces' },
+                { id: 'selfie-009', row: 350, col: 250, widthCells: 12, heightCells: 12, name: 'Fahad AlMutairi', link: 'https://twitter.com/fahad_mutairi', image: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=120&h=120&fit=crop&crop=faces' },
+                { id: 'selfie-010', row: 400, col: 700, widthCells: 30, heightCells: 30, name: 'Munira AlSubaie', link: 'https://instagram.com/munira_subaie', image: 'https://images.unsplash.com/photo-1517841905240-472988babdf9?w=300&h=300&fit=crop&crop=faces' }
             ];
 
             const gridContainer = document.getElementById('grid-container');
@@ -1413,9 +1478,7 @@
 
                     const badge = document.createElement('div');
                     badge.className = 'block-size-badge';
-                    const pixelWidth = block.widthCells * CELL_SIZE;
-                    const pixelHeight = block.heightCells * CELL_SIZE;
-                    badge.textContent = pixelWidth + '×' + pixelHeight + 'px';
+                    badge.textContent = (block.widthCells * CELL_SIZE) + '×' + (block.heightCells * CELL_SIZE) + 'px';
                     div.appendChild(badge);
 
                     div.addEventListener('click', function(e) {
@@ -1456,8 +1519,8 @@
                 const scrollLeft = gridWrapper.scrollLeft;
                 const scrollTop = gridWrapper.scrollTop;
 
-                const adjustedX = x + scrollLeft;
-                const adjustedY = y + scrollTop;
+                const adjustedX = (x + scrollLeft) / currentScale;
+                const adjustedY = (y + scrollTop) / currentScale;
 
                 const col = Math.floor(adjustedX / CELL_SIZE);
                 const row = Math.floor(adjustedY / CELL_SIZE);
@@ -1481,23 +1544,8 @@
                     tooltip.classList.remove('visible');
                 } else {
                     hoveredBlockId = null;
-                    const tooltipX = e.clientX + 12;
-                    const tooltipY = e.clientY - 10;
-                    const tooltipWidth = tooltip.offsetWidth || 120;
-                    const tooltipHeight = tooltip.offsetHeight || 40;
-                    const viewportW = window.innerWidth;
-                    const viewportH = window.innerHeight;
-
-                    let finalX = tooltipX;
-                    let finalY = tooltipY;
-
-                    if (finalX + tooltipWidth > viewportW - 10) finalX = e.clientX - tooltipWidth - 12;
-                    if (finalY + tooltipHeight > viewportH - 10) finalY = e.clientY - tooltipHeight - 12;
-                    if (finalX < 10) finalX = 10;
-                    if (finalY < 10) finalY = 10;
-
-                    tooltip.style.left = finalX + 'px';
-                    tooltip.style.top = finalY + 'px';
+                    tooltip.style.left = (e.clientX + 12) + 'px';
+                    tooltip.style.top = (e.clientY - 10) + 'px';
                     tooltip.classList.add('visible');
                 }
             });
@@ -1525,6 +1573,7 @@
             function init() {
                 renderReservedBlocks();
                 updateStats();
+                hideSkeletonLoader();
                 gridWrapper.scrollLeft = 20 * CELL_SIZE;
                 gridWrapper.scrollTop = 30 * CELL_SIZE;
             }
