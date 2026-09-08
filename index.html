@@ -253,11 +253,16 @@
         }
 
         #pixelCanvas {
+            display: block;
             width: 100%;
             height: 100%;
-            display: block;
+            cursor: grab;
             background-color: #0b0f19;
             image-rendering: pixelated;
+        }
+
+        #pixelCanvas:active {
+            cursor: grabbing;
         }
 
         /* ===== شريط التنقل ===== */
@@ -309,11 +314,6 @@
         .cta-btn:hover {
             transform: scale(1.02);
             box-shadow: 0 4px 30px rgba(16, 185, 129, 0.5);
-        }
-
-        /* ===== منطقة الاختيار (مخفية) ===== */
-        .selection-area {
-            display: none;
         }
 
         /* ===== التذييل ===== */
@@ -544,6 +544,20 @@
             border-color: #ef4444;
         }
 
+        #gridInfo {
+            position: absolute;
+            bottom: 10px;
+            left: 10px;
+            color: #fff;
+            font-size: 0.65rem;
+            background: rgba(0,0,0,0.6);
+            padding: 4px 12px;
+            border-radius: 20px;
+            pointer-events: none;
+            font-family: var(--primary-font);
+            direction: ltr;
+        }
+
         /* ===== تحسينات للجوال ===== */
         @media (max-width: 600px) {
             body { padding: 8px; }
@@ -560,6 +574,7 @@
             .modal-content { padding: 20px; margin: 10px; }
             .modal-title { font-size: 1.1rem; }
             .modal-pixel-info .number { font-size: 1.2rem; }
+            #gridInfo { font-size: 0.5rem; padding: 2px 8px; }
         }
 
         @media (max-width: 400px) {
@@ -622,6 +637,7 @@
         <!-- حاوية الشبكة -->
         <div class="grid-wrapper" id="gridWrapper">
             <canvas id="pixelCanvas"></canvas>
+            <div id="gridInfo">1,000,000 خلية</div>
         </div>
 
         <!-- شريط التنقل -->
@@ -635,16 +651,6 @@
 
         <!-- زر الحجز الرئيسي -->
         <button class="cta-btn" id="ctaBtn" onclick="bookPixelAlert()">احجز مكانك في الجدارية الآن 😍</button>
-
-        <!-- منطقة الاختيار (مخفية) -->
-        <div class="selection-area">
-            <div class="selection-controls">
-                <input type="number" id="pixelNumberInput" min="1" max="1000000" placeholder="رقم المربع">
-                <button onclick="selectPixelByNumber()" id="selectBtn">اختر</button>
-                <button onclick="selectRandomPixel()" class="random-btn" id="randomBtn">🎲 عشوائي</button>
-            </div>
-            <div id="selectedPixelInfo" class="info-text">✨ اختر مربعاً من الشبكة أو أدخل رقمه</div>
-        </div>
 
         <footer>
             <span id="footerText">© 2026 جدارية مليون سيلفي. جميع الحقوق محفوظة.</span>
@@ -703,7 +709,7 @@
 
     <script>
         // ============================================
-        // البيانات
+        // بيانات الشبكة
         // ============================================
         const TOTAL_PIXELS = 1000000;
         const COLS = 1000;
@@ -723,31 +729,39 @@
 
         const pixelData = {};
 
-        const RESERVED_COLORS = {};
-        RESERVED_INDICES.forEach(idx => {
-            const rand = Math.random();
-            if (rand < 0.33) RESERVED_COLORS[idx] = '#eab308';
-            else if (rand < 0.66) RESERVED_COLORS[idx] = '#f59e0b';
-            else RESERVED_COLORS[idx] = '#94a3b8';
-        });
+        // ألوان المربعات - نستخدم نفس نظام الألوان من الكود الجديد
+        const colors = new Uint32Array(TOTAL_PIXELS);
+        for (let i = 0; i < TOTAL_PIXELS; i++) {
+            if (RESERVED_INDICES.has(i)) {
+                // ألوان للمربعات المحجوزة
+                const rand = Math.random();
+                let r, g, b;
+                if (rand < 0.33) { r = 234; g = 179; b = 8; } // ذهبي
+                else if (rand < 0.66) { r = 245; g = 158; b = 11; } // برتقالي
+                else { r = 148; g = 163; b = 184; } // رمادي
+                colors[i] = (0xFF << 24) | (r << 16) | (g << 8) | b;
+            } else {
+                // لون المربع الفارغ
+                colors[i] = (0xFF << 24) | (26 << 16) | (35 << 8) | 64; // #1a2340
+            }
+        }
 
         // ============================================
-        // متغيرات التحكم
+        // متغيرات التحكم في الشبكة
         // ============================================
-        let scale = 1;
-        let panX = 0;
-        let panY = 0;
-        const MIN_SCALE = 0.02;
-        const MAX_SCALE = 10;
-        
+        const canvas = document.getElementById('pixelCanvas');
+        const ctx = canvas.getContext('2d');
+
+        let scale = 1.0;
+        let offsetX = 0;
+        let offsetY = 0;
+
         let isDragging = false;
-        let startX = 0;
-        let startY = 0;
-        let startPanX = 0;
-        let startPanY = 0;
+        let startX = 0, startY = 0;
+        let startOffsetX = 0, startOffsetY = 0;
 
-        let canvas, ctx;
-        let canvasWidth, canvasHeight;
+        let canvasWidth = 0;
+        let canvasHeight = 0;
         let selectedPixelIndex = -1;
         let pendingPixelIndex = -1;
 
@@ -785,7 +799,8 @@
                 messageLabel: "📝 رسالة (اختياري)",
                 confirmBtn: "✅ تأكيد الحجز",
                 cancelBtn: "إلغاء",
-                noFile: "لم يتم اختيار صورة"
+                noFile: "لم يتم اختيار صورة",
+                infoText: "خلية"
             },
             en: {
                 title: "Million Selfie Wall",
@@ -815,7 +830,8 @@
                 messageLabel: "📝 Message (Optional)",
                 confirmBtn: "✅ Confirm Reservation",
                 cancelBtn: "Cancel",
-                noFile: "No file selected"
+                noFile: "No file selected",
+                infoText: "cells"
             }
         };
 
@@ -834,123 +850,259 @@
         }
 
         // ============================================
-        // تهيئة Canvas
+        // وظائف الشبكة
         // ============================================
-        function initCanvas() {
-            canvas = document.getElementById('pixelCanvas');
-            ctx = canvas.getContext('2d');
-            
-            const wrapper = document.getElementById('gridWrapper');
-            canvasWidth = wrapper.clientWidth;
-            canvasHeight = wrapper.clientHeight;
-            
-            canvas.width = canvasWidth * window.devicePixelRatio;
-            canvas.height = canvasHeight * window.devicePixelRatio;
-            canvas.style.width = canvasWidth + 'px';
-            canvas.style.height = canvasHeight + 'px';
-            
-            ctx.scale(window.devicePixelRatio, window.devicePixelRatio);
-            
-            drawGrid();
-            updateStats();
+        function resizeCanvas() {
+            const container = document.getElementById('gridWrapper');
+            const rect = container.getBoundingClientRect();
+            canvas.width = rect.width * window.devicePixelRatio;
+            canvas.height = rect.height * window.devicePixelRatio;
+            canvas.style.width = rect.width + 'px';
+            canvas.style.height = rect.height + 'px';
+            canvasWidth = canvas.width;
+            canvasHeight = canvas.height;
+            render();
         }
 
-        // ============================================
-        // رسم الشبكة
-        // ============================================
-        function drawGrid() {
+        function render() {
+            if (canvasWidth === 0 || canvasHeight === 0) return;
+
             ctx.clearRect(0, 0, canvasWidth, canvasHeight);
-            
-            ctx.fillStyle = '#0b0f19';
-            ctx.fillRect(0, 0, canvasWidth, canvasHeight);
-            
-            const pixelSize = Math.max(3, Math.min(16, (canvasWidth / COLS) * scale));
-            const totalWidth = COLS * pixelSize;
-            const totalHeight = ROWS * pixelSize;
-            
-            const offsetX = panX + (canvasWidth - totalWidth) / 2;
-            const offsetY = panY + (canvasHeight - totalHeight) / 2;
-            
-            const startCol = Math.max(0, Math.floor(-offsetX / pixelSize));
-            const endCol = Math.min(COLS, Math.ceil((canvasWidth - offsetX) / pixelSize) + 1);
-            const startRow = Math.max(0, Math.floor(-offsetY / pixelSize));
-            const endRow = Math.min(ROWS, Math.ceil((canvasHeight - offsetY) / pixelSize) + 1);
-            
-            for (let row = startRow; row < endRow; row++) {
-                for (let col = startCol; col < endCol; col++) {
-                    const index = row * COLS + col;
-                    if (index >= TOTAL_PIXELS) continue;
+
+            const gridWidth = COLS;
+            const gridHeight = ROWS;
+
+            const aspect = canvasWidth / canvasHeight;
+            const baseScale = Math.min(canvasWidth / gridWidth, canvasHeight / gridHeight);
+            const currentScale = baseScale * scale;
+
+            const cellSize = currentScale;
+            if (cellSize < 0.001) return;
+
+            const viewLeft = -offsetX;
+            const viewTop = -offsetY;
+            const viewRight = viewLeft + canvasWidth / currentScale;
+            const viewBottom = viewTop + canvasHeight / currentScale;
+
+            const minCol = Math.max(0, Math.floor(viewLeft));
+            const maxCol = Math.min(COLS - 1, Math.ceil(viewRight));
+            const minRow = Math.max(0, Math.floor(viewTop));
+            const maxRow = Math.min(ROWS - 1, Math.ceil(viewBottom));
+
+            // رسم المربعات المرئية
+            for (let row = minRow; row <= maxRow; row++) {
+                for (let col = minCol; col <= maxCol; col++) {
+                    const idx = row * COLS + col;
+                    const color = colors[idx];
+                    const x = (col - offsetX) * currentScale;
+                    const y = (row - offsetY) * currentScale;
                     
-                    const x = offsetX + col * pixelSize;
-                    const y = offsetY + row * pixelSize;
-                    
-                    let color = '#1a2340';
-                    
-                    if (RESERVED_INDICES.has(index)) {
-                        color = RESERVED_COLORS[index] || '#ec4899';
-                    }
-                    
-                    const isSelected = (index === selectedPixelIndex && !RESERVED_INDICES.has(index));
+                    const isSelected = (idx === selectedPixelIndex && !RESERVED_INDICES.has(idx));
                     
                     if (isSelected) {
-                        const gradient = ctx.createRadialGradient(
-                            x + pixelSize/2, y + pixelSize/2, 0,
-                            x + pixelSize/2, y + pixelSize/2, pixelSize * 5
-                        );
-                        gradient.addColorStop(0, 'rgba(16, 185, 129, 0.95)');
-                        gradient.addColorStop(0.2, 'rgba(16, 185, 129, 0.5)');
-                        gradient.addColorStop(0.5, 'rgba(16, 185, 129, 0.15)');
-                        gradient.addColorStop(1, 'rgba(16, 185, 129, 0)');
-                        
-                        ctx.fillStyle = gradient;
-                        ctx.fillRect(x - pixelSize*2.5, y - pixelSize*2.5, pixelSize*6, pixelSize*6);
-                        
+                        // تأثير إضاءة للمربع المختار
+                        const size = Math.max(1, cellSize);
                         ctx.shadowColor = 'rgba(16, 185, 129, 0.8)';
-                        ctx.shadowBlur = 50;
+                        ctx.shadowBlur = 30;
                         ctx.fillStyle = '#10b981';
-                        ctx.fillRect(x, y, pixelSize, pixelSize);
+                        ctx.fillRect(x, y, size, size);
                         ctx.shadowBlur = 0;
                         
                         ctx.strokeStyle = 'rgba(255,255,255,0.9)';
-                        ctx.lineWidth = Math.max(2, pixelSize * 0.3);
-                        ctx.shadowColor = 'rgba(255,255,255,0.3)';
-                        ctx.shadowBlur = 15;
-                        ctx.strokeRect(x, y, pixelSize, pixelSize);
-                        ctx.shadowBlur = 0;
+                        ctx.lineWidth = Math.max(2, size * 0.3);
+                        ctx.strokeRect(x, y, size, size);
                     } else {
                         ctx.shadowBlur = 0;
-                        ctx.fillStyle = color;
-                        ctx.fillRect(x, y, pixelSize, pixelSize);
-                        
-                        if (pixelSize > 4) {
-                            ctx.strokeStyle = 'rgba(30, 41, 59, 0.3)';
-                            ctx.lineWidth = 0.5;
-                            ctx.strokeRect(x, y, pixelSize, pixelSize);
-                        }
+                        ctx.fillStyle = `#${color.toString(16).padStart(8, '0').slice(2)}`;
+                        ctx.fillRect(x, y, Math.max(1, cellSize), Math.max(1, cellSize));
                     }
                 }
             }
-            
-            ctx.shadowBlur = 0;
+
+            // تحديث معلومات الشبكة
+            const visible = (maxCol - minCol + 1) * (maxRow - minRow + 1);
+            document.getElementById('gridInfo').textContent = 
+                `${TOTAL_PIXELS.toLocaleString()} ${translations[currentLang].infoText} | مرئي: ${visible.toLocaleString()} | تكبير: ${(scale * 100).toFixed(1)}%`;
         }
 
         // ============================================
-        // تحويل الإحداثيات
+        // التحكم في التكبير والتحريك
+        // ============================================
+        function handleZoom(factor, centerX, centerY) {
+            const oldScale = scale;
+            const newScale = Math.min(Math.max(scale * factor, 0.01), 200);
+            if (newScale === oldScale) return;
+
+            const cx = centerX / canvasWidth;
+            const cy = centerY / canvasHeight;
+
+            const baseScale = Math.min(canvasWidth / COLS, canvasHeight / ROWS);
+            const oldWorldX = (cx * canvasWidth) / (baseScale * oldScale) - offsetX;
+            const oldWorldY = (cy * canvasHeight) / (baseScale * oldScale) - offsetY;
+
+            scale = newScale;
+
+            const newWorldX = (cx * canvasWidth) / (baseScale * scale) - offsetX;
+            const newWorldY = (cy * canvasHeight) / (baseScale * scale) - offsetY;
+
+            offsetX += newWorldX - oldWorldX;
+            offsetY += newWorldY - oldWorldY;
+
+            document.getElementById('zoomDisplay').textContent = Math.round(scale * 100) + '%';
+            render();
+        }
+
+        function zoomIn() {
+            const centerX = canvasWidth / 2;
+            const centerY = canvasHeight / 2;
+            handleZoom(1.3, centerX, centerY);
+        }
+
+        function zoomOut() {
+            const centerX = canvasWidth / 2;
+            const centerY = canvasHeight / 2;
+            handleZoom(0.7, centerX, centerY);
+        }
+
+        function resetView() {
+            scale = 1.0;
+            const baseScale = Math.min(canvasWidth / COLS, canvasHeight / ROWS);
+            offsetX = (COLS - canvasWidth / (baseScale * scale)) / 2;
+            offsetY = (ROWS - canvasHeight / (baseScale * scale)) / 2;
+            document.getElementById('zoomDisplay').textContent = Math.round(scale * 100) + '%';
+            render();
+        }
+
+        function fitToScreen() {
+            const baseScale = Math.min(canvasWidth / COLS, canvasHeight / ROWS);
+            scale = 0.95;
+            offsetX = (COLS - canvasWidth / (baseScale * scale)) / 2;
+            offsetY = (ROWS - canvasHeight / (baseScale * scale)) / 2;
+            document.getElementById('zoomDisplay').textContent = Math.round(scale * 100) + '%';
+            render();
+        }
+
+        function centerOnPixel(index) {
+            const col = index % COLS;
+            const row = Math.floor(index / COLS);
+            
+            const baseScale = Math.min(canvasWidth / COLS, canvasHeight / ROWS);
+            const currentScale = baseScale * scale;
+            
+            const targetX = col - canvasWidth / (2 * currentScale);
+            const targetY = row - canvasHeight / (2 * currentScale);
+            
+            offsetX = targetX;
+            offsetY = targetY;
+            
+            render();
+        }
+
+        // ============================================
+        // أحداث الماوس واللمس
+        // ============================================
+        function onPointerDown(x, y) {
+            isDragging = true;
+            startX = x;
+            startY = y;
+            startOffsetX = offsetX;
+            startOffsetY = offsetY;
+            canvas.style.cursor = 'grabbing';
+        }
+
+        function onPointerMove(x, y) {
+            if (!isDragging) return;
+            const baseScale = Math.min(canvasWidth / COLS, canvasHeight / ROWS);
+            const dx = (x - startX) / (baseScale * scale);
+            const dy = (y - startY) / (baseScale * scale);
+            offsetX = startOffsetX - dx;
+            offsetY = startOffsetY - dy;
+            render();
+        }
+
+        function onPointerUp() {
+            isDragging = false;
+            canvas.style.cursor = 'grab';
+        }
+
+        // أحداث الفأرة
+        canvas.addEventListener('mousedown', (e) => {
+            const rect = canvas.getBoundingClientRect();
+            onPointerDown(e.clientX - rect.left, e.clientY - rect.top);
+        });
+
+        window.addEventListener('mousemove', (e) => {
+            if (!isDragging) return;
+            const rect = canvas.getBoundingClientRect();
+            onPointerMove(e.clientX - rect.left, e.clientY - rect.top);
+        });
+
+        window.addEventListener('mouseup', onPointerUp);
+
+        // أحداث اللمس
+        let lastTouchDist = 0;
+
+        canvas.addEventListener('touchstart', (e) => {
+            e.preventDefault();
+            if (e.touches.length === 1) {
+                const t = e.touches[0];
+                const rect = canvas.getBoundingClientRect();
+                onPointerDown(t.clientX - rect.left, t.clientY - rect.top);
+            } else if (e.touches.length === 2) {
+                const t1 = e.touches[0];
+                const t2 = e.touches[1];
+                lastTouchDist = Math.hypot(t1.clientX - t2.clientX, t1.clientY - t2.clientY);
+            }
+        }, { passive: false });
+
+        canvas.addEventListener('touchmove', (e) => {
+            e.preventDefault();
+            if (e.touches.length === 1 && isDragging) {
+                const t = e.touches[0];
+                const rect = canvas.getBoundingClientRect();
+                onPointerMove(t.clientX - rect.left, t.clientY - rect.top);
+            } else if (e.touches.length === 2) {
+                const t1 = e.touches[0];
+                const t2 = e.touches[1];
+                const dist = Math.hypot(t1.clientX - t2.clientX, t1.clientY - t2.clientY);
+                if (lastTouchDist > 0) {
+                    const factor = dist / lastTouchDist;
+                    const cx = (t1.clientX + t2.clientX) / 2;
+                    const cy = (t1.clientY + t2.clientY) / 2;
+                    const rect = canvas.getBoundingClientRect();
+                    handleZoom(factor, cx - rect.left, cy - rect.top);
+                }
+                lastTouchDist = dist;
+            }
+        }, { passive: false });
+
+        canvas.addEventListener('touchend', (e) => {
+            e.preventDefault();
+            onPointerUp();
+            lastTouchDist = 0;
+        }, { passive: false });
+
+        // عجلة الفأرة للتكبير
+        canvas.addEventListener('wheel', (e) => {
+            e.preventDefault();
+            const rect = canvas.getBoundingClientRect();
+            const factor = e.deltaY > 0 ? 0.9 : 1.1;
+            handleZoom(factor, e.clientX - rect.left, e.clientY - rect.top);
+        }, { passive: false });
+
+        // ============================================
+        // النقر على المربع
         // ============================================
         function getPixelIndexFromScreen(screenX, screenY) {
             const rect = canvas.getBoundingClientRect();
             const x = screenX - rect.left;
             const y = screenY - rect.top;
             
-            const pixelSize = Math.max(3, Math.min(16, (canvasWidth / COLS) * scale));
-            const totalWidth = COLS * pixelSize;
-            const totalHeight = ROWS * pixelSize;
+            const baseScale = Math.min(canvasWidth / COLS, canvasHeight / ROWS);
+            const currentScale = baseScale * scale;
             
-            const offsetX = panX + (canvasWidth - totalWidth) / 2;
-            const offsetY = panY + (canvasHeight - totalHeight) / 2;
-            
-            const col = Math.floor((x - offsetX) / pixelSize);
-            const row = Math.floor((y - offsetY) / pixelSize);
+            const col = Math.floor(x / currentScale + offsetX);
+            const row = Math.floor(y / currentScale + offsetY);
             
             if (col >= 0 && col < COLS && row >= 0 && row < ROWS) {
                 return row * COLS + col;
@@ -958,11 +1110,31 @@
             return -1;
         }
 
+        canvas.addEventListener('click', (e) => {
+            const index = getPixelIndexFromScreen(e.clientX, e.clientY);
+            if (index === -1) return;
+            
+            if (RESERVED_INDICES.has(index)) {
+                document.getElementById('liveStatus').textContent = 
+                    translations[currentLang].takenTxt;
+                selectedPixelIndex = -1;
+                render();
+                return;
+            }
+            
+            selectedPixelIndex = index;
+            document.getElementById('liveStatus').textContent = 
+                translations[currentLang].selectedTxt + (index + 1);
+            render();
+            
+            openUploadModal(index);
+        });
+
         // ============================================
         // فتح نافذة رفع الصورة
         // ============================================
         function openUploadModal(index) {
-            if (pixelStatus[index]) {
+            if (RESERVED_INDICES.has(index)) {
                 document.getElementById('liveStatus').textContent = 
                     translations[currentLang].takenTxt;
                 return;
@@ -983,9 +1155,6 @@
             document.getElementById('uploadModal').classList.add('active');
         }
 
-        // ============================================
-        // إغلاق النافذة
-        // ============================================
         function closeModal() {
             document.getElementById('uploadModal').classList.remove('active');
             pendingPixelIndex = -1;
@@ -1037,15 +1206,18 @@
             RESERVED_INDICES.add(pendingPixelIndex);
             pixelStatus[pendingPixelIndex] = true;
             
+            // تحديث لون المربع
             const rand = Math.random();
-            if (rand < 0.33) RESERVED_COLORS[pendingPixelIndex] = '#eab308';
-            else if (rand < 0.66) RESERVED_COLORS[pendingPixelIndex] = '#f59e0b';
-            else RESERVED_COLORS[pendingPixelIndex] = '#94a3b8';
+            let r, g, b;
+            if (rand < 0.33) { r = 234; g = 179; b = 8; }
+            else if (rand < 0.66) { r = 245; g = 158; b = 11; }
+            else { r = 148; g = 163; b = 184; }
+            colors[pendingPixelIndex] = (0xFF << 24) | (r << 16) | (g << 8) | b;
             
             selectedPixelIndex = pendingPixelIndex;
             
             updateStats();
-            drawGrid();
+            render();
             
             document.getElementById('liveStatus').textContent = 
                 translations[currentLang].selectedTxt + (pendingPixelIndex + 1);
@@ -1056,29 +1228,6 @@
         }
 
         // ============================================
-        // معالجة النقر على المربع
-        // ============================================
-        function handleCanvasClick(e) {
-            const index = getPixelIndexFromScreen(e.clientX, e.clientY);
-            if (index === -1) return;
-            
-            if (pixelStatus[index]) {
-                document.getElementById('liveStatus').textContent = 
-                    translations[currentLang].takenTxt;
-                selectedPixelIndex = -1;
-                drawGrid();
-                return;
-            }
-            
-            selectedPixelIndex = index;
-            document.getElementById('liveStatus').textContent = 
-                translations[currentLang].selectedTxt + (index + 1);
-            drawGrid();
-            
-            openUploadModal(index);
-        }
-
-        // ============================================
         // زر الحجز الرئيسي
         // ============================================
         function bookPixelAlert() {
@@ -1086,189 +1235,11 @@
                 alert('الرجاء اختيار مربع أولاً من الشبكة!');
                 return;
             }
-            if (pixelStatus[selectedPixelIndex]) {
+            if (RESERVED_INDICES.has(selectedPixelIndex)) {
                 alert('هذا المربع محجوز بالفعل! الرجاء اختيار مربع آخر.');
                 return;
             }
             openUploadModal(selectedPixelIndex);
-        }
-
-        // ============================================
-        // التحكم في التكبير والتحريك
-        // ============================================
-        function updateTransform() {
-            document.getElementById('zoomDisplay').textContent = Math.round(scale * 100) + '%';
-            drawGrid();
-        }
-
-        function zoomIn() {
-            const newScale = Math.min(scale * 1.4, MAX_SCALE);
-            const centerX = canvasWidth / 2;
-            const centerY = canvasHeight / 2;
-            panX = centerX - (centerX - panX) * (newScale / scale);
-            panY = centerY - (centerY - panY) * (newScale / scale);
-            scale = newScale;
-            updateTransform();
-        }
-
-        function zoomOut() {
-            const newScale = Math.max(scale / 1.4, MIN_SCALE);
-            const centerX = canvasWidth / 2;
-            const centerY = canvasHeight / 2;
-            panX = centerX - (centerX - panX) * (newScale / scale);
-            panY = centerY - (centerY - panY) * (newScale / scale);
-            scale = newScale;
-            updateTransform();
-        }
-
-        function resetView() {
-            scale = 1;
-            panX = 0;
-            panY = 0;
-            updateTransform();
-        }
-
-        function fitToScreen() {
-            const wrapper = document.getElementById('gridWrapper');
-            const w = wrapper.clientWidth - 4;
-            const h = wrapper.clientHeight - 4;
-            
-            const scaleX = w / COLS;
-            const scaleY = h / ROWS;
-            scale = Math.min(scaleX, scaleY, 1);
-            
-            panX = 0;
-            panY = 0;
-            updateTransform();
-        }
-
-        function centerOnPixel(index) {
-            const pixelSize = Math.max(3, Math.min(16, (canvasWidth / COLS) * scale));
-            const totalWidth = COLS * pixelSize;
-            const totalHeight = ROWS * pixelSize;
-            
-            const col = index % COLS;
-            const row = Math.floor(index / COLS);
-            
-            const offsetX = panX + (canvasWidth - totalWidth) / 2;
-            const offsetY = panY + (canvasHeight - totalHeight) / 2;
-            
-            const targetX = -offsetX + canvasWidth / 2 - col * pixelSize - pixelSize / 2;
-            const targetY = -offsetY + canvasHeight / 2 - row * pixelSize - pixelSize / 2;
-            
-            panX = targetX;
-            panY = targetY;
-            updateTransform();
-        }
-
-        // ============================================
-        // أحداث السحب
-        // ============================================
-        function setupPanning() {
-            const wrapper = document.getElementById('gridWrapper');
-            
-            wrapper.addEventListener('mousedown', startDrag);
-            window.addEventListener('mousemove', drag);
-            window.addEventListener('mouseup', endDrag);
-            
-            wrapper.addEventListener('touchstart', handleTouchStart, { passive: false });
-            window.addEventListener('touchmove', handleTouchMove, { passive: false });
-            window.addEventListener('touchend', handleTouchEnd, { passive: false });
-            
-            wrapper.addEventListener('wheel', handleWheel, { passive: false });
-            
-            canvas.addEventListener('click', handleCanvasClick);
-        }
-
-        function startDrag(e) {
-            isDragging = true;
-            startX = e.clientX;
-            startY = e.clientY;
-            startPanX = panX;
-            startPanY = panY;
-            document.getElementById('gridWrapper').style.cursor = 'grabbing';
-        }
-
-        function drag(e) {
-            if (!isDragging) return;
-            const dx = e.clientX - startX;
-            const dy = e.clientY - startY;
-            panX = startPanX + dx;
-            panY = startPanY + dy;
-            drawGrid();
-        }
-
-        function endDrag() {
-            isDragging = false;
-            document.getElementById('gridWrapper').style.cursor = 'grab';
-        }
-
-        let touchStartX = 0, touchStartY = 0;
-        let touchStartPanX = 0, touchStartPanY = 0;
-        let lastTouchDist = 0;
-
-        function handleTouchStart(e) {
-            e.preventDefault();
-            const touches = e.touches;
-            if (touches.length === 1) {
-                isDragging = true;
-                touchStartX = touches[0].clientX;
-                touchStartY = touches[0].clientY;
-                touchStartPanX = panX;
-                touchStartPanY = panY;
-            } else if (touches.length === 2) {
-                lastTouchDist = getTouchDistance(touches);
-            }
-        }
-
-        function handleTouchMove(e) {
-            e.preventDefault();
-            const touches = e.touches;
-            
-            if (touches.length === 1 && isDragging) {
-                const dx = touches[0].clientX - touchStartX;
-                const dy = touches[0].clientY - touchStartY;
-                panX = touchStartPanX + dx;
-                panY = touchStartPanY + dy;
-                drawGrid();
-            } else if (touches.length === 2) {
-                const dist = getTouchDistance(touches);
-                const delta = dist - lastTouchDist;
-                const newScale = Math.min(Math.max(scale * (1 + delta / 400), MIN_SCALE), MAX_SCALE);
-                const centerX = canvasWidth / 2;
-                const centerY = canvasHeight / 2;
-                panX = centerX - (centerX - panX) * (newScale / scale);
-                panY = centerY - (centerY - panY) * (newScale / scale);
-                scale = newScale;
-                lastTouchDist = dist;
-                drawGrid();
-            }
-        }
-
-        function handleTouchEnd(e) {
-            isDragging = false;
-        }
-
-        function getTouchDistance(touches) {
-            const dx = touches[0].clientX - touches[1].clientX;
-            const dy = touches[0].clientY - touches[1].clientY;
-            return Math.sqrt(dx * dx + dy * dy);
-        }
-
-        function handleWheel(e) {
-            e.preventDefault();
-            const delta = e.deltaY > 0 ? 0.9 : 1.1;
-            const newScale = Math.min(Math.max(scale * delta, MIN_SCALE), MAX_SCALE);
-            
-            const rect = canvas.getBoundingClientRect();
-            const mouseX = e.clientX - rect.left;
-            const mouseY = e.clientY - rect.top;
-            
-            panX = mouseX - (mouseX - panX) * (newScale / scale);
-            panY = mouseY - (mouseY - panY) * (newScale / scale);
-            scale = newScale;
-            
-            drawGrid();
         }
 
         // ============================================
@@ -1278,11 +1249,11 @@
             const index = num - 1;
             if (index < 0 || index >= TOTAL_PIXELS) return;
             
-            if (pixelStatus[index]) {
+            if (RESERVED_INDICES.has(index)) {
                 document.getElementById('liveStatus').textContent = 
                     translations[currentLang].takenTxt;
                 selectedPixelIndex = -1;
-                drawGrid();
+                render();
                 return;
             }
             
@@ -1291,7 +1262,7 @@
                 translations[currentLang].selectedTxt + (index + 1);
             
             centerOnPixel(index);
-            drawGrid();
+            render();
             
             setTimeout(() => {
                 openUploadModal(index);
@@ -1320,7 +1291,7 @@
             document.getElementById('lblAvailable').textContent = translations[newLang].lblAvailable;
             document.getElementById('ctaBtn').textContent = translations[newLang].ctaBtn;
             
-            if (selectedPixelIndex !== -1 && !pixelStatus[selectedPixelIndex]) {
+            if (selectedPixelIndex !== -1 && !RESERVED_INDICES.has(selectedPixelIndex)) {
                 document.getElementById('liveStatus').textContent = 
                     translations[newLang].selectedTxt + (selectedPixelIndex + 1);
             } else {
@@ -1341,33 +1312,33 @@
                 document.querySelector('.btn-cancel').textContent = translations[newLang].cancelBtn;
                 document.getElementById('fileNameDisplay').textContent = translations[newLang].noFile;
             }
+            
+            // تحديث معلومات الشبكة
+            render();
         }
 
         // ============================================
         // تحميل الصفحة
         // ============================================
+        window.addEventListener('resize', resizeCanvas);
+        
         window.onload = function() {
-            initCanvas();
-            setupPanning();
+            resizeCanvas();
+            updateStats();
             
             setTimeout(() => {
                 fitToScreen();
-            }, 50);
-            
-            window.addEventListener('resize', () => {
-                initCanvas();
-                setTimeout(fitToScreen, 50);
-            });
+            }, 100);
             
             // اختيار مربع افتراضي
             setTimeout(() => {
                 for (let i = 0; i < TOTAL_PIXELS; i++) {
-                    if (!pixelStatus[i]) {
+                    if (!RESERVED_INDICES.has(i)) {
                         selectedPixelIndex = i;
                         document.getElementById('liveStatus').textContent = 
                             translations[currentLang].selectedTxt + (i + 1);
                         centerOnPixel(i);
-                        drawGrid();
+                        render();
                         break;
                     }
                 }
