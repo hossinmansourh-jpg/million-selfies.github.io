@@ -10,7 +10,7 @@
     <style>
         :root {
             --bg-color: #0b0f19;
-            --card-bg: rgba(30, 41, 59, 0.85);
+            --card-bg: rgba(30, 41, 59, 0.7);
             --text-color: #f1f5f9;
             --accent-color: #f59e0b;
             --grid-line: #1e293b;
@@ -34,11 +34,22 @@
             background-image: radial-gradient(circle at top, #1e1b4b 0%, #0b0f19 70%);
             color: var(--text-color);
             margin: 0;
-            padding: 6px;
+            padding: 12px;
             display: flex;
             flex-direction: column;
-            height: 100vh;
+            align-items: center;
+            min-height: 100vh;
             overflow: hidden;
+            height: 100vh;
+        }
+
+        /* ===== الحاوية الرئيسية ===== */
+        .container {
+            width: 100%;
+            max-width: 500px;
+            display: flex;
+            flex-direction: column;
+            height: 100%;
         }
 
         /* ===== الشريط العلوي ===== */
@@ -47,19 +58,18 @@
             justify-content: space-between;
             align-items: center;
             flex-shrink: 0;
-            padding: 2px 6px;
-            margin-bottom: 2px;
+            margin-bottom: 8px;
         }
 
         .lang-switch-btn {
             background: rgba(245, 158, 11, 0.15);
             color: var(--accent-color);
             border: 1px solid var(--accent-color);
-            padding: 4px 12px;
+            padding: 6px 16px;
             font-weight: bold;
-            border-radius: 16px;
+            border-radius: 20px;
             cursor: pointer;
-            font-size: 0.7rem;
+            font-size: 0.75rem;
             transition: all 0.3s ease;
         }
         
@@ -68,74 +78,41 @@
             color: #000;
         }
 
-        .title-area {
+        /* ===== العنوان ===== */
+        .header {
             text-align: center;
-            flex: 1;
+            flex-shrink: 0;
+            margin-bottom: 4px;
         }
 
-        .title-area h1 {
+        .header h1 {
             color: var(--accent-color);
-            font-size: 1.6rem;
+            font-size: 2rem;
             margin: 0;
             text-shadow: 0 0 30px rgba(245, 158, 11, 0.3);
             font-weight: 900;
         }
 
-        .title-area p {
-            font-size: 0.75rem;
+        .header p {
+            font-size: 0.85rem;
             opacity: 0.7;
             margin: 0;
-        }
-
-        .spacer {
-            width: 50px;
-        }
-
-        /* ===== شريط الإحصائيات ===== */
-        .stats-bar {
-            display: grid;
-            grid-template-columns: 1fr 1fr 1fr 1fr;
-            gap: 6px;
-            flex-shrink: 0;
-            margin-bottom: 4px;
-        }
-
-        .stat-item {
-            background: rgba(15, 23, 42, 0.7);
-            border-radius: 10px;
-            padding: 4px 6px;
-            text-align: center;
-            border: 1px solid rgba(255,255,255,0.05);
-        }
-
-        .stat-item .number {
-            font-size: 1.1rem;
-            font-weight: 900;
-            color: var(--accent-color);
-            display: block;
-            line-height: 1.2;
-        }
-
-        .stat-item .label {
-            font-size: 0.5rem;
-            opacity: 0.6;
-            display: block;
         }
 
         /* ===== شريط الحالة ===== */
         .status-bar {
             background: rgba(15, 23, 42, 0.8);
             border: 1px solid var(--accent-color);
-            padding: 4px 12px;
-            border-radius: 20px;
-            font-size: 0.75rem;
+            padding: 8px 16px;
+            border-radius: 30px;
+            font-size: 0.85rem;
             display: flex;
             align-items: center;
-            gap: 8px;
+            gap: 10px;
             flex-shrink: 0;
-            margin-bottom: 4px;
+            margin-bottom: 10px;
             justify-content: center;
-            min-height: 30px;
+            min-height: 38px;
             font-weight: 600;
         }
 
@@ -157,14 +134,74 @@
             color: #10b981;
         }
 
+        /* ===== الإحصائيات ===== */
+        .stats-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            flex-shrink: 0;
+            margin-bottom: 8px;
+        }
+
+        .stat-card {
+            background: rgba(15, 23, 42, 0.7);
+            border-radius: 12px;
+            padding: 10px 14px;
+            text-align: center;
+            border: 1px solid rgba(255,255,255,0.05);
+        }
+
+        .stat-card .number {
+            font-size: 1.6rem;
+            font-weight: 900;
+            color: var(--accent-color);
+            display: block;
+            line-height: 1.2;
+        }
+
+        .stat-card .label {
+            font-size: 0.7rem;
+            opacity: 0.6;
+            display: block;
+        }
+
+        /* ===== شريط التقدم ===== */
+        .progress-container {
+            background-color: #0f172a;
+            border-radius: 30px;
+            height: 20px;
+            width: 100%;
+            overflow: hidden;
+            margin-bottom: 6px;
+            border: 1px solid var(--grid-line);
+            flex-shrink: 0;
+        }
+
+        .progress-bar {
+            background: linear-gradient(90deg, #f59e0b, #ef4444, #ec4899);
+            height: 100%;
+            box-shadow: 0 0 20px rgba(245, 158, 11, 0.3);
+            transition: width 0.5s ease;
+            width: 0.045%;
+        }
+
+        .percentage-text {
+            text-align: center;
+            font-weight: bold;
+            color: var(--accent-color);
+            font-size: 0.9rem;
+            flex-shrink: 0;
+            margin-bottom: 4px;
+        }
+
         /* ===== أدوات التحكم ===== */
         .controls-bar {
             display: flex;
-            gap: 4px;
+            gap: 6px;
             align-items: center;
             justify-content: center;
             flex-shrink: 0;
-            margin-bottom: 3px;
+            margin-bottom: 6px;
             flex-wrap: wrap;
         }
 
@@ -172,10 +209,10 @@
             background: rgba(30, 41, 59, 0.8);
             border: 1px solid var(--grid-line);
             color: white;
-            padding: 3px 10px;
-            border-radius: 8px;
+            padding: 4px 14px;
+            border-radius: 10px;
             cursor: pointer;
-            font-size: 0.65rem;
+            font-size: 0.7rem;
             font-family: var(--primary-font);
             transition: all 0.3s ease;
             font-weight: 600;
@@ -189,23 +226,23 @@
         .zoom-display {
             color: var(--accent-color);
             font-weight: bold;
-            font-size: 0.75rem;
-            min-width: 40px;
+            font-size: 0.8rem;
+            min-width: 45px;
             text-align: center;
         }
 
-        /* ===== حاوية الشبكة - أكبر وأوضح ===== */
+        /* ===== حاوية الشبكة ===== */
         .grid-wrapper {
             flex: 1;
-            min-height: 50vh;
-            max-height: 70vh;
+            min-height: 40vh;
+            max-height: 65vh;
             width: 100%;
             overflow: hidden;
             position: relative;
             background-color: #0b0f19;
-            border-radius: 12px;
+            border-radius: 16px;
             border: 2px solid rgba(255,255,255,0.08);
-            margin-bottom: 4px;
+            margin-bottom: 8px;
             touch-action: none;
             cursor: grab;
             box-shadow: inset 0 0 60px rgba(0,0,0,0.5);
@@ -226,21 +263,21 @@
         /* ===== شريط التنقل ===== */
         .nav-bar {
             display: flex;
-            gap: 4px;
+            gap: 6px;
             justify-content: center;
             flex-wrap: wrap;
             flex-shrink: 0;
-            margin-bottom: 3px;
+            margin-bottom: 6px;
         }
 
         .nav-bar button {
-            padding: 3px 8px;
+            padding: 4px 12px;
             background: rgba(30, 41, 59, 0.6);
             border: 1px solid var(--grid-line);
-            border-radius: 6px;
+            border-radius: 8px;
             color: white;
             cursor: pointer;
-            font-size: 0.55rem;
+            font-size: 0.65rem;
             font-family: var(--primary-font);
             transition: all 0.3s ease;
             font-weight: 600;
@@ -251,101 +288,44 @@
             color: #000;
         }
 
-        /* ===== منطقة الاختيار ===== */
-        .selection-area {
-            background-color: var(--card-bg);
-            border-radius: 12px;
-            padding: 8px 12px;
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255,255,255,0.06);
-            flex-shrink: 0;
-            margin-bottom: 3px;
-        }
-
-        .selection-controls {
-            display: flex;
-            gap: 6px;
-            flex-wrap: wrap;
-            justify-content: center;
-            align-items: center;
-        }
-
-        .selection-controls label {
-            font-size: 0.75rem;
-            font-weight: 600;
-            color: var(--accent-color);
-        }
-
-        .selection-controls input {
-            padding: 5px 10px;
-            border-radius: 8px;
-            border: 2px solid var(--grid-line);
-            background: #0f172a;
+        /* ===== زر الحجز الرئيسي ===== */
+        .cta-btn {
+            background: linear-gradient(135deg, #10b981, #059669);
             color: white;
-            font-size: 0.85rem;
-            width: 130px;
-            font-family: var(--primary-font);
-            font-weight: 600;
-            text-align: center;
-            transition: all 0.3s ease;
-        }
-
-        .selection-controls input:focus {
-            outline: none;
-            border-color: var(--accent-color);
-            box-shadow: 0 0 20px rgba(245, 158, 11, 0.15);
-        }
-
-        .selection-controls button {
-            padding: 5px 16px;
-            border-radius: 8px;
             border: none;
-            background: var(--accent-color);
-            color: #000;
-            font-weight: 700;
-            cursor: pointer;
+            padding: 12px 24px;
+            font-size: 1rem;
+            font-weight: bold;
             font-family: var(--primary-font);
+            border-radius: 12px;
+            cursor: pointer;
+            width: 100%;
+            box-shadow: 0 4px 20px rgba(16, 185, 129, 0.3);
             transition: all 0.3s ease;
-            font-size: 0.75rem;
+            flex-shrink: 0;
+            margin-bottom: 4px;
         }
 
-        .selection-controls button:hover {
-            background: #d97706;
-            transform: scale(1.05);
+        .cta-btn:hover {
+            transform: scale(1.02);
+            box-shadow: 0 4px 30px rgba(16, 185, 129, 0.5);
         }
 
-        .selection-controls .random-btn {
-            background: linear-gradient(135deg, #8b5cf6, #6d28d9);
-            color: white;
+        /* ===== منطقة الاختيار (مخفية) ===== */
+        .selection-area {
+            display: none;
         }
 
-        .selection-controls .random-btn:hover {
-            background: linear-gradient(135deg, #7c3aed, #5b21b6);
-        }
-
-        .info-text {
-            font-size: 0.7rem;
-            margin-top: 4px;
+        /* ===== التذييل ===== */
+        footer {
+            padding: 4px;
+            font-size: 0.55rem;
+            opacity: 0.3;
             text-align: center;
-            font-weight: 600;
+            flex-shrink: 0;
         }
 
-        .info-text .available {
-            color: #10b981;
-        }
-
-        .info-text .reserved {
-            color: #ef4444;
-        }
-
-        .info-text .pixel-number {
-            color: var(--accent-color);
-            font-size: 0.9rem;
-        }
-
-        /* ============================================
-           نافذة رفع الصورة المنبثقة
-           ============================================ */
+        /* ===== نافذة رفع الصورة ===== */
         .modal-overlay {
             display: none;
             position: fixed;
@@ -564,115 +544,111 @@
             border-color: #ef4444;
         }
 
-        /* ===== التذييل ===== */
-        footer {
-            padding: 2px;
-            font-size: 0.5rem;
-            opacity: 0.3;
-            text-align: center;
-            flex-shrink: 0;
-        }
-
         /* ===== تحسينات للجوال ===== */
         @media (max-width: 600px) {
-            .title-area h1 { font-size: 1.2rem; }
-            .title-area p { font-size: 0.6rem; }
-            .stats-bar { grid-template-columns: 1fr 1fr; gap: 4px; }
-            .stat-item .number { font-size: 0.9rem; }
-            .stat-item .label { font-size: 0.45rem; }
-            .status-bar { font-size: 0.65rem; padding: 3px 8px; min-height: 26px; }
-            .selection-controls input { width: 100px; font-size: 0.75rem; padding: 4px 8px; }
-            .selection-controls button { padding: 4px 12px; font-size: 0.65rem; }
-            .controls-bar button { padding: 2px 8px; font-size: 0.55rem; }
-            .nav-bar button { padding: 2px 6px; font-size: 0.5rem; }
-            .grid-wrapper { min-height: 45vh; max-height: 60vh; }
-            .lang-switch-btn { font-size: 0.6rem; padding: 3px 10px; }
-            .spacer { width: 35px; }
-            .info-text { font-size: 0.6rem; }
+            body { padding: 8px; }
+            .header h1 { font-size: 1.5rem; }
+            .header p { font-size: 0.7rem; }
+            .status-bar { font-size: 0.7rem; padding: 6px 12px; min-height: 32px; }
+            .stat-card .number { font-size: 1.2rem; }
+            .stat-card .label { font-size: 0.6rem; }
+            .controls-bar button { padding: 3px 10px; font-size: 0.6rem; }
+            .nav-bar button { padding: 3px 8px; font-size: 0.55rem; }
+            .grid-wrapper { min-height: 35vh; max-height: 55vh; }
+            .cta-btn { font-size: 0.85rem; padding: 10px 18px; }
+            .lang-switch-btn { font-size: 0.65rem; padding: 4px 12px; }
             .modal-content { padding: 20px; margin: 10px; }
             .modal-title { font-size: 1.1rem; }
             .modal-pixel-info .number { font-size: 1.2rem; }
         }
 
         @media (max-width: 400px) {
-            .title-area h1 { font-size: 1rem; }
-            .selection-controls input { width: 80px; font-size: 0.65rem; }
-            .selection-controls button { padding: 3px 8px; font-size: 0.55rem; }
-            .status-bar { font-size: 0.55rem; padding: 2px 6px; min-height: 22px; }
-            .stat-item .number { font-size: 0.75rem; }
+            .header h1 { font-size: 1.2rem; }
+            .status-bar { font-size: 0.6rem; padding: 4px 8px; min-height: 28px; }
+            .stat-card .number { font-size: 1rem; }
+            .grid-wrapper { min-height: 30vh; max-height: 50vh; }
+            .cta-btn { font-size: 0.75rem; padding: 8px 14px; }
         }
     </style>
 </head>
 <body>
 
-    <!-- الشريط العلوي -->
-    <div class="top-bar">
-        <button class="lang-switch-btn" id="langBtn" onclick="toggleLanguage()">English</button>
-        <div class="title-area">
+    <div class="container">
+        <!-- الشريط العلوي -->
+        <div class="top-bar">
+            <button class="lang-switch-btn" id="langBtn" onclick="toggleLanguage()">English</button>
+            <div></div>
+        </div>
+
+        <!-- العنوان -->
+        <div class="header">
             <h1 id="mainTitle">جدارية مليون سيلفي</h1>
             <p id="subTitle">احجز مربعك في أكبر لوحة رقمية للتاريخ</p>
         </div>
-        <div class="spacer"></div>
-    </div>
 
-    <!-- شريط الإحصائيات -->
-    <div class="stats-bar">
-        <div class="stat-item">
-            <span class="number" id="statTotal">1,000,000</span>
-            <span class="label" id="lblTotal">إجمالي المربعات</span>
+        <!-- شريط الحالة -->
+        <div class="status-bar">
+            <span class="live-dot"></span>
+            <span id="liveStatus">اضغط على أي مربع في الشبكة بالأسفل لاختياره</span>
         </div>
-        <div class="stat-item">
-            <span class="number" id="statReserved">458</span>
-            <span class="label" id="lblReserved">محجوزة</span>
+
+        <!-- الإحصائيات -->
+        <div class="stats-container">
+            <div class="stat-card">
+                <span class="number" id="statReserved">458</span>
+                <span class="label" id="lblReserved">المربعات المحجوزة</span>
+            </div>
+            <div class="stat-card">
+                <span class="number" id="statAvailable">999,542</span>
+                <span class="label" id="lblAvailable">المربعات المتبقية</span>
+            </div>
         </div>
-        <div class="stat-item">
-            <span class="number" id="statAvailable">999,542</span>
-            <span class="label" id="lblAvailable">متاحة</span>
+
+        <!-- شريط التقدم -->
+        <div class="progress-container">
+            <div class="progress-bar" id="progressBar"></div>
         </div>
-        <div class="stat-item">
-            <span class="number" id="statPercent">0.05%</span>
-            <span class="label" id="lblPercent">نسبة الحجز</span>
+        <div class="percentage-text" id="percentageText">0.045%</div>
+
+        <!-- أدوات التحكم -->
+        <div class="controls-bar">
+            <button onclick="resetView()" id="resetBtn">🔄 إعادة تعيين</button>
+            <button onclick="zoomIn()" id="zoomInBtn">➕</button>
+            <span class="zoom-display" id="zoomDisplay">100%</span>
+            <button onclick="zoomOut()" id="zoomOutBtn">➖</button>
+            <button onclick="fitToScreen()" id="fitBtn">📐 ملاءمة</button>
         </div>
-    </div>
 
-    <!-- شريط الحالة -->
-    <div class="status-bar">
-        <span class="live-dot"></span>
-        <span id="liveStatus">اضغط على مربع لاختياره</span>
-    </div>
-
-    <!-- أدوات التحكم -->
-    <div class="controls-bar">
-        <button onclick="resetView()" id="resetBtn">🔄 إعادة تعيين</button>
-        <button onclick="zoomIn()" id="zoomInBtn">➕</button>
-        <span class="zoom-display" id="zoomDisplay">100%</span>
-        <button onclick="zoomOut()" id="zoomOutBtn">➖</button>
-        <button onclick="fitToScreen()" id="fitBtn">📐 ملاءمة</button>
-    </div>
-
-    <!-- حاوية الشبكة -->
-    <div class="grid-wrapper" id="gridWrapper">
-        <canvas id="pixelCanvas"></canvas>
-    </div>
-
-    <!-- شريط التنقل -->
-    <div class="nav-bar">
-        <button onclick="goToPixel(1)">⬅️ البداية</button>
-        <button onclick="goToPixel(250000)">الربع الأول</button>
-        <button onclick="goToPixel(500000)">المنتصف</button>
-        <button onclick="goToPixel(750000)">الربع الأخير</button>
-        <button onclick="goToPixel(1000000)">النهاية ➡️</button>
-    </div>
-
-    <!-- منطقة الاختيار -->
-    <div class="selection-area">
-        <div class="selection-controls">
-            <label>🔢 رقم المربع:</label>
-            <input type="number" id="pixelNumberInput" min="1" max="1000000" placeholder="مثال: 48429">
-            <button onclick="selectPixelByNumber()" id="selectBtn">اختر</button>
-            <button onclick="selectRandomPixel()" class="random-btn" id="randomBtn">🎲 عشوائي</button>
+        <!-- حاوية الشبكة -->
+        <div class="grid-wrapper" id="gridWrapper">
+            <canvas id="pixelCanvas"></canvas>
         </div>
-        <div id="selectedPixelInfo" class="info-text">✨ اختر مربعاً من الشبكة أو أدخل رقمه</div>
+
+        <!-- شريط التنقل -->
+        <div class="nav-bar">
+            <button onclick="goToPixel(1)">⬅️ البداية</button>
+            <button onclick="goToPixel(250000)">الربع الأول</button>
+            <button onclick="goToPixel(500000)">المنتصف</button>
+            <button onclick="goToPixel(750000)">الربع الأخير</button>
+            <button onclick="goToPixel(1000000)">النهاية ➡️</button>
+        </div>
+
+        <!-- زر الحجز الرئيسي -->
+        <button class="cta-btn" id="ctaBtn" onclick="bookPixelAlert()">احجز مكانك في الجدارية الآن 😍</button>
+
+        <!-- منطقة الاختيار (مخفية) -->
+        <div class="selection-area">
+            <div class="selection-controls">
+                <input type="number" id="pixelNumberInput" min="1" max="1000000" placeholder="رقم المربع">
+                <button onclick="selectPixelByNumber()" id="selectBtn">اختر</button>
+                <button onclick="selectRandomPixel()" class="random-btn" id="randomBtn">🎲 عشوائي</button>
+            </div>
+            <div id="selectedPixelInfo" class="info-text">✨ اختر مربعاً من الشبكة أو أدخل رقمه</div>
+        </div>
+
+        <footer>
+            <span id="footerText">© 2026 جدارية مليون سيلفي. جميع الحقوق محفوظة.</span>
+        </footer>
     </div>
 
     <!-- نافذة رفع الصورة المنبثقة -->
@@ -725,10 +701,6 @@
         </div>
     </div>
 
-    <footer>
-        <span id="footerText">© 2026 جدارية مليون سيلفي - جميع الحقوق محفوظة</span>
-    </footer>
-
     <script>
         // ============================================
         // البيانات
@@ -749,10 +721,8 @@
         const pixelStatus = new Array(TOTAL_PIXELS).fill(false);
         RESERVED_INDICES.forEach(idx => pixelStatus[idx] = true);
 
-        // بيانات المربعات المحجوزة مع معلومات المستخدم
         const pixelData = {};
 
-        // ألوان المربعات المحجوزة
         const RESERVED_COLORS = {};
         RESERVED_INDICES.forEach(idx => {
             const rand = Math.random();
@@ -790,25 +760,19 @@
             ar: {
                 title: "جدارية مليون سيلفي",
                 subtitle: "احجز مربعك في أكبر لوحة رقمية للتاريخ",
-                liveStatus: "اضغط على مربع لاختياره",
+                liveStatus: "اضغط على أي مربع في الشبكة بالأسفل لاختياره",
                 alertMsg: "تم حجز مربعك بنجاح! 🎉 سيتم تحديث الجدارية قريباً.",
-                footer: "© 2026 جدارية مليون سيلفي - جميع الحقوق محفوظة",
+                footer: "© 2026 جدارية مليون سيلفي. جميع الحقوق محفوظة.",
                 langBtn: "English",
                 selectedTxt: "✅ تم اختيار المربع رقم ",
                 takenTxt: "❌ هذا المربع محجوز بالفعل!",
-                selectBtn: "اختر",
-                randomBtn: "🎲 عشوائي",
-                noSelection: "✨ اختر مربعاً من الشبكة أو أدخل رقمه",
-                available: "✅ متاح",
-                reserved: "❌ محجوز",
                 resetBtn: "🔄 إعادة تعيين",
                 zoomInBtn: "➕",
                 zoomOutBtn: "➖",
                 fitBtn: "📐 ملاءمة",
-                lblTotal: "إجمالي المربعات",
-                lblReserved: "محجوزة",
-                lblAvailable: "متاحة",
-                lblPercent: "نسبة الحجز",
+                lblReserved: "المربعات المحجوزة",
+                lblAvailable: "المربعات المتبقية",
+                ctaBtn: "احجز مكانك في الجدارية الآن 😍",
                 modalTitle: "📸 رفع سيلفي",
                 modalSubtitle: "املأ البيانات التالية لحجز مربعك",
                 pixelLabel: "رقم المربع",
@@ -826,25 +790,19 @@
             en: {
                 title: "Million Selfie Wall",
                 subtitle: "Reserve your pixel in the biggest digital wall in history",
-                liveStatus: "Tap on any pixel to select it",
+                liveStatus: "Tap on any pixel in the grid below to select it",
                 alertMsg: "Your pixel has been reserved successfully! 🎉 The wall will be updated soon.",
-                footer: "© 2026 Million Selfie Wall - All Rights Reserved",
+                footer: "© 2026 Million Selfie Wall. All rights reserved.",
                 langBtn: "العربية",
                 selectedTxt: "✅ Selected pixel #",
                 takenTxt: "❌ This pixel is already reserved!",
-                selectBtn: "Select",
-                randomBtn: "🎲 Random",
-                noSelection: "✨ Select a pixel from the grid or enter its number",
-                available: "✅ Available",
-                reserved: "❌ Reserved",
                 resetBtn: "🔄 Reset",
                 zoomInBtn: "➕",
                 zoomOutBtn: "➖",
                 fitBtn: "📐 Fit",
-                lblTotal: "Total Pixels",
-                lblReserved: "Reserved",
-                lblAvailable: "Available",
-                lblPercent: "Reserved %",
+                lblReserved: "Reserved Pixels",
+                lblAvailable: "Remaining Pixels",
+                ctaBtn: "Book Your Pixel Now 😍",
                 modalTitle: "📸 Upload Selfie",
                 modalSubtitle: "Fill in the details below to reserve your pixel",
                 pixelLabel: "Pixel Number",
@@ -869,10 +827,10 @@
             const available = TOTAL_PIXELS - reserved;
             const percent = ((reserved / TOTAL_PIXELS) * 100);
             
-            document.getElementById('statTotal').textContent = TOTAL_PIXELS.toLocaleString();
             document.getElementById('statReserved').textContent = reserved.toLocaleString();
             document.getElementById('statAvailable').textContent = available.toLocaleString();
-            document.getElementById('statPercent').textContent = percent.toFixed(3) + '%';
+            document.getElementById('percentageText').textContent = percent.toFixed(3) + '%';
+            document.getElementById('progressBar').style.width = percent + '%';
         }
 
         // ============================================
@@ -898,7 +856,7 @@
         }
 
         // ============================================
-        // رسم الشبكة - محسنة للوضوح
+        // رسم الشبكة
         // ============================================
         function drawGrid() {
             ctx.clearRect(0, 0, canvasWidth, canvasHeight);
@@ -935,7 +893,6 @@
                     const isSelected = (index === selectedPixelIndex && !RESERVED_INDICES.has(index));
                     
                     if (isSelected) {
-                        // تأثير إضاءة قوي
                         const gradient = ctx.createRadialGradient(
                             x + pixelSize/2, y + pixelSize/2, 0,
                             x + pixelSize/2, y + pixelSize/2, pixelSize * 5
@@ -1008,8 +965,6 @@
             if (pixelStatus[index]) {
                 document.getElementById('liveStatus').textContent = 
                     translations[currentLang].takenTxt;
-                document.getElementById('selectedPixelInfo').innerHTML = 
-                    `❌ المربع #<span class="pixel-number">${index + 1}</span> - <strong class="reserved">${translations[currentLang].reserved}</strong>`;
                 return;
             }
             
@@ -1071,7 +1026,6 @@
                 return;
             }
             
-            // تخزين بيانات المربع
             pixelData[pendingPixelIndex] = {
                 image: file.name,
                 profileLink: profileLink,
@@ -1080,11 +1034,9 @@
                 timestamp: new Date().toLocaleString()
             };
             
-            // حجز المربع
             RESERVED_INDICES.add(pendingPixelIndex);
             pixelStatus[pendingPixelIndex] = true;
             
-            // تحديث اللون
             const rand = Math.random();
             if (rand < 0.33) RESERVED_COLORS[pendingPixelIndex] = '#eab308';
             else if (rand < 0.66) RESERVED_COLORS[pendingPixelIndex] = '#f59e0b';
@@ -1092,14 +1044,11 @@
             
             selectedPixelIndex = pendingPixelIndex;
             
-            // تحديث الواجهة
             updateStats();
             drawGrid();
             
             document.getElementById('liveStatus').textContent = 
                 translations[currentLang].selectedTxt + (pendingPixelIndex + 1);
-            document.getElementById('selectedPixelInfo').innerHTML = 
-                `📍 المربع #<span class="pixel-number">${pendingPixelIndex + 1}</span> - ✅ تم الحجز بنجاح!`;
             
             closeModal();
             
@@ -1113,11 +1062,35 @@
             const index = getPixelIndexFromScreen(e.clientX, e.clientY);
             if (index === -1) return;
             
+            if (pixelStatus[index]) {
+                document.getElementById('liveStatus').textContent = 
+                    translations[currentLang].takenTxt;
+                selectedPixelIndex = -1;
+                drawGrid();
+                return;
+            }
+            
             selectedPixelIndex = index;
+            document.getElementById('liveStatus').textContent = 
+                translations[currentLang].selectedTxt + (index + 1);
             drawGrid();
             
-            // فتح نافذة رفع الصورة
             openUploadModal(index);
+        }
+
+        // ============================================
+        // زر الحجز الرئيسي
+        // ============================================
+        function bookPixelAlert() {
+            if (selectedPixelIndex === -1) {
+                alert('الرجاء اختيار مربع أولاً من الشبكة!');
+                return;
+            }
+            if (pixelStatus[selectedPixelIndex]) {
+                alert('هذا المربع محجوز بالفعل! الرجاء اختيار مربع آخر.');
+                return;
+            }
+            openUploadModal(selectedPixelIndex);
         }
 
         // ============================================
@@ -1299,83 +1272,15 @@
         }
 
         // ============================================
-        // اختيار المربعات
+        // الانتقال إلى مربع
         // ============================================
-        function selectPixelByNumber() {
-            const input = document.getElementById('pixelNumberInput');
-            const num = parseInt(input.value);
-            
-            if (isNaN(num) || num < 1 || num > TOTAL_PIXELS) {
-                alert(`الرجاء إدخال رقم بين 1 و ${TOTAL_PIXELS.toLocaleString()}`);
-                return;
-            }
-            
-            const index = num - 1;
-            
-            if (pixelStatus[index]) {
-                document.getElementById('liveStatus').textContent = 
-                    translations[currentLang].takenTxt;
-                document.getElementById('selectedPixelInfo').innerHTML = 
-                    `❌ المربع #<span class="pixel-number">${num}</span> - <strong class="reserved">${translations[currentLang].reserved}</strong>`;
-                selectedPixelIndex = -1;
-                drawGrid();
-                return;
-            }
-            
-            selectedPixelIndex = index;
-            document.getElementById('liveStatus').textContent = 
-                translations[currentLang].selectedTxt + (index + 1);
-            document.getElementById('selectedPixelInfo').innerHTML = 
-                `📍 المربع #<span class="pixel-number">${index + 1}</span> - <strong class="available">${translations[currentLang].available}</strong>`;
-            
-            centerOnPixel(index);
-            drawGrid();
-            
-            // فتح نافذة رفع الصورة
-            setTimeout(() => {
-                openUploadModal(index);
-            }, 300);
-        }
-
-        function selectRandomPixel() {
-            let attempts = 0;
-            let index;
-            
-            do {
-                index = Math.floor(Math.random() * TOTAL_PIXELS);
-                attempts++;
-            } while (pixelStatus[index] && attempts < 100);
-            
-            if (pixelStatus[index]) {
-                alert('جميع المربعات العشوائية محجوزة! حاول مرة أخرى.');
-                return;
-            }
-            
-            selectedPixelIndex = index;
-            document.getElementById('liveStatus').textContent = 
-                translations[currentLang].selectedTxt + (index + 1);
-            document.getElementById('selectedPixelInfo').innerHTML = 
-                `📍 المربع #<span class="pixel-number">${index + 1}</span> - <strong class="available">${translations[currentLang].available}</strong>`;
-            document.getElementById('pixelNumberInput').value = index + 1;
-            
-            centerOnPixel(index);
-            drawGrid();
-            
-            setTimeout(() => {
-                openUploadModal(index);
-            }, 300);
-        }
-
         function goToPixel(num) {
             const index = num - 1;
             if (index < 0 || index >= TOTAL_PIXELS) return;
             
             if (pixelStatus[index]) {
-                document.getElementById('pixelNumberInput').value = num;
                 document.getElementById('liveStatus').textContent = 
                     translations[currentLang].takenTxt;
-                document.getElementById('selectedPixelInfo').innerHTML = 
-                    `❌ المربع #<span class="pixel-number">${num}</span> - <strong class="reserved">${translations[currentLang].reserved}</strong>`;
                 selectedPixelIndex = -1;
                 drawGrid();
                 return;
@@ -1384,9 +1289,6 @@
             selectedPixelIndex = index;
             document.getElementById('liveStatus').textContent = 
                 translations[currentLang].selectedTxt + (index + 1);
-            document.getElementById('selectedPixelInfo').innerHTML = 
-                `📍 المربع #<span class="pixel-number">${index + 1}</span> - <strong class="available">${translations[currentLang].available}</strong>`;
-            document.getElementById('pixelNumberInput').value = index + 1;
             
             centerOnPixel(index);
             drawGrid();
@@ -1410,29 +1312,23 @@
             document.getElementById('subTitle').textContent = translations[newLang].subtitle;
             document.getElementById('footerText').textContent = translations[newLang].footer;
             document.getElementById('langBtn').textContent = translations[newLang].langBtn;
-            document.getElementById('selectBtn').textContent = translations[newLang].selectBtn;
-            document.getElementById('randomBtn').textContent = translations[newLang].randomBtn;
             document.getElementById('resetBtn').textContent = translations[newLang].resetBtn;
             document.getElementById('zoomInBtn').textContent = translations[newLang].zoomInBtn;
             document.getElementById('zoomOutBtn').textContent = translations[newLang].zoomOutBtn;
             document.getElementById('fitBtn').textContent = translations[newLang].fitBtn;
-            document.getElementById('lblTotal').textContent = translations[newLang].lblTotal;
             document.getElementById('lblReserved').textContent = translations[newLang].lblReserved;
             document.getElementById('lblAvailable').textContent = translations[newLang].lblAvailable;
-            document.getElementById('lblPercent').textContent = translations[newLang].lblPercent;
+            document.getElementById('ctaBtn').textContent = translations[newLang].ctaBtn;
             
             if (selectedPixelIndex !== -1 && !pixelStatus[selectedPixelIndex]) {
                 document.getElementById('liveStatus').textContent = 
                     translations[newLang].selectedTxt + (selectedPixelIndex + 1);
-                document.getElementById('selectedPixelInfo').innerHTML = 
-                    `📍 المربع #<span class="pixel-number">${selectedPixelIndex + 1}</span> - <strong class="available">${translations[newLang].available}</strong>`;
             } else {
                 document.getElementById('liveStatus').textContent = translations[newLang].liveStatus;
-                document.getElementById('selectedPixelInfo').textContent = translations[newLang].noSelection;
             }
             
-            // تحديث النافذة المنبثقة إذا كانت مفتوحة
-            if (document.getElementById('uploadModal').classList.contains('active') && pendingPixelIndex !== -1) {
+            // تحديث النافذة المنبثقة
+            if (document.getElementById('uploadModal').classList.contains('active')) {
                 document.querySelector('.modal-title').textContent = translations[newLang].modalTitle;
                 document.querySelector('.modal-subtitle').textContent = translations[newLang].modalSubtitle;
                 document.querySelector('.modal-pixel-info .label').textContent = translations[newLang].pixelLabel;
@@ -1443,14 +1339,7 @@
                 document.querySelector('.form-group:nth-child(5) label').textContent = translations[newLang].messageLabel;
                 document.querySelector('.btn-confirm').textContent = translations[newLang].confirmBtn;
                 document.querySelector('.btn-cancel').textContent = translations[newLang].cancelBtn;
-                
-                if (pixelStatus[pendingPixelIndex]) {
-                    document.getElementById('modalPixelStatus').textContent = translations[newLang].statusReserved;
-                    document.getElementById('modalPixelStatus').className = 'status reserved';
-                } else {
-                    document.getElementById('modalPixelStatus').textContent = translations[newLang].statusAvailable;
-                    document.getElementById('modalPixelStatus').className = 'status available';
-                }
+                document.getElementById('fileNameDisplay').textContent = translations[newLang].noFile;
             }
         }
 
@@ -1475,11 +1364,8 @@
                 for (let i = 0; i < TOTAL_PIXELS; i++) {
                     if (!pixelStatus[i]) {
                         selectedPixelIndex = i;
-                        document.getElementById('pixelNumberInput').value = i + 1;
                         document.getElementById('liveStatus').textContent = 
                             translations[currentLang].selectedTxt + (i + 1);
-                        document.getElementById('selectedPixelInfo').innerHTML = 
-                            `📍 المربع #<span class="pixel-number">${i + 1}</span> - <strong class="available">${translations[currentLang].available}</strong>`;
                         centerOnPixel(i);
                         drawGrid();
                         break;
@@ -1490,8 +1376,7 @@
 
         // جعل التوابع عالمية
         window.toggleLanguage = toggleLanguage;
-        window.selectPixelByNumber = selectPixelByNumber;
-        window.selectRandomPixel = selectRandomPixel;
+        window.bookPixelAlert = bookPixelAlert;
         window.goToPixel = goToPixel;
         window.zoomIn = zoomIn;
         window.zoomOut = zoomOut;
