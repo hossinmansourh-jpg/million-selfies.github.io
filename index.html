@@ -341,7 +341,7 @@
             max-width: 1200px;
             margin: 0 auto;
             animation: fadeInUp 0.8s ease 0.5s both;
-            margin-top: 25px; /* التعديل المطلوب: هامش علوي لمنع التداخل */
+            margin-top: 25px;
         }
 
         .grid-section-header {
@@ -351,7 +351,7 @@
             align-items: center;
             margin-bottom: 16px;
             gap: 12px;
-            margin-top: 25px; /* هامش إضافي لشريط الإرشادات */
+            margin-top: 25px;
         }
 
         .grid-section-title {
@@ -416,7 +416,7 @@
             -ms-user-select: none;
             max-height: 100vh;
             overflow: auto;
-            -webkit-overflow-scrolling: touch; /* التعديل المطلوب: تمرير سلس */
+            -webkit-overflow-scrolling: touch;
             position: relative;
         }
 
@@ -438,20 +438,22 @@
             min-width: 100%;
             position: relative;
             direction: ltr;
-            transform: scale(var(--grid-scale)); /* التعديل: دعم التكبير */
-            transform-origin: top left; /* التعديل: نقطة التكبير */
+            transform: scale(var(--grid-scale));
+            transform-origin: top left;
             transition: transform 0.3s ease;
             will-change: transform;
         }
 
         /* ===== ZOOM CONTROLS ===== */
         .zoom-controls {
-            position: absolute;
+            position: sticky;
             bottom: 16px;
             right: 16px;
             display: flex;
             gap: 8px;
             z-index: 100;
+            float: right;
+            margin: 8px;
         }
 
         .zoom-btn {
@@ -472,6 +474,7 @@
             display: flex;
             align-items: center;
             justify-content: center;
+            pointer-events: all;
         }
 
         .zoom-btn:hover {
@@ -526,11 +529,7 @@
             }
         }
 
-        /* ===== EMPTY CELL HOVER ===== */
-        .grid-container:not(.reserved-block):hover {
-            /* تأثير عام للشبكة */
-        }
-
+        /* ===== RESERVED BLOCKS ===== */
         .reserved-block {
             position: relative;
             overflow: hidden;
@@ -1119,9 +1118,9 @@
             </div>
 
             <!-- Zoom Controls -->
-            <div class="zoom-controls">
-                <button class="zoom-btn" onclick="zoomGrid(0.2)" title="تكبير">+</button>
-                <button class="zoom-btn" onclick="zoomGrid(-0.2)" title="تصغير">−</button>
+            <div class="zoom-controls" id="zoom-controls">
+                <button class="zoom-btn" id="zoom-in-btn" title="تكبير">+</button>
+                <button class="zoom-btn" id="zoom-out-btn" title="تصغير">−</button>
             </div>
 
             <div class="grid-container" id="grid-container">
@@ -1198,9 +1197,26 @@
 
         function zoomGrid(delta) {
             currentScale = Math.min(MAX_SCALE, Math.max(MIN_SCALE, currentScale + delta));
-            document.getElementById('grid-container').style.setProperty('--grid-scale', currentScale);
             document.getElementById('grid-container').style.transform = `scale(${currentScale})`;
         }
+
+        // ===== منع انتشار النقر لأزرار التكبير =====
+        document.getElementById('zoom-in-btn').addEventListener('click', function(e) {
+            e.stopPropagation();
+            e.preventDefault();
+            zoomGrid(0.2);
+        });
+
+        document.getElementById('zoom-out-btn').addEventListener('click', function(e) {
+            e.stopPropagation();
+            e.preventDefault();
+            zoomGrid(-0.2);
+        });
+
+        // أيضاً منع انتشار النقر لحاوية الأزرار
+        document.getElementById('zoom-controls').addEventListener('click', function(e) {
+            e.stopPropagation();
+        });
 
         // ===== SKELETON LOADER =====
         function hideSkeletonLoader() {
@@ -1210,7 +1226,7 @@
                     loader.classList.add('hidden');
                     setTimeout(() => loader.remove(), 500);
                 }
-            }, 800); // محاكاة وقت التحميل
+            }, 800);
         }
 
         // ===== LANGUAGE MANAGEMENT =====
@@ -1556,6 +1572,11 @@
             });
 
             gridWrapper.addEventListener('click', function(e) {
+                // تجاهل النقرات على أزرار التحكم
+                if (e.target.closest('.zoom-controls') || e.target.closest('.zoom-btn')) {
+                    return;
+                }
+
                 if (e.target.closest('.reserved-block')) return;
 
                 const cell = getCellFromMouseEvent(e);
