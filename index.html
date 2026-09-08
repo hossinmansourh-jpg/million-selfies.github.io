@@ -1,679 +1,1563 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>جدارية مليون صورة سيلفي – احجز مكانك</title>
-  <style>
-    /* === إعادة تعيين وإعدادات عامة === */
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-      font-family: 'Segoe UI', Roboto, system-ui, sans-serif;
-    }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>جدارية مليون صورة سيلفي | One Million Selfies Mosaic</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-primary: #0a0a0f;
+            --bg-secondary: #111118;
+            --bg-card: #1a1a25;
+            --bg-grid: #1e1e2a;
+            --cell-border: rgba(255, 255, 255, 0.04);
+            --cell-hover: rgba(255, 215, 0, 0.25);
+            --text-primary: #ffffff;
+            --text-secondary: #b0b0c0;
+            --text-muted: #707080;
+            --accent-gold: #f5c542;
+            --accent-gold-dark: #d4a82a;
+            --accent-gradient: linear-gradient(135deg, #f5c542 0%, #e8a020 40%, #c47b0f 100%);
+            --accent-glow: rgba(245, 197, 66, 0.35);
+            --progress-bg: #1a1a25;
+            --progress-fill: linear-gradient(90deg, #f5c542, #e8a020, #d48a0f);
+            --modal-bg: #1a1a25;
+            --modal-overlay: rgba(0, 0, 0, 0.75);
+            --grid-size: 1000;
+            --cell-size: 10px;
+            --scrollbar-thumb: #333345;
+            --scrollbar-track: #111118;
+            --tooltip-bg: rgba(20, 20, 30, 0.95);
+            --tooltip-border: #f5c542;
+            --shadow-sm: 0 2px 12px rgba(0, 0, 0, 0.4);
+            --shadow-md: 0 8px 32px rgba(0, 0, 0, 0.5);
+            --shadow-lg: 0 20px 60px rgba(0, 0, 0, 0.7);
+            --radius-sm: 8px;
+            --radius-md: 16px;
+            --radius-lg: 24px;
+            --transition-fast: 0.2s ease;
+            --transition-med: 0.35s ease;
+            --transition-slow: 0.5s ease;
+        }
 
-    body {
-      background-color: #0b0e14;
-      color: #eef2f7;
-      display: flex;
-      justify-content: center;
-      padding: 2rem 1rem;
-      min-height: 100vh;
-    }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
-    .app-container {
-      max-width: 1400px;
-      width: 100%;
-    }
+        html {
+            scroll-behavior: smooth;
+            font-size: 16px;
+        }
 
-    /* === رأس الصفحة === */
-    .hero {
-      text-align: center;
-      margin-bottom: 2.5rem;
-      padding: 1.8rem 0.5rem;
-      background: linear-gradient(145deg, #161c26, #0f131a);
-      border-radius: 2.5rem;
-      box-shadow: 0 20px 40px -12px rgba(0, 0, 0, 0.8), inset 0 1px 0 #2f3b4b;
-      border: 1px solid #28313e;
-    }
+        body {
+            font-family: 'Cairo', sans-serif;
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
+            min-height: 100vh;
+            overflow-x: hidden;
+            line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
 
-    .hero h1 {
-      font-size: 2.8rem;
-      font-weight: 700;
-      letter-spacing: 1px;
-      background: linear-gradient(135deg, #f6e9a0, #f0b27a);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-      text-shadow: 0 0 30px rgba(240, 178, 122, 0.2);
-      margin-bottom: 0.5rem;
-    }
+        ::-webkit-scrollbar {
+            width: 10px;
+            height: 10px;
+        }
+        ::-webkit-scrollbar-track {
+            background: var(--scrollbar-track);
+        }
+        ::-webkit-scrollbar-thumb {
+            background: var(--scrollbar-thumb);
+            border-radius: 6px;
+            border: 2px solid var(--scrollbar-track);
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #4a4a60;
+        }
 
-    .hero .subhead {
-      color: #a0b8d0;
-      font-size: 1.1rem;
-      border-top: 1px dashed #2a3545;
-      padding-top: 0.8rem;
-      display: inline-block;
-      backdrop-filter: blur(4px);
-      padding-left: 2rem;
-      padding-right: 2rem;
-      border-radius: 40px;
-      background: #141c26;
-    }
+        ::selection {
+            background: rgba(245, 197, 66, 0.3);
+            color: #fff;
+        }
 
-    /* === لوحة العدادات === */
-    .stats-panel {
-      display: flex;
-      flex-wrap: wrap;
-      align-items: center;
-      justify-content: space-between;
-      background: #131b24;
-      padding: 0.9rem 2rem;
-      border-radius: 60px;
-      margin: 1.5rem 0 2rem 0;
-      border: 1px solid #28313e;
-      box-shadow: inset 0 2px 3px rgba(0,0,0,0.6);
-      gap: 1rem 0.5rem;
-    }
+        /* === LANGUAGE SWITCH === */
+        .lang-switch-container {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            z-index: 1500;
+            display: flex;
+            gap: 8px;
+        }
 
-    .counter {
-      font-size: 1.6rem;
-      font-weight: 600;
-      background: #1f2a36;
-      padding: 0.2rem 1.4rem;
-      border-radius: 40px;
-      color: #f2d9b0;
-      letter-spacing: 0.5px;
-      box-shadow: inset 0 -2px 0 #3b4a5c;
-    }
+        .lang-btn {
+            padding: 8px 16px;
+            border-radius: 30px;
+            border: 1px solid rgba(245, 197, 66, 0.4);
+            background: rgba(26, 26, 37, 0.9);
+            color: var(--text-secondary);
+            cursor: pointer;
+            font-family: 'Cairo', sans-serif;
+            font-weight: 700;
+            font-size: 0.85rem;
+            transition: all var(--transition-fast);
+            letter-spacing: 0.5px;
+        }
 
-    .progress-wrapper {
-      flex: 2;
-      min-width: 160px;
-      display: flex;
-      align-items: center;
-      gap: 15px;
-    }
+        .lang-btn.active {
+            background: var(--accent-gradient);
+            color: #0a0a0f;
+            border-color: var(--accent-gold);
+            box-shadow: 0 0 20px rgba(245, 197, 66, 0.3);
+        }
 
-    .progress-track {
-      width: 100%;
-      height: 10px;
-      background: #1f2a34;
-      border-radius: 20px;
-      overflow: hidden;
-      box-shadow: inset 0 2px 4px #0a0e12;
-    }
+        .lang-btn:hover {
+            border-color: var(--accent-gold);
+            color: var(--accent-gold);
+        }
 
-    .progress-fill {
-      width: 0%;
-      height: 100%;
-      background: linear-gradient(90deg, #f3b47a, #f5d48a);
-      border-radius: 20px;
-      transition: width 0.2s ease;
-    }
+        .lang-btn.active:hover {
+            color: #0a0a0f;
+        }
 
-    .progress-label {
-      font-size: 0.9rem;
-      color: #b4c9e0;
-      font-weight: 500;
-      background: #1f2833;
-      padding: 0.15rem 0.9rem;
-      border-radius: 30px;
-      white-space: nowrap;
-    }
+        /* === HERO SECTION === */
+        .hero {
+            position: relative;
+            padding: 48px 24px 32px;
+            text-align: center;
+            background: radial-gradient(ellipse 80% 60% at 50% -10%, rgba(245, 197, 66, 0.08) 0%, transparent 70%),
+                linear-gradient(180deg, #0d0d14 0%, #0a0a0f 100%);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+            overflow: hidden;
+        }
 
-    /* === شبكة الجدارية === */
-    .mosaic-grid {
-      display: grid;
-      grid-template-columns: repeat(100, 10px);
-      gap: 1px;
-      background-color: #161e27;
-      padding: 10px;
-      border-radius: 28px;
-      border: 1px solid #293543;
-      box-shadow: 0 16px 40px -12px #000000cc;
-      justify-content: center;
-      margin: 0 auto;
-      overflow-x: auto;
-      direction: ltr;
-    }
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: repeating-linear-gradient(90deg,
+                    transparent,
+                    transparent 39px,
+                    rgba(255, 255, 255, 0.01) 40px,
+                    rgba(255, 255, 255, 0.01) 40px);
+            pointer-events: none;
+            z-index: 0;
+        }
 
-    .cell {
-      width: 10px;
-      height: 10px;
-      background-color: #2d3a48;
-      border-radius: 2px;
-      transition: all 0.08s ease;
-      box-shadow: 0 0 0 0.5px #3c4b5c;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 0px;
-      color: transparent;
-      position: relative;
-      flex-shrink: 0;
-    }
+        .hero>* {
+            position: relative;
+            z-index: 1;
+        }
 
-    .cell.empty {
-      background-color: #3d4b5a;
-      box-shadow: 0 0 0 0.5px #4d5e72;
-    }
+        .hero-badge {
+            display: inline-block;
+            padding: 6px 18px;
+            border-radius: 50px;
+            background: rgba(245, 197, 66, 0.1);
+            border: 1px solid rgba(245, 197, 66, 0.3);
+            color: var(--accent-gold);
+            font-size: 0.8rem;
+            font-weight: 700;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            margin-bottom: 20px;
+            animation: fadeInDown 0.8s ease;
+        }
 
-    .cell.empty:hover {
-      background-color: #5a6f84;
-      transform: scale(1.08);
-      z-index: 10;
-      box-shadow: 0 0 0 2px #f5cba0;
-    }
-    .cell.empty:hover::after {
-      content: "احجزني بدولار";
-      position: absolute;
-      bottom: 110%;
-      left: 50%;
-      transform: translateX(-50%);
-      background: #0d141e;
-      color: #f5e3c4;
-      font-size: 10px;
-      font-weight: 600;
-      padding: 3px 10px;
-      border-radius: 30px;
-      white-space: nowrap;
-      box-shadow: 0 8px 20px rgba(0,0,0,0.8);
-      border: 1px solid #f5b67a;
-      letter-spacing: 0.3px;
-      z-index: 99;
-      pointer-events: none;
-    }
+        .hero-title {
+            font-size: clamp(2rem, 5.5vw, 3.8rem);
+            font-weight: 900;
+            line-height: 1.2;
+            margin-bottom: 12px;
+            background: var(--accent-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-shadow: none;
+            animation: fadeInDown 0.8s ease 0.1s both;
+            letter-spacing: -0.5px;
+        }
 
-    .cell.booked {
-      background: #7f9bb3;
-      background-image: radial-gradient(circle at 30% 30%, #b8d0e5, #3f5770);
-      box-shadow: 0 0 0 0.5px #8eaac2;
-      transition: 0.08s;
-      cursor: pointer;
-      position: relative;
-    }
-    .cell.booked:hover {
-      filter: brightness(1.2);
-      transform: scale(1.1);
-      z-index: 20;
-      box-shadow: 0 0 0 2px #ffd79c;
-    }
-    .cell.booked::before {
-      content: "📸";
-      font-size: 6px;
-      color: #f5f0e3;
-      text-shadow: 0 2px 4px #00000080;
-      opacity: 0.7;
-    }
+        .hero-title .highlight {
+            display: inline-block;
+            background: var(--accent-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            position: relative;
+        }
 
-    .cell.size-20 {
-      width: 20px;
-      height: 20px;
-      grid-column: span 2;
-      grid-row: span 2;
-    }
-    .cell.size-20::before { font-size: 12px; }
+        .hero-subtitle {
+            font-size: clamp(1rem, 2vw, 1.25rem);
+            color: var(--text-secondary);
+            max-width: 720px;
+            margin: 0 auto 24px;
+            font-weight: 400;
+            animation: fadeInDown 0.8s ease 0.2s both;
+            line-height: 1.8;
+        }
 
-    .cell.size-50 {
-      width: 50px;
-      height: 50px;
-      grid-column: span 5;
-      grid-row: span 5;
-    }
-    .cell.size-50::before { font-size: 28px; }
+        .hero-subtitle strong {
+            color: var(--accent-gold);
+            font-weight: 700;
+        }
 
-    /* === النافذة المنبثقة الرئيسية (مودال الحجز) === */
-    .modal-overlay {
-      display: none;
-      position: fixed;
-      top: 0; left: 0; width: 100%; height: 100%;
-      background: rgba(2, 8, 16, 0.85);
-      backdrop-filter: blur(6px);
-      align-items: center;
-      justify-content: center;
-      z-index: 999;
-      padding: 1rem;
-    }
-    .modal-overlay.active { display: flex; }
+        /* === STATS SECTION === */
+        .stats-section {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 24px;
+            padding: 24px 16px 20px;
+            max-width: 900px;
+            margin: 0 auto;
+            animation: fadeInUp 0.8s ease 0.3s both;
+        }
 
-    .modal-box {
-      background: #1b2532;
-      max-width: 600px;
-      width: 100%;
-      max-height: 90vh;
-      overflow-y: auto;
-      padding: 2rem 1.8rem;
-      border-radius: 40px 20px 40px 20px;
-      border: 1px solid #f5cba0;
-      box-shadow: 0 30px 60px #000000dd;
-      transition: 0.2s;
-    }
+        .stat-card {
+            background: var(--bg-card);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: var(--radius-md);
+            padding: 20px 28px;
+            text-align: center;
+            min-width: 180px;
+            flex: 1;
+            max-width: 280px;
+            box-shadow: var(--shadow-sm);
+            transition: all var(--transition-fast);
+            position: relative;
+            overflow: hidden;
+        }
 
-    .modal-box h2 {
-      font-size: 2rem;
-      font-weight: 300;
-      color: #f5dbb0;
-      text-align: center;
-      border-bottom: 1px solid #3b4c60;
-      padding-bottom: 0.8rem;
-      margin-bottom: 1.5rem;
-    }
+        .stat-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: var(--accent-gradient);
+            opacity: 0.7;
+        }
 
-    /* حقول الإدخال */
-    .field-group {
-      margin-bottom: 1.2rem;
-    }
-    .field-group label {
-      display: block;
-      font-weight: 500;
-      color: #bdd0e8;
-      margin-bottom: 4px;
-      font-size: 0.9rem;
-    }
-    .field-group input, .field-group textarea {
-      width: 100%;
-      padding: 0.6rem 1rem;
-      border-radius: 30px;
-      border: 1px solid #36495c;
-      background: #101a24;
-      color: #f0f4fa;
-      font-size: 1rem;
-      transition: 0.15s;
-    }
-    .field-group input:focus, .field-group textarea:focus {
-      outline: none;
-      border-color: #f5cba0;
-      box-shadow: 0 0 0 3px #f5cba055;
-    }
-    .field-group textarea { resize: vertical; min-height: 60px; }
+        .stat-card:hover {
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-md);
+            border-color: rgba(245, 197, 66, 0.3);
+        }
 
-    /* أزرار الدفع الثلاثة */
-    .payment-buttons {
-      display: flex;
-      flex-direction: column;
-      gap: 0.8rem;
-      margin: 1.8rem 0 1.2rem;
-    }
-    .pay-btn {
-      width: 100%;
-      padding: 0.9rem 1.2rem;
-      border: none;
-      border-radius: 60px;
-      font-weight: 700;
-      font-size: 1.1rem;
-      background: #2b3a4b;
-      color: #f0f4fa;
-      box-shadow: 0 6px 0 #121b24;
-      transition: all 0.07s ease;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 10px;
-    }
-    .pay-btn:active {
-      transform: translateY(4px);
-      box-shadow: 0 2px 0 #121b24;
-    }
-    .pay-btn.usdt { background: #1f8b7a; box-shadow: 0 6px 0 #0f5347; }
-    .pay-btn.visa { background: #1a4b7a; box-shadow: 0 6px 0 #0d2d4a; }
-    .pay-btn.ewallet { background: #7a5f3f; box-shadow: 0 6px 0 #4d3b27; }
+        .stat-number {
+            font-size: 2.4rem;
+            font-weight: 900;
+            color: var(--accent-gold);
+            line-height: 1.2;
+            letter-spacing: -1px;
+            font-variant-numeric: tabular-nums;
+        }
 
-    /* تفاصيل الدفع (تظهر عند الضغط) */
-    .payment-detail {
-      background: #101a24;
-      padding: 1rem 1.2rem;
-      border-radius: 20px;
-      margin-top: 0.8rem;
-      border-right: 3px solid #f5cba0;
-      display: none;
-      font-size: 0.95rem;
-    }
-    .payment-detail.show { display: block; }
-    .payment-detail .copy-box {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      background: #1f2b38;
-      padding: 0.4rem 0.8rem;
-      border-radius: 40px;
-      margin: 8px 0;
-    }
-    .payment-detail .copy-box span {
-      font-family: monospace;
-      word-break: break-all;
-      color: #f5e3c4;
-    }
-    .copy-btn {
-      background: #f5cba0;
-      border: none;
-      color: #0b141e;
-      font-weight: 600;
-      padding: 0.2rem 1.2rem;
-      border-radius: 40px;
-      cursor: pointer;
-      font-size: 0.8rem;
-      white-space: nowrap;
-    }
+        .stat-number.remaining {
+            animation: pulse-gold 2s ease-in-out infinite;
+        }
 
-    /* زر إرسال الطلب للمراجعة */
-    .submit-review {
-      width: 100%;
-      padding: 0.9rem;
-      margin-top: 1.8rem;
-      border: none;
-      border-radius: 60px;
-      background: #f5cba0;
-      color: #0b141e;
-      font-weight: 800;
-      font-size: 1.2rem;
-      box-shadow: 0 6px 0 #7a5f42;
-      transition: 0.07s linear;
-      cursor: pointer;
-    }
-    .submit-review:active {
-      transform: translateY(4px);
-      box-shadow: 0 2px 0 #7a5f42;
-    }
+        .stat-label {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            font-weight: 600;
+            letter-spacing: 0.5px;
+            margin-top: 4px;
+            text-transform: uppercase;
+        }
 
-    .close-modal-btn {
-      background: transparent;
-      border: 1px solid #4f637a;
-      color: #b0c8df;
-      padding: 0.5rem 1.8rem;
-      border-radius: 60px;
-      margin-top: 0.8rem;
-      cursor: pointer;
-      font-size: 0.9rem;
-      transition: 0.15s;
-      width: fit-content;
-      margin-left: auto;
-      margin-right: auto;
-    }
-    .close-modal-btn:hover { background: #2b3a4b; }
+        /* === PROGRESS BAR === */
+        .progress-wrapper {
+            max-width: 700px;
+            margin: 8px auto 24px;
+            padding: 0 16px;
+            animation: fadeInUp 0.8s ease 0.4s both;
+        }
 
-    /* رسالة المراجعة الوهمية */
-    .review-mock {
-      background: #1f2b38;
-      padding: 0.8rem 1rem;
-      border-radius: 30px;
-      margin: 1rem 0 0.5rem;
-      font-size: 0.9rem;
-      color: #bdd0e8;
-      text-align: center;
-      border: 1px dashed #f5b67a;
-      display: none;
-    }
-    .review-mock.show { display: block; }
+        .progress-label-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px;
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            font-weight: 600;
+        }
 
-    /* استجابة */
-    @media (max-width: 700px) {
-      .hero h1 { font-size: 2rem; }
-      .mosaic-grid { gap: 1px; padding: 6px; }
-      .cell { width: 10px; height: 10px; }
-      .cell.size-20 { width: 20px; height: 20px; }
-      .cell.size-50 { width: 50px; height: 50px; }
-    }
-    @media (max-width: 480px) {
-      .stats-panel { flex-direction: column; align-items: stretch; gap: 0.6rem; }
-      .counter { text-align: center; }
-      .modal-box { padding: 1.5rem 1rem; }
-    }
+        .progress-percent {
+            color: var(--accent-gold);
+            font-weight: 800;
+            font-size: 1.1rem;
+        }
 
-    .mosaic-grid::-webkit-scrollbar { height: 8px; background: #0c141e; border-radius: 12px; }
-    .mosaic-grid::-webkit-scrollbar-thumb { background: #3f5369; border-radius: 12px; }
-  </style>
+        .progress-bar-outer {
+            width: 100%;
+            height: 10px;
+            background: var(--progress-bg);
+            border-radius: 50px;
+            overflow: hidden;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            position: relative;
+            box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .progress-bar-inner {
+            height: 100%;
+            background: var(--progress-fill);
+            border-radius: 50px;
+            transition: width 1s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            position: relative;
+            min-width: 0;
+            box-shadow: 0 0 16px var(--accent-glow);
+        }
+
+        .progress-bar-inner::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(180deg, rgba(255, 255, 255, 0.25) 0%, transparent 60%);
+            border-radius: 50px;
+        }
+
+        /* === GRID SECTION === */
+        .grid-section {
+            padding: 16px 16px 32px;
+            max-width: 1200px;
+            margin: 0 auto;
+            animation: fadeInUp 0.8s ease 0.5s both;
+        }
+
+        .grid-section-header {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+            gap: 12px;
+        }
+
+        .grid-section-title {
+            font-size: 1.2rem;
+            font-weight: 800;
+            color: var(--text-primary);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .grid-section-title .icon {
+            font-size: 1.5rem;
+        }
+
+        .grid-hint {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            font-weight: 400;
+            letter-spacing: 0.3px;
+        }
+
+        .grid-legend {
+            display: flex;
+            gap: 16px;
+            flex-wrap: wrap;
+            align-items: center;
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .legend-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 3px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        .legend-dot.empty {
+            background: var(--bg-grid);
+        }
+        .legend-dot.reserved {
+            background: var(--accent-gradient);
+        }
+
+        /* === GRID CONTAINER === */
+        .grid-wrapper {
+            position: relative;
+            border-radius: var(--radius-md);
+            overflow: hidden;
+            border: 2px solid rgba(255, 255, 255, 0.08);
+            box-shadow: var(--shadow-lg);
+            background: var(--bg-grid);
+            cursor: crosshair;
+            user-select: none;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            max-height: 70vh;
+            overflow: auto;
+            position: relative;
+        }
+
+        .grid-wrapper:focus {
+            outline: none;
+            border-color: rgba(245, 197, 66, 0.4);
+        }
+
+        .grid-container {
+            display: grid;
+            grid-template-columns: repeat(var(--grid-size), var(--cell-size));
+            grid-template-rows: repeat(var(--grid-size), var(--cell-size));
+            background-color: var(--bg-grid);
+            background-image:
+                linear-gradient(to right, var(--cell-border) 1px, transparent 1px),
+                linear-gradient(to bottom, var(--cell-border) 1px, transparent 1px);
+            background-size: var(--cell-size) var(--cell-size);
+            width: fit-content;
+            min-width: 100%;
+            position: relative;
+            direction: ltr;
+        }
+
+        /* === RESERVED BLOCKS === */
+        .reserved-block {
+            position: relative;
+            overflow: hidden;
+            border-radius: 2px;
+            cursor: pointer;
+            transition: all var(--transition-fast);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+            z-index: 1;
+            animation: blockAppear 0.5s ease both;
+        }
+
+        .reserved-block:hover {
+            z-index: 10;
+            box-shadow: 0 6px 24px rgba(245, 197, 66, 0.4);
+            transform: scale(1.04);
+            filter: brightness(1.1);
+            border-radius: 4px;
+        }
+
+        .reserved-block img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+            pointer-events: none;
+            transition: transform var(--transition-med);
+        }
+
+        .reserved-block:hover img {
+            transform: scale(1.08);
+        }
+
+        .reserved-block .block-overlay {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            padding: 6px 10px;
+            background: linear-gradient(transparent, rgba(0, 0, 0, 0.85));
+            color: #fff;
+            font-size: 0.65rem;
+            font-weight: 700;
+            letter-spacing: 0.3px;
+            opacity: 0;
+            transition: opacity var(--transition-fast);
+            pointer-events: none;
+            text-align: left;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .reserved-block:hover .block-overlay {
+            opacity: 1;
+        }
+
+        .reserved-block .block-size-badge {
+            position: absolute;
+            top: 4px;
+            right: 4px;
+            background: rgba(0, 0, 0, 0.7);
+            color: var(--accent-gold);
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-size: 0.55rem;
+            font-weight: 800;
+            letter-spacing: 0.3px;
+            opacity: 0;
+            transition: opacity var(--transition-fast);
+            pointer-events: none;
+        }
+
+        .reserved-block:hover .block-size-badge {
+            opacity: 1;
+        }
+
+        /* === TOOLTIP === */
+        .grid-tooltip {
+            position: fixed;
+            pointer-events: none;
+            background: var(--tooltip-bg);
+            border: 1px solid var(--tooltip-border);
+            border-radius: var(--radius-sm);
+            padding: 8px 16px;
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: var(--accent-gold);
+            z-index: 1000;
+            opacity: 0;
+            transition: opacity 0.15s ease;
+            box-shadow: var(--shadow-md);
+            letter-spacing: 0.5px;
+            white-space: nowrap;
+            direction: rtl;
+        }
+
+        .grid-tooltip.visible {
+            opacity: 1;
+        }
+
+        .grid-tooltip .tooltip-arrow {
+            position: absolute;
+            bottom: -6px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 0;
+            height: 0;
+            border-left: 6px solid transparent;
+            border-right: 6px solid transparent;
+            border-top: 6px solid var(--tooltip-border);
+        }
+
+        /* === MODAL === */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--modal-overlay);
+            z-index: 2000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+            backdrop-filter: blur(6px);
+            -webkit-backdrop-filter: blur(6px);
+            padding: 20px;
+        }
+
+        .modal-overlay.active {
+            opacity: 1;
+            pointer-events: all;
+        }
+
+        .modal-content {
+            background: var(--modal-bg);
+            border: 1px solid rgba(245, 197, 66, 0.25);
+            border-radius: var(--radius-lg);
+            padding: 40px 32px 32px;
+            max-width: 520px;
+            width: 100%;
+            text-align: center;
+            box-shadow: var(--shadow-lg);
+            transform: scale(0.85) translateY(20px);
+            transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+            position: relative;
+            overflow: hidden;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        .modal-overlay.active .modal-content {
+            transform: scale(1) translateY(0);
+        }
+
+        .modal-content::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: var(--accent-gradient);
+        }
+
+        .modal-icon {
+            font-size: 3.5rem;
+            margin-bottom: 16px;
+            display: block;
+            animation: bounce 2s ease-in-out infinite;
+        }
+
+        .modal-title {
+            font-size: 1.6rem;
+            font-weight: 900;
+            margin-bottom: 12px;
+            background: var(--accent-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            letter-spacing: -0.5px;
+        }
+
+        .modal-description {
+            font-size: 0.95rem;
+            color: var(--text-secondary);
+            margin-bottom: 24px;
+            line-height: 1.8;
+        }
+
+        .modal-description strong {
+            color: var(--accent-gold);
+            font-weight: 700;
+        }
+
+        .modal-btn {
+            display: inline-block;
+            padding: 14px 36px;
+            border-radius: 50px;
+            background: var(--accent-gradient);
+            color: #0a0a0f;
+            font-weight: 800;
+            font-size: 1rem;
+            border: none;
+            cursor: pointer;
+            letter-spacing: 0.5px;
+            transition: all var(--transition-fast);
+            box-shadow: 0 4px 20px var(--accent-glow);
+            text-transform: uppercase;
+            font-family: 'Cairo', sans-serif;
+        }
+
+        .modal-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 32px rgba(245, 197, 66, 0.5);
+            filter: brightness(1.05);
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 16px;
+            left: 16px;
+            background: none;
+            border: none;
+            color: var(--text-muted);
+            font-size: 1.5rem;
+            cursor: pointer;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all var(--transition-fast);
+            font-family: 'Cairo', sans-serif;
+            line-height: 1;
+            z-index: 10;
+        }
+
+        .modal-close:hover {
+            background: rgba(255, 255, 255, 0.1);
+            color: var(--text-primary);
+        }
+
+        /* === PAYMENT METHODS === */
+        .payment-methods {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+            justify-content: center;
+            margin: 20px 0;
+        }
+
+        .payment-btn {
+            padding: 12px 20px;
+            border-radius: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            background: rgba(255, 255, 255, 0.05);
+            color: var(--text-primary);
+            cursor: pointer;
+            font-family: 'Cairo', sans-serif;
+            font-weight: 700;
+            font-size: 0.85rem;
+            transition: all var(--transition-fast);
+            min-width: 130px;
+            text-align: center;
+        }
+
+        .payment-btn:hover {
+            border-color: var(--accent-gold);
+            background: rgba(245, 197, 66, 0.1);
+            transform: translateY(-2px);
+        }
+
+        .payment-btn.active {
+            border-color: var(--accent-gold);
+            background: rgba(245, 197, 66, 0.15);
+            box-shadow: 0 0 20px rgba(245, 197, 66, 0.2);
+        }
+
+        .payment-details {
+            margin-top: 20px;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: var(--radius-sm);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            animation: fadeInUp 0.3s ease;
+        }
+
+        .wallet-address {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: rgba(0, 0, 0, 0.3);
+            padding: 12px;
+            border-radius: 8px;
+            margin: 10px 0;
+            font-family: monospace;
+            font-size: 0.9rem;
+            word-break: break-all;
+        }
+
+        .copy-btn {
+            background: var(--accent-gradient);
+            color: #0a0a0f;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-family: 'Cairo', sans-serif;
+            font-weight: 700;
+            transition: all var(--transition-fast);
+            white-space: nowrap;
+        }
+
+        .copy-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 15px rgba(245, 197, 66, 0.4);
+        }
+
+        .file-upload {
+            margin: 20px 0;
+            padding: 20px;
+            border: 2px dashed rgba(245, 197, 66, 0.3);
+            border-radius: var(--radius-sm);
+            cursor: pointer;
+            transition: all var(--transition-fast);
+        }
+
+        .file-upload:hover {
+            border-color: var(--accent-gold);
+            background: rgba(245, 197, 66, 0.05);
+        }
+
+        .file-upload input {
+            display: none;
+        }
+
+        .form-group {
+            margin-bottom: 16px;
+            text-align: right;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 6px;
+            color: var(--text-secondary);
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 12px;
+            border-radius: 8px;
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            background: rgba(255, 255, 255, 0.05);
+            color: var(--text-primary);
+            font-family: 'Cairo', sans-serif;
+            font-size: 0.9rem;
+        }
+
+        .review-notice {
+            margin-top: 20px;
+            padding: 16px;
+            background: rgba(245, 197, 66, 0.08);
+            border: 1px solid rgba(245, 197, 66, 0.2);
+            border-radius: var(--radius-sm);
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            text-align: center;
+        }
+
+        .review-notice strong {
+            color: var(--accent-gold);
+        }
+
+        /* === ANIMATIONS === */
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes pulse-gold {
+            0%,
+            100% {
+                text-shadow: 0 0 20px rgba(245, 197, 66, 0.3);
+            }
+            50% {
+                text-shadow: 0 0 40px rgba(245, 197, 66, 0.7);
+            }
+        }
+
+        @keyframes bounce {
+            0%,
+            100% {
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(-10px);
+            }
+        }
+
+        @keyframes blockAppear {
+            from {
+                opacity: 0;
+                transform: scale(0.5);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        /* === FOOTER === */
+        .site-footer {
+            text-align: center;
+            padding: 24px 16px 32px;
+            color: var(--text-muted);
+            font-size: 0.8rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            letter-spacing: 0.3px;
+        }
+
+        .site-footer a {
+            color: var(--accent-gold);
+            text-decoration: none;
+            font-weight: 600;
+            transition: color var(--transition-fast);
+        }
+
+        .site-footer a:hover {
+            color: var(--accent-gold-dark);
+        }
+
+        /* === RESPONSIVE === */
+        @media (max-width: 768px) {
+            .hero {
+                padding: 32px 16px 20px;
+            }
+            .hero-title {
+                font-size: 2rem;
+            }
+            .stats-section {
+                gap: 12px;
+                padding: 16px 8px;
+            }
+            .stat-card {
+                padding: 14px 18px;
+                min-width: 120px;
+            }
+            .stat-number {
+                font-size: 1.8rem;
+            }
+            .grid-section {
+                padding: 8px 8px 16px;
+            }
+            .grid-wrapper {
+                max-height: 55vh;
+                border-radius: var(--radius-sm);
+            }
+            .modal-content {
+                padding: 28px 20px 24px;
+                margin: 12px;
+            }
+            .modal-title {
+                font-size: 1.3rem;
+            }
+            .grid-legend {
+                font-size: 0.65rem;
+                gap: 8px;
+            }
+            .lang-switch-container {
+                top: 10px;
+                left: 10px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .hero-title {
+                font-size: 1.5rem;
+            }
+            .hero-subtitle {
+                font-size: 0.9rem;
+            }
+            .stat-card {
+                padding: 10px 12px;
+                min-width: 90px;
+                border-radius: var(--radius-sm);
+            }
+            .stat-number {
+                font-size: 1.4rem;
+            }
+            .stat-label {
+                font-size: 0.7rem;
+            }
+            .grid-wrapper {
+                max-height: 45vh;
+            }
+            .modal-btn {
+                padding: 12px 24px;
+                font-size: 0.85rem;
+            }
+        }
+    </style>
 </head>
 <body>
-<div class="app-container">
 
-  <header class="hero">
-    <h1>📸 جدارية مليون صورة سيلفي</h1>
-    <div class="subhead">تحدي الرقمنة الخالدة – احجز مكانك في التاريخ</div>
-  </header>
+    <!-- ===== LANGUAGE SWITCH ===== -->
+    <div class="lang-switch-container">
+        <button class="lang-btn active" id="lang-ar" onclick="setLanguage('ar')">🇸🇦 عربي</button>
+        <button class="lang-btn" id="lang-en" onclick="setLanguage('en')">🇬🇧 English</button>
+    </div>
 
-  <div class="stats-panel">
-    <div class="counter" id="remainingCounter">1,000,000</div>
+    <!-- ===== HERO SECTION ===== -->
+    <header class="hero">
+        <div class="hero-badge" data-ar="🚀 تحدي رقمي تاريخي" data-en="🚀 Historic Digital Challenge">🚀 تحدي رقمي تاريخي</div>
+        <h1 class="hero-title">
+            <span data-ar="جدارية" data-en="The">جدارية</span> <span class="highlight" data-ar="مليون" data-en="Million">مليون</span> <span data-ar="صورة سيلفي" data-en="Selfies Mosaic">صورة سيلفي</span>
+        </h1>
+        <p class="hero-subtitle">
+            <span data-ar="كن جزءاً من" data-en="Be part of">كن جزءاً من</span> <strong data-ar="أكبر لوحة رقمية تفاعلية" data-en="the largest interactive digital wall">أكبر لوحة رقمية تفاعلية</strong> <span data-ar="في العالم." data-en="in the world.">في العالم.</span><br>
+            <span data-ar="احجز مربعاتك على الجدارية الخالدة، واترك" data-en="Reserve your squares on the eternal wall and leave">احجز مربعاتك على الجدارية الخالدة، واترك</span> <strong data-ar="بصمتك للأبد" data-en="your mark forever">بصمتك للأبد</strong>.<br>
+            <span data-ar="كل مربع 10×10 بكسل بـ" data-en="Each 10×10 pixel square costs">كل مربع 10×10 بكسل بـ</span> <strong data-ar="دولار واحد فقط" data-en="only $1">دولار واحد فقط</strong>.
+        </p>
+    </header>
+
+    <!-- ===== STATS & PROGRESS ===== -->
+    <section class="stats-section" aria-label="إحصائيات الجدارية">
+        <div class="stat-card">
+            <div class="stat-number remaining" id="counter-remaining">1,000,000</div>
+            <div class="stat-label" data-ar="مربعات متبقية" data-en="Squares Remaining">مربعات متبقية</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-number" id="counter-reserved">0</div>
+            <div class="stat-label" data-ar="مربعات محجوزة" data-en="Reserved Squares">مربعات محجوزة</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-number" id="counter-blocks">0</div>
+            <div class="stat-label" data-ar="صورة سيلفي" data-en="Selfies">صورة سيلفي</div>
+        </div>
+    </section>
+
+    <!-- ===== PROGRESS BAR ===== -->
     <div class="progress-wrapper">
-      <div class="progress-track">
-        <div class="progress-fill" id="progressFill" style="width: 0%;"></div>
-      </div>
-      <span class="progress-label" id="progressPercent">0%</span>
-    </div>
-  </div>
-
-  <div class="mosaic-grid" id="mosaicGrid" dir="ltr"></div>
-</div>
-
-<!-- ===== نافذة الحجز المتطورة ===== -->
-<div class="modal-overlay" id="bookingModal">
-  <div class="modal-box">
-    <h2>📌 احجز مكانك الرقمي</h2>
-
-    <!-- حقول رفع الصورة والرابط -->
-    <div class="field-group">
-      <label>📤 رفع صورة السيلفي (اختياري)</label>
-      <input type="file" accept="image/*" id="selfieUpload" placeholder="اختر صورة">
-    </div>
-    <div class="field-group">
-      <label>🔗 رابط حسابك الشخصي (Instagram, موقعك...)</label>
-      <input type="url" id="profileLink" placeholder="https://example.com/your-profile">
+        <div class="progress-label-row">
+            <span data-ar="نسبة الحجز" data-en="Reservation Rate">نسبة الحجز</span>
+            <span class="progress-percent" id="progress-percent-text">0.00%</span>
+        </div>
+        <div class="progress-bar-outer">
+            <div class="progress-bar-inner" id="progress-bar-inner" style="width: 0%;"></div>
+        </div>
     </div>
 
-    <!-- أزرار الدفع الثلاثة -->
-    <div class="payment-buttons">
-      <button class="pay-btn usdt" data-payment="usdt">🪙 USDT (TRC20)</button>
-      <button class="pay-btn visa" data-payment="visa">💳 Visa / MasterCard</button>
-      <button class="pay-btn ewallet" data-payment="ewallet">🏦 Payeer / Perfect Money</button>
+    <!-- ===== GRID SECTION ===== -->
+    <section class="grid-section" aria-label="شبكة الجدارية">
+        <div class="grid-section-header">
+            <h2 class="grid-section-title">
+                <span class="icon">🖼️</span> <span data-ar="لوحة الجدارية التفاعلية" data-en="Interactive Mosaic Wall">لوحة الجدارية التفاعلية</span>
+            </h2>
+            <div class="grid-legend">
+                <span class="legend-item">
+                    <span class="legend-dot empty"></span> <span data-ar="مربع فارغ" data-en="Empty Square">مربع فارغ</span>
+                </span>
+                <span class="legend-item">
+                    <span class="legend-dot reserved"></span> <span data-ar="محجوز" data-en="Reserved">محجوز</span>
+                </span>
+                <span class="grid-hint" data-ar="⬅ مرر للاستكشاف | انقر للحجز" data-en="⬅ Scroll to explore | Click to reserve">⬅ مرر للاستكشاف | انقر للحجز</span>
+            </div>
+        </div>
+
+        <div class="grid-wrapper" id="grid-wrapper" tabindex="0" role="grid" aria-label="جدارية مليون سيلفي">
+            <div class="grid-container" id="grid-container">
+                <!-- Reserved blocks will be rendered here via JavaScript -->
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== FOOTER ===== -->
+    <footer class="site-footer">
+        <p>© 2025 <span data-ar="جدارية مليون سيلفي" data-en="One Million Selfies Mosaic">جدارية مليون سيلفي</span> — <span data-ar="جميع الحقوق محفوظة" data-en="All rights reserved">جميع الحقوق محفوظة</span> | <span data-ar="مستوحاة من" data-en="Inspired by">مستوحاة من</span> The Million Dollar Homepage | <a href="#" target="_blank" data-ar="سياسة الخصوصية" data-en="Privacy Policy">سياسة الخصوصية</a></p>
+    </footer>
+
+    <!-- ===== TOOLTIP ===== -->
+    <div class="grid-tooltip" id="grid-tooltip">
+        <span data-ar="احجزني بدولار" data-en="Reserve me for $1">احجزني بدولار</span>
+        <div class="tooltip-arrow"></div>
     </div>
 
-    <!-- تفاصيل الدفع (تظهر حسب الزر) -->
-    <div id="paymentDetailUSDT" class="payment-detail">
-      <p style="margin-bottom: 6px;"><strong>عنوان محفظة USDT (TRC20):</strong></p>
-      <div class="copy-box">
-        <span id="usdtAddress">TQm9x8yZ7wV6u5t4r3e2w1q0p9o8i7u6y5t4r3e2</span>
-        <button class="copy-btn" data-copy="usdtAddress">📋 نسخ</button>
-      </div>
-      <p style="font-size:0.9rem; color:#bdd0e8;">💰 القيمة: 1 دولار (أو أكثر حسب حجم الصورة)</p>
+    <!-- ===== MODAL ===== -->
+    <div class="modal-overlay" id="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+        <div class="modal-content">
+            <button class="modal-close" id="modal-close" aria-label="إغلاق النافذة">✕</button>
+            <span class="modal-icon">📸</span>
+            <h2 class="modal-title" id="modal-title" data-ar="احجز مكانك في التاريخ الرقمي" data-en="Reserve Your Spot in Digital History">احجز مكانك في التاريخ الرقمي</h2>
+            <p class="modal-description">
+                <span data-ar="هذا المربع فارغ وينتظر صورتك!" data-en="This square is empty and waiting for your selfie!">هذا المربع فارغ وينتظر صورتك!</span><br>
+                <span data-ar="احجز مساحتك الآن وكن جزءاً من هذه الجدارية الخالدة." data-en="Reserve your space now and be part of this eternal wall.">احجز مساحتك الآن وكن جزءاً من هذه الجدارية الخالدة.</span>
+            </p>
+
+            <!-- File Upload -->
+            <div class="file-upload" id="file-upload">
+                <input type="file" id="selfie-upload" accept="image/*" />
+                <div data-ar="📤 اضغط لرفع صورة السيلفي الخاصة بك" data-en="📤 Click to upload your selfie">📤 اضغط لرفع صورة السيلفي الخاصة بك</div>
+                <small data-ar="(JPG, PNG, GIF - الحد الأقصى 2MB)" data-en="(JPG, PNG, GIF - Max 2MB)">(JPG, PNG, GIF - الحد الأقصى 2MB)</small>
+            </div>
+
+            <!-- Social Link Input -->
+            <div class="form-group">
+                <label for="social-link" data-ar="رابط حسابك (انستغرام/تويتر/موقعك):" data-en="Your profile link (Instagram/Twitter/Website):">رابط حسابك (انستغرام/تويتر/موقعك):</label>
+                <input type="url" id="social-link" placeholder="https://instagram.com/yourname" />
+            </div>
+
+            <!-- Payment Methods -->
+            <div class="payment-methods">
+                <button class="payment-btn active" onclick="selectPayment('crypto')" data-ar="💎 USDT (TRC20)" data-en="💎 USDT (TRC20)">💎 USDT (TRC20)</button>
+                <button class="payment-btn" onclick="selectPayment('card')" data-ar="💳 فيزا/ماستركارد" data-en="💳 Visa/MasterCard">💳 فيزا/ماستركارد</button>
+                <button class="payment-btn" onclick="selectPayment('epay')" data-ar="🏦 Payeer / Perfect Money" data-en="🏦 Payeer / Perfect Money">🏦 Payeer / Perfect Money</button>
+            </div>
+
+            <!-- Payment Details Container -->
+            <div class="payment-details" id="payment-details">
+                <!-- Dynamic content based on selected payment method -->
+            </div>
+
+            <!-- Review Notice -->
+            <div class="review-notice">
+                🔒 <strong data-ar="نظام المراجعة البشرية:" data-en="Human Review System:">نظام المراجعة البشرية:</strong>
+                <span data-ar="سيتم مراجعة صورتك من قبل فريق الإدارة قبل ظهورها على الجدارية لضمان عدم وجود محتوى غير لائق." data-en="Your photo will be reviewed by our team before appearing on the wall to ensure no inappropriate content.">سيتم مراجعة صورتك من قبل فريق الإدارة قبل ظهورها على الجدارية لضمان عدم وجود محتوى غير لائق.</span>
+            </div>
+
+            <button class="modal-btn" id="modal-submit-btn" onclick="submitReservation()" data-ar="إرسال للحجز 🔥" data-en="Submit Reservation 🔥">إرسال للحجز 🔥</button>
+        </div>
     </div>
 
-    <div id="paymentDetailVisa" class="payment-detail">
-      <p>🔗 سيتم تحويلك إلى بوابة دفع آمنة (اختبارية):</p>
-      <p style="background:#1f2b38; padding:0.5rem; border-radius:30px; text-align:center; direction:ltr;">
-        <a href="#" id="visaMockLink" target="_blank" style="color:#f5cba0;">https://payment-demo.com/checkout</a>
-      </p>
-      <p style="font-size:0.8rem; color:#8899b0;">(رابط وهمي – استبدله برابط الدفع الحقيقي)</p>
-    </div>
+    <script>
+        // ===== LANGUAGE MANAGEMENT =====
+        let currentLanguage = 'ar';
 
-    <div id="paymentDetailEwallet" class="payment-detail">
-      <p><strong>حسابات الدفع الإلكتروني:</strong></p>
-      <p>🔹 Payeer: <span style="font-family:monospace;">P12345678</span></p>
-      <p>🔹 Perfect Money: <span style="font-family:monospace;">U1234567</span></p>
-      <p style="font-size:0.8rem; color:#8899b0;">(أرقام وهمية – استبدلها بأرقامك)</p>
-    </div>
+        function setLanguage(lang) {
+            currentLanguage = lang;
+            document.documentElement.lang = lang;
+            document.documentElement.dir = lang === 'ar' ? 'rtl' : 'ltr';
 
-    <!-- زر إرسال للمراجعة -->
-    <button class="submit-review" id="submitReviewBtn">🚀 إرسال الطلب للمراجعة البشرية</button>
-    <div class="review-mock" id="reviewMockMessage">✅ تم إرسال طلبك! سيتم مراجعة الصورة والمحتوى من قبل الإدارة خلال 24 ساعة. شكراً لك!</div>
+            // Update active button
+            document.getElementById('lang-ar').classList.toggle('active', lang === 'ar');
+            document.getElementById('lang-en').classList.toggle('active', lang === 'en');
 
-    <button class="close-modal-btn" id="closeModalBtn">✖ إغلاق</button>
-  </div>
-</div>
+            // Update all elements with data-ar and data-en attributes
+            document.querySelectorAll('[data-ar][data-en]').forEach(el => {
+                const newText = lang === 'ar' ? el.getAttribute('data-ar') : el.getAttribute('data-en');
+                if (el.tagName === 'INPUT') {
+                    el.placeholder = newText;
+                } else {
+                    el.textContent = newText;
+                }
+            });
 
-<script>
-  (function() {
-    // ===== إعدادات الشبكة =====
-    const GRID_COLS = 100;
-    const GRID_ROWS = 100;
-    const TOTAL_CELLS = GRID_COLS * GRID_ROWS;
-
-    const grid = document.getElementById('mosaicGrid');
-    const remainingSpan = document.getElementById('remainingCounter');
-    const progressFill = document.getElementById('progressFill');
-    const progressPercent = document.getElementById('progressPercent');
-    const modal = document.getElementById('bookingModal');
-    const closeModalBtn = document.getElementById('closeModalBtn');
-
-    let cellState = new Array(TOTAL_CELLS).fill(0);
-
-    // ===== حجوزات مبدئية (لتوضيح الدمج) =====
-    function presetBookings() {
-      for (let r = 0; r < 20; r++) for (let c = 0; c < 20; c++) {
-        const idx = r * GRID_COLS + c;
-        if (idx < TOTAL_CELLS) cellState[idx] = 1;
-      }
-      for (let r = 30; r < 80; r++) for (let c = 30; c < 80; c++) {
-        const idx = r * GRID_COLS + c;
-        if (idx < TOTAL_CELLS) cellState[idx] = 1;
-      }
-      for (let r = 70; r < 75; r++) for (let c = 70; c < 75; c++) {
-        const idx = r * GRID_COLS + c;
-        if (idx < TOTAL_CELLS) cellState[idx] = 1;
-      }
-    }
-    presetBookings();
-
-    function updateStats() {
-      const booked = cellState.filter(v => v === 1).length;
-      const remaining = TOTAL_CELLS - booked;
-      const percent = (booked / TOTAL_CELLS) * 100;
-      remainingSpan.textContent = remaining.toLocaleString();
-      progressFill.style.width = percent + '%';
-      progressPercent.textContent = Math.round(percent) + '%';
-    }
-
-    function buildGrid() {
-      grid.innerHTML = '';
-      for (let idx = 0; idx < TOTAL_CELLS; idx++) {
-        const cell = document.createElement('div');
-        cell.className = 'cell';
-        cell.dataset.index = idx;
-
-        const state = cellState[idx];
-        if (state === 1) {
-          cell.classList.add('booked');
-          const profileUrl = `https://example.com/selfie-${idx}`;
-          cell.dataset.profile = profileUrl;
-          const row = Math.floor(idx / GRID_COLS);
-          const col = idx % GRID_COLS;
-          if (row < 20 && col < 20) cell.classList.add('size-20');
-          if (row >= 30 && row < 80 && col >= 30 && col < 80) cell.classList.add('size-50');
-          if (row >= 70 && row < 75 && col >= 70 && col < 75) cell.classList.add('size-20');
-        } else {
-          cell.classList.add('empty');
+            // Update tooltip text
+            const tooltipText = document.querySelector('#grid-tooltip span');
+            if (tooltipText) {
+                tooltipText.textContent = lang === 'ar' ? 'احجزني بدولار' : 'Reserve me for $1';
+            }
         }
 
-        cell.addEventListener('click', function(e) {
-          e.stopPropagation();
-          const index = parseInt(this.dataset.index);
-          if (cellState[index] === 1) {
-            const profile = this.dataset.profile || 'https://example.com/default';
-            window.open(profile, '_blank');
-          } else {
-            // فتح مودال الحجز المتطور
-            openBookingModal();
-          }
+        // ===== PAYMENT METHODS =====
+        let selectedPaymentMethod = 'crypto';
+
+        function selectPayment(method) {
+            selectedPaymentMethod = method;
+
+            // Update active state
+            document.querySelectorAll('.payment-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            event.target.classList.add('active');
+
+            // Update payment details
+            updatePaymentDetails();
+        }
+
+        function updatePaymentDetails() {
+            const detailsContainer = document.getElementById('payment-details');
+            const lang = currentLanguage;
+            const isArabic = lang === 'ar';
+
+            if (selectedPaymentMethod === 'crypto') {
+                const walletAddress = 'TUxYqV5d2E7bV9wKp3mNqR8sT1uW4xZ6cA';
+                detailsContainer.innerHTML = `
+                    <div style="text-align:center; margin-bottom:10px; font-weight:700; color: var(--accent-gold);">
+                        ${isArabic ? '💎 الدفع بالعملات الرقمية (USDT - TRC20)' : '💎 Crypto Payment (USDT - TRC20)'}
+                    </div>
+                    <div class="wallet-address">
+                        <span style="flex:1;">${walletAddress}</span>
+                        <button class="copy-btn" onclick="copyWalletAddress('${walletAddress}')">${isArabic ? '📋 نسخ' : '📋 Copy'}</button>
+                    </div>
+                    <p style="font-size:0.85rem; color:var(--text-secondary); text-align:center;">
+                        ${isArabic ? 'أرسل 1 دولار أو أكثر حسب حجم الصورة إلى العنوان أعلاه.' : 'Send $1 or more depending on image size to the address above.'}
+                    </p>
+                `;
+            } else if (selectedPaymentMethod === 'card') {
+                detailsContainer.innerHTML = `
+                    <div style="text-align:center; margin-bottom:10px; font-weight:700; color: var(--accent-gold);">
+                        ${isArabic ? '💳 الدفع بالفيزا والماستركارد' : '💳 Visa/MasterCard Payment'}
+                    </div>
+                    <p style="text-align:center; color:var(--text-secondary); font-size:0.9rem;">
+                        ${isArabic ? 'سيتم توجيهك إلى صفحة دفع آمنة.' : 'You will be redirected to a secure payment page.'}
+                    </p>
+                    <div style="text-align:center; margin-top:15px;">
+                        <button class="modal-btn" onclick="window.open('https://payment.example.com/checkout', '_blank')" style="padding:10px 24px; font-size:0.9rem;">
+                            ${isArabic ? '🔗 اذهب لصفحة الدفع' : '🔗 Go to Payment Page'}
+                        </button>
+                    </div>
+                    <p style="font-size:0.75rem; color:var(--text-muted); text-align:center; margin-top:10px;">
+                        ${isArabic ? '* رابط تجريبي - سيتم استبداله لاحقاً' : '* Demo link - will be replaced later'}
+                    </p>
+                `;
+            } else if (selectedPaymentMethod === 'epay') {
+                detailsContainer.innerHTML = `
+                    <div style="text-align:center; margin-bottom:10px; font-weight:700; color: var(--accent-gold);">
+                        ${isArabic ? '🏦 البنوك الإلكترونية' : '🏦 Electronic Banks'}
+                    </div>
+                    <div style="display:flex; flex-direction:column; gap:12px;">
+                        <div style="display:flex; justify-content:space-between; align-items:center; background:rgba(255,255,255,0.05); padding:12px; border-radius:8px;">
+                            <span style="font-weight:700;">Payeer:</span>
+                            <span style="font-family:monospace;">P123456789</span>
+                        </div>
+                        <div style="display:flex; justify-content:space-between; align-items:center; background:rgba(255,255,255,0.05); padding:12px; border-radius:8px;">
+                            <span style="font-weight:700;">Perfect Money:</span>
+                            <span style="font-family:monospace;">PM987654321</span>
+                        </div>
+                    </div>
+                `;
+            }
+        }
+
+        function copyWalletAddress(address) {
+            navigator.clipboard.writeText(address).then(() => {
+                const lang = currentLanguage;
+                alert(lang === 'ar' ? '✅ تم نسخ العنوان بنجاح!' : '✅ Address copied successfully!');
+            }).catch(() => {
+                alert('❌ فشل النسخ - يرجى النسخ يدوياً / Copy failed - please copy manually');
+            });
+        }
+
+        // ===== SUBMIT RESERVATION (Mockup) =====
+        function submitReservation() {
+            const fileInput = document.getElementById('selfie-upload');
+            const socialLink = document.getElementById('social-link').value;
+            const lang = currentLanguage;
+            const isArabic = lang === 'ar';
+
+            if (!fileInput.files || fileInput.files.length === 0) {
+                alert(isArabic ? '⚠️ يرجى رفع صورة السيلفي أولاً' : '⚠️ Please upload your selfie first');
+                return;
+            }
+
+            if (!socialLink) {
+                alert(isArabic ? '⚠️ يرجى إدخال رابط حسابك' : '⚠️ Please enter your profile link');
+                return;
+            }
+
+            // Simulate submission to admin review
+            const fileName = fileInput.files[0].name;
+
+            alert(
+                isArabic ?
+                `🎉 تم استلام طلبك بنجاح!\n\n📸 الصورة: ${fileName}\n🔗 الرابط: ${socialLink}\n💳 طريقة الدفع: ${getPaymentMethodName()}\n\n🔍 سيتم مراجعة طلبك من قبل الإدارة خلال 24 ساعة.\n⏳ بمجرد الموافقة، ستظهر صورتك على الجدارية.` :
+                `🎉 Your request was submitted successfully!\n\n📸 Photo: ${fileName}\n🔗 Link: ${socialLink}\n💳 Payment: ${getPaymentMethodName()}\n\n🔍 Your request will be reviewed by our team within 24 hours.\n⏳ Once approved, your photo will appear on the wall.`
+            );
+
+            closeModal();
+            document.getElementById('selfie-upload').value = '';
+            document.getElementById('social-link').value = '';
+        }
+
+        function getPaymentMethodName() {
+            switch (selectedPaymentMethod) {
+                case 'crypto':
+                    return 'USDT (TRC20)';
+                case 'card':
+                    return 'Visa/MasterCard';
+                case 'epay':
+                    return 'Payeer / Perfect Money';
+                default:
+                    return 'Unknown';
+            }
+        }
+
+        // ===== FILE UPLOAD CLICK =====
+        document.getElementById('file-upload').addEventListener('click', function() {
+            document.getElementById('selfie-upload').click();
         });
 
-        grid.appendChild(cell);
-      }
-      updateStats();
-    }
-
-    // ===== وظائف المودال =====
-    function openBookingModal() {
-      // إعادة تعيين حقول المودال
-      document.getElementById('selfieUpload').value = '';
-      document.getElementById('profileLink').value = '';
-      // إخفاء كل تفاصيل الدفع
-      document.querySelectorAll('.payment-detail').forEach(el => el.classList.remove('show'));
-      document.getElementById('reviewMockMessage').classList.remove('show');
-      modal.classList.add('active');
-    }
-
-    function closeModal() {
-      modal.classList.remove('active');
-    }
-
-    // ===== أزرار الدفع (إظهار التفاصيل) =====
-    document.querySelectorAll('.pay-btn').forEach(btn => {
-      btn.addEventListener('click', function(e) {
-        e.stopPropagation();
-        const type = this.dataset.payment;
-        // إخفاء الكل
-        document.querySelectorAll('.payment-detail').forEach(el => el.classList.remove('show'));
-        // إظهار المطلوب
-        if (type === 'usdt') document.getElementById('paymentDetailUSDT').classList.add('show');
-        else if (type === 'visa') document.getElementById('paymentDetailVisa').classList.add('show');
-        else if (type === 'ewallet') document.getElementById('paymentDetailEwallet').classList.add('show');
-      });
-    });
-
-    // ===== نسخ عنوان USDT =====
-    document.querySelectorAll('.copy-btn').forEach(btn => {
-      btn.addEventListener('click', function() {
-        const targetId = this.dataset.copy;
-        const textEl = document.getElementById(targetId);
-        if (textEl) {
-          navigator.clipboard?.writeText(textEl.textContent).then(() => {
-            alert('✅ تم نسخ العنوان: ' + textEl.textContent);
-          }).catch(() => {
-            // fallback
-            const range = document.createRange();
-            range.selectNode(textEl);
-            window.getSelection().removeAllRanges();
-            window.getSelection().addRange(range);
-            document.execCommand('copy');
-            alert('✅ تم نسخ العنوان');
-          });
+        // ===== MODAL FUNCTIONS =====
+        function openModal() {
+            document.getElementById('modal-overlay').classList.add('active');
+            document.body.style.overflow = 'hidden';
+            setTimeout(() => document.getElementById('modal-close').focus(), 100);
+            updatePaymentDetails();
         }
-      });
-    });
 
-    // ===== رابط فيزا وهمي =====
-    document.getElementById('visaMockLink')?.addEventListener('click', function(e) {
-      e.preventDefault();
-      window.open('https://payment-demo.com/checkout', '_blank');
-    });
+        function closeModal() {
+            document.getElementById('modal-overlay').classList.remove('active');
+            document.body.style.overflow = '';
+            document.getElementById('grid-wrapper').focus();
+        }
 
-    // ===== زر إرسال الطلب للمراجعة (Mock) =====
-    document.getElementById('submitReviewBtn').addEventListener('click', function() {
-      const fileInput = document.getElementById('selfieUpload');
-      const profileLink = document.getElementById('profileLink').value.trim();
-      // محاكاة التحقق البسيط
-      if (!profileLink) {
-        alert('⛔ يرجى إدخال رابط حسابك الشخصي على الأقل.');
-        return;
-      }
-      // عرض رسالة المراجعة الوهمية
-      const reviewMsg = document.getElementById('reviewMockMessage');
-      reviewMsg.classList.add('show');
-      reviewMsg.textContent = '✅ تم إرسال طلبك! سيتم مراجعة الصورة والمحتوى من قبل الإدارة خلال 24 ساعة. شكراً لك!';
-      // إعادة تعيين التفاصيل
-      document.querySelectorAll('.payment-detail').forEach(el => el.classList.remove('show'));
-      // (اختياري) يمكن إغلاق المودال بعد فترة
-      setTimeout(() => {
-        // لكن نترك المستخدم يغلق يدوياً
-      }, 500);
-    });
+        document.getElementById('modal-close').addEventListener('click', closeModal);
+        document.getElementById('modal-overlay').addEventListener('click', function(e) {
+            if (e.target === this) closeModal();
+        });
 
-    // ===== إغلاق المودال =====
-    modal.addEventListener('click', function(e) {
-      if (e.target === this) closeModal();
-    });
-    closeModalBtn.addEventListener('click', closeModal);
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape' && document.getElementById('modal-overlay').classList.contains('active')) {
+                closeModal();
+            }
+        });
 
-    // ===== بناء الشبكة =====
-    buildGrid();
+        // ===== GRID SYSTEM (Existing code) =====
+        (function() {
+            'use strict';
 
-    // ===== إضافة تفاعل إضافي: إذا تم النقر على مربع فارغ يفتح المودال (تم بالفعل) =====
+            const GRID_SIZE = 1000;
+            const CELL_SIZE = 10;
+            const TOTAL_CELLS = GRID_SIZE * GRID_SIZE;
 
-    console.log('✅ جدارية مليون سيلفي – مع تعدد طرق الدفع والمراجعة البشرية الوهمية');
-  })();
-</script>
+            const reservedBlocks = [{
+                id: 'selfie-001',
+                row: 5,
+                col: 8,
+                widthCells: 5,
+                heightCells: 5,
+                name: 'Ahmed AlSalem',
+                link: 'https://instagram.com/ahmed_alsalem',
+                image: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=50&h=50&fit=crop&crop=faces'
+            }, {
+                id: 'selfie-002',
+                row: 20,
+                col: 30,
+                widthCells: 10,
+                heightCells: 10,
+                name: 'Sara AlKhaled',
+                link: 'https://instagram.com/sara_alkhaled',
+                image: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100&h=100&fit=crop&crop=faces'
+            }, {
+                id: 'selfie-003',
+                row: 45,
+                col: 60,
+                widthCells: 20,
+                heightCells: 20,
+                name: 'Mohammed AlOtaibi',
+                link: 'https://twitter.com/mohd_alotaibi',
+                image: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=200&h=200&fit=crop&crop=faces'
+            }, {
+                id: 'selfie-004',
+                row: 80,
+                col: 15,
+                widthCells: 3,
+                heightCells: 3,
+                name: 'Noura AlShammari',
+                link: 'https://instagram.com/noura_shamri',
+                image: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=30&h=30&fit=crop&crop=faces'
+            }, {
+                id: 'selfie-005',
+                row: 100,
+                col: 200,
+                widthCells: 15,
+                heightCells: 15,
+                name: 'Abdullah AlHarbi',
+                link: 'https://twitter.com/abdullah_harbi',
+                image: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=150&h=150&fit=crop&crop=faces'
+            }, {
+                id: 'selfie-006',
+                row: 150,
+                col: 350,
+                widthCells: 8,
+                heightCells: 8,
+                name: 'Reem AlQahtani',
+                link: 'https://instagram.com/reem_alqahtani',
+                image: 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=80&h=80&fit=crop&crop=faces'
+            }, {
+                id: 'selfie-007',
+                row: 200,
+                col: 100,
+                widthCells: 25,
+                heightCells: 25,
+                name: 'Khaled AlDosari',
+                link: 'https://twitter.com/khalid_dosari',
+                image: 'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=250&h=250&fit=crop&crop=faces'
+            }, {
+                id: 'selfie-008',
+                row: 300,
+                col: 500,
+                widthCells: 4,
+                heightCells: 4,
+                name: 'Laila AlAnzi',
+                link: 'https://instagram.com/laila_anzi',
+                image: 'https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=40&h=40&fit=crop&crop=faces'
+            }, {
+                id: 'selfie-009',
+                row: 350,
+                col: 250,
+                widthCells: 12,
+                heightCells: 12,
+                name: 'Fahad AlMutairi',
+                link: 'https://twitter.com/fahad_mutairi',
+                image: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=120&h=120&fit=crop&crop=faces'
+            }, {
+                id: 'selfie-010',
+                row: 400,
+                col: 700,
+                widthCells: 30,
+                heightCells: 30,
+                name: 'Munira AlSubaie',
+                link: 'https://instagram.com/munira_subaie',
+                image: 'https://images.unsplash.com/photo-1517841905240-472988babdf9?w=300&h=300&fit=crop&crop=faces'
+            }];
+
+            const gridContainer = document.getElementById('grid-container');
+            const gridWrapper = document.getElementById('grid-wrapper');
+            const tooltip = document.getElementById('grid-tooltip');
+            let hoveredBlockId = null;
+
+            let totalReservedCells = 0;
+            reservedBlocks.forEach(block => {
+                totalReservedCells += block.widthCells * block.heightCells;
+            });
+
+            const remainingCells = TOTAL_CELLS - totalReservedCells;
+            const reservedPercentage = (totalReservedCells / TOTAL_CELLS) * 100;
+
+            function formatNumber(num) {
+                return num.toLocaleString('en-US');
+            }
+
+            function updateStats() {
+                document.getElementById('counter-remaining').textContent = formatNumber(remainingCells);
+                document.getElementById('counter-reserved').textContent = formatNumber(totalReservedCells);
+                document.getElementById('counter-blocks').textContent = formatNumber(reservedBlocks.length);
+                document.getElementById('progress-bar-inner').style.width = reservedPercentage + '%';
+                document.getElementById('progress-percent-text').textContent = reservedPercentage.toFixed(2) + '%';
+            }
+
+            function renderReservedBlocks() {
+                reservedBlocks.forEach((block, index) => {
+                    const div = document.createElement('div');
+                    div.className = 'reserved-block';
+                    div.id = 'block-' + block.id;
+                    div.dataset.blockId = block.id;
+                    div.dataset.index = index;
+
+                    const gridRowStart = block.row + 1;
+                    const gridRowEnd = gridRowStart + block.heightCells;
+                    const gridColStart = block.col + 1;
+                    const gridColEnd = gridColStart + block.widthCells;
+
+                    div.style.gridRow = gridRowStart + ' / ' + gridRowEnd;
+                    div.style.gridColumn = gridColStart + ' / ' + gridColEnd;
+                    div.style.animationDelay = (index * 0.06) + 's';
+
+                    const img = document.createElement('img');
+                    img.src = block.image;
+                    img.alt = 'Selfie of ' + block.name;
+                    img.loading = 'lazy';
+                    img.draggable = false;
+                    img.onerror = function() {
+                        this.style.display = 'none';
+                        div.style.background = 'linear-gradient(135deg, #f5c542 0%, #e8a020 50%, #c47b0f 100%)';
+                        div.innerHTML =
+                            '<span style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-size:1.5em;">📸</span>';
+                    };
+                    div.appendChild(img);
+
+                    const overlay = document.createElement('div');
+                    overlay.className = 'block-overlay';
+                    overlay.textContent = block.name;
+                    div.appendChild(overlay);
+
+                    const badge = document.createElement('div');
+                    badge.className = 'block-size-badge';
+                    const pixelWidth = block.widthCells * CELL_SIZE;
+                    const pixelHeight = block.heightCells * CELL_SIZE;
+                    badge.textContent = pixelWidth + '×' + pixelHeight + 'px';
+                    div.appendChild(badge);
+
+                    div.addEventListener('click', function(e) {
+                        e.stopPropagation();
+                        e.preventDefault();
+                        window.open(block.link, '_blank', 'noopener,noreferrer');
+                    });
+
+                    div.addEventListener('mouseenter', function() {
+                        hoveredBlockId = block.id;
+                        tooltip.classList.remove('visible');
+                    });
+
+                    div.addEventListener('mouseleave', function() {
+                        hoveredBlockId = null;
+                    });
+
+                    gridContainer.appendChild(div);
+                });
+            }
+
+            function findBlockAtCell(row, col) {
+                for (let i = 0; i < reservedBlocks.length; i++) {
+                    const block = reservedBlocks[i];
+                    if (row >= block.row && row < block.row + block.heightCells &&
+                        col >= block.col && col < block.col + block.widthCells) {
+                        return block;
+                    }
+                }
+                return null;
+            }
+
+            function getCellFromMouseEvent(e) {
+                const rect = gridContainer.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+
+                const scrollLeft = gridWrapper.scrollLeft;
+                const scrollTop = gridWrapper.scrollTop;
+
+                const adjustedX = x + scrollLeft;
+                const adjustedY = y + scrollTop;
+
+                const col = Math.floor(adjustedX / CELL_SIZE);
+                const row = Math.floor(adjustedY / CELL_SIZE);
+
+                if (row >= 0 && row < GRID_SIZE && col >= 0 && col < GRID_SIZE) {
+                    return { row, col };
+                }
+                return null;
+            }
+
+            gridWrapper.addEventListener('mousemove', function(e) {
+                const cell = getCellFromMouseEvent(e);
+                if (!cell) {
+                    tooltip.classList.remove('visible');
+                    return;
+                }
+
+                const block = findBlockAtCell(cell.row, cell.col);
+                if (block) {
+                    hoveredBlockId = block.id;
+                    tooltip.classList.remove('visible');
+                } else {
+                    hoveredBlockId = null;
+                    const tooltipX = e.clientX + 12;
+                    const tooltipY = e.clientY - 10;
+                    const tooltipWidth = tooltip.offsetWidth || 120;
+                    const tooltipHeight = tooltip.offsetHeight || 40;
+                    const viewportW = window.innerWidth;
+                    const viewportH = window.innerHeight;
+
+                    let finalX = tooltipX;
+                    let finalY = tooltipY;
+
+                    if (finalX + tooltipWidth > viewportW - 10) finalX = e.clientX - tooltipWidth - 12;
+                    if (finalY + tooltipHeight > viewportH - 10) finalY = e.clientY - tooltipHeight - 12;
+                    if (finalX < 10) finalX = 10;
+                    if (finalY < 10) finalY = 10;
+
+                    tooltip.style.left = finalX + 'px';
+                    tooltip.style.top = finalY + 'px';
+                    tooltip.classList.add('visible');
+                }
+            });
+
+            gridWrapper.addEventListener('mouseleave', function() {
+                tooltip.classList.remove('visible');
+                hoveredBlockId = null;
+            });
+
+            gridWrapper.addEventListener('click', function(e) {
+                if (e.target.closest('.reserved-block')) return;
+
+                const cell = getCellFromMouseEvent(e);
+                if (!cell) return;
+
+                const block = findBlockAtCell(cell.row, cell.col);
+                if (block) {
+                    window.open(block.link, '_blank', 'noopener,noreferrer');
+                    return;
+                }
+
+                openModal();
+            });
+
+            function init() {
+                renderReservedBlocks();
+                updateStats();
+                gridWrapper.scrollLeft = 20 * CELL_SIZE;
+                gridWrapper.scrollTop = 30 * CELL_SIZE;
+            }
+
+            if (document.readyState === 'loading') {
+                document.addEventListener('DOMContentLoaded', init);
+            } else {
+                init();
+            }
+        })();
+    </script>
 </body>
 </html>
