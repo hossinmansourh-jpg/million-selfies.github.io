@@ -25,7 +25,7 @@
             --modal-bg: #1a1a25;
             --modal-overlay: rgba(0, 0, 0, 0.75);
             --grid-size: 1000;
-            --cell-size: 10px;
+            --cell-size: 10px; /* الحجم الافتراضي */
             --scrollbar-thumb: #333345;
             --scrollbar-track: #111118;
             --tooltip-bg: rgba(20, 20, 30, 0.95);
@@ -84,7 +84,7 @@
             color: #fff;
         }
 
-        /* === LANGUAGE SWITCH - SINGLE BUTTON === */
+        /* ===== LANGUAGE SWITCH - SINGLE BUTTON ===== */
         .lang-switch-container {
             position: fixed;
             top: 20px;
@@ -143,7 +143,7 @@
             margin: 0 4px;
         }
 
-        /* === HERO SECTION === */
+        /* ===== HERO SECTION ===== */
         .hero {
             position: relative;
             padding: 48px 24px 32px;
@@ -228,7 +228,7 @@
             font-weight: 700;
         }
 
-        /* === STATS SECTION === */
+        /* ===== STATS SECTION ===== */
         .stats-section {
             display: flex;
             flex-wrap: wrap;
@@ -294,7 +294,7 @@
             text-transform: uppercase;
         }
 
-        /* === PROGRESS BAR === */
+        /* ===== PROGRESS BAR ===== */
         .progress-wrapper {
             max-width: 700px;
             margin: 8px auto 24px;
@@ -350,12 +350,14 @@
             border-radius: 50px;
         }
 
-        /* === GRID SECTION === */
+        /* ===== GRID SECTION ===== */
         .grid-section {
             padding: 16px 16px 32px;
             max-width: 1200px;
             margin: 0 auto;
             animation: fadeInUp 0.8s ease 0.5s both;
+            /* هامش علوي إضافي لمنع تداخل زر اللغة */
+            margin-top: 60px; /* تعديل مقترح */
         }
 
         .grid-section-header {
@@ -415,7 +417,7 @@
             background: var(--accent-gradient);
         }
 
-        /* === GRID CONTAINER === */
+        /* ===== GRID CONTAINER ===== */
         .grid-wrapper {
             position: relative;
             border-radius: var(--radius-md);
@@ -430,6 +432,7 @@
             -ms-user-select: none;
             max-height: 100vh;
             overflow: auto;
+            -webkit-overflow-scrolling: touch; /* تمت الإضافة */
             position: relative;
         }
 
@@ -836,56 +839,24 @@
 
         /* === ANIMATIONS === */
         @keyframes fadeInDown {
-            from {
-                opacity: 0;
-                transform: translateY(-20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
         }
-
         @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
         }
-
         @keyframes pulse-gold {
-            0%,
-            100% {
-                text-shadow: 0 0 20px rgba(245, 197, 66, 0.3);
-            }
-            50% {
-                text-shadow: 0 0 40px rgba(245, 197, 66, 0.7);
-            }
+            0%, 100% { text-shadow: 0 0 20px rgba(245, 197, 66, 0.3); }
+            50% { text-shadow: 0 0 40px rgba(245, 197, 66, 0.7); }
         }
-
         @keyframes bounce {
-            0%,
-            100% {
-                transform: translateY(0);
-            }
-            50% {
-                transform: translateY(-10px);
-            }
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
         }
-
         @keyframes blockAppear {
-            from {
-                opacity: 0;
-                transform: scale(0.5);
-            }
-            to {
-                opacity: 1;
-                transform: scale(1);
-            }
+            from { opacity: 0; transform: scale(0.5); }
+            to { opacity: 1; transform: scale(1); }
         }
 
         /* === FOOTER === */
@@ -930,6 +901,7 @@
             }
             .grid-section {
                 padding: 8px 8px 16px;
+                margin-top: 50px; /* تصغير الهامش العلوي للشبكة */
             }
             .grid-wrapper {
                 max-height: 85vh;
@@ -953,6 +925,11 @@
             .lang-switch-btn {
                 padding: 8px 14px;
                 font-size: 0.8rem;
+            }
+
+            /* تكبير حجم الخلايا لتسهيل اللمس */
+            :root {
+                --cell-size: 12px; /* زيادة 20% */
             }
         }
 
@@ -987,6 +964,11 @@
             }
             .lang-icon {
                 font-size: 1rem;
+            }
+
+            /* زيادة أكبر للخلايا في الشاشات الصغيرة جداً */
+            :root {
+                --cell-size: 14px;
             }
         }
     </style>
@@ -1067,7 +1049,7 @@
 
     <!-- ===== FOOTER ===== -->
     <footer class="site-footer">
-        <p>© 2025 <span data-ar="جدارية مليون سيلفي" data-en="One Million Selfies Mosaic">جدارية مليون سيلفي</span> — <span data-ar="جميع الحقوق محفوظة" data-en="All rights reserved">جميع الحقوق محفوظة</span> | <span data-ar="مستوحاة من" data-en="Inspired by">مستوحاة من</span> The Million Dollar Homepage | <a href="#" target="_blank" data-ar="سياسة الخصوصية" data-en="Privacy Policy">سياسة الخصوصية</a></p>
+        <p>&copy; <span id="year"></span> <span data-ar="جدارية مليون سيلفي" data-en="One Million Selfies Mosaic">جدارية مليون سيلفي</span> — <span data-ar="جميع الحقوق محفوظة" data-en="All rights reserved">جميع الحقوق محفوظة</span> | <span data-ar="مستوحاة من" data-en="Inspired by">مستوحاة من</span> The Million Dollar Homepage | <a href="#" target="_blank" data-ar="سياسة الخصوصية" data-en="Privacy Policy">سياسة الخصوصية</a></p>
     </footer>
 
     <!-- ===== TOOLTIP ===== -->
@@ -1123,6 +1105,9 @@
     </div>
 
     <script>
+        // ===== تحديث السنة تلقائياً =====
+        document.getElementById("year").textContent = new Date().getFullYear();
+
         // ===== LANGUAGE MANAGEMENT =====
         let currentLanguage = 'ar';
 
@@ -1136,10 +1121,8 @@
             document.documentElement.lang = lang;
             document.documentElement.dir = lang === 'ar' ? 'rtl' : 'ltr';
 
-            // Update the toggle button icon and text
             const langIcon = document.getElementById('lang-icon');
             const langText = document.getElementById('lang-text');
-
             if (lang === 'ar') {
                 langIcon.textContent = '🇸🇦';
                 langText.textContent = 'English';
@@ -1148,7 +1131,6 @@
                 langText.textContent = 'عربي';
             }
 
-            // Update all elements with data-ar and data-en attributes
             document.querySelectorAll('[data-ar][data-en]').forEach(el => {
                 const newText = lang === 'ar' ? el.getAttribute('data-ar') : el.getAttribute('data-en');
                 if (el.tagName === 'INPUT') {
@@ -1158,13 +1140,11 @@
                 }
             });
 
-            // Update tooltip text
             const tooltipText = document.querySelector('#grid-tooltip span');
             if (tooltipText) {
                 tooltipText.textContent = lang === 'ar' ? 'احجزني بدولار' : 'Reserve me for $1';
             }
 
-            // Update payment details if modal is open
             if (document.getElementById('modal-overlay').classList.contains('active')) {
                 updatePaymentDetails();
             }
@@ -1175,14 +1155,10 @@
 
         function selectPayment(method) {
             selectedPaymentMethod = method;
-
-            // Update active state
             document.querySelectorAll('.payment-btn').forEach(btn => {
                 btn.classList.remove('active');
             });
             event.target.classList.add('active');
-
-            // Update payment details
             updatePaymentDetails();
         }
 
@@ -1243,8 +1219,7 @@
 
         function copyWalletAddress(address) {
             navigator.clipboard.writeText(address).then(() => {
-                const lang = currentLanguage;
-                alert(lang === 'ar' ? '✅ تم نسخ العنوان بنجاح!' : '✅ Address copied successfully!');
+                alert(currentLanguage === 'ar' ? '✅ تم نسخ العنوان بنجاح!' : '✅ Address copied successfully!');
             }).catch(() => {
                 alert('❌ فشل النسخ - يرجى النسخ يدوياً / Copy failed - please copy manually');
             });
@@ -1261,14 +1236,12 @@
                 alert(isArabic ? '⚠️ يرجى رفع صورة السيلفي أولاً' : '⚠️ Please upload your selfie first');
                 return;
             }
-
             if (!socialLink) {
                 alert(isArabic ? '⚠️ يرجى إدخال رابط حسابك' : '⚠️ Please enter your profile link');
                 return;
             }
 
             const fileName = fileInput.files[0].name;
-
             alert(
                 isArabic ?
                 `🎉 تم استلام طلبك بنجاح!\n\n📸 الصورة: ${fileName}\n🔗 الرابط: ${socialLink}\n💳 طريقة الدفع: ${getPaymentMethodName()}\n\n🔍 سيتم مراجعة طلبك من قبل الإدارة خلال 24 ساعة.\n⏳ بمجرد الموافقة، ستظهر صورتك على الجدارية.` :
@@ -1282,14 +1255,10 @@
 
         function getPaymentMethodName() {
             switch (selectedPaymentMethod) {
-                case 'crypto':
-                    return 'USDT (TRC20)';
-                case 'card':
-                    return 'Visa/MasterCard';
-                case 'epay':
-                    return 'Payeer / Perfect Money';
-                default:
-                    return 'Unknown';
+                case 'crypto': return 'USDT (TRC20)';
+                case 'card': return 'Visa/MasterCard';
+                case 'epay': return 'Payeer / Perfect Money';
+                default: return 'Unknown';
             }
         }
 
@@ -1316,7 +1285,6 @@
         document.getElementById('modal-overlay').addEventListener('click', function(e) {
             if (e.target === this) closeModal();
         });
-
         document.addEventListener('keydown', function(e) {
             if (e.key === 'Escape' && document.getElementById('modal-overlay').classList.contains('active')) {
                 closeModal();
@@ -1328,100 +1296,61 @@
             'use strict';
 
             const GRID_SIZE = 1000;
-            const CELL_SIZE = 10;
+            const CELL_SIZE = 10; // سيتم تحديثها من CSS عبر --cell-size
             const TOTAL_CELLS = GRID_SIZE * GRID_SIZE;
 
-            const reservedBlocks = [{
-                id: 'selfie-001',
-                row: 5,
-                col: 8,
-                widthCells: 5,
-                heightCells: 5,
-                name: 'Ahmed AlSalem',
-                link: 'https://instagram.com/ahmed_alsalem',
-                image: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=50&h=50&fit=crop&crop=faces'
-            }, {
-                id: 'selfie-002',
-                row: 20,
-                col: 30,
-                widthCells: 10,
-                heightCells: 10,
-                name: 'Sara AlKhaled',
-                link: 'https://instagram.com/sara_alkhaled',
-                image: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100&h=100&fit=crop&crop=faces'
-            }, {
-                id: 'selfie-003',
-                row: 45,
-                col: 60,
-                widthCells: 20,
-                heightCells: 20,
-                name: 'Mohammed AlOtaibi',
-                link: 'https://twitter.com/mohd_alotaibi',
-                image: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=200&h=200&fit=crop&crop=faces'
-            }, {
-                id: 'selfie-004',
-                row: 80,
-                col: 15,
-                widthCells: 3,
-                heightCells: 3,
-                name: 'Noura AlShammari',
-                link: 'https://instagram.com/noura_shamri',
-                image: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=30&h=30&fit=crop&crop=faces'
-            }, {
-                id: 'selfie-005',
-                row: 100,
-                col: 200,
-                widthCells: 15,
-                heightCells: 15,
-                name: 'Abdullah AlHarbi',
-                link: 'https://twitter.com/abdullah_harbi',
-                image: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=150&h=150&fit=crop&crop=faces'
-            }, {
-                id: 'selfie-006',
-                row: 150,
-                col: 350,
-                widthCells: 8,
-                heightCells: 8,
-                name: 'Reem AlQahtani',
-                link: 'https://instagram.com/reem_alqahtani',
-                image: 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=80&h=80&fit=crop&crop=faces'
-            }, {
-                id: 'selfie-007',
-                row: 200,
-                col: 100,
-                widthCells: 25,
-                heightCells: 25,
-                name: 'Khaled AlDosari',
-                link: 'https://twitter.com/khalid_dosari',
-                image: 'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=250&h=250&fit=crop&crop=faces'
-            }, {
-                id: 'selfie-008',
-                row: 300,
-                col: 500,
-                widthCells: 4,
-                heightCells: 4,
-                name: 'Laila AlAnzi',
-                link: 'https://instagram.com/laila_anzi',
-                image: 'https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=40&h=40&fit=crop&crop=faces'
-            }, {
-                id: 'selfie-009',
-                row: 350,
-                col: 250,
-                widthCells: 12,
-                heightCells: 12,
-                name: 'Fahad AlMutairi',
-                link: 'https://twitter.com/fahad_mutairi',
-                image: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=120&h=120&fit=crop&crop=faces'
-            }, {
-                id: 'selfie-010',
-                row: 400,
-                col: 700,
-                widthCells: 30,
-                heightCells: 30,
-                name: 'Munira AlSubaie',
-                link: 'https://instagram.com/munira_subaie',
-                image: 'https://images.unsplash.com/photo-1517841905240-472988babdf9?w=300&h=300&fit=crop&crop=faces'
-            }];
+            const reservedBlocks = [
+                {
+                    id: 'selfie-001', row: 5, col: 8, widthCells: 5, heightCells: 5,
+                    name: 'Ahmed AlSalem', link: 'https://instagram.com/ahmed_alsalem',
+                    image: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=50&h=50&fit=crop&crop=faces'
+                },
+                {
+                    id: 'selfie-002', row: 20, col: 30, widthCells: 10, heightCells: 10,
+                    name: 'Sara AlKhaled', link: 'https://instagram.com/sara_alkhaled',
+                    image: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100&h=100&fit=crop&crop=faces'
+                },
+                {
+                    id: 'selfie-003', row: 45, col: 60, widthCells: 20, heightCells: 20,
+                    name: 'Mohammed AlOtaibi', link: 'https://twitter.com/mohd_alotaibi',
+                    image: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=200&h=200&fit=crop&crop=faces'
+                },
+                {
+                    id: 'selfie-004', row: 80, col: 15, widthCells: 3, heightCells: 3,
+                    name: 'Noura AlShammari', link: 'https://instagram.com/noura_shamri',
+                    image: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=30&h=30&fit=crop&crop=faces'
+                },
+                {
+                    id: 'selfie-005', row: 100, col: 200, widthCells: 15, heightCells: 15,
+                    name: 'Abdullah AlHarbi', link: 'https://twitter.com/abdullah_harbi',
+                    image: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=150&h=150&fit=crop&crop=faces'
+                },
+                {
+                    id: 'selfie-006', row: 150, col: 350, widthCells: 8, heightCells: 8,
+                    name: 'Reem AlQahtani', link: 'https://instagram.com/reem_alqahtani',
+                    image: 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=80&h=80&fit=crop&crop=faces'
+                },
+                {
+                    id: 'selfie-007', row: 200, col: 100, widthCells: 25, heightCells: 25,
+                    name: 'Khaled AlDosari', link: 'https://twitter.com/khalid_dosari',
+                    image: 'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=250&h=250&fit=crop&crop=faces'
+                },
+                {
+                    id: 'selfie-008', row: 300, col: 500, widthCells: 4, heightCells: 4,
+                    name: 'Laila AlAnzi', link: 'https://instagram.com/laila_anzi',
+                    image: 'https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=40&h=40&fit=crop&crop=faces'
+                },
+                {
+                    id: 'selfie-009', row: 350, col: 250, widthCells: 12, heightCells: 12,
+                    name: 'Fahad AlMutairi', link: 'https://twitter.com/fahad_mutairi',
+                    image: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=120&h=120&fit=crop&crop=faces'
+                },
+                {
+                    id: 'selfie-010', row: 400, col: 700, widthCells: 30, heightCells: 30,
+                    name: 'Munira AlSubaie', link: 'https://instagram.com/munira_subaie',
+                    image: 'https://images.unsplash.com/photo-1517841905240-472988babdf9?w=300&h=300&fit=crop&crop=faces'
+                }
+            ];
 
             const gridContainer = document.getElementById('grid-container');
             const gridWrapper = document.getElementById('grid-wrapper');
@@ -1473,8 +1402,7 @@
                     img.onerror = function() {
                         this.style.display = 'none';
                         div.style.background = 'linear-gradient(135deg, #f5c542 0%, #e8a020 50%, #c47b0f 100%)';
-                        div.innerHTML =
-                            '<span style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-size:1.5em;">📸</span>';
+                        div.innerHTML = '<span style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-size:1.5em;">📸</span>';
                     };
                     div.appendChild(img);
 
