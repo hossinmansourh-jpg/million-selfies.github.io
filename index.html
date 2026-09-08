@@ -84,44 +84,63 @@
             color: #fff;
         }
 
-        /* === LANGUAGE SWITCH === */
+        /* === LANGUAGE SWITCH - SINGLE BUTTON === */
         .lang-switch-container {
             position: fixed;
             top: 20px;
             left: 20px;
             z-index: 1500;
-            display: flex;
-            gap: 8px;
         }
 
-        .lang-btn {
-            padding: 8px 16px;
-            border-radius: 30px;
+        .lang-switch-btn {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 20px;
+            border-radius: 50px;
             border: 1px solid rgba(245, 197, 66, 0.4);
-            background: rgba(26, 26, 37, 0.9);
+            background: rgba(26, 26, 37, 0.95);
             color: var(--text-secondary);
             cursor: pointer;
             font-family: 'Cairo', sans-serif;
             font-weight: 700;
-            font-size: 0.85rem;
+            font-size: 0.9rem;
             transition: all var(--transition-fast);
+            letter-spacing: 0.5px;
+            box-shadow: var(--shadow-sm);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+        }
+
+        .lang-switch-btn:hover {
+            border-color: var(--accent-gold);
+            color: var(--accent-gold);
+            box-shadow: 0 0 20px rgba(245, 197, 66, 0.3);
+            transform: translateY(-2px);
+        }
+
+        .lang-switch-btn:active {
+            transform: translateY(0);
+            box-shadow: var(--shadow-sm);
+        }
+
+        .lang-icon {
+            font-size: 1.2rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .lang-text {
+            font-size: 0.9rem;
             letter-spacing: 0.5px;
         }
 
-        .lang-btn.active {
-            background: var(--accent-gradient);
-            color: #0a0a0f;
-            border-color: var(--accent-gold);
-            box-shadow: 0 0 20px rgba(245, 197, 66, 0.3);
-        }
-
-        .lang-btn:hover {
-            border-color: var(--accent-gold);
-            color: var(--accent-gold);
-        }
-
-        .lang-btn.active:hover {
-            color: #0a0a0f;
+        .lang-switch-btn .lang-divider {
+            width: 1px;
+            height: 20px;
+            background: rgba(255, 255, 255, 0.2);
+            margin: 0 4px;
         }
 
         /* === HERO SECTION === */
@@ -931,6 +950,10 @@
                 top: 10px;
                 left: 10px;
             }
+            .lang-switch-btn {
+                padding: 8px 14px;
+                font-size: 0.8rem;
+            }
         }
 
         @media (max-width: 480px) {
@@ -958,15 +981,24 @@
                 padding: 12px 24px;
                 font-size: 0.85rem;
             }
+            .lang-switch-btn {
+                padding: 6px 10px;
+                font-size: 0.75rem;
+            }
+            .lang-icon {
+                font-size: 1rem;
+            }
         }
     </style>
 </head>
 <body>
 
-    <!-- ===== LANGUAGE SWITCH ===== -->
+    <!-- ===== LANGUAGE SWITCH - SINGLE BUTTON ===== -->
     <div class="lang-switch-container">
-        <button class="lang-btn active" id="lang-ar" onclick="setLanguage('ar')">🇸🇦 عربي</button>
-        <button class="lang-btn" id="lang-en" onclick="setLanguage('en')">🇬🇧 English</button>
+        <button class="lang-switch-btn" id="lang-toggle-btn" onclick="toggleLanguage()">
+            <span class="lang-icon" id="lang-icon">🇸🇦</span>
+            <span class="lang-text" id="lang-text">English</span>
+        </button>
     </div>
 
     <!-- ===== HERO SECTION ===== -->
@@ -1094,14 +1126,27 @@
         // ===== LANGUAGE MANAGEMENT =====
         let currentLanguage = 'ar';
 
+        function toggleLanguage() {
+            const newLang = currentLanguage === 'ar' ? 'en' : 'ar';
+            setLanguage(newLang);
+        }
+
         function setLanguage(lang) {
             currentLanguage = lang;
             document.documentElement.lang = lang;
             document.documentElement.dir = lang === 'ar' ? 'rtl' : 'ltr';
 
-            // Update active button
-            document.getElementById('lang-ar').classList.toggle('active', lang === 'ar');
-            document.getElementById('lang-en').classList.toggle('active', lang === 'en');
+            // Update the toggle button icon and text
+            const langIcon = document.getElementById('lang-icon');
+            const langText = document.getElementById('lang-text');
+
+            if (lang === 'ar') {
+                langIcon.textContent = '🇸🇦';
+                langText.textContent = 'English';
+            } else {
+                langIcon.textContent = '🇬🇧';
+                langText.textContent = 'عربي';
+            }
 
             // Update all elements with data-ar and data-en attributes
             document.querySelectorAll('[data-ar][data-en]').forEach(el => {
@@ -1117,6 +1162,11 @@
             const tooltipText = document.querySelector('#grid-tooltip span');
             if (tooltipText) {
                 tooltipText.textContent = lang === 'ar' ? 'احجزني بدولار' : 'Reserve me for $1';
+            }
+
+            // Update payment details if modal is open
+            if (document.getElementById('modal-overlay').classList.contains('active')) {
+                updatePaymentDetails();
             }
         }
 
@@ -1217,7 +1267,6 @@
                 return;
             }
 
-            // Simulate submission to admin review
             const fileName = fileInput.files[0].name;
 
             alert(
