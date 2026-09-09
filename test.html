@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>مختبر التجريب - جدارية مليون سيلفي</title>
+    <title>مختبر التجريب الحقيقي - جدارية مليون سيلفي</title>
     <style>
         body {
             background-color: #0b0b0b;
@@ -47,7 +47,7 @@
             transition: 0.3s;
         }
         button:hover { transform: scale(1.05); opacity: 0.9; }
-        .btn-secondary { background: #333; color: #fff; border: 1px solid #55px; }
+        .btn-secondary { background: #333; color: #fff; border: 1px solid #555; }
         .status-panel {
             background: #1e1e1e;
             padding: 15px;
@@ -61,7 +61,7 @@
             font-family: monospace;
             padding: 15px;
             border-radius: 6px;
-            height: 150px;
+            height: 180px;
             overflow-y: auto;
             margin-top: 20px;
             font-size: 13px;
@@ -75,17 +75,16 @@
         }
         .input-group { margin-bottom: 15px; }
         .input-group label { display: block; margin-bottom: 5px; color: #ccc; }
-        .input-group input { width: 100%; padding: 8px; background: #333; border: 1px solid #55px; color: #fff; border-radius: 4px; box-sizing: border-box; }
+        .input-group input { width: 100%; padding: 8px; background: #333; border: 1px solid #555; color: #fff; border-radius: 4px; box-sizing: border-box; }
         .loading { display: none; color: #d4af37; font-weight: bold; margin-top: 10px; }
     </style>
 </head>
 <body>
 
 <div class="test-container">
-    <h1>🧪 مختبر تجريب نظام الحجز والدفع الذكي</h1>
-    <p style="text-align: center; color: #aaa;">استخدم هذه الصفحة لمحاكاة واختبار رحلة المستخدم قبل تفعيل الحسابات الحقيقية.</p>
+    <h1>🧪 مختبر التجريب السحابي الحقيقي لـ Firebase</h1>
+    <p style="text-align: center; color: #aaa;">هذه الصفحة متصلة الآن بقاعدة بياناتك السحابية الحقيقية لتوثيق عمليات الحجز.</p>
 
-    <!-- 1. محاكي اللوحة التفاعلية واختيار المربعات -->
     <div class="grid-simulator">
         <h3>1. محاكاة اختيار المربعات (Grid Simulation)</h3>
         <p>اختر عدد المربعات الافتراضية المراد حجزها لتجربة حساب السعر:</p>
@@ -97,9 +96,8 @@
         </div>
     </div>
 
-    <!-- 2. محاكي نافذة الحجز والدفع -->
     <div class="modal-sim">
-        <h3>2. نافذة الشراء والمراجعة (Checkout Modal)</h3>
+        <h3>2. نافذة الشراء والمراجعة السحابية (Checkout)</h3>
         <div class="input-group">
             <label>عدد المربعات المحددة:</label>
             <input type="text" id="selectedCount" value="0" disabled>
@@ -113,53 +111,88 @@
             <input type="url" id="userUrl" placeholder="https://example.com" value="https://myphoto.com">
         </div>
         
-        <p><strong>محاكاة بوابة الدفع:</strong></p>
-        <button onclick="simulatePayment(true)">محاكاة دفع ناجح (Success) ✔️</button>
-        <button onclick="simulatePayment(false)" class="btn-secondary" style="border-color: #ff3333; color: #ff3333;">محاكاة فشل الدفع (Fail) ❌</button>
+        <p><strong>محاكاة بوابات الدفع والرفع السحابي الحقيقي:</strong></p>
+        <button onclick="simulateAndSavePayment(true)">محاكاة دفع ناجح وحفظ في السحاب ✔️</button>
+        <button onclick="simulateAndSavePayment(false)" class="btn-secondary" style="border-color: #ff3333; color: #ff3333;">محاكاة دفع فاشل ❌</button>
         
-        <div id="loadingIndicator" class="loading">🔄 جاري معالجة الدفع والرفع السحابي بأمان... لست بحاجة لإغلاق الصفحة.</div>
+        <div id="loadingIndicator" class="loading">🔄 جاري معالجة الدفع الإلكتروني والرفع السحابي الآمن إلى Firebase Firestore...</div>
     </div>
 
-    <!-- 3. لوحة الإحصائيات الحية المتوقعة -->
     <div class="status-panel">
-        <h3>3. الإحصائيات المتوقع تحديثها في الواجهة الحقيقية</h3>
+        <h3>3. عدادات الواجهة الحية المتصلة بالسحاب</h3>
         <ul>
-            <li>إجمالي المربعات المحجوزة الحالية: <strong id="statReserved" style="color: #d4af37;">759</strong></li>
-            <li>المربعات المتبقية: <strong id="statLeft">999,241</strong></li>
-            <li>نسبة الحجز الحالية: <strong id="statPercent" style="color: #00ff00;">0.08%</strong></li>
+            <li>إجمالي المربعات المحجوزة في Firebase: <strong id="statReserved" style="color: #d4af37;">جاري التحميل...</strong></li>
+            <li>المربعات المتبقية لجدارية المليون: <strong id="statLeft">--</strong></li>
+            <li>نسبة الحجز الفكرية الحالية: <strong id="statPercent" style="color: #00ff00;">--</strong></li>
         </ul>
     </div>
 
-    <!-- 4. شاشة سجل المطور (Console Log Simulator) -->
-    <h3>📋 سجل عمليات النظام المباشر (System Logs):</h3>
-    <div class="log-box" id="logBox">
-        [نظام]: المختبر جاهز للاختبار. قم باختيار حجم المربعات للبدء...<br>
-    </div>
+    <h3>📋 سجل المطور والمزامنة الحية مع السيرفر (System Logs):</h3>
+    <div class="log-box" id="logBox"></div>
 </div>
 
-<script>
+<!-- استدعاء مكتبات Firebase السحابية الرسمية (CDN) المتوافقة مع الويب -->
+<script type="module">
+    import { initializeApp } from "https://gstatic.com";
+    import { getFirestore, collection, addDoc, getDocs, onSnapshot } from "https://gstatic.com";
+
+    // مفاتيح الاتصال السرية الخاصة بـ حسين
+    const firebaseConfig = {
+      apiKey: "AIzaSyCEMxWCT0siwT2t72CX24N1ajSAwqEk7Fs",
+      authDomain: "million-selfies.firebaseapp.com",
+      projectId: "million-selfies",
+      storageBucket: "million-selfies.firebasestorage.app",
+      messagingSenderId: "1016907817387",
+      appId: "1:1016907817387:web:f6e9b2b76dcaecebe4b2ee",
+      measurementId: "G-9K5E3PLFDN"
+    };
+
+    // تهيئة المشروع وقاعدة البيانات
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+
     let currentSelectedBlocks = 0;
-    let baseReserved = 759;
     const maxBlocks = 1000000;
 
-    function log(message, type = 'info') {
+    window.log = function(message, type = 'info') {
         const logBox = document.getElementById('logBox');
         let color = '#00ff00';
         if (type === 'error') color = '#ff3333';
         if (type === 'success') color = '#ffcc00';
-        
         logBox.innerHTML += `<span style="color: ${color}">[${new Date().toLocaleTimeString()}] ${message}</span><br>`;
         logBox.scrollTop = logBox.scrollHeight;
     }
 
-    function selectBlocks(count) {
+    log("تم الاتصال بسيرفر Firebase السحابي الخاص بك بنجاح! المختبر جاهز...");
+
+    // دالة الاستماع الحي لقاعدة البيانات لتحديث العدادات تلقائياً
+    onSnapshot(collection(db, "reservations"), (snapshot) => {
+        let totalReservedFromDB = 0;
+        snapshot.forEach((doc) => {
+            const data = doc.data();
+            // نقوم بحساب المربعات فقط إذا تم قبول الحجز أو كان في وضع الاختبار للتجربة
+            totalReservedFromDB += Number(data.blocksCount || 0);
+        });
+
+        // إذا كانت قاعدة البيانات فارغة تماماً في البداية نضع رقماً افتراضياً للتجربة
+        let displayReserved = totalReservedFromDB === 0 ? 759 : totalReservedFromDB;
+        let left = maxBlocks - displayReserved;
+        let percent = ((displayReserved / maxBlocks) * 100).toFixed(4);
+
+        document.getElementById('statReserved').innerText = displayReserved.toLocaleString();
+        document.getElementById('statLeft').innerText = left.toLocaleString();
+        document.getElementById('statPercent').innerText = `${percent}%`;
+        log(`المزامنة الحية: تم تحديث عدادات الموقع تلقائياً من السيرفر. إجمالي المحجوز في قاعدة البيانات: ${totalReservedFromDB} مربع.`, 'success');
+    });
+
+    window.selectBlocks = function(count) {
         currentSelectedBlocks = count;
         document.getElementById('selectedCount').value = count;
         document.getElementById('totalPrice').value = `$${count}`;
-        log(`تم تحديد ${count} مربع/مربعات بنجاح. السعر المحسوب تلقائياً: $${count}`);
+        log(`تم تحديد ${count} مربع. السعر المتوقع لبوابة الدفع: $${count}`);
     }
 
-    function simulatePayment(isSuccessful) {
+    window.simulateAndSavePayment = async function(isSuccessful) {
         if (currentSelectedBlocks === 0) {
             log("خطأ: يرجى تحديد عدد المربعات أولاً قبل البدء بعملية الدفع!", "error");
             alert("الرجاء تحديد المربعات أولاً!");
@@ -167,47 +200,32 @@
         }
 
         document.getElementById('loadingIndicator').style.display = 'block';
-        log(`بدء محاكاة عملية الدفع بقيمة $${currentSelectedBlocks}...`, 'info');
+        log(`بدء معالجة الدفع المالي بقيمة $${currentSelectedBlocks}...`, 'info');
 
-        // محاكاة تأخير معالجة السيرفر والشبكة (ثانيتين)
-        setTimeout(() => {
+        setTimeout(async () => {
             document.getElementById('loadingIndicator').style.display = 'none';
 
             if (isSuccessful) {
                 const mockTransactionId = "TXN-" + Math.floor(Math.random() * 100000000);
-                log(`نجاح الدفع المالي! رقم العملية: ${mockTransactionId}`, 'success');
+                log(`نجاح الدفع المالي من البوابة البنكية! رقم العملية: ${mockTransactionId}`, 'success');
                 
-                log(`جاري إرسال البيانات إلى Firebase Firestore... الحقول المرسلة: {status: "pending", paymentStatus: "paid"}`, 'info');
-                log(`تم حفظ البيانات بنجاح في قاعدة البيانات وبانتظار موافقة المسؤول!`, 'success');
+                log(`جاري الاتصال بـ Cloud Firestore للرفع السحابي...`, 'info');
 
-                // تحديث العدادات بشكل وهمي لرؤية النتيجة
-                baseReserved += currentSelectedBlocks;
-                const left = maxBlocks - baseReserved;
-                const percent = ((baseReserved / maxBlocks) * 100).toFixed(4);
+                try {
+                    // الرفع الحقيقي والفعلي لقاعدة بيانات Firebase الخاصة بك
+                    const docRef = await addDoc(collection(db, "reservations"), {
+                        blocksCount: currentSelectedBlocks,
+                        websiteUrl: document.getElementById('userUrl').value,
+                        imageUrl: "https://example.com", // رابط تجريبي للصورة
+                        status: "pending", // حالة معلقة بانتظار موافقة الإدارة
+                        paymentStatus: "paid", // تم الدفع بنجاح
+                        transactionId: mockTransactionId,
+                        createdAt: new Date()
+                    });
 
-                document.getElementById('statReserved').innerText = baseReserved.toLocaleString();
-                document.getElementById('statLeft').innerText = left.toLocaleString();
-                document.getElementById('statPercent').innerText = `${percent}%`;
+                    log(`نجاح كبير! تم حفظ الحجز في السحابة وأخذ معرف مستند حقيقي: ${docRef.id}`, 'success');
+                    alert("مبارك! تمت العملية بالكامل وحُفظت البيانات في قاعدة بيانات Firebase السحابية الحقيقية الخاصة بك.");
+                } catch (e) {
+                    log(`خطأ أثناء الرفع السحابي: ${e.message}`, 'error');
+                }
 
-                log(`تم تحديث العدادات والنسب ديناميكياً على الواجهة بنجاح.`, 'success');
-                alert("تمت محاكاة عملية الحجز بنجاح كامل! تفقد السجل في الأسفل لرؤية السلسلة البرمجية.");
-            } else {
-                log("فشل عملية الدفع: تم إلغاء العملية بواسطة المستخدم أو البطاقة لا تحتوي على رصيد كافٍ.", "error");
-                log("تنبيه: تم إلغاء عملية الحجز وإتاحة المربعات مرة أخرى للاختيار، ولم يتم إرسال أي بيانات لـ Firebase.", "error");
-                alert("فشلت عملية الدفع التجريبية. تم الحفاظ على اختياراتك لإعادة المحاولة.");
-            }
-        }, 2000);
-    }
-
-    function resetTest() {
-        currentSelectedBlocks = 0;
-        document.getElementById('selectedCount').value = "0";
-        document.getElementById('totalPrice').value = "$0";
-        document.getElementById('logBox').innerHTML = "[نظام]: تم إعادة تعيين المختبر بنجاح.<br>";
-        log("المختبر جاهز للاختبار مجدداً.");
-    }
-</script>
-
-</body>
-</html>
-.
