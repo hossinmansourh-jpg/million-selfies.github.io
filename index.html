@@ -89,19 +89,42 @@
             color: #fff;
         }
 
-        /* ===== SINGLE TOGGLE BUTTON ===== */
-        .view-toggle-container {
+        /* ===== TOP BAR - FIXED ===== */
+        .top-bar {
             position: fixed;
-            top: 20px;
-            right: 20px;
+            top: 0;
+            left: 0;
+            right: 0;
             z-index: 3000;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 20px;
+            background: rgba(10, 10, 15, 0.85);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            border-bottom: 1px solid rgba(245, 197, 66, 0.15);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
         }
 
-        .view-toggle-btn {
+        .top-bar-right {
             display: flex;
             align-items: center;
             gap: 10px;
-            padding: 12px 24px;
+        }
+
+        .top-bar-left {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        /* ===== SINGLE TOGGLE BUTTON ===== */
+        .view-toggle-btn {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 18px;
             border-radius: 50px;
             border: 2px solid rgba(245, 197, 66, 0.5);
             background: rgba(26, 26, 37, 0.95);
@@ -109,61 +132,34 @@
             cursor: pointer;
             font-family: 'Cairo', sans-serif;
             font-weight: 800;
-            font-size: 0.9rem;
+            font-size: 0.85rem;
             transition: all var(--transition-fast);
             letter-spacing: 0.5px;
-            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4), 0 0 20px rgba(245, 197, 66, 0.15);
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
-            pointer-events: all;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
         }
 
         .view-toggle-btn:hover {
             border-color: var(--accent-gold);
             background: var(--accent-gradient);
             color: #0a0a0f;
-            box-shadow: 0 8px 32px rgba(245, 197, 66, 0.4);
-            transform: translateY(-2px);
-        }
-
-        .view-toggle-btn:active {
-            transform: translateY(0);
+            box-shadow: 0 4px 20px rgba(245, 197, 66, 0.4);
+            transform: translateY(-1px);
         }
 
         .view-toggle-icon {
-            font-size: 1.3rem;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+            font-size: 1.2rem;
         }
 
         .view-toggle-text {
-            font-size: 0.9rem;
-            letter-spacing: 0.5px;
-        }
-
-        .view-toggle-arrow {
-            font-size: 0.8rem;
-            transition: transform var(--transition-fast);
-        }
-
-        .view-toggle-btn:hover .view-toggle-arrow {
-            transform: translateX(-3px);
+            font-size: 0.85rem;
         }
 
         /* ===== LANGUAGE SWITCH ===== */
-        .lang-switch-container {
-            position: fixed;
-            top: 20px;
-            left: 20px;
-            z-index: 3000;
-        }
-
         .lang-switch-btn {
             display: flex;
             align-items: center;
-            gap: 8px;
-            padding: 10px 20px;
+            gap: 6px;
+            padding: 10px 16px;
             border-radius: 50px;
             border: 1px solid rgba(245, 197, 66, 0.4);
             background: rgba(26, 26, 37, 0.95);
@@ -171,33 +167,30 @@
             cursor: pointer;
             font-family: 'Cairo', sans-serif;
             font-weight: 700;
-            font-size: 0.9rem;
+            font-size: 0.85rem;
             transition: all var(--transition-fast);
             letter-spacing: 0.5px;
-            box-shadow: var(--shadow-sm);
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
-            pointer-events: all;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
         }
 
         .lang-switch-btn:hover {
             border-color: var(--accent-gold);
             color: var(--accent-gold);
-            box-shadow: 0 0 20px rgba(245, 197, 66, 0.3);
-            transform: translateY(-2px);
+            box-shadow: 0 4px 20px rgba(245, 197, 66, 0.3);
         }
 
         .lang-icon {
-            font-size: 1.2rem;
+            font-size: 1.1rem;
         }
 
         .lang-text {
-            font-size: 0.9rem;
+            font-size: 0.85rem;
         }
 
         /* ===== VIEWS ===== */
         .view {
             display: none;
+            padding-top: 70px; /* مسافة للشريط العلوي */
         }
 
         .view.active {
@@ -207,7 +200,7 @@
         /* ===== HERO SECTION ===== */
         .hero {
             position: relative;
-            padding: 48px 24px 32px;
+            padding: 40px 24px 32px;
             text-align: center;
             background: radial-gradient(ellipse 80% 60% at 50% -10%, rgba(245, 197, 66, 0.08) 0%, transparent 70%),
                 linear-gradient(180deg, #0d0d14 0%, #0a0a0f 100%);
@@ -417,7 +410,6 @@
             max-width: 1200px;
             margin: 0 auto;
             animation: fadeInUp 0.8s ease 0.5s both;
-            margin-top: 25px;
             position: relative;
         }
 
@@ -428,7 +420,6 @@
             align-items: center;
             margin-bottom: 16px;
             gap: 12px;
-            margin-top: 25px;
         }
 
         .grid-section-title {
@@ -491,7 +482,7 @@
             -webkit-user-select: none;
             -moz-user-select: none;
             -ms-user-select: none;
-            max-height: 80vh;
+            max-height: 70vh;
             overflow: auto;
             -webkit-overflow-scrolling: touch;
             position: relative;
@@ -521,7 +512,7 @@
             will-change: transform;
         }
 
-        /* ===== ZOOM CONTROLS - FIXED POSITION ===== */
+        /* ===== ZOOM CONTROLS - FIXED ===== */
         .zoom-controls {
             position: fixed;
             bottom: 30px;
@@ -636,50 +627,6 @@
 
         .reserved-block:hover img {
             transform: scale(1.08);
-        }
-
-        .reserved-block .block-overlay {
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            padding: 6px 10px;
-            background: linear-gradient(transparent, rgba(0, 0, 0, 0.85));
-            color: #fff;
-            font-size: 0.65rem;
-            font-weight: 700;
-            letter-spacing: 0.3px;
-            opacity: 0;
-            transition: opacity var(--transition-fast);
-            pointer-events: none;
-            text-align: left;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-        }
-
-        .reserved-block:hover .block-overlay {
-            opacity: 1;
-        }
-
-        .reserved-block .block-size-badge {
-            position: absolute;
-            top: 4px;
-            right: 4px;
-            background: rgba(0, 0, 0, 0.7);
-            color: var(--accent-gold);
-            padding: 2px 6px;
-            border-radius: 4px;
-            font-size: 0.55rem;
-            font-weight: 800;
-            letter-spacing: 0.3px;
-            opacity: 0;
-            transition: opacity var(--transition-fast);
-            pointer-events: none;
-        }
-
-        .reserved-block:hover .block-size-badge {
-            opacity: 1;
         }
 
         /* ===== TOOLTIP ===== */
@@ -799,11 +746,6 @@
             line-height: 1.8;
         }
 
-        .modal-description strong {
-            color: var(--accent-gold);
-            font-weight: 700;
-        }
-
         .modal-btn {
             display: inline-block;
             padding: 14px 36px;
@@ -824,7 +766,6 @@
         .modal-btn:hover {
             transform: translateY(-3px);
             box-shadow: 0 8px 32px rgba(245, 197, 66, 0.5);
-            filter: brightness(1.05);
         }
 
         .modal-close {
@@ -880,7 +821,6 @@
         .payment-btn:hover {
             border-color: var(--accent-gold);
             background: rgba(245, 197, 66, 0.1);
-            transform: translateY(-2px);
         }
 
         .payment-btn.active {
@@ -895,7 +835,6 @@
             background: rgba(255, 255, 255, 0.03);
             border-radius: var(--radius-sm);
             border: 1px solid rgba(255, 255, 255, 0.1);
-            animation: fadeInUp 0.3s ease;
         }
 
         .wallet-address {
@@ -920,13 +859,7 @@
             cursor: pointer;
             font-family: 'Cairo', sans-serif;
             font-weight: 700;
-            transition: all var(--transition-fast);
             white-space: nowrap;
-        }
-
-        .copy-btn:hover {
-            transform: scale(1.05);
-            box-shadow: 0 0 15px rgba(245, 197, 66, 0.4);
         }
 
         .file-upload {
@@ -935,12 +868,6 @@
             border: 2px dashed rgba(245, 197, 66, 0.3);
             border-radius: var(--radius-sm);
             cursor: pointer;
-            transition: all var(--transition-fast);
-        }
-
-        .file-upload:hover {
-            border-color: var(--accent-gold);
-            background: rgba(245, 197, 66, 0.05);
         }
 
         .file-upload input {
@@ -986,11 +913,11 @@
             color: var(--accent-gold);
         }
 
-        /* ===== ADMIN DASHBOARD STYLES ===== */
+        /* ===== ADMIN DASHBOARD ===== */
         .admin-dashboard {
             padding: 24px;
             max-width: 1400px;
-            margin: 80px auto 0;
+            margin: 0 auto;
         }
 
         .admin-header {
@@ -1012,10 +939,6 @@
             gap: 12px;
         }
 
-        .admin-header-title .icon {
-            font-size: 2rem;
-        }
-
         .logout-btn {
             padding: 10px 24px;
             border-radius: 50px;
@@ -1026,12 +949,6 @@
             font-family: 'Cairo', sans-serif;
             font-weight: 700;
             font-size: 0.9rem;
-            transition: all var(--transition-fast);
-        }
-
-        .logout-btn:hover {
-            background: rgba(245, 197, 66, 0.1);
-            border-color: var(--accent-gold);
         }
 
         .stats-grid {
@@ -1046,7 +963,6 @@
             border: 1px solid rgba(255, 255, 255, 0.08);
             border-radius: var(--radius-md);
             overflow: hidden;
-            box-shadow: var(--shadow-sm);
             margin-bottom: 32px;
         }
 
@@ -1063,15 +979,11 @@
         .table-title {
             font-size: 1.1rem;
             font-weight: 800;
-            display: flex;
-            align-items: center;
-            gap: 8px;
         }
 
         .table {
             width: 100%;
             border-collapse: collapse;
-            overflow-x: auto;
         }
 
         .table th {
@@ -1081,8 +993,6 @@
             font-weight: 700;
             color: var(--text-secondary);
             border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
         }
 
         .table td {
@@ -1091,22 +1001,12 @@
             font-size: 0.9rem;
         }
 
-        .table tr:hover {
-            background: rgba(255, 255, 255, 0.02);
-        }
-
         .thumb-preview {
             width: 50px;
             height: 50px;
             border-radius: 8px;
             object-fit: cover;
             cursor: pointer;
-            transition: all var(--transition-fast);
-        }
-
-        .thumb-preview:hover {
-            transform: scale(1.5);
-            box-shadow: var(--shadow-md);
         }
 
         .status-badge {
@@ -1114,25 +1014,21 @@
             border-radius: 20px;
             font-size: 0.75rem;
             font-weight: 700;
-            display: inline-block;
         }
 
         .status-pending {
             background: rgba(255, 152, 0, 0.15);
             color: var(--warning);
-            border: 1px solid rgba(255, 152, 0, 0.3);
         }
 
         .status-approved {
             background: rgba(76, 175, 80, 0.15);
             color: var(--success);
-            border: 1px solid rgba(76, 175, 80, 0.3);
         }
 
         .status-rejected {
             background: rgba(244, 67, 54, 0.15);
             color: var(--danger);
-            border: 1px solid rgba(244, 67, 54, 0.3);
         }
 
         .action-btn {
@@ -1143,7 +1039,6 @@
             font-family: 'Cairo', sans-serif;
             font-weight: 700;
             font-size: 0.75rem;
-            transition: all var(--transition-fast);
             margin: 2px;
         }
 
@@ -1153,20 +1048,10 @@
             border: 1px solid rgba(76, 175, 80, 0.3);
         }
 
-        .btn-approve:hover {
-            background: rgba(76, 175, 80, 0.3);
-            transform: translateY(-2px);
-        }
-
         .btn-reject {
             background: rgba(244, 67, 54, 0.15);
             color: var(--danger);
             border: 1px solid rgba(244, 67, 54, 0.3);
-        }
-
-        .btn-reject:hover {
-            background: rgba(244, 67, 54, 0.3);
-            transform: translateY(-2px);
         }
 
         /* ===== LOGIN SCREEN ===== */
@@ -1182,7 +1067,6 @@
             background: radial-gradient(ellipse 80% 60% at 50% 40%, rgba(245, 197, 66, 0.05) 0%, transparent 70%),
                 linear-gradient(180deg, #0d0d14 0%, #0a0a0f 100%);
             z-index: 5000;
-            transition: opacity 0.5s ease;
         }
 
         .login-screen.hidden {
@@ -1199,24 +1083,11 @@
             width: 90%;
             text-align: center;
             box-shadow: var(--shadow-lg);
-            position: relative;
-            overflow: hidden;
-        }
-
-        .login-form::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 4px;
-            background: var(--accent-gradient);
         }
 
         .login-icon {
             font-size: 3rem;
             margin-bottom: 16px;
-            display: block;
         }
 
         .login-title {
@@ -1245,13 +1116,6 @@
             color: var(--text-primary);
             font-family: 'Cairo', sans-serif;
             font-size: 0.9rem;
-            transition: all var(--transition-fast);
-        }
-
-        .login-form input:focus {
-            outline: none;
-            border-color: var(--accent-gold);
-            box-shadow: 0 0 20px rgba(245, 197, 66, 0.2);
         }
 
         .login-btn {
@@ -1264,15 +1128,7 @@
             font-size: 1rem;
             border: none;
             cursor: pointer;
-            letter-spacing: 0.5px;
-            transition: all var(--transition-fast);
-            box-shadow: 0 4px 20px var(--accent-glow);
             font-family: 'Cairo', sans-serif;
-        }
-
-        .login-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 32px rgba(245, 197, 66, 0.5);
         }
 
         .login-error {
@@ -1293,18 +1149,6 @@
             color: var(--text-muted);
             font-size: 0.8rem;
             border-top: 1px solid rgba(255, 255, 255, 0.05);
-            letter-spacing: 0.3px;
-        }
-
-        .site-footer a {
-            color: var(--accent-gold);
-            text-decoration: none;
-            font-weight: 600;
-            transition: color var(--transition-fast);
-        }
-
-        .site-footer a:hover {
-            color: var(--accent-gold-dark);
         }
 
         /* ===== ANIMATIONS ===== */
@@ -1331,11 +1175,25 @@
 
         /* ===== RESPONSIVE ===== */
         @media (max-width: 768px) {
+            .top-bar {
+                padding: 8px 12px;
+            }
+            .view-toggle-btn {
+                padding: 8px 14px;
+                font-size: 0.75rem;
+            }
+            .lang-switch-btn {
+                padding: 8px 12px;
+                font-size: 0.75rem;
+            }
+            .view {
+                padding-top: 60px;
+            }
             .hero {
-                padding: 32px 16px 20px;
+                padding: 30px 16px 20px;
             }
             .hero-title {
-                font-size: 2rem;
+                font-size: 1.8rem;
             }
             .stats-section {
                 gap: 12px;
@@ -1346,37 +1204,13 @@
                 min-width: 120px;
             }
             .stat-number {
-                font-size: 1.8rem;
+                font-size: 1.6rem;
             }
             .grid-section {
                 padding: 8px 8px 16px;
-                margin-top: 25px;
-            }
-            .grid-section-header {
-                margin-top: 25px;
             }
             .grid-wrapper {
-                max-height: 70vh;
-                border-radius: var(--radius-sm);
-            }
-            .modal-content {
-                padding: 28px 20px 24px;
-                margin: 12px;
-            }
-            .modal-title {
-                font-size: 1.3rem;
-            }
-            .grid-legend {
-                font-size: 0.65rem;
-                gap: 8px;
-            }
-            .lang-switch-container {
-                top: 10px;
-                left: 10px;
-            }
-            .lang-switch-btn {
-                padding: 8px 14px;
-                font-size: 0.8rem;
+                max-height: 60vh;
             }
             .zoom-btn {
                 width: 40px;
@@ -1386,90 +1220,44 @@
             .zoom-controls {
                 bottom: 20px;
                 right: 20px;
-                gap: 8px;
-            }
-            .view-toggle-container {
-                top: 10px;
-                right: 10px;
-            }
-            .view-toggle-btn {
-                padding: 8px 16px;
-                font-size: 0.8rem;
-            }
-            .view-toggle-icon {
-                font-size: 1.1rem;
-            }
-            .admin-dashboard {
-                padding: 16px;
-                margin-top: 60px;
-            }
-            .stats-grid {
-                grid-template-columns: repeat(2, 1fr);
-                gap: 12px;
-            }
-            .table {
-                font-size: 0.8rem;
-            }
-            .table th, .table td {
-                padding: 8px 10px;
-            }
-            .thumb-preview {
-                width: 40px;
-                height: 40px;
             }
         }
 
         @media (max-width: 480px) {
-            .hero-title {
-                font-size: 1.5rem;
+            .top-bar {
+                padding: 6px 8px;
             }
-            .hero-subtitle {
+            .view-toggle-btn {
+                padding: 6px 10px;
+                font-size: 0.7rem;
+                gap: 4px;
+            }
+            .view-toggle-icon {
                 font-size: 0.9rem;
+            }
+            .lang-switch-btn {
+                padding: 6px 8px;
+                font-size: 0.7rem;
+                gap: 4px;
+            }
+            .lang-icon {
+                font-size: 0.9rem;
+            }
+            .view {
+                padding-top: 50px;
+            }
+            .hero-title {
+                font-size: 1.4rem;
             }
             .stat-card {
                 padding: 10px 12px;
                 min-width: 90px;
-                border-radius: var(--radius-sm);
             }
             .stat-number {
-                font-size: 1.4rem;
-            }
-            .stat-label {
-                font-size: 0.7rem;
+                font-size: 1.3rem;
             }
             .grid-wrapper {
-                max-height: 60vh;
-            }
-            .modal-btn {
-                padding: 12px 24px;
-                font-size: 0.85rem;
-            }
-            .lang-switch-btn {
-                padding: 6px 10px;
-                font-size: 0.75rem;
-            }
-            .lang-icon {
-                font-size: 1rem;
-            }
-            .stats-grid {
-                grid-template-columns: 1fr;
-            }
-            .admin-header-title {
-                font-size: 1.2rem;
-            }
-            .table-container {
-                overflow-x: auto;
-            }
-            .table {
-                font-size: 0.7rem;
-            }
-            .thumb-preview {
-                width: 30px;
-                height: 30px;
-            }
-            .action-btn {
-                padding: 6px 10px;
-                font-size: 0.65rem;
+                max-height: 50vh;
             }
             .zoom-btn {
                 width: 36px;
@@ -1480,33 +1268,25 @@
                 bottom: 15px;
                 right: 15px;
             }
-            .view-toggle-btn {
-                padding: 6px 12px;
-                font-size: 0.75rem;
-            }
-            .view-toggle-icon {
-                font-size: 1rem;
-            }
         }
     </style>
 </head>
 <body>
 
-    <!-- ===== SINGLE TOGGLE BUTTON ===== -->
-    <div class="view-toggle-container">
-        <button class="view-toggle-btn" id="view-toggle-btn" onclick="toggleView()">
-            <span class="view-toggle-icon" id="view-toggle-icon">🛡️</span>
-            <span class="view-toggle-text" id="view-toggle-text">لوحة الإدارة</span>
-            <span class="view-toggle-arrow">◄</span>
-        </button>
-    </div>
-
-    <!-- ===== LANGUAGE SWITCH ===== -->
-    <div class="lang-switch-container">
-        <button class="lang-switch-btn" id="lang-toggle-btn" onclick="toggleLanguage()">
-            <span class="lang-icon" id="lang-icon">🇸🇦</span>
-            <span class="lang-text" id="lang-text">English</span>
-        </button>
+    <!-- ===== TOP BAR - FIXED ===== -->
+    <div class="top-bar">
+        <div class="top-bar-right">
+            <button class="view-toggle-btn" id="view-toggle-btn" onclick="toggleView()">
+                <span class="view-toggle-icon" id="view-toggle-icon">🛡️</span>
+                <span class="view-toggle-text" id="view-toggle-text">لوحة الإدارة</span>
+            </button>
+        </div>
+        <div class="top-bar-left">
+            <button class="lang-switch-btn" id="lang-toggle-btn" onclick="toggleLanguage()">
+                <span class="lang-icon" id="lang-icon">🇸🇦</span>
+                <span class="lang-text" id="lang-text">English</span>
+            </button>
+        </div>
     </div>
 
     <!-- ===== ZOOM CONTROLS - FIXED ===== -->
@@ -1578,7 +1358,6 @@
                 <div class="skeleton-loader" id="skeleton-loader">
                     <div class="skeleton-pulse"></div>
                 </div>
-
                 <div class="grid-container" id="grid-container"></div>
             </div>
         </section>
@@ -1597,9 +1376,7 @@
                 <span class="login-icon">🔐</span>
                 <h2 class="login-title">لوحة تحكم الإدارة</h2>
                 <p class="login-subtitle">جدارية مليون سيلفي - المنطقة الآمنة</p>
-                
                 <div class="login-error" id="login-error">❌ اسم المستخدم أو كلمة المرور غير صحيحة</div>
-                
                 <input type="text" id="username" placeholder="اسم المستخدم" />
                 <input type="password" id="password" placeholder="كلمة المرور" />
                 <button class="login-btn" onclick="handleLogin()">تسجيل الدخول 🔑</button>
@@ -1726,7 +1503,7 @@
             { id: 'ORD-003', gridX: 100, gridY: 150, width: 20, height: 20, image: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=200&h=200&fit=crop&crop=faces', link: 'https://twitter.com/user3', status: 'approved' }
         ];
 
-        // ===== VIEW TOGGLE (SINGLE BUTTON) =====
+        // ===== VIEW TOGGLE =====
         function toggleView() {
             const newView = currentView === 'public' ? 'admin' : 'public';
             setView(newView);
@@ -1734,16 +1511,12 @@
 
         function setView(view) {
             currentView = view;
-            
             document.getElementById('view-public').classList.toggle('active', view === 'public');
             document.getElementById('view-admin').classList.toggle('active', view === 'admin');
-
             document.getElementById('zoom-controls').style.display = view === 'public' ? 'flex' : 'none';
 
-            // Update toggle button
             const icon = document.getElementById('view-toggle-icon');
             const text = document.getElementById('view-toggle-text');
-            
             if (view === 'public') {
                 icon.textContent = '🛡️';
                 text.textContent = 'لوحة الإدارة';
@@ -1752,15 +1525,13 @@
                 text.textContent = 'العودة للجدارية';
             }
 
-            if (view === 'admin') {
-                checkSession();
-            }
+            if (view === 'admin') checkSession();
         }
 
-        // ===== YEAR UPDATE =====
+        // ===== YEAR =====
         document.getElementById("year").textContent = new Date().getFullYear();
 
-        // ===== ZOOM FUNCTIONS =====
+        // ===== ZOOM =====
         function zoomGrid(delta) {
             currentScale = Math.min(MAX_SCALE, Math.max(MIN_SCALE, currentScale + delta));
             document.getElementById('grid-container').style.transform = `scale(${currentScale})`;
@@ -1768,17 +1539,15 @@
 
         document.getElementById('zoom-in-btn').addEventListener('click', function(e) {
             e.stopPropagation();
-            e.preventDefault();
             zoomGrid(0.2);
         });
 
         document.getElementById('zoom-out-btn').addEventListener('click', function(e) {
             e.stopPropagation();
-            e.preventDefault();
             zoomGrid(-0.2);
         });
 
-        // ===== SKELETON LOADER =====
+        // ===== SKELETON =====
         function hideSkeletonLoader() {
             setTimeout(() => {
                 const loader = document.getElementById('skeleton-loader');
@@ -1789,36 +1558,29 @@
             }, 800);
         }
 
-        // ===== LANGUAGE MANAGEMENT =====
+        // ===== LANGUAGE =====
         function toggleLanguage() {
-            const newLang = currentLanguage === 'ar' ? 'en' : 'ar';
-            setLanguage(newLang);
+            setLanguage(currentLanguage === 'ar' ? 'en' : 'ar');
         }
 
         function setLanguage(lang) {
             currentLanguage = lang;
             document.documentElement.lang = lang;
             document.documentElement.dir = lang === 'ar' ? 'rtl' : 'ltr';
-
             document.getElementById('lang-icon').textContent = lang === 'ar' ? '🇸🇦' : '🇬🇧';
             document.getElementById('lang-text').textContent = lang === 'ar' ? 'English' : 'عربي';
 
             document.querySelectorAll('[data-ar][data-en]').forEach(el => {
                 const newText = lang === 'ar' ? el.getAttribute('data-ar') : el.getAttribute('data-en');
-                if (el.tagName === 'INPUT') {
-                    el.placeholder = newText;
-                } else {
-                    el.textContent = newText;
-                }
+                if (el.tagName === 'INPUT') el.placeholder = newText;
+                else el.textContent = newText;
             });
 
             const tooltipText = document.querySelector('#grid-tooltip span');
-            if (tooltipText) {
-                tooltipText.textContent = lang === 'ar' ? 'احجزني بدولار' : 'Reserve me for $1';
-            }
+            if (tooltipText) tooltipText.textContent = lang === 'ar' ? 'احجزني بدولار' : 'Reserve me for $1';
         }
 
-        // ===== PAYMENT METHODS =====
+        // ===== PAYMENT =====
         function selectPayment(method) {
             selectedPaymentMethod = method;
             document.querySelectorAll('.payment-btn').forEach(btn => btn.classList.remove('active'));
@@ -1871,13 +1633,13 @@
             });
         }
 
-        // ===== SUBMIT RESERVATION =====
+        // ===== SUBMIT =====
         function submitReservation() {
-            alert(currentLanguage === 'ar' ? '🎉 تم استلام طلبك! سيتم مراجعته خلال 24 ساعة.' : '🎉 Your request was submitted!');
+            alert(currentLanguage === 'ar' ? '🎉 تم استلام طلبك!' : '🎉 Your request was submitted!');
             closeModal();
         }
 
-        // ===== MODAL FUNCTIONS =====
+        // ===== MODAL =====
         function openModal() {
             document.getElementById('modal-overlay').classList.add('active');
             document.body.style.overflow = 'hidden';
@@ -1893,7 +1655,6 @@
         document.getElementById('modal-overlay').addEventListener('click', function(e) {
             if (e.target === this) closeModal();
         });
-
         document.getElementById('file-upload').addEventListener('click', function() {
             document.getElementById('selfie-upload').click();
         });
@@ -1905,16 +1666,11 @@
             const TOTAL_CELLS = GRID_SIZE * GRID_SIZE;
 
             const reservedBlocks = [
-                { id: 'selfie-001', row: 5, col: 8, widthCells: 5, heightCells: 5, name: 'Ahmed AlSalem', link: 'https://instagram.com/ahmed_alsalem', image: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=50&h=50&fit=crop&crop=faces' },
-                { id: 'selfie-002', row: 20, col: 30, widthCells: 10, heightCells: 10, name: 'Sara AlKhaled', link: 'https://instagram.com/sara_alkhaled', image: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100&h=100&fit=crop&crop=faces' },
-                { id: 'selfie-003', row: 45, col: 60, widthCells: 20, heightCells: 20, name: 'Mohammed AlOtaibi', link: 'https://twitter.com/mohd_alotaibi', image: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=200&h=200&fit=crop&crop=faces' },
-                { id: 'selfie-004', row: 80, col: 15, widthCells: 3, heightCells: 3, name: 'Noura AlShammari', link: 'https://instagram.com/noura_shamri', image: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=30&h=30&fit=crop&crop=faces' },
-                { id: 'selfie-005', row: 100, col: 200, widthCells: 15, heightCells: 15, name: 'Abdullah AlHarbi', link: 'https://twitter.com/abdullah_harbi', image: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=150&h=150&fit=crop&crop=faces' },
-                { id: 'selfie-006', row: 150, col: 350, widthCells: 8, heightCells: 8, name: 'Reem AlQahtani', link: 'https://instagram.com/reem_alqahtani', image: 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=80&h=80&fit=crop&crop=faces' },
-                { id: 'selfie-007', row: 200, col: 100, widthCells: 25, heightCells: 25, name: 'Khaled AlDosari', link: 'https://twitter.com/khalid_dosari', image: 'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=250&h=250&fit=crop&crop=faces' },
-                { id: 'selfie-008', row: 300, col: 500, widthCells: 4, heightCells: 4, name: 'Laila AlAnzi', link: 'https://instagram.com/laila_anzi', image: 'https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=40&h=40&fit=crop&crop=faces' },
-                { id: 'selfie-009', row: 350, col: 250, widthCells: 12, heightCells: 12, name: 'Fahad AlMutairi', link: 'https://twitter.com/fahad_mutairi', image: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=120&h=120&fit=crop&crop=faces' },
-                { id: 'selfie-010', row: 400, col: 700, widthCells: 30, heightCells: 30, name: 'Munira AlSubaie', link: 'https://instagram.com/munira_subaie', image: 'https://images.unsplash.com/photo-1517841905240-472988babdf9?w=300&h=300&fit=crop&crop=faces' }
+                { id: 'selfie-001', row: 5, col: 8, widthCells: 5, heightCells: 5, name: 'Ahmed', link: 'https://instagram.com/ahmed', image: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=50&h=50&fit=crop&crop=faces' },
+                { id: 'selfie-002', row: 20, col: 30, widthCells: 10, heightCells: 10, name: 'Sara', link: 'https://instagram.com/sara', image: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100&h=100&fit=crop&crop=faces' },
+                { id: 'selfie-003', row: 45, col: 60, widthCells: 20, heightCells: 20, name: 'Mohammed', link: 'https://twitter.com/mohammed', image: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=200&h=200&fit=crop&crop=faces' },
+                { id: 'selfie-004', row: 80, col: 15, widthCells: 3, heightCells: 3, name: 'Noura', link: 'https://instagram.com/noura', image: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=30&h=30&fit=crop&crop=faces' },
+                { id: 'selfie-005', row: 100, col: 200, widthCells: 15, heightCells: 15, name: 'Abdullah', link: 'https://twitter.com/abdullah', image: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=150&h=150&fit=crop&crop=faces' }
             ];
 
             const gridContainer = document.getElementById('grid-container');
@@ -1947,7 +1703,6 @@
                     div.className = 'reserved-block';
                     div.style.gridRow = (block.row + 1) + ' / ' + (block.row + 1 + block.heightCells);
                     div.style.gridColumn = (block.col + 1) + ' / ' + (block.col + 1 + block.widthCells);
-                    div.style.animationDelay = (index * 0.06) + 's';
 
                     const img = document.createElement('img');
                     img.src = block.image;
@@ -1976,27 +1731,21 @@
                 const col = Math.floor(adjustedX / CELL_SIZE);
                 const row = Math.floor(adjustedY / CELL_SIZE);
 
-                if (row >= 0 && row < GRID_SIZE && col >= 0 && col < GRID_SIZE) {
-                    return { row, col };
-                }
+                if (row >= 0 && row < GRID_SIZE && col >= 0 && col < GRID_SIZE) return { row, col };
                 return null;
             }
 
             gridWrapper.addEventListener('mousemove', function(e) {
                 const cell = getCellFromMouseEvent(e);
-                if (!cell) {
-                    tooltip.classList.remove('visible');
-                    return;
-                }
+                if (!cell) { tooltip.classList.remove('visible'); return; }
 
                 const block = reservedBlocks.find(b => 
                     cell.row >= b.row && cell.row < b.row + b.heightCells &&
                     cell.col >= b.col && cell.col < b.col + b.widthCells
                 );
 
-                if (block) {
-                    tooltip.classList.remove('visible');
-                } else {
+                if (block) tooltip.classList.remove('visible');
+                else {
                     tooltip.style.left = (e.clientX + 12) + 'px';
                     tooltip.style.top = (e.clientY - 10) + 'px';
                     tooltip.classList.add('visible');
@@ -2009,20 +1758,14 @@
 
             gridWrapper.addEventListener('click', function(e) {
                 if (e.target.closest('.reserved-block')) return;
-
                 const cell = getCellFromMouseEvent(e);
                 if (!cell) return;
-
                 const block = reservedBlocks.find(b => 
                     cell.row >= b.row && cell.row < b.row + b.heightCells &&
                     cell.col >= b.col && cell.col < b.col + b.widthCells
                 );
-
-                if (block) {
-                    window.open(block.link, '_blank');
-                } else {
-                    openModal();
-                }
+                if (block) window.open(block.link, '_blank');
+                else openModal();
             });
 
             function init() {
@@ -2059,9 +1802,8 @@
         }
 
         function checkSession() {
-            if (sessionStorage.getItem(SESSION_KEY) === 'true') {
-                showDashboard();
-            } else {
+            if (sessionStorage.getItem(SESSION_KEY) === 'true') showDashboard();
+            else {
                 document.getElementById('login-screen').classList.remove('hidden');
                 document.getElementById('admin-dashboard').style.display = 'none';
             }
@@ -2076,14 +1818,10 @@
         function updateDashboard() {
             const totalReserved = reservations.filter(r => r.status === 'approved').reduce((sum, r) => sum + (r.width * r.height), 0);
             const pendingCount = reservations.filter(r => r.status === 'pending').length;
-            const totalRevenue = totalReserved;
-            const reservationPercentage = (totalReserved / 1000000) * 100;
-
             document.getElementById('stat-reserved').textContent = totalReserved.toLocaleString();
-            document.getElementById('stat-revenue').textContent = '$' + totalRevenue.toLocaleString();
+            document.getElementById('stat-revenue').textContent = '$' + totalReserved.toLocaleString();
             document.getElementById('stat-pending').textContent = pendingCount;
-            document.getElementById('stat-percentage').textContent = reservationPercentage.toFixed(4) + '%';
-
+            document.getElementById('stat-percentage').textContent = ((totalReserved / 1000000) * 100).toFixed(4) + '%';
             updateTable();
         }
 
@@ -2094,16 +1832,14 @@
 
             reservations.forEach(res => {
                 const row = document.createElement('tr');
-                const statusClass = res.status === 'approved' ? 'status-approved' : 
-                                   res.status === 'rejected' ? 'status-rejected' : 'status-pending';
-                const statusText = res.status === 'approved' ? '✅ موافق عليه' : 
-                                  res.status === 'rejected' ? '❌ مرفوض' : '⏳ معلق';
+                const statusClass = res.status === 'approved' ? 'status-approved' : res.status === 'rejected' ? 'status-rejected' : 'status-pending';
+                const statusText = res.status === 'approved' ? '✅ موافق عليه' : res.status === 'rejected' ? '❌ مرفوض' : '⏳ معلق';
 
                 row.innerHTML = `
                     <td><strong>${res.id}</strong></td>
                     <td>X:${res.gridX}, Y:${res.gridY} (${res.width * 10}×${res.height * 10}px)</td>
-                    <td><img src="${res.image}" alt="Selfie" class="thumb-preview" onclick="window.open('${res.image}', '_blank')" /></td>
-                    <td><a href="${res.link}" target="_blank" style="color:var(--accent-gold); text-decoration:none;">${res.link}</a></td>
+                    <td><img src="${res.image}" class="thumb-preview" onclick="window.open('${res.image}', '_blank')" /></td>
+                    <td><a href="${res.link}" target="_blank" style="color:var(--accent-gold);">${res.link}</a></td>
                     <td><span class="status-badge ${statusClass}">${statusText}</span></td>
                     <td>
                         ${res.status === 'pending' ? `
@@ -2121,29 +1857,17 @@
 
         function approveReservation(id) {
             const res = reservations.find(r => r.id === id);
-            if (res) {
-                res.status = 'approved';
-                updateDashboard();
-                alert('✅ تمت الموافقة على الطلب ' + id);
-            }
+            if (res) { res.status = 'approved'; updateDashboard(); alert('✅ تمت الموافقة'); }
         }
 
         function rejectReservation(id) {
             const res = reservations.find(r => r.id === id);
-            if (res) {
-                res.status = 'rejected';
-                updateDashboard();
-                alert('❌ تم رفض الطلب ' + id);
-            }
+            if (res) { res.status = 'rejected'; updateDashboard(); alert('❌ تم الرفض'); }
         }
 
         function hideReservation(id) {
             const res = reservations.find(r => r.id === id);
-            if (res) {
-                res.status = 'rejected';
-                updateDashboard();
-                alert('🚫 تم حظر الصورة');
-            }
+            if (res) { res.status = 'rejected'; updateDashboard(); alert('🚫 تم الحظر'); }
         }
 
         // Initialize
