@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>مختبر التجريب - جدارية مليون سيلفي</title>
+    <style>
+        body {
+            background-color: #0b0b0b;
+            color: #ffffff;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            padding: 20px;
+            margin: 0;
+        }
+        .test-container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: #141414;
+            border: 1px solid #d4af37;
+            border-radius: 12px;
+            padding: 25px;
+            box-shadow: 0 4px 20px rgba(212, 175, 55, 0.1);
+        }
+        h1 { color: #d4af37; text-align: center; margin-bottom: 30px; }
+        .grid-simulator {
+            background: #1a1a1a;
+            border: 2px dashed #444;
+            padding: 20px;
+            border-radius: 8px;
+            text-align: center;
+            margin-bottom: 25px;
+        }
+        .block-selector {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 15px;
+        }
+        button {
+            background: linear-gradient(45deg, #d4af37, #aa7c11);
+            color: #000;
+            border: none;
+            padding: 10px 20px;
+            font-weight: bold;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+        button:hover { transform: scale(1.05); opacity: 0.9; }
+        .btn-secondary { background: #333; color: #fff; border: 1px solid #55px; }
+        .status-panel {
+            background: #1e1e1e;
+            padding: 15px;
+            border-radius: 6px;
+            margin-top: 20px;
+            border-right: 4px solid #d4af37;
+        }
+        .log-box {
+            background: #000;
+            color: #00ff00;
+            font-family: monospace;
+            padding: 15px;
+            border-radius: 6px;
+            height: 150px;
+            overflow-y: auto;
+            margin-top: 20px;
+            font-size: 13px;
+        }
+        .modal-sim {
+            background: #222;
+            border: 1px solid #d4af37;
+            padding: 20px;
+            border-radius: 8px;
+            margin-top: 25px;
+        }
+        .input-group { margin-bottom: 15px; }
+        .input-group label { display: block; margin-bottom: 5px; color: #ccc; }
+        .input-group input { width: 100%; padding: 8px; background: #333; border: 1px solid #55px; color: #fff; border-radius: 4px; box-sizing: border-box; }
+        .loading { display: none; color: #d4af37; font-weight: bold; margin-top: 10px; }
+    </style>
+</head>
+<body>
+
+<div class="test-container">
+    <h1>🧪 مختبر تجريب نظام الحجز والدفع الذكي</h1>
+    <p style="text-align: center; color: #aaa;">استخدم هذه الصفحة لمحاكاة واختبار رحلة المستخدم قبل تفعيل الحسابات الحقيقية.</p>
+
+    <!-- 1. محاكي اللوحة التفاعلية واختيار المربعات -->
+    <div class="grid-simulator">
+        <h3>1. محاكاة اختيار المربعات (Grid Simulation)</h3>
+        <p>اختر عدد المربعات الافتراضية المراد حجزها لتجربة حساب السعر:</p>
+        <div class="block-selector">
+            <button onclick="selectBlocks(1)">مربع واحد (10x10)</button>
+            <button onclick="selectBlocks(4)">كتلة 4 مربعات</button>
+            <button onclick="selectBlocks(9)">كتلة 9 مربعات</button>
+            <button class="btn-secondary" onclick="resetTest()">إعادة تعيين</button>
+        </div>
+    </div>
+
+    <!-- 2. محاكي نافذة الحجز والدفع -->
+    <div class="modal-sim">
+        <h3>2. نافذة الشراء والمراجعة (Checkout Modal)</h3>
+        <div class="input-group">
+            <label>عدد المربعات المحددة:</label>
+            <input type="text" id="selectedCount" value="0" disabled>
+        </div>
+        <div class="input-group">
+            <label>إجمالي السعر المحسوب (1 دولار لكل مربع):</label>
+            <input type="text" id="totalPrice" value="$0" disabled>
+        </div>
+        <div class="input-group">
+            <label>رابط الموقع الإلكتروني للمشترك:</label>
+            <input type="url" id="userUrl" placeholder="https://example.com" value="https://myphoto.com">
+        </div>
+        
+        <p><strong>محاكاة بوابة الدفع:</strong></p>
+        <button onclick="simulatePayment(true)">محاكاة دفع ناجح (Success) ✔️</button>
+        <button onclick="simulatePayment(false)" class="btn-secondary" style="border-color: #ff3333; color: #ff3333;">محاكاة فشل الدفع (Fail) ❌</button>
+        
+        <div id="loadingIndicator" class="loading">🔄 جاري معالجة الدفع والرفع السحابي بأمان... لست بحاجة لإغلاق الصفحة.</div>
+    </div>
+
+    <!-- 3. لوحة الإحصائيات الحية المتوقعة -->
+    <div class="status-panel">
+        <h3>3. الإحصائيات المتوقع تحديثها في الواجهة الحقيقية</h3>
+        <ul>
+            <li>إجمالي المربعات المحجوزة الحالية: <strong id="statReserved" style="color: #d4af37;">759</strong></li>
+            <li>المربعات المتبقية: <strong id="statLeft">999,241</strong></li>
+            <li>نسبة الحجز الحالية: <strong id="statPercent" style="color: #00ff00;">0.08%</strong></li>
+        </ul>
+    </div>
+
+    <!-- 4. شاشة سجل المطور (Console Log Simulator) -->
+    <h3>📋 سجل عمليات النظام المباشر (System Logs):</h3>
+    <div class="log-box" id="logBox">
+        [نظام]: المختبر جاهز للاختبار. قم باختيار حجم المربعات للبدء...<br>
+    </div>
+</div>
+
+<script>
+    let currentSelectedBlocks = 0;
+    let baseReserved = 759;
+    const maxBlocks = 1000000;
+
+    function log(message, type = 'info') {
+        const logBox = document.getElementById('logBox');
+        let color = '#00ff00';
+        if (type === 'error') color = '#ff3333';
+        if (type === 'success') color = '#ffcc00';
+        
+        logBox.innerHTML += `<span style="color: ${color}">[${new Date().toLocaleTimeString()}] ${message}</span><br>`;
+        logBox.scrollTop = logBox.scrollHeight;
+    }
+
+    function selectBlocks(count) {
+        currentSelectedBlocks = count;
+        document.getElementById('selectedCount').value = count;
+        document.getElementById('totalPrice').value = `$${count}`;
+        log(`تم تحديد ${count} مربع/مربعات بنجاح. السعر المحسوب تلقائياً: $${count}`);
+    }
+
+    function simulatePayment(isSuccessful) {
+        if (currentSelectedBlocks === 0) {
+            log("خطأ: يرجى تحديد عدد المربعات أولاً قبل البدء بعملية الدفع!", "error");
+            alert("الرجاء تحديد المربعات أولاً!");
+            return;
+        }
+
+        document.getElementById('loadingIndicator').style.display = 'block';
+        log(`بدء محاكاة عملية الدفع بقيمة $${currentSelectedBlocks}...`, 'info');
+
+        // محاكاة تأخير معالجة السيرفر والشبكة (ثانيتين)
+        setTimeout(() => {
+            document.getElementById('loadingIndicator').style.display = 'none';
+
+            if (isSuccessful) {
+                const mockTransactionId = "TXN-" + Math.floor(Math.random() * 100000000);
+                log(`نجاح الدفع المالي! رقم العملية: ${mockTransactionId}`, 'success');
+                
+                log(`جاري إرسال البيانات إلى Firebase Firestore... الحقول المرسلة: {status: "pending", paymentStatus: "paid"}`, 'info');
+                log(`تم حفظ البيانات بنجاح في قاعدة البيانات وبانتظار موافقة المسؤول!`, 'success');
+
+                // تحديث العدادات بشكل وهمي لرؤية النتيجة
+                baseReserved += currentSelectedBlocks;
+                const left = maxBlocks - baseReserved;
+                const percent = ((baseReserved / maxBlocks) * 100).toFixed(4);
+
+                document.getElementById('statReserved').innerText = baseReserved.toLocaleString();
+                document.getElementById('statLeft').innerText = left.toLocaleString();
+                document.getElementById('statPercent').innerText = `${percent}%`;
+
+                log(`تم تحديث العدادات والنسب ديناميكياً على الواجهة بنجاح.`, 'success');
+                alert("تمت محاكاة عملية الحجز بنجاح كامل! تفقد السجل في الأسفل لرؤية السلسلة البرمجية.");
+            } else {
+                log("فشل عملية الدفع: تم إلغاء العملية بواسطة المستخدم أو البطاقة لا تحتوي على رصيد كافٍ.", "error");
+                log("تنبيه: تم إلغاء عملية الحجز وإتاحة المربعات مرة أخرى للاختيار، ولم يتم إرسال أي بيانات لـ Firebase.", "error");
+                alert("فشلت عملية الدفع التجريبية. تم الحفاظ على اختياراتك لإعادة المحاولة.");
+            }
+        }, 2000);
+    }
+
+    function resetTest() {
+        currentSelectedBlocks = 0;
+        document.getElementById('selectedCount').value = "0";
+        document.getElementById('totalPrice').value = "$0";
+        document.getElementById('logBox').innerHTML = "[نظام]: تم إعادة تعيين المختبر بنجاح.<br>";
+        log("المختبر جاهز للاختبار مجدداً.");
+    }
+</script>
+
+</body>
+</html>
