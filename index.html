@@ -89,44 +89,66 @@
             color: #fff;
         }
 
-        /* ===== NAVIGATION TABS ===== */
-        .nav-tabs {
+        /* ===== SINGLE TOGGLE BUTTON ===== */
+        .view-toggle-container {
             position: fixed;
             top: 20px;
             right: 20px;
             z-index: 3000;
-            display: flex;
-            gap: 8px;
         }
 
-        .nav-tab {
-            padding: 10px 20px;
+        .view-toggle-btn {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 12px 24px;
             border-radius: 50px;
-            border: 1px solid rgba(245, 197, 66, 0.4);
+            border: 2px solid rgba(245, 197, 66, 0.5);
             background: rgba(26, 26, 37, 0.95);
-            color: var(--text-secondary);
+            color: var(--accent-gold);
             cursor: pointer;
             font-family: 'Cairo', sans-serif;
-            font-weight: 700;
-            font-size: 0.85rem;
+            font-weight: 800;
+            font-size: 0.9rem;
             transition: all var(--transition-fast);
             letter-spacing: 0.5px;
-            box-shadow: var(--shadow-sm);
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4), 0 0 20px rgba(245, 197, 66, 0.15);
             backdrop-filter: blur(10px);
             -webkit-backdrop-filter: blur(10px);
             pointer-events: all;
         }
 
-        .nav-tab:hover {
+        .view-toggle-btn:hover {
             border-color: var(--accent-gold);
-            color: var(--accent-gold);
-        }
-
-        .nav-tab.active {
             background: var(--accent-gradient);
             color: #0a0a0f;
-            border-color: var(--accent-gold);
-            box-shadow: 0 0 20px rgba(245, 197, 66, 0.4);
+            box-shadow: 0 8px 32px rgba(245, 197, 66, 0.4);
+            transform: translateY(-2px);
+        }
+
+        .view-toggle-btn:active {
+            transform: translateY(0);
+        }
+
+        .view-toggle-icon {
+            font-size: 1.3rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .view-toggle-text {
+            font-size: 0.9rem;
+            letter-spacing: 0.5px;
+        }
+
+        .view-toggle-arrow {
+            font-size: 0.8rem;
+            transition: transform var(--transition-fast);
+        }
+
+        .view-toggle-btn:hover .view-toggle-arrow {
+            transform: translateX(-3px);
         }
 
         /* ===== LANGUAGE SWITCH ===== */
@@ -1366,13 +1388,16 @@
                 right: 20px;
                 gap: 8px;
             }
-            .nav-tabs {
+            .view-toggle-container {
                 top: 10px;
                 right: 10px;
             }
-            .nav-tab {
-                padding: 8px 14px;
-                font-size: 0.75rem;
+            .view-toggle-btn {
+                padding: 8px 16px;
+                font-size: 0.8rem;
+            }
+            .view-toggle-icon {
+                font-size: 1.1rem;
             }
             .admin-dashboard {
                 padding: 16px;
@@ -1455,15 +1480,25 @@
                 bottom: 15px;
                 right: 15px;
             }
+            .view-toggle-btn {
+                padding: 6px 12px;
+                font-size: 0.75rem;
+            }
+            .view-toggle-icon {
+                font-size: 1rem;
+            }
         }
     </style>
 </head>
 <body>
 
-    <!-- ===== NAVIGATION TABS ===== -->
-    <div class="nav-tabs">
-        <button class="nav-tab active" id="tab-public" onclick="switchView('public')">🖼️ الجدارية</button>
-        <button class="nav-tab" id="tab-admin" onclick="switchView('admin')">🛡️ الإدارة</button>
+    <!-- ===== SINGLE TOGGLE BUTTON ===== -->
+    <div class="view-toggle-container">
+        <button class="view-toggle-btn" id="view-toggle-btn" onclick="toggleView()">
+            <span class="view-toggle-icon" id="view-toggle-icon">🛡️</span>
+            <span class="view-toggle-text" id="view-toggle-text">لوحة الإدارة</span>
+            <span class="view-toggle-arrow">◄</span>
+        </button>
     </div>
 
     <!-- ===== LANGUAGE SWITCH ===== -->
@@ -1691,20 +1726,31 @@
             { id: 'ORD-003', gridX: 100, gridY: 150, width: 20, height: 20, image: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=200&h=200&fit=crop&crop=faces', link: 'https://twitter.com/user3', status: 'approved' }
         ];
 
-        // ===== VIEW SWITCHING =====
-        function switchView(view) {
+        // ===== VIEW TOGGLE (SINGLE BUTTON) =====
+        function toggleView() {
+            const newView = currentView === 'public' ? 'admin' : 'public';
+            setView(newView);
+        }
+
+        function setView(view) {
             currentView = view;
             
-            // Hide/show views
             document.getElementById('view-public').classList.toggle('active', view === 'public');
             document.getElementById('view-admin').classList.toggle('active', view === 'admin');
-            
-            // Update tab states
-            document.getElementById('tab-public').classList.toggle('active', view === 'public');
-            document.getElementById('tab-admin').classList.toggle('active', view === 'admin');
 
-            // Show/hide zoom controls (only visible in public view)
             document.getElementById('zoom-controls').style.display = view === 'public' ? 'flex' : 'none';
+
+            // Update toggle button
+            const icon = document.getElementById('view-toggle-icon');
+            const text = document.getElementById('view-toggle-text');
+            
+            if (view === 'public') {
+                icon.textContent = '🛡️';
+                text.textContent = 'لوحة الإدارة';
+            } else {
+                icon.textContent = '🖼️';
+                text.textContent = 'العودة للجدارية';
+            }
 
             if (view === 'admin') {
                 checkSession();
@@ -2100,7 +2146,7 @@
             }
         }
 
-        // Initialize zoom controls visibility
+        // Initialize
         document.getElementById('zoom-controls').style.display = 'flex';
     </script>
 </body>
