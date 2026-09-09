@@ -40,6 +40,10 @@
             --transition-med: 0.35s ease;
             --transition-slow: 0.5s ease;
             --grid-scale: 1;
+            --success: #4caf50;
+            --danger: #f44336;
+            --warning: #ff9800;
+            --info: #2196f3;
         }
 
         * {
@@ -85,6 +89,45 @@
             color: #fff;
         }
 
+        /* ===== NAVIGATION TABS ===== */
+        .nav-tabs {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1500;
+            display: flex;
+            gap: 8px;
+        }
+
+        .nav-tab {
+            padding: 10px 20px;
+            border-radius: 50px;
+            border: 1px solid rgba(245, 197, 66, 0.4);
+            background: rgba(26, 26, 37, 0.95);
+            color: var(--text-secondary);
+            cursor: pointer;
+            font-family: 'Cairo', sans-serif;
+            font-weight: 700;
+            font-size: 0.85rem;
+            transition: all var(--transition-fast);
+            letter-spacing: 0.5px;
+            box-shadow: var(--shadow-sm);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+        }
+
+        .nav-tab:hover {
+            border-color: var(--accent-gold);
+            color: var(--accent-gold);
+        }
+
+        .nav-tab.active {
+            background: var(--accent-gradient);
+            color: #0a0a0f;
+            border-color: var(--accent-gold);
+            box-shadow: 0 0 20px rgba(245, 197, 66, 0.4);
+        }
+
         /* ===== LANGUAGE SWITCH ===== */
         .lang-switch-container {
             position: fixed;
@@ -126,6 +169,15 @@
 
         .lang-text {
             font-size: 0.9rem;
+        }
+
+        /* ===== VIEWS ===== */
+        .view {
+            display: none;
+        }
+
+        .view.active {
+            display: block;
         }
 
         /* ===== HERO SECTION ===== */
@@ -414,7 +466,7 @@
             -webkit-user-select: none;
             -moz-user-select: none;
             -ms-user-select: none;
-            max-height: 100vh;
+            max-height: 80vh;
             overflow: auto;
             -webkit-overflow-scrolling: touch;
             position: relative;
@@ -910,26 +962,304 @@
             color: var(--accent-gold);
         }
 
-        /* ===== ANIMATIONS ===== */
-        @keyframes fadeInDown {
-            from { opacity: 0; transform: translateY(-20px); }
-            to { opacity: 1; transform: translateY(0); }
+        /* ===== ADMIN DASHBOARD STYLES ===== */
+        .admin-dashboard {
+            padding: 24px;
+            max-width: 1400px;
+            margin: 80px auto 0;
         }
-        @keyframes fadeInUp {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
+
+        .admin-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 16px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+            margin-bottom: 24px;
+            flex-wrap: wrap;
+            gap: 16px;
         }
-        @keyframes pulse-gold {
-            0%, 100% { text-shadow: 0 0 20px rgba(245, 197, 66, 0.3); }
-            50% { text-shadow: 0 0 40px rgba(245, 197, 66, 0.7); }
+
+        .admin-header-title {
+            font-size: 1.5rem;
+            font-weight: 900;
+            display: flex;
+            align-items: center;
+            gap: 12px;
         }
-        @keyframes bounce {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-10px); }
+
+        .admin-header-title .icon {
+            font-size: 2rem;
         }
-        @keyframes blockAppear {
-            from { opacity: 0; transform: scale(0.5); }
-            to { opacity: 1; transform: scale(1); }
+
+        .logout-btn {
+            padding: 10px 24px;
+            border-radius: 50px;
+            border: 1px solid rgba(245, 197, 66, 0.4);
+            background: transparent;
+            color: var(--accent-gold);
+            cursor: pointer;
+            font-family: 'Cairo', sans-serif;
+            font-weight: 700;
+            font-size: 0.9rem;
+            transition: all var(--transition-fast);
+        }
+
+        .logout-btn:hover {
+            background: rgba(245, 197, 66, 0.1);
+            border-color: var(--accent-gold);
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 16px;
+            margin-bottom: 32px;
+        }
+
+        .table-container {
+            background: var(--bg-card);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: var(--radius-md);
+            overflow: hidden;
+            box-shadow: var(--shadow-sm);
+            margin-bottom: 32px;
+        }
+
+        .table-header {
+            padding: 16px 20px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+
+        .table-title {
+            font-size: 1.1rem;
+            font-weight: 800;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .table {
+            width: 100%;
+            border-collapse: collapse;
+            overflow-x: auto;
+        }
+
+        .table th {
+            padding: 12px 16px;
+            text-align: right;
+            font-size: 0.8rem;
+            font-weight: 700;
+            color: var(--text-secondary);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .table td {
+            padding: 12px 16px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+            font-size: 0.9rem;
+        }
+
+        .table tr:hover {
+            background: rgba(255, 255, 255, 0.02);
+        }
+
+        .thumb-preview {
+            width: 50px;
+            height: 50px;
+            border-radius: 8px;
+            object-fit: cover;
+            cursor: pointer;
+            transition: all var(--transition-fast);
+        }
+
+        .thumb-preview:hover {
+            transform: scale(1.5);
+            box-shadow: var(--shadow-md);
+        }
+
+        .status-badge {
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            display: inline-block;
+        }
+
+        .status-pending {
+            background: rgba(255, 152, 0, 0.15);
+            color: var(--warning);
+            border: 1px solid rgba(255, 152, 0, 0.3);
+        }
+
+        .status-approved {
+            background: rgba(76, 175, 80, 0.15);
+            color: var(--success);
+            border: 1px solid rgba(76, 175, 80, 0.3);
+        }
+
+        .status-rejected {
+            background: rgba(244, 67, 54, 0.15);
+            color: var(--danger);
+            border: 1px solid rgba(244, 67, 54, 0.3);
+        }
+
+        .action-btn {
+            padding: 8px 16px;
+            border-radius: 6px;
+            border: none;
+            cursor: pointer;
+            font-family: 'Cairo', sans-serif;
+            font-weight: 700;
+            font-size: 0.75rem;
+            transition: all var(--transition-fast);
+            margin: 2px;
+        }
+
+        .btn-approve {
+            background: rgba(76, 175, 80, 0.15);
+            color: var(--success);
+            border: 1px solid rgba(76, 175, 80, 0.3);
+        }
+
+        .btn-approve:hover {
+            background: rgba(76, 175, 80, 0.3);
+            transform: translateY(-2px);
+        }
+
+        .btn-reject {
+            background: rgba(244, 67, 54, 0.15);
+            color: var(--danger);
+            border: 1px solid rgba(244, 67, 54, 0.3);
+        }
+
+        .btn-reject:hover {
+            background: rgba(244, 67, 54, 0.3);
+            transform: translateY(-2px);
+        }
+
+        /* ===== LOGIN SCREEN ===== */
+        .login-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: radial-gradient(ellipse 80% 60% at 50% 40%, rgba(245, 197, 66, 0.05) 0%, transparent 70%),
+                linear-gradient(180deg, #0d0d14 0%, #0a0a0f 100%);
+            z-index: 10000;
+            transition: opacity 0.5s ease;
+        }
+
+        .login-screen.hidden {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .login-form {
+            background: var(--bg-card);
+            border: 1px solid rgba(245, 197, 66, 0.25);
+            border-radius: var(--radius-lg);
+            padding: 40px 32px;
+            max-width: 400px;
+            width: 90%;
+            text-align: center;
+            box-shadow: var(--shadow-lg);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .login-form::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: var(--accent-gradient);
+        }
+
+        .login-icon {
+            font-size: 3rem;
+            margin-bottom: 16px;
+            display: block;
+        }
+
+        .login-title {
+            font-size: 1.5rem;
+            font-weight: 900;
+            margin-bottom: 8px;
+            background: var(--accent-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .login-subtitle {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            margin-bottom: 24px;
+        }
+
+        .login-form input {
+            width: 100%;
+            padding: 12px 16px;
+            margin-bottom: 16px;
+            border-radius: 8px;
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            background: rgba(255, 255, 255, 0.05);
+            color: var(--text-primary);
+            font-family: 'Cairo', sans-serif;
+            font-size: 0.9rem;
+            transition: all var(--transition-fast);
+        }
+
+        .login-form input:focus {
+            outline: none;
+            border-color: var(--accent-gold);
+            box-shadow: 0 0 20px rgba(245, 197, 66, 0.2);
+        }
+
+        .login-btn {
+            width: 100%;
+            padding: 14px;
+            border-radius: 50px;
+            background: var(--accent-gradient);
+            color: #0a0a0f;
+            font-weight: 800;
+            font-size: 1rem;
+            border: none;
+            cursor: pointer;
+            letter-spacing: 0.5px;
+            transition: all var(--transition-fast);
+            box-shadow: 0 4px 20px var(--accent-glow);
+            font-family: 'Cairo', sans-serif;
+        }
+
+        .login-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 32px rgba(245, 197, 66, 0.5);
+        }
+
+        .login-error {
+            color: var(--danger);
+            font-size: 0.8rem;
+            margin-bottom: 12px;
+            display: none;
+        }
+
+        .login-error.visible {
+            display: block;
         }
 
         /* ===== FOOTER ===== */
@@ -951,6 +1281,28 @@
 
         .site-footer a:hover {
             color: var(--accent-gold-dark);
+        }
+
+        /* ===== ANIMATIONS ===== */
+        @keyframes fadeInDown {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes pulse-gold {
+            0%, 100% { text-shadow: 0 0 20px rgba(245, 197, 66, 0.3); }
+            50% { text-shadow: 0 0 40px rgba(245, 197, 66, 0.7); }
+        }
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+        @keyframes blockAppear {
+            from { opacity: 0; transform: scale(0.5); }
+            to { opacity: 1; transform: scale(1); }
         }
 
         /* ===== RESPONSIVE ===== */
@@ -980,7 +1332,7 @@
                 margin-top: 25px;
             }
             .grid-wrapper {
-                max-height: 85vh;
+                max-height: 70vh;
                 border-radius: var(--radius-sm);
             }
             .modal-content {
@@ -1007,6 +1359,38 @@
                 height: 38px;
                 font-size: 1rem;
             }
+            .nav-tabs {
+                top: 10px;
+                right: 10px;
+            }
+            .nav-tab {
+                padding: 8px 14px;
+                font-size: 0.75rem;
+            }
+            .admin-dashboard {
+                padding: 16px;
+                margin-top: 60px;
+            }
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 12px;
+            }
+            .stat-card {
+                padding: 16px;
+            }
+            .stat-card .stat-value {
+                font-size: 1.5rem;
+            }
+            .table {
+                font-size: 0.8rem;
+            }
+            .table th, .table td {
+                padding: 8px 10px;
+            }
+            .thumb-preview {
+                width: 40px;
+                height: 40px;
+            }
         }
 
         @media (max-width: 480px) {
@@ -1028,7 +1412,7 @@
                 font-size: 0.7rem;
             }
             .grid-wrapper {
-                max-height: 75vh;
+                max-height: 60vh;
             }
             .modal-btn {
                 padding: 12px 24px;
@@ -1041,10 +1425,36 @@
             .lang-icon {
                 font-size: 1rem;
             }
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+            .admin-header-title {
+                font-size: 1.2rem;
+            }
+            .table-container {
+                overflow-x: auto;
+            }
+            .table {
+                font-size: 0.7rem;
+            }
+            .thumb-preview {
+                width: 30px;
+                height: 30px;
+            }
+            .action-btn {
+                padding: 6px 10px;
+                font-size: 0.65rem;
+            }
         }
     </style>
 </head>
 <body>
+
+    <!-- ===== NAVIGATION TABS ===== -->
+    <div class="nav-tabs">
+        <button class="nav-tab active" id="tab-public" onclick="switchView('public')">🖼️ الجدارية</button>
+        <button class="nav-tab" id="tab-admin" onclick="switchView('admin')">🛡️ الإدارة</button>
+    </div>
 
     <!-- ===== LANGUAGE SWITCH ===== -->
     <div class="lang-switch-container">
@@ -1054,85 +1464,157 @@
         </button>
     </div>
 
-    <!-- ===== HERO SECTION ===== -->
-    <header class="hero">
-        <div class="hero-badge" data-ar="🚀 تحدي رقمي تاريخي" data-en="🚀 Historic Digital Challenge">🚀 تحدي رقمي تاريخي</div>
-        <h1 class="hero-title">
-            <span data-ar="جدارية" data-en="The">جدارية</span> <span class="highlight" data-ar="مليون" data-en="Million">مليون</span> <span data-ar="صورة سيلفي" data-en="Selfies Mosaic">صورة سيلفي</span>
-        </h1>
-        <p class="hero-subtitle">
-            <span data-ar="كن جزءاً من" data-en="Be part of">كن جزءاً من</span> <strong data-ar="أكبر لوحة رقمية تفاعلية" data-en="the largest interactive digital wall">أكبر لوحة رقمية تفاعلية</strong> <span data-ar="في العالم." data-en="in the world.">في العالم.</span><br>
-            <span data-ar="احجز مربعاتك على الجدارية الخالدة، واترك" data-en="Reserve your squares on the eternal wall and leave">احجز مربعاتك على الجدارية الخالدة، واترك</span> <strong data-ar="بصمتك للأبد" data-en="your mark forever">بصمتك للأبد</strong>.<br>
-            <span data-ar="كل مربع 10x10 بكسل بـ" data-en="Each 10x10 pixel square costs">كل مربع 10x10 بكسل بـ</span> <strong data-ar="1 دولار فقط" data-en="only $1">1 دولار فقط</strong>.
-        </p>
-    </header>
+    <!-- ===== PUBLIC VIEW ===== -->
+    <div class="view active" id="view-public">
+        <!-- HERO SECTION -->
+        <header class="hero">
+            <div class="hero-badge" data-ar="🚀 تحدي رقمي تاريخي" data-en="🚀 Historic Digital Challenge">🚀 تحدي رقمي تاريخي</div>
+            <h1 class="hero-title">
+                <span data-ar="جدارية" data-en="The">جدارية</span> <span class="highlight" data-ar="مليون" data-en="Million">مليون</span> <span data-ar="صورة سيلفي" data-en="Selfies Mosaic">صورة سيلفي</span>
+            </h1>
+            <p class="hero-subtitle">
+                <span data-ar="كن جزءاً من" data-en="Be part of">كن جزءاً من</span> <strong data-ar="أكبر لوحة رقمية تفاعلية" data-en="the largest interactive digital wall">أكبر لوحة رقمية تفاعلية</strong> <span data-ar="في العالم." data-en="in the world.">في العالم.</span><br>
+                <span data-ar="احجز مربعاتك على الجدارية الخالدة، واترك" data-en="Reserve your squares on the eternal wall and leave">احجز مربعاتك على الجدارية الخالدة، واترك</span> <strong data-ar="بصمتك للأبد" data-en="your mark forever">بصمتك للأبد</strong>.<br>
+                <span data-ar="كل مربع 10x10 بكسل بـ" data-en="Each 10x10 pixel square costs">كل مربع 10x10 بكسل بـ</span> <strong data-ar="1 دولار فقط" data-en="only $1">1 دولار فقط</strong>.
+            </p>
+        </header>
 
-    <!-- ===== STATS & PROGRESS ===== -->
-    <section class="stats-section" aria-label="إحصائيات الجدارية">
-        <div class="stat-card">
-            <div class="stat-number remaining" id="counter-remaining">1,000,000</div>
-            <div class="stat-label" data-ar="مربعات متبقية" data-en="Squares Remaining">مربعات متبقية</div>
-        </div>
-        <div class="stat-card">
-            <div class="stat-number" id="counter-reserved">0</div>
-            <div class="stat-label" data-ar="مربعات محجوزة" data-en="Reserved Squares">مربعات محجوزة</div>
-        </div>
-        <div class="stat-card">
-            <div class="stat-number" id="counter-blocks">0</div>
-            <div class="stat-label" data-ar="صورة سيلفي" data-en="Selfies">صورة سيلفي</div>
-        </div>
-    </section>
+        <!-- STATS -->
+        <section class="stats-section">
+            <div class="stat-card">
+                <div class="stat-number remaining" id="counter-remaining">1,000,000</div>
+                <div class="stat-label" data-ar="مربعات متبقية" data-en="Squares Remaining">مربعات متبقية</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number" id="counter-reserved">0</div>
+                <div class="stat-label" data-ar="مربعات محجوزة" data-en="Reserved Squares">مربعات محجوزة</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number" id="counter-blocks">0</div>
+                <div class="stat-label" data-ar="صورة سيلفي" data-en="Selfies">صورة سيلفي</div>
+            </div>
+        </section>
 
-    <!-- ===== PROGRESS BAR ===== -->
-    <div class="progress-wrapper">
-        <div class="progress-label-row">
-            <span data-ar="نسبة الحجز" data-en="Reservation Rate">نسبة الحجز</span>
-            <span class="progress-percent" id="progress-percent-text">0.00%</span>
+        <!-- PROGRESS -->
+        <div class="progress-wrapper">
+            <div class="progress-label-row">
+                <span data-ar="نسبة الحجز" data-en="Reservation Rate">نسبة الحجز</span>
+                <span class="progress-percent" id="progress-percent-text">0.00%</span>
+            </div>
+            <div class="progress-bar-outer">
+                <div class="progress-bar-inner" id="progress-bar-inner" style="width: 0%;"></div>
+            </div>
         </div>
-        <div class="progress-bar-outer">
-            <div class="progress-bar-inner" id="progress-bar-inner" style="width: 0%;"></div>
-        </div>
+
+        <!-- GRID -->
+        <section class="grid-section">
+            <div class="grid-section-header">
+                <h2 class="grid-section-title">
+                    <span class="icon">🖼️</span> <span data-ar="لوحة الجدارية التفاعلية" data-en="Interactive Mosaic Wall">لوحة الجدارية التفاعلية</span>
+                </h2>
+                <div class="grid-legend">
+                    <span class="legend-item">
+                        <span class="legend-dot empty"></span> <span data-ar="مربع فارغ" data-en="Empty Square">مربع فارغ</span>
+                    </span>
+                    <span class="legend-item">
+                        <span class="legend-dot reserved"></span> <span data-ar="محجوز" data-en="Reserved">محجوز</span>
+                    </span>
+                    <span class="grid-hint" data-ar="⬅ مرر للاستكشاف | انقر للحجز" data-en="⬅ Scroll to explore | Click to reserve">⬅ مرر للاستكشاف | انقر للحجز</span>
+                </div>
+            </div>
+
+            <div class="grid-wrapper" id="grid-wrapper" tabindex="0" role="grid">
+                <div class="skeleton-loader" id="skeleton-loader">
+                    <div class="skeleton-pulse"></div>
+                </div>
+
+                <div class="zoom-controls" id="zoom-controls">
+                    <button class="zoom-btn" id="zoom-in-btn" title="تكبير">+</button>
+                    <button class="zoom-btn" id="zoom-out-btn" title="تصغير">−</button>
+                </div>
+
+                <div class="grid-container" id="grid-container"></div>
+            </div>
+        </section>
+
+        <!-- FOOTER -->
+        <footer class="site-footer">
+            <p>&copy; <span id="year"></span> <span data-ar="جدارية مليون سيلفي" data-en="One Million Selfies Mosaic">جدارية مليون سيلفي</span> — <span data-ar="جميع الحقوق محفوظة" data-en="All rights reserved">جميع الحقوق محفوظة</span></p>
+        </footer>
     </div>
 
-    <!-- ===== GRID SECTION ===== -->
-    <section class="grid-section" aria-label="شبكة الجدارية">
-        <div class="grid-section-header">
-            <h2 class="grid-section-title">
-                <span class="icon">🖼️</span> <span data-ar="لوحة الجدارية التفاعلية" data-en="Interactive Mosaic Wall">لوحة الجدارية التفاعلية</span>
-            </h2>
-            <div class="grid-legend">
-                <span class="legend-item">
-                    <span class="legend-dot empty"></span> <span data-ar="مربع فارغ" data-en="Empty Square">مربع فارغ</span>
-                </span>
-                <span class="legend-item">
-                    <span class="legend-dot reserved"></span> <span data-ar="محجوز" data-en="Reserved">محجوز</span>
-                </span>
-                <span class="grid-hint" data-ar="⬅ مرر للاستكشاف | انقر للحجز" data-en="⬅ Scroll to explore | Click to reserve">⬅ مرر للاستكشاف | انقر للحجز</span>
+    <!-- ===== ADMIN VIEW ===== -->
+    <div class="view" id="view-admin">
+        <!-- LOGIN SCREEN -->
+        <div class="login-screen" id="login-screen">
+            <div class="login-form">
+                <span class="login-icon">🔐</span>
+                <h2 class="login-title">لوحة تحكم الإدارة</h2>
+                <p class="login-subtitle">جدارية مليون سيلفي - المنطقة الآمنة</p>
+                
+                <div class="login-error" id="login-error">❌ اسم المستخدم أو كلمة المرور غير صحيحة</div>
+                
+                <input type="text" id="username" placeholder="اسم المستخدم" />
+                <input type="password" id="password" placeholder="كلمة المرور" />
+                <button class="login-btn" onclick="handleLogin()">تسجيل الدخول 🔑</button>
             </div>
         </div>
 
-        <div class="grid-wrapper" id="grid-wrapper" tabindex="0" role="grid" aria-label="جدارية مليون سيلفي">
-            <!-- Skeleton Loader -->
-            <div class="skeleton-loader" id="skeleton-loader">
-                <div class="skeleton-pulse"></div>
+        <!-- ADMIN DASHBOARD -->
+        <div class="admin-dashboard" id="admin-dashboard" style="display:none;">
+            <header class="admin-header">
+                <h1 class="admin-header-title">
+                    <span class="icon">🛡️</span> لوحة تحكم الإدارة
+                </h1>
+                <button class="logout-btn" onclick="handleLogout()">تسجيل الخروج 🚪</button>
+            </header>
+
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-icon">📦</div>
+                    <div class="stat-value" id="stat-reserved">0</div>
+                    <div class="stat-label">إجمالي المربعات المحجوزة</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">💰</div>
+                    <div class="stat-value" id="stat-revenue">$0</div>
+                    <div class="stat-label">إجمالي الأرباح</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">⏳</div>
+                    <div class="stat-value" id="stat-pending">0</div>
+                    <div class="stat-label">صور معلقة للانتظار</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">📊</div>
+                    <div class="stat-value" id="stat-percentage">0%</div>
+                    <div class="stat-label">نسبة الحجز الإجمالية</div>
+                </div>
             </div>
 
-            <!-- Zoom Controls -->
-            <div class="zoom-controls" id="zoom-controls">
-                <button class="zoom-btn" id="zoom-in-btn" title="تكبير">+</button>
-                <button class="zoom-btn" id="zoom-out-btn" title="تصغير">−</button>
-            </div>
-
-            <div class="grid-container" id="grid-container">
-                <!-- Reserved blocks will be rendered here -->
+            <div class="table-container">
+                <div class="table-header">
+                    <h2 class="table-title">📋 إدارة الحجوزات والموافقات</h2>
+                    <span style="font-size:0.8rem; color:var(--text-muted);" id="table-count">0 طلب</span>
+                </div>
+                <div style="overflow-x:auto;">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>رقم الطلب</th>
+                                <th>الإحداثيات</th>
+                                <th>معاينة الصورة</th>
+                                <th>رابط المشترك</th>
+                                <th>الحالة</th>
+                                <th>إجراءات</th>
+                            </tr>
+                        </thead>
+                        <tbody id="reservations-table-body"></tbody>
+                    </table>
+                </div>
             </div>
         </div>
-    </section>
-
-    <!-- ===== FOOTER ===== -->
-    <footer class="site-footer">
-        <p>&copy; <span id="year"></span> <span data-ar="جدارية مليون سيلفي" data-en="One Million Selfies Mosaic">جدارية مليون سيلفي</span> — <span data-ar="جميع الحقوق محفوظة" data-en="All rights reserved">جميع الحقوق محفوظة</span> | <span data-ar="مستوحاة من" data-en="Inspired by">مستوحاة من</span> The Million Dollar Homepage | <a href="#" target="_blank" data-ar="سياسة الخصوصية" data-en="Privacy Policy">سياسة الخصوصية</a></p>
-    </footer>
+    </div>
 
     <!-- ===== TOOLTIP ===== -->
     <div class="grid-tooltip" id="grid-tooltip">
@@ -1141,66 +1623,87 @@
     </div>
 
     <!-- ===== MODAL ===== -->
-    <div class="modal-overlay" id="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+    <div class="modal-overlay" id="modal-overlay">
         <div class="modal-content">
-            <button class="modal-close" id="modal-close" aria-label="إغلاق النافذة">✕</button>
+            <button class="modal-close" id="modal-close">✕</button>
             <span class="modal-icon">📸</span>
-            <h2 class="modal-title" id="modal-title" data-ar="احجز مكانك في التاريخ الرقمي" data-en="Reserve Your Spot in Digital History">احجز مكانك في التاريخ الرقمي</h2>
+            <h2 class="modal-title" data-ar="احجز مكانك في التاريخ الرقمي" data-en="Reserve Your Spot in Digital History">احجز مكانك في التاريخ الرقمي</h2>
             <p class="modal-description">
                 <span data-ar="هذا المربع فارغ وينتظر صورتك!" data-en="This square is empty and waiting for your selfie!">هذا المربع فارغ وينتظر صورتك!</span><br>
                 <span data-ar="احجز مساحتك الآن وكن جزءاً من هذه الجدارية الخالدة." data-en="Reserve your space now and be part of this eternal wall.">احجز مساحتك الآن وكن جزءاً من هذه الجدارية الخالدة.</span>
             </p>
 
-            <!-- File Upload -->
             <div class="file-upload" id="file-upload">
                 <input type="file" id="selfie-upload" accept="image/*" />
                 <div data-ar="📤 اضغط لرفع صورة السيلفي الخاصة بك" data-en="📤 Click to upload your selfie">📤 اضغط لرفع صورة السيلفي الخاصة بك</div>
                 <small data-ar="(JPG, PNG, GIF - الحد الأقصى 2MB)" data-en="(JPG, PNG, GIF - Max 2MB)">(JPG, PNG, GIF - الحد الأقصى 2MB)</small>
             </div>
 
-            <!-- Social Link Input -->
             <div class="form-group">
-                <label for="social-link" data-ar="رابط حسابك (انستغرام/تويتر/موقعك):" data-en="Your profile link (Instagram/Twitter/Website):">رابط حسابك (انستغرام/تويتر/موقعك):</label>
+                <label for="social-link" data-ar="رابط حسابك (انستغرام/تويتر/موقعك):" data-en="Your profile link (Instagram/Twitter/Website):">رابط حسابك</label>
                 <input type="url" id="social-link" placeholder="https://instagram.com/yourname" />
             </div>
 
-            <!-- Payment Methods -->
             <div class="payment-methods">
-                <button class="payment-btn active" onclick="selectPayment('crypto')" data-ar="💎 USDT (TRC20)" data-en="💎 USDT (TRC20)">💎 USDT (TRC20)</button>
-                <button class="payment-btn" onclick="selectPayment('card')" data-ar="💳 فيزا/ماستركارد" data-en="💳 Visa/MasterCard">💳 فيزا/ماستركارد</button>
-                <button class="payment-btn" onclick="selectPayment('epay')" data-ar="🏦 Payeer / Perfect Money" data-en="🏦 Payeer / Perfect Money">🏦 Payeer / Perfect Money</button>
+                <button class="payment-btn active" onclick="selectPayment('crypto')">💎 USDT (TRC20)</button>
+                <button class="payment-btn" onclick="selectPayment('card')">💳 فيزا/ماستركارد</button>
+                <button class="payment-btn" onclick="selectPayment('epay')">🏦 Payeer / Perfect Money</button>
             </div>
 
-            <!-- Payment Details Container -->
-            <div class="payment-details" id="payment-details">
-                <!-- Dynamic content -->
-            </div>
+            <div class="payment-details" id="payment-details"></div>
 
-            <!-- Review Notice -->
             <div class="review-notice">
-                🔒 <strong data-ar="نظام المراجعة البشرية:" data-en="Human Review System:">نظام المراجعة البشرية:</strong>
-                <span data-ar="سيتم مراجعة صورتك من قبل فريق الإدارة قبل ظهورها على الجدارية لضمان عدم وجود محتوى غير لائق." data-en="Your photo will be reviewed by our team before appearing on the wall to ensure no inappropriate content.">سيتم مراجعة صورتك من قبل فريق الإدارة قبل ظهورها على الجدارية لضمان عدم وجود محتوى غير لائق.</span>
+                🔒 <strong>نظام المراجعة البشرية:</strong>
+                <span>سيتم مراجعة صورتك قبل ظهورها على الجدارية.</span>
             </div>
 
-            <button class="modal-btn" id="modal-submit-btn" onclick="submitReservation()" data-ar="إرسال للحجز 🔥" data-en="Submit Reservation 🔥">إرسال للحجز 🔥</button>
+            <button class="modal-btn" onclick="submitReservation()">إرسال للحجز 🔥</button>
         </div>
     </div>
 
     <script>
-        // ===== تحديث السنة تلقائياً =====
-        document.getElementById("year").textContent = new Date().getFullYear();
-
-        // ===== ZOOM FUNCTION =====
+        // ===== GLOBAL VARIABLES =====
         let currentScale = 1;
         const MIN_SCALE = 0.5;
         const MAX_SCALE = 3;
+        let currentLanguage = 'ar';
+        let selectedPaymentMethod = 'crypto';
+        let currentView = 'public';
 
+        // Admin credentials
+        const ADMIN_USERNAME = 'admin';
+        const ADMIN_PASSWORD = 'admin123';
+        const SESSION_KEY = 'mosaic_admin_session';
+
+        // Reservations data
+        let reservations = [
+            { id: 'ORD-001', gridX: 10, gridY: 20, width: 5, height: 5, image: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=50&h=50&fit=crop&crop=faces', link: 'https://instagram.com/user1', status: 'pending' },
+            { id: 'ORD-002', gridX: 50, gridY: 80, width: 10, height: 10, image: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100&h=100&fit=crop&crop=faces', link: 'https://instagram.com/user2', status: 'pending' },
+            { id: 'ORD-003', gridX: 100, gridY: 150, width: 20, height: 20, image: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=200&h=200&fit=crop&crop=faces', link: 'https://twitter.com/user3', status: 'approved' }
+        ];
+
+        // ===== VIEW SWITCHING =====
+        function switchView(view) {
+            currentView = view;
+            document.getElementById('view-public').classList.toggle('active', view === 'public');
+            document.getElementById('view-admin').classList.toggle('active', view === 'admin');
+            document.getElementById('tab-public').classList.toggle('active', view === 'public');
+            document.getElementById('tab-admin').classList.toggle('active', view === 'admin');
+
+            if (view === 'admin') {
+                checkSession();
+            }
+        }
+
+        // ===== YEAR UPDATE =====
+        document.getElementById("year").textContent = new Date().getFullYear();
+
+        // ===== ZOOM FUNCTIONS =====
         function zoomGrid(delta) {
             currentScale = Math.min(MAX_SCALE, Math.max(MIN_SCALE, currentScale + delta));
             document.getElementById('grid-container').style.transform = `scale(${currentScale})`;
         }
 
-        // ===== منع انتشار النقر لأزرار التكبير =====
         document.getElementById('zoom-in-btn').addEventListener('click', function(e) {
             e.stopPropagation();
             e.preventDefault();
@@ -1213,7 +1716,6 @@
             zoomGrid(-0.2);
         });
 
-        // أيضاً منع انتشار النقر لحاوية الأزرار
         document.getElementById('zoom-controls').addEventListener('click', function(e) {
             e.stopPropagation();
         });
@@ -1230,8 +1732,6 @@
         }
 
         // ===== LANGUAGE MANAGEMENT =====
-        let currentLanguage = 'ar';
-
         function toggleLanguage() {
             const newLang = currentLanguage === 'ar' ? 'en' : 'ar';
             setLanguage(newLang);
@@ -1242,15 +1742,8 @@
             document.documentElement.lang = lang;
             document.documentElement.dir = lang === 'ar' ? 'rtl' : 'ltr';
 
-            const langIcon = document.getElementById('lang-icon');
-            const langText = document.getElementById('lang-text');
-            if (lang === 'ar') {
-                langIcon.textContent = '🇸🇦';
-                langText.textContent = 'English';
-            } else {
-                langIcon.textContent = '🇬🇧';
-                langText.textContent = 'عربي';
-            }
+            document.getElementById('lang-icon').textContent = lang === 'ar' ? '🇸🇦' : '🇬🇧';
+            document.getElementById('lang-text').textContent = lang === 'ar' ? 'English' : 'عربي';
 
             document.querySelectorAll('[data-ar][data-en]').forEach(el => {
                 const newText = lang === 'ar' ? el.getAttribute('data-ar') : el.getAttribute('data-en');
@@ -1265,28 +1758,19 @@
             if (tooltipText) {
                 tooltipText.textContent = lang === 'ar' ? 'احجزني بدولار' : 'Reserve me for $1';
             }
-
-            if (document.getElementById('modal-overlay').classList.contains('active')) {
-                updatePaymentDetails();
-            }
         }
 
         // ===== PAYMENT METHODS =====
-        let selectedPaymentMethod = 'crypto';
-
         function selectPayment(method) {
             selectedPaymentMethod = method;
-            document.querySelectorAll('.payment-btn').forEach(btn => {
-                btn.classList.remove('active');
-            });
+            document.querySelectorAll('.payment-btn').forEach(btn => btn.classList.remove('active'));
             event.target.classList.add('active');
             updatePaymentDetails();
         }
 
         function updatePaymentDetails() {
             const detailsContainer = document.getElementById('payment-details');
-            const lang = currentLanguage;
-            const isArabic = lang === 'ar';
+            const isArabic = currentLanguage === 'ar';
 
             if (selectedPaymentMethod === 'crypto') {
                 const walletAddress = 'TUxYqV5d2E7bV9wKp3mNqR8sT1uW4xZ6cA';
@@ -1299,7 +1783,7 @@
                         <button class="copy-btn" onclick="copyWalletAddress('${walletAddress}')">${isArabic ? '📋 نسخ' : '📋 Copy'}</button>
                     </div>
                     <p style="font-size:0.85rem; color:var(--text-secondary); text-align:center;">
-                        ${isArabic ? 'أرسل 1 دولار أو أكثر حسب حجم الصورة إلى العنوان أعلاه.' : 'Send $1 or more depending on image size to the address above.'}
+                        ${isArabic ? 'أرسل 1 دولار أو أكثر إلى العنوان أعلاه.' : 'Send $1 or more to the address above.'}
                     </p>
                 `;
             } else if (selectedPaymentMethod === 'card') {
@@ -1315,9 +1799,6 @@
                             ${isArabic ? '🔗 اذهب لصفحة الدفع' : '🔗 Go to Payment Page'}
                         </button>
                     </div>
-                    <p style="font-size:0.75rem; color:var(--text-muted); text-align:center; margin-top:10px;">
-                        ${isArabic ? '* رابط تجريبي - سيتم استبداله لاحقاً' : '* Demo link - will be replaced later'}
-                    </p>
                 `;
             } else if (selectedPaymentMethod === 'epay') {
                 detailsContainer.innerHTML = `
@@ -1342,7 +1823,7 @@
             navigator.clipboard.writeText(address).then(() => {
                 alert(currentLanguage === 'ar' ? '✅ تم نسخ العنوان بنجاح!' : '✅ Address copied successfully!');
             }).catch(() => {
-                alert('❌ فشل النسخ - يرجى النسخ يدوياً / Copy failed - please copy manually');
+                alert('❌ فشل النسخ');
             });
         }
 
@@ -1350,8 +1831,7 @@
         function submitReservation() {
             const fileInput = document.getElementById('selfie-upload');
             const socialLink = document.getElementById('social-link').value;
-            const lang = currentLanguage;
-            const isArabic = lang === 'ar';
+            const isArabic = currentLanguage === 'ar';
 
             if (!fileInput.files || fileInput.files.length === 0) {
                 alert(isArabic ? '⚠️ يرجى رفع صورة السيلفي أولاً' : '⚠️ Please upload your selfie first');
@@ -1362,60 +1842,33 @@
                 return;
             }
 
-            const fileName = fileInput.files[0].name;
-            alert(
-                isArabic ?
-                `🎉 تم استلام طلبك بنجاح!\n\n📸 الصورة: ${fileName}\n🔗 الرابط: ${socialLink}\n💳 طريقة الدفع: ${getPaymentMethodName()}\n\n🔍 سيتم مراجعة طلبك من قبل الإدارة خلال 24 ساعة.\n⏳ بمجرد الموافقة، ستظهر صورتك على الجدارية.` :
-                `🎉 Your request was submitted successfully!\n\n📸 Photo: ${fileName}\n🔗 Link: ${socialLink}\n💳 Payment: ${getPaymentMethodName()}\n\n🔍 Your request will be reviewed by our team within 24 hours.\n⏳ Once approved, your photo will appear on the wall.`
-            );
-
+            alert(isArabic ? '🎉 تم استلام طلبك! سيتم مراجعته خلال 24 ساعة.' : '🎉 Your request was submitted! It will be reviewed within 24 hours.');
             closeModal();
-            document.getElementById('selfie-upload').value = '';
-            document.getElementById('social-link').value = '';
         }
-
-        function getPaymentMethodName() {
-            switch (selectedPaymentMethod) {
-                case 'crypto': return 'USDT (TRC20)';
-                case 'card': return 'Visa/MasterCard';
-                case 'epay': return 'Payeer / Perfect Money';
-                default: return 'Unknown';
-            }
-        }
-
-        // ===== FILE UPLOAD =====
-        document.getElementById('file-upload').addEventListener('click', function() {
-            document.getElementById('selfie-upload').click();
-        });
 
         // ===== MODAL FUNCTIONS =====
         function openModal() {
             document.getElementById('modal-overlay').classList.add('active');
             document.body.style.overflow = 'hidden';
-            setTimeout(() => document.getElementById('modal-close').focus(), 100);
             updatePaymentDetails();
         }
 
         function closeModal() {
             document.getElementById('modal-overlay').classList.remove('active');
             document.body.style.overflow = '';
-            document.getElementById('grid-wrapper').focus();
         }
 
         document.getElementById('modal-close').addEventListener('click', closeModal);
         document.getElementById('modal-overlay').addEventListener('click', function(e) {
             if (e.target === this) closeModal();
         });
-        document.addEventListener('keydown', function(e) {
-            if (e.key === 'Escape' && document.getElementById('modal-overlay').classList.contains('active')) {
-                closeModal();
-            }
+
+        document.getElementById('file-upload').addEventListener('click', function() {
+            document.getElementById('selfie-upload').click();
         });
 
         // ===== GRID SYSTEM =====
         (function() {
-            'use strict';
-
             const GRID_SIZE = 1000;
             const CELL_SIZE = 10;
             const TOTAL_CELLS = GRID_SIZE * GRID_SIZE;
@@ -1436,7 +1889,6 @@
             const gridContainer = document.getElementById('grid-container');
             const gridWrapper = document.getElementById('grid-wrapper');
             const tooltip = document.getElementById('grid-tooltip');
-            let hoveredBlockId = null;
 
             let totalReservedCells = 0;
             reservedBlocks.forEach(block => {
@@ -1462,17 +1914,8 @@
                 reservedBlocks.forEach((block, index) => {
                     const div = document.createElement('div');
                     div.className = 'reserved-block';
-                    div.id = 'block-' + block.id;
-                    div.dataset.blockId = block.id;
-                    div.dataset.index = index;
-
-                    const gridRowStart = block.row + 1;
-                    const gridRowEnd = gridRowStart + block.heightCells;
-                    const gridColStart = block.col + 1;
-                    const gridColEnd = gridColStart + block.widthCells;
-
-                    div.style.gridRow = gridRowStart + ' / ' + gridRowEnd;
-                    div.style.gridColumn = gridColStart + ' / ' + gridColEnd;
+                    div.style.gridRow = (block.row + 1) + ' / ' + (block.row + 1 + block.heightCells);
+                    div.style.gridColumn = (block.col + 1) + ' / ' + (block.col + 1 + block.widthCells);
                     div.style.animationDelay = (index * 0.06) + 's';
 
                     const img = document.createElement('img');
@@ -1482,8 +1925,7 @@
                     img.draggable = false;
                     img.onerror = function() {
                         this.style.display = 'none';
-                        div.style.background = 'linear-gradient(135deg, #f5c542 0%, #e8a020 50%, #c47b0f 100%)';
-                        div.innerHTML = '<span style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-size:1.5em;">📸</span>';
+                        div.style.background = 'linear-gradient(135deg, #f5c542, #c47b0f)';
                     };
                     div.appendChild(img);
 
@@ -1492,52 +1934,23 @@
                     overlay.textContent = block.name;
                     div.appendChild(overlay);
 
-                    const badge = document.createElement('div');
-                    badge.className = 'block-size-badge';
-                    badge.textContent = (block.widthCells * CELL_SIZE) + '×' + (block.heightCells * CELL_SIZE) + 'px';
-                    div.appendChild(badge);
-
                     div.addEventListener('click', function(e) {
                         e.stopPropagation();
-                        e.preventDefault();
-                        window.open(block.link, '_blank', 'noopener,noreferrer');
-                    });
-
-                    div.addEventListener('mouseenter', function() {
-                        hoveredBlockId = block.id;
-                        tooltip.classList.remove('visible');
-                    });
-
-                    div.addEventListener('mouseleave', function() {
-                        hoveredBlockId = null;
+                        window.open(block.link, '_blank');
                     });
 
                     gridContainer.appendChild(div);
                 });
             }
 
-            function findBlockAtCell(row, col) {
-                for (let i = 0; i < reservedBlocks.length; i++) {
-                    const block = reservedBlocks[i];
-                    if (row >= block.row && row < block.row + block.heightCells &&
-                        col >= block.col && col < block.col + block.widthCells) {
-                        return block;
-                    }
-                }
-                return null;
-            }
-
             function getCellFromMouseEvent(e) {
                 const rect = gridContainer.getBoundingClientRect();
                 const x = e.clientX - rect.left;
                 const y = e.clientY - rect.top;
-
                 const scrollLeft = gridWrapper.scrollLeft;
                 const scrollTop = gridWrapper.scrollTop;
-
                 const adjustedX = (x + scrollLeft) / currentScale;
                 const adjustedY = (y + scrollTop) / currentScale;
-
                 const col = Math.floor(adjustedX / CELL_SIZE);
                 const row = Math.floor(adjustedY / CELL_SIZE);
 
@@ -1554,12 +1967,14 @@
                     return;
                 }
 
-                const block = findBlockAtCell(cell.row, cell.col);
+                const block = reservedBlocks.find(b => 
+                    cell.row >= b.row && cell.row < b.row + b.heightCells &&
+                    cell.col >= b.col && cell.col < b.col + b.widthCells
+                );
+
                 if (block) {
-                    hoveredBlockId = block.id;
                     tooltip.classList.remove('visible');
                 } else {
-                    hoveredBlockId = null;
                     tooltip.style.left = (e.clientX + 12) + 'px';
                     tooltip.style.top = (e.clientY - 10) + 'px';
                     tooltip.classList.add('visible');
@@ -1568,27 +1983,25 @@
 
             gridWrapper.addEventListener('mouseleave', function() {
                 tooltip.classList.remove('visible');
-                hoveredBlockId = null;
             });
 
             gridWrapper.addEventListener('click', function(e) {
-                // تجاهل النقرات على أزرار التحكم
-                if (e.target.closest('.zoom-controls') || e.target.closest('.zoom-btn')) {
-                    return;
-                }
-
+                if (e.target.closest('.zoom-controls') || e.target.closest('.zoom-btn')) return;
                 if (e.target.closest('.reserved-block')) return;
 
                 const cell = getCellFromMouseEvent(e);
                 if (!cell) return;
 
-                const block = findBlockAtCell(cell.row, cell.col);
-                if (block) {
-                    window.open(block.link, '_blank', 'noopener,noreferrer');
-                    return;
-                }
+                const block = reservedBlocks.find(b => 
+                    cell.row >= b.row && cell.row < b.row + b.heightCells &&
+                    cell.col >= b.col && cell.col < b.col + b.widthCells
+                );
 
-                openModal();
+                if (block) {
+                    window.open(block.link, '_blank');
+                } else {
+                    openModal();
+                }
             });
 
             function init() {
@@ -1599,12 +2012,119 @@
                 gridWrapper.scrollTop = 30 * CELL_SIZE;
             }
 
-            if (document.readyState === 'loading') {
-                document.addEventListener('DOMContentLoaded', init);
-            } else {
-                init();
-            }
+            init();
         })();
+
+        // ===== ADMIN FUNCTIONS =====
+        function handleLogin() {
+            const username = document.getElementById('username').value.trim();
+            const password = document.getElementById('password').value.trim();
+            const errorDiv = document.getElementById('login-error');
+
+            if (username === ADMIN_USERNAME && password === ADMIN_PASSWORD) {
+                sessionStorage.setItem(SESSION_KEY, 'true');
+                showDashboard();
+                errorDiv.classList.remove('visible');
+            } else {
+                errorDiv.classList.add('visible');
+            }
+        }
+
+        function handleLogout() {
+            sessionStorage.removeItem(SESSION_KEY);
+            document.getElementById('login-screen').classList.remove('hidden');
+            document.getElementById('admin-dashboard').style.display = 'none';
+            document.getElementById('password').value = '';
+        }
+
+        function checkSession() {
+            if (sessionStorage.getItem(SESSION_KEY) === 'true') {
+                showDashboard();
+            } else {
+                document.getElementById('login-screen').classList.remove('hidden');
+                document.getElementById('admin-dashboard').style.display = 'none';
+            }
+        }
+
+        function showDashboard() {
+            document.getElementById('login-screen').classList.add('hidden');
+            document.getElementById('admin-dashboard').style.display = 'block';
+            updateDashboard();
+        }
+
+        function updateDashboard() {
+            const totalReserved = reservations.filter(r => r.status === 'approved').reduce((sum, r) => sum + (r.width * r.height), 0);
+            const pendingCount = reservations.filter(r => r.status === 'pending').length;
+            const totalRevenue = totalReserved;
+            const reservationPercentage = (totalReserved / 1000000) * 100;
+
+            document.getElementById('stat-reserved').textContent = totalReserved.toLocaleString();
+            document.getElementById('stat-revenue').textContent = '$' + totalRevenue.toLocaleString();
+            document.getElementById('stat-pending').textContent = pendingCount;
+            document.getElementById('stat-percentage').textContent = reservationPercentage.toFixed(4) + '%';
+
+            updateTable();
+        }
+
+        function updateTable() {
+            const tbody = document.getElementById('reservations-table-body');
+            tbody.innerHTML = '';
+            document.getElementById('table-count').textContent = reservations.length + ' طلب';
+
+            reservations.forEach(res => {
+                const row = document.createElement('tr');
+                const statusClass = res.status === 'approved' ? 'status-approved' : 
+                                   res.status === 'rejected' ? 'status-rejected' : 'status-pending';
+                const statusText = res.status === 'approved' ? '✅ موافق عليه' : 
+                                  res.status === 'rejected' ? '❌ مرفوض' : '⏳ معلق';
+
+                row.innerHTML = `
+                    <td><strong>${res.id}</strong></td>
+                    <td>X:${res.gridX}, Y:${res.gridY} (${res.width * 10}×${res.height * 10}px)</td>
+                    <td><img src="${res.image}" alt="Selfie" class="thumb-preview" onclick="window.open('${res.image}', '_blank')" /></td>
+                    <td><a href="${res.link}" target="_blank" style="color:var(--accent-gold); text-decoration:none;">${res.link}</a></td>
+                    <td><span class="status-badge ${statusClass}">${statusText}</span></td>
+                    <td>
+                        ${res.status === 'pending' ? `
+                            <button class="action-btn btn-approve" onclick="approveReservation('${res.id}')">✅ موافقة</button>
+                            <button class="action-btn btn-reject" onclick="rejectReservation('${res.id}')">❌ رفض</button>
+                        ` : ''}
+                        ${res.status === 'approved' ? `
+                            <button class="action-btn btn-reject" onclick="hideReservation('${res.id}')">🚫 حظر</button>
+                        ` : ''}
+                        ${res.status === 'rejected' ? `<span style="font-size:0.7rem; color:var(--text-muted);">تم الرفض</span>` : ''}
+                    </td>
+                `;
+                tbody.appendChild(row);
+            });
+        }
+
+        function approveReservation(id) {
+            const res = reservations.find(r => r.id === id);
+            if (res) {
+                res.status = 'approved';
+                updateDashboard();
+                alert('✅ تمت الموافقة على الطلب ' + id);
+            }
+        }
+
+        function rejectReservation(id) {
+            const res = reservations.find(r => r.id === id);
+            if (res) {
+                res.status = 'rejected';
+                updateDashboard();
+                alert('❌ تم رفض الطلب ' + id);
+            }
+        }
+
+        function hideReservation(id) {
+            const res = reservations.find(r => r.id === id);
+            if (res) {
+                res.status = 'rejected';
+                updateDashboard();
+                alert('🚫 تم حظر الصورة');
+            }
+        }
     </script>
 </body>
 </html>
