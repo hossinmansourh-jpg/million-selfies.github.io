@@ -6,47 +6,45 @@
     <title>لوحة تحكم المسؤول الآمنة - جدارية المليون</title>
     <style>
         body { background-color: #000; color: #fff; font-family: sans-serif; padding: 20px; text-align: center; margin: 0; }
-        .admin-container { max-width: 800px; margin: 0 auto; display: none; } /* مخفية افتراضياً لحين تسجيل الدخول */
+        .admin-container { max-width: 800px; margin: 0 auto; display: none; }
         .login-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #000; display: flex; justify-content: center; align-items: center; z-index: 9999; }
         .login-box { border: 2px solid #d4af37; padding: 30px; border-radius: 12px; background: #0a0a0a; max-width: 350px; width: 90%; box-sizing: border-box; }
         h2, h3 { color: #d4af37; margin-bottom: 20px; }
         input[type="text"], input[type="password"] { width: 100%; padding: 12px; margin: 10px 0; border: 1px solid #555; background: #111; color: #fff; border-radius: 5px; box-sizing: border-box; font-size: 16px; text-align: center; }
         .btn-gold { background: #d4af37; color: #000; padding: 12px 25px; border: none; border-radius: 5px; font-weight: bold; cursor: pointer; width: 100%; margin-top: 15px; font-size: 16px; }
-        .btn-gold:hover { background: #fff; }
         .error-msg { color: #ff4d4d; font-size: 14px; margin-top: 10px; display: none; }
         .order-card { border: 1px solid #333; padding: 15px; margin: 15px 0; border-radius: 6px; background: #111; text-align: right; }
         .btn-approve { background: #2ecc71; color: #fff; padding: 8px 15px; border: none; border-radius: 4px; cursor: pointer; font-weight: bold; }
         .btn-reject { background: #e74c3c; color: #fff; padding: 8px 15px; border: none; border-radius: 4px; cursor: pointer; font-weight: bold; margin-right: 10px; }
+        .pass-wrapper { position: relative; width: 100%; }
+        .eye-btn { position: absolute; left: 10px; top: 50%; transform: translateY(-50%); background: none; border: none; color: #d4af37; font-size: 20px; cursor: pointer; padding: 5px; z-index: 10; }
     </style>
 </head>
 <body>
 
-
-<!-- شاشة تسجيل الدخول المحمية مع ميزة رؤية وتغطية كلمة المرور -->
+<!-- شاشة تسجيل الدخول المحمية -->
 <div class="login-overlay" id="loginOverlay">
     <div class="login-box">
         <h2>🔒 تسجيل دخول المسؤول</h2>
         <input type="text" id="adminUser" placeholder="اسم المسؤول">
         
-        <!-- حقل كلمة المرور المطور مع زر العين -->
-        <div style="position: relative; width: 100%;">
+        <!-- حقل الباسورد مع زر العين المطور -->
+        <div class="pass-wrapper">
             <input type="password" id="adminPass" placeholder="كلمة المرور" style="padding-left: 45px;">
-            <button type="button" onclick="تبديلرؤيةكلمةالمرور()" style="position: absolute; left: 10px; top: 50%; transform: translateY(-50%); background: none; border: none; color: #d4af37; font-size: 20px; cursor: pointer; padding: 5px; z-index: 10;">👁️</button>
+            <button type="button" class="eye-btn" onclick="togglePasswordVisibility(event)">👁️</button>
         </div>
         
-        <button type="button" class="btn-gold" onclick="تحققمنالدخول()">دخول الآمن ✔</button>
+        <button type="button" class="btn-gold" onclick="checkAdminLogin()">الدخول الآمن ✔</button>
         <p class="error-msg" id="loginError">البيانات غير صحيحة، يرجى المحاولة مجدداً!</p>
     </div>
 </div>
 
-
-<!-- لوحة التحكم الحقيقية (لا تظهر إلا بعد الدخول الناجح) -->
+<!-- لوحة التحكم الحقيقية -->
 <div class="admin-container" id="adminPanel">
     <h2>🛠️ لوحة تحكم المسؤول (أهلاً حسين)</h2>
     <p style="color: #aaa;">يمكنك من هنا مراجعة الطلبات المعلقة وقبولها لتظهر حية على الجدارية.</p>
     
     <div id="ordersList">
-        <!-- محاكاة لطلبات قادمة من Firebase لتجربتها فوراً -->
         <div class="order-card">
             <h4>طلب حجز جديد #1024</h4>
             <p>اسم المشترك: أحمد علي</p>
@@ -60,38 +58,43 @@
 </div>
 
 <script>
-    // نظام التحقق الصارم والمعزول ببياناتك المعتمدة
-    function تحققمنالدخول() {
+    // دالة تبديل رؤية كلمة المرور
+    function togglePasswordVisibility(event) {
+        const passField = document.getElementById('adminPass');
+        const toggleBtn = event.target;
+        
+        if (passField.type === "password") {
+            passField.type = "text";
+            toggleBtn.innerText = "🔒";
+        } else {
+            passField.type = "password";
+            toggleBtn.innerText = "👁️";
+        }
+    }
+
+    // دالة التحقق من الدخول الآمن ببياناتك المعتمدة مع عزل الرموز الخاصة لتفادي تشفير السحاب
+    function checkAdminLogin() {
         const userField = document.getElementById('adminUser').value.trim();
         const passField = document.getElementById('adminPass').value;
         const errorMsg = document.getElementById('loginError');
 
-                // البيانات المعتمدة والمصححة لمنع مشاكل تشفير الرموز في المتصفحات
         const CORRECT_USER = "حسين";
-        const CORRECT_PASS = "hossinn@1" + "&" + "9$"; 
-
+        const CORRECT_PASS = "hossinn@1" + "&" + "9$";
 
         if (userField === CORRECT_USER && passField === CORRECT_PASS) {
-            // إخفاء شاشة تسجيل الدخول وإظهار لوحة التحكم فوراً
             document.getElementById('loginOverlay').style.display = 'none';
             document.getElementById('adminPanel').style.display = 'block';
             errorMsg.style.display = 'none';
-            
-            // تشغيل دالة جلب البيانات الحقيقية من Firebase إذا كانت مربوطة
-            if (typeof تشغيلجلبFirebase === "function") {
-                تشغيلجلبFirebase();
-            }
         } else {
-            // إظهار رسالة الخطأ وهز صندوق الدخول
             errorMsg.style.display = 'block';
-            document.getElementById('adminPass').value = ""; // مسح كلمة المرور الخاطئة
+            document.getElementById('adminPass').value = "";
         }
     }
 
-    // السماح بالدخول عند الضغط على زر Enter من لوحة المفاتيح تسهيلاً لك
+    // دعم زر Enter للدخول السريع
     document.addEventListener("keypress", function(e) {
         if (e.key === "Enter") {
-            تحققمنالدخول();
+            checkAdminLogin();
         }
     });
 </script>
