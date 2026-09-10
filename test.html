@@ -3,255 +3,110 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>مختبر التجريب السحابي الحقيقي لـ Firebase</title>
+    <title>مختبر التجريب السحابي المطور</title>
     <style>
-        body { background-color: #000; color: #fff; font-family: system-ui, -apple-system, sans-serif; padding: 20px; direction: rtl; }
-        .container { max-width: 500px; margin: 0 auto; border: 2px solid #d4af37; border-radius: 12px; padding: 20px; background-color: #0a0a0a; box-shadow: 0 4px 15px rgba(212, 175, 55, 0.2); }
-        h2, h3 { color: #d4af37; text-align: center; }
-        .section { background-color: #111; border: 1px solid #333; padding: 15px; border-radius: 8px; margin-bottom: 15px; }
-        .btn-group { display: flex; gap: 10px; margin: 10px 0; }
-        button { flex: 1; padding: 12px; border: none; border-radius: 6px; font-weight: bold; cursor: pointer; font-size: 14px; transition: 0.2s; }
-        .btn-gold { background-color: #d4af37; color: #000; }
-        .btn-gold:active { background-color: #fff; }
-        .btn-red { background-color: #ff4d4d; color: #fff; }
-        .btn-dark { background-color: #222; color: #fff; border: 1px solid #444; }
-        input[type="text"], input[type="file"], input[type="number"] { width: 100%; padding: 12px; margin: 10px 0; box-sizing: border-box; background-color: #1a1a1a; border: 1px solid #444; color: #fff; border-radius: 6px; font-size: 14px; }
-        input[type="number"] { border: 1px solid #d4af37; text-align: center; }
-        .log-box { background-color: #000; border: 1px solid #d4af37; height: 140px; overflow-y: auto; padding: 10px; font-family: monospace; font-size: 12px; color: #0f0; border-radius: 6px; text-align: left; direction: ltr; }
-        ul { list-style: none; padding: 0; margin: 0; }
-        li { margin: 10px 0; font-size: 15px; }
-        span.val { color: #d4af37; font-weight: bold; }
+        body { background-color: #000; color: #fff; font-family: sans-serif; padding: 20px; text-align: center; }
+        .container { max-width: 500px; margin: 0 auto; }
+        .booking-container, .section { border: 1px solid #d4af37; border-radius: 8px; padding: 20px; margin: 20px 0; background: #0a0a0a; }
+        h2, h3 { color: #d4af37; margin-bottom: 15px; }
+        .counter-wrapper { display: flex; align-items: center; justify-content: center; gap: 15px; margin: 20px 0; }
+        .counter-btn { width: 50px; height: 50px; background: #d4af37; color: #000; border: none; font-size: 24px; cursor: pointer; border-radius: 5px; font-weight: bold; }
+        #squares-count { width: 90px; height: 46px; text-align: center; font-size: 22px; border: 1px solid #d4af37; background: #111; color: #fff; border-radius: 5px; font-weight: bold; }
+        .price-summary p { margin: 10px 0; font-size: 18px; color: #ccc; }
+        .btn-gold { background: #d4af37; color: #000; padding: 12px 25px; border: none; border-radius: 5px; font-weight: bold; cursor: pointer; width: 100%; margin: 10px 0; font-size: 16px; }
+        .btn-red { background: #ff4d4d; color: #fff; padding: 12px 25px; border: none; border-radius: 5px; font-weight: bold; cursor: pointer; width: 100%; margin: 10px 0; font-size: 16px; }
+        input[type="text"], input[type="file"] { width: 100%; padding: 10px; margin: 10px 0; border: 1px solid #555; background: #111; color: #fff; border-radius: 5px; box-sizing: border-box; }
+        ul { list-style: none; padding: 0; text-align: right; }
+        li { margin: 8px 0; color: #aaa; }
     </style>
 </head>
 <body>
 
-    <div class="container">
-        <h2>🧪 مختبر التجريب السحابي المطور</h2>
+<div class="container">
+    <h2>🧪 مختبر التجريب السحابي المطور</h2>
 
-        <!-- ================= بداية جزء العداد والأسعار الجديد ================= -->
-<div class="booking-container" style="margin: 20px 0; padding: 15px; border: 1px solid #d4af37; border-radius: 8px;">
-    <h3 style="color: #fff;">1. اختيار عدد المربعات المخصص</h3>
-    
-    <div class="counter-wrapper" style="display: flex; align-items: center; gap: 10px; margin: 15px 0;">
-        <button type="button" id="btn-decrease" style="width: 40px; height: 40px; background: #d4af37; color: #000; border: none; font-size: 20px; cursor: pointer; border-radius: 5px; font-weight: bold;">-</button>
-        <input type="number" id="squares-count" value="1" min="1" max="1000" step="1" style="width: 80px; height: 40px; text-align: center; font-size: 18px; border: 1px solid #d4af37; background: #111; color: #fff; border-radius: 5px;">
-        <button type="button" id="btn-increase" style="width: 40px; height: 40px; background: #d4af37; color: #000; border: none; font-size: 20px; cursor: pointer; border-radius: 5px; font-weight: bold;">+</button>
-    </div>
-
-    <div class="price-summary" style="margin-top: 15px; font-size: 16px; color: #aaa;">
-        <p>عدد المربعات المحدد: <span id="summary-squares" style="color: #fff; font-weight: bold;">1</span> مربع</p>
-        <p>إجمالي السعر: <span id="summary-price" style="color: #d4af37; font-weight: bold;">10</span> دولار</p>
-    
-        <!-- 2. نافذة الشراء والرفع -->
-        <div class="section">
-            <h3>2. نافذة الشراء والمراجعة السحابية</h3>
-            <ul>
-                <li>عدد المربعات المحددة: <span id="lblCount" class="val">0</span></li>
-                <li>إجمالي السعر المحسوب (1$ للمربع): <span id="lblPrice" class="val">$0</span></li>
-            </ul>
-            <input type="text" id="txtName" placeholder="رابط الموقع أو اسم المشترك">
-            <label style="font-size:12px; color:#d4af37; display:block; margin-top:5px; text-align:right;">اختر صورة السيلفي لرفعها مباشرة:</label>
-            <input type="file" id="fileImage" accept="image/*">
-            <div class="btn-group">
-                <button class="btn-gold" id="btnPaySuccess" onclick="simulatePayment(true)">محاكاة دفع ناجح وحفظ في السحاب ✔️</button>
-            </div>
-            <div class="btn-group">
-                <button class="btn-red" onclick="simulatePayment(false)">محاكاة دفع فاشل ❌</button>
-            </div>
+    <!-- 1. قسم العداد وحساب الأسعار الذاتي والمحمي -->
+    <div class="booking-container">
+        <h3>1. اختيار عدد المربعات المخصص</h3>
+        
+        <div class="counter-wrapper">
+            <!-- زر النقصان -->
+            <button type="button" class="counter-btn" onclick="تغييرالعداد(-1)">-</button>
+            <!-- حقل الإدخال -->
+            <input type="number" id="squares-count" value="1" min="1" max="1000" oninput="تحديثالأسعار()">
+            <!-- زر الزيادة -->
+            <button type="button" class="counter-btn" onclick="تغييرالعداد(1)">+</button>
         </div>
 
-        <!-- 3. العدادات الحية -->
-        <div class="section">
-            <h3>3. عدادات الواجهة الحية المتصلة بالسحاب</h3>
-            <ul>
-                <li>إجمالي المربعات المحجوزة في Firebase: <span id="statReserved" class="val">جاري التحميل...</span></li>
-                <li>المربعات المتبقية لجدارية المليون: <span id="statRemaining" class="val">--</span></li>
-                <li>نسبة الحجز الحالية: <span id="statPercent" class="val">--</span></li>
-            </ul>
+        <div class="price-summary">
+            <p>عدد المربعات المحدد: <span id="summary-squares" style="color: #fff; font-weight: bold;">1</span> مربع</p>
+            <p>إجمالي السعر: <span id="summary-price" style="color: #d4af37; font-weight: bold;">10</span> دولار</p>
         </div>
-
-        <h3>📋 سجل المطور والمزامنة الحية (System Logs)</h3>
-        <div class="log-box" id="logBox">[System] المختبر جاهز لبدء التجارب السحابية...</div>
     </div>
 
-    <!-- استدعاء مكتبات الـ SDK لـ Firebase من سيرفرات جوجل الموثوقة -->
-    <script src="https://gstatic.com"></script>
-    <script src="https://gstatic.com"></script>
-    <script src="https://gstatic.com"></script>
+    <!-- 2. نافذة الشراء والمراجعة السحابية -->
+    <div class="section">
+        <h3>2. نافذة الشراء والمراجعة السحابية</h3>
+        <ul>
+            <li>عدد المربعات المحددة في الفاتورة: <span id="bill-squares" style="color:#fff;">1</span></li>
+            <li>إجمالي السعر المحسوب (10$ للمربع): <span id="bill-price" style="color:#d4af37;">10$</span></li>
+        </ul>
+        
+        <input type="text" id="txtName" placeholder="رابط الموقع أو اسم المشترك">
+        <label style="font-size:12px; color:#aaa; display:block; text-align:right;">اختر صورة السيلفي لرفعها مباشرة:</label>
+        <input type="file" id="fileImage" accept="image/*">
 
-    <script>
-        // المتغيرات العامة الأساسية
-        let db = null;
-        let storage = null;
-        let selectedPixels = 0;
-        const totalWallPixels = 1000000;
-            // --- منطق معزول لإدارة العداد وحساب الأسعار تلقائياً في المتصفح والهواتف ---
-    document.addEventListener("DOMContentLoaded", () => {
-        const inputSquares = document.getElementById("squares-count");
-        const btnDecrease = document.getElementById("btn-decrease");
-        const btnIncrease = document.getElementById("btn-increase");
-        const summarySquares = document.getElementById("summary-squares");
-        const summaryPrice = document.getElementById("summary-price");
+        <button type="button" class="btn-gold" onclick="alert('سيتم ربط الدفع الحقيقي هنا في الخطوة القادمة')">محاكاة دفع ناجح وحفظ في السحاب ✔</button>
+        <button type="button" class="btn-red" onclick="alert('تم إلغاء المعاملة')">محاكاة دفع فاشل ❌</button>
+    </div>
 
-        const PRICE_PER_SQUARE = 10; // سعر المربع الواحد
+    <!-- 3. عدادات الواجهة الحية المتصلة بالسحاب -->
+    <div class="section">
+        <h3>3. عدادات الواجهة الحية المتصلة بالسحاب</h3>
+        <p style="color:#aaa;">إجمالي المربعات المحجوزة في Firebase: <span style="color:#fff;">جاري التحميل...</span></p>
+        <p style="color:#aaa;">المربعات المتبقية لجدارية المليون: <span style="color:#fff;">--</span></p>
+    </div>
+</div>
 
-        function updateCalculations() {
-            if (!inputSquares || !summarySquares || !summaryPrice) return;
-            
-            let count = parseInt(inputSquares.value);
-            if (isNaN(count) || count < 1) {
-                count = 1;
-            }
+<script>
+    // الأكواد البرمجية الأساسية الذكية والمنعزلة عن أي تداخل
+    const PRICE_PER_SQUARE = 10; // سعر المربع الواحد بالدولار
 
-            inputSquares.value = count;
-            summarySquares.innerText = count;
-            summaryPrice.innerText = (count * PRICE_PER_SQUARE).toLocaleString();
+    function تغييرالعداد(مقدار) {
+        const input = document.getElementById('squares-count');
+        let currentVal = parseInt(input.value) || 1;
+        let newVal = currentVal + مقدار;
+        
+        if (newVal < 1) newVal = 1;
+        if (newVal > 1000) newVal = 1000;
+        
+        input.value = newVal;
+        تحديثالأسعار();
+    }
 
-            // ربط العداد بالمتغيرات العالمية للمشروع لرفعها لاحقاً إلى Firebase
-            window.selectedSquaresCount = count;
-            window.totalCalculatedPrice = count * PRICE_PER_SQUARE;
-            
-            // تحديث المتغير الأساسي المعتمد في كودك القديم إذا كان مستخدماً
-            if (typeof selectedPixels !== 'undefined') {
-                selectedPixels = count;
-            }
-        }
+    function تحديثالأسعار() {
+        const input = document.getElementById('squares-count');
+        let val = parseInt(input.value) || 1;
+        
+        if (val < 1) val = 1;
+        input.value = val;
 
-        if (btnDecrease && inputSquares) {
-            btnDecrease.addEventListener("click", (e) => {
-                e.preventDefault();
-                let current = parseInt(inputSquares.value) || 1;
-                if (current > 1) {
-                    inputSquares.value = current - 1;
-                    updateCalculations();
-                }
-            });
-        }
+        // تحديث جميع النصوص في واجهة المستخدم فوراً وبنفس اللحظة
+        document.getElementById('summary-squares').innerText = val;
+        document.getElementById('summary-price').innerText = (val * PRICE_PER_SQUARE).toLocaleString();
+        document.getElementById('bill-squares').innerText = val;
+        document.getElementById('bill-price').innerText = (val * PRICE_PER_SQUARE).toLocaleString() + "$";
 
-        if (btnIncrease && inputSquares) {
-            btnIncrease.addEventListener("click", (e) => {
-                e.preventDefault();
-                let current = parseInt(inputSquares.value) || 1;
-                inputSquares.value = current + 1;
-                updateCalculations();
-            });
-        }
+        // تمرير القيم للمتغيرات العالمية لرفعها إلى Firebase لاحقاً
+        window.selectedSquaresCount = val;
+        window.totalCalculatedPrice = val * PRICE_PER_SQUARE;
+    }
 
-        if (inputSquares) {
-            inputSquares.addEventListener("input", updateCalculations);
-            inputSquares.addEventListener("change", updateCalculations);
-        }
+    // تشغيل تلقائي أول ما تفتح الصفحة لتهيئة الأرقام
+    window.onload = function() {
+        تحديثالأسعار();
+    };
+</script>
 
-        // تشغيل مبدئي فور تحميل الصفحة لمطابقة الأرقام
-        updateCalculations();
-    });
-    // -------------------------------------------------------------------------
-
-
-        // 1. دالة تحديث الصندوق الأسود (السجلات)
-        function logMessage(text) {
-            const logBox = document.getElementById('logBox');
-            if (logBox) {
-                logBox.innerHTML += "<br>[" + new Date().toLocaleTimeString() + "] " + text;
-                logBox.scrollTop = logBox.scrollHeight;
-            }
-        }
-
-        // 2. دالة تحديث العدادات الفورية - أصبحت تعمل رغماً عن أي مشكلة اتصال في الخلفية
-        function updateCounters(val) {
-            let num = parseInt(val);
-            if (isNaN(num) || num <= 0) {
-                num = 0;
-            }
-            selectedPixels = num;
-            
-            const countEl = document.getElementById('lblCount');
-            const priceEl = document.getElementById('lblPrice');
-            
-            if (countEl) countEl.innerText = num;
-            if (priceEl) priceEl.innerText = "$" + num;
-            
-            logMessage("⏳ تم تحديث المساحة المطلوبة إلى: " + num + " مربع، السعر المحسوب تلقائياً: $" + num);
-        }
-
-        // 3. دالة إعادة التعيين للصفر
-        function resetForm() {
-            selectedPixels = 0;
-            if (document.getElementById('lblCount')) document.getElementById('lblCount').innerText = "0";
-            if (document.getElementById('lblPrice')) document.getElementById('lblPrice').innerText = "$0";
-            if (document.getElementById('txtName')) document.getElementById('txtName').value = "";
-            if (document.getElementById('fileImage')) document.getElementById('fileImage').value = "";
-            if (document.getElementById('customPixelsInput')) document.getElementById('customPixelsInput').value = "";
-            logMessage("🧹 تم إعادة تعيين قيم الاستمارة بالكامل.");
-        }
-
-        // 4. دالة معالجة ورفع الصورة والطلب للسحاب
-        function simulatePayment(isSuccess) {
-            if (!isSuccess) {
-                logMessage("❌ فشلت عملية الدفع. تم إلغاء حفظ البيانات السحابية.");
-                alert("تمت محاكاة عملية دفع فاشلة بنجاح.");
-                return;
-            }
-
-            if (!db || !storage) {
-                alert("نظام السحاب لم يكتمل تحميله بعد أو هناك مشكلة بالاتصال. يرجى التحقق من شبكة الإنترنت.");
-                return;
-            }
-
-            const nameInput = document.getElementById('txtName');
-            const fileInput = document.getElementById('fileImage');
-            const name = nameInput ? nameInput.value.trim() : "";
-
-            if (selectedPixels === 0) { alert("يرجى اختيار أو كتابة عدد المربعات أولاً."); return; }
-            if (!name) { alert("يرجى إدخال اسم المشترك."); return; }
-            if (!fileInput || fileInput.files.length === 0) { alert("يرجى اختيار ملف صورة السيلفي."); return; }
-
-            const file = fileInput.files[0];
-            const btn = document.getElementById('btnPaySuccess');
-            if (btn) {
-                btn.innerText = "جاري الرفع سحابياً...";
-                btn.disabled = true;
-            }
-
-            logMessage("⏳ جاري رفع ملف الصورة إلى Firebase Storage...");
-
-            const fileRef = storage.ref("test_selfies/" + Date.now() + "_" + file.name);
-
-            fileRef.put(file).then(function(snapshot) {
-                logMessage("✔️ تم رفع الصورة بنجاح! جاري استخراج رابط المعاينة...");
-                return snapshot.ref.getDownloadURL();
-            })
-            .then(function(downloadURL) {
-                logMessage("🔗 تم جلب الرابط السحابي بنجاح. جاري حفظ الطلب في Firestore...");
-                return db.collection("reservations").add({
-                    row: Math.floor(Math.random() * 1000) + 1, 
-                    col: Math.floor(Math.random() * 1000) + 1,
-                    userName: name,
-                    imageUrl: downloadURL,
-                    status: "pending",
-                    createdAt: firebase.firestore.FieldValue.serverTimestamp()
-                });
-            })
-            .then(function() {
-                logMessage("🟢 تم تسجيل عملية الحجز والدفع بنجاح في Firestore!");
-                alert("🎉 نجحت المحاكاة! تم رفع الملف وحفظ مستند الحجز سحابياً بنجاح.");
-                resetForm();
-            })
-            .catch(function(err) {
-                console.error(err);
-                logMessage("❌ فشل الرفع السحابي: " + err.message);
-                alert("حدث خطأ غير متوقع أثناء المعالجة سحابياً.");
-            })
-            .finally(function() {
-                if (btn) {
-                    btn.innerText = "محاكاة دفع ناجح وحفظ في السحاب ✔️";
-                    btn.disabled = false;
-                }
-            });
-        }
-
-        // 5. حماية تشغيل سيرفر الـ Firebase داخل حيز آمن (Try-Catch) لكي لا يعطل الأزرار مطلقاً
-        try {
-            const firebaseConfig = {
-                apiKey: "AIzaSyCEMxWCT0siwT2t72CX24N1ajSAwqEk7Fs",
-                authDomain: "://firebaseapp.com",
+</body>
+</html>
