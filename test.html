@@ -9,10 +9,6 @@
         .container { max-width: 500px; margin: 0 auto; }
         .booking-container, .section { border: 1px solid #d4af37; border-radius: 8px; padding: 20px; margin: 20px 0; background: #0a0a0a; }
         h2, h3 { color: #d4af37; margin-bottom: 15px; }
-        .counter-wrapper { display: flex; align-items: center; justify-content: center; gap: 15px; margin: 20px 0; }
-        .counter-btn { width: 50px; height: 50px; background: #d4af37; color: #000; border: none; font-size: 24px; cursor: pointer; border-radius: 5px; font-weight: bold; }
-        #squares-count { width: 90px; height: 46px; text-align: center; font-size: 22px; border: 1px solid #d4af37; background: #111; color: #fff; border-radius: 5px; font-weight: bold; }
-        .price-summary p { margin: 10px 0; font-size: 18px; color: #ccc; }
         .btn-gold { background: #d4af37; color: #000; padding: 12px 25px; border: none; border-radius: 5px; font-weight: bold; cursor: pointer; width: 100%; margin: 10px 0; font-size: 16px; }
         .btn-red { background: #ff4d4d; color: #fff; padding: 12px 25px; border: none; border-radius: 5px; font-weight: bold; cursor: pointer; width: 100%; margin: 10px 0; font-size: 16px; }
         input[type="text"], input[type="file"] { width: 100%; padding: 10px; margin: 10px 0; border: 1px solid #555; background: #111; color: #fff; border-radius: 5px; box-sizing: border-box; }
@@ -25,95 +21,46 @@
 <div class="container">
     <h2>🧪 مختبر التجريب السحابي المطور</h2>
 
-    <!-- 1. قسم العداد وحساب الأسعار الذاتي والمحمي -->
+    <!-- 1. صندوق الأبعاد المطور والذاتي بالكامل -->
     <div class="booking-container">
-    <!-- ================= بداية جزء أبعاد المربعات المطور والاحترافي ================= -->
-<div class="booking-container" style="margin: 20px 0; padding: 15px; border: 1px solid #d4af37; border-radius: 8px; background: #0a0a0a;">
-    <h3 style="color: #fff; text-align: center;">1. حدد حجم مساحتك على الجدارية</h3>
-    
-    <div style="display: flex; justify-content: space-around; gap: 15px; margin: 20px 0;">
-        <!-- اختيار العرض (عدد Mربعات أفقياً) -->
-        <div style="text-align: center; flex: 1;">
-            <label style="color: #aaa; display: block; margin-bottom: 8px; font-size: 14px;">العرض (أفقياً)</label>
-            <div style="display: flex; align-items: center; justify-content: center; gap: 5px; direction: ltr;">
-                <button type="button" onclick="تعديلالبعد('squares-width', 1)" style="width: 35px; height: 35px; background: #d4af37; border: none; font-weight: bold; font-size: 18px; cursor: pointer; border-radius: 4px;">+</button>
-                <input type="number" id="squares-width" value="1" min="1" max="50" oninput="حسابالمساحةوالسعر()" style="width: 50px; height: 35px; text-align: center; background: #111; color: #fff; border: 1px solid #d4af37; border-radius: 4px; font-weight: bold;">
-                <button type="button" onclick="تعديلالبعد('squares-width', -1)" style="width: 35px; height: 35px; background: #d4af37; border: none; font-weight: bold; font-size: 18px; cursor: pointer; border-radius: 4px;">-</button>
+        <h3>1. حدد حجم مساحتك على الجدارية</h3>
+        
+        <div style="display: flex; justify-content: space-around; gap: 15px; margin: 20px 0;">
+            <!-- اختيار العرض -->
+            <div style="text-align: center; flex: 1;">
+                <label style="color: #aaa; display: block; margin-bottom: 8px; font-size: 14px;">العرض (أفقياً)</label>
+                <div style="display: flex; align-items: center; justify-content: center; gap: 5px; direction: ltr;">
+                    <button type="button" onclick="تعديلالبعد('squares-width', 1)" style="width: 35px; height: 35px; background: #d4af37; border: none; font-weight: bold; font-size: 18px; cursor: pointer; border-radius: 4px;">+</button>
+                    <input type="number" id="squares-width" value="1" min="1" max="50" oninput="حسابالمساحةوالسعر()" style="width: 50px; height: 35px; text-align: center; background: #111; color: #fff; border: 1px solid #d4af37; border-radius: 4px; font-weight: bold;">
+                    <button type="button" onclick="تعديلالبعد('squares-width', -1)" style="width: 35px; height: 35px; background: #d4af37; border: none; font-weight: bold; font-size: 18px; cursor: pointer; border-radius: 4px;">-</button>
+                </div>
+            </div>
+
+            <div style="display: flex; align-items: center; color: #d4af37; font-size: 24px; font-weight: bold; margin-top: 20px;">X</div>
+
+            <!-- اختيار الارتفاع -->
+            <div style="text-align: center; flex: 1;">
+                <label style="color: #aaa; display: block; margin-bottom: 8px; font-size: 14px;">الارتفاع (عمودياً)</label>
+                <div style="display: flex; align-items: center; justify-content: center; gap: 5px; direction: ltr;">
+                    <button type="button" onclick="تعديلالبعد('squares-height', 1)" style="width: 35px; height: 35px; background: #d4af37; border: none; font-weight: bold; font-size: 18px; cursor: pointer; border-radius: 4px;">+</button>
+                    <input type="number" id="squares-height" value="1" min="1" max="50" oninput="حسابالمساحةوالسعر()" style="width: 50px; height: 35px; text-align: center; background: #111; color: #fff; border: 1px solid #d4af37; border-radius: 4px; font-weight: bold;">
+                    <button type="button" onclick="تعديلالبعد('squares-height', -1)" style="width: 35px; height: 35px; background: #d4af37; border: none; font-weight: bold; font-size: 18px; cursor: pointer; border-radius: 4px;">-</button>
+                </div>
             </div>
         </div>
 
-        <!-- علامة الضرب التوضيحية -->
-        <div style="display: flex; align-items: center; color: #d4af37; font-size: 24px; font-weight: bold; margin-top: 20px;">X</div>
-
-                <!-- اختيار الطول (عدد المربعات عمودياً) -->
-        <div style="text-align: center; flex: 1;">
-            <label style="color: #aaa; display: block; margin-bottom: 8px; font-size: 14px;">الارتفاع (عمودياً)</label>
-            <div style="display: flex; align-items: center; justify-content: center; gap: 5px; direction: ltr;">
-                <button type="button" onclick="تعديلالبعد('squares-height', 1)" style="width: 35px; height: 35px; background: #d4af37; border: none; font-weight: bold; font-size: 18px; cursor: pointer; border-radius: 4px;">+</button>
-                <input type="number" id="squares-height" value="1" min="1" max="50" oninput="حسابالمساحةوالسعر()" style="width: 50px; height: 35px; text-align: center; background: #111; color: #fff; border: 1px solid #d4af37; border-radius: 4px; font-weight: bold;">
-                <button type="button" onclick="تعديلالبعد('squares-height', -1)" style="width: 35px; height: 35px; background: #d4af37; border: none; font-weight: bold; font-size: 18px; cursor: pointer; border-radius: 4px;">-</button>
-            </div>
+        <div class="price-summary" style="margin-top: 15px; font-size: 16px; color: #aaa; text-align: center; border-top: 1px dashed #333; padding-top: 15px;">
+            <p>المساحة المحجوزة: <span id="summary-squares" style="color: #fff; font-weight: bold;">1</span> مربع</p>
+            <p>إجمالي السعر ($10 للمربع): <span id="summary-price" style="color: #d4af37; font-weight: bold;">10</span> دولار</p>
         </div>
     </div>
-
-    <!-- ملخص الحساب التلقائي الذكي -->
-    <div class="price-summary" style="margin-top: 15px; font-size: 16px; color: #aaa; text-align: center; border-top: 1px dashed #333; padding-top: 15px;">
-        <p>المساحة المحجوزة: <span id="summary-squares" style="color: #fff; font-weight: bold;">1</span> مربع</p>
-        <p>إجمالي السعر ($10 للمربع): <span id="summary-price" style="color: #d4af37; font-weight: bold;">10</span> دولار</p>
-    </div>
-</div>
-
-<script>
-    function تعديلالبعد(idالعنصر, مقدار) {
-        const input = document.getElementById(idالعنصر);
-        if (!input) return;
-        let currentVal = parseInt(input.value) || 1;
-        let newVal = currentVal + مقدار;
-        if (newVal < 1) newVal = 1;
-        if (newVal > 50) newVal = 50; 
-        input.value = newVal;
-        حسابالمساحةوالسعر();
-    }
-</script>
-
-    }
-
-    function حسابالمساحةوالسعر() {
-        const widthInput = document.getElementById('squares-width');
-        const heightInput = document.getElementById('squares-height');
-        
-        let width = parseInt(widthInput.value) || 1;
-        let height = parseInt(heightInput.value) || 1;
-        
-        if (width < 1) { width = 1; widthInput.value = 1; }
-        if (height < 1) { height = 1; heightInput.value = 1; }
-
-        let totalSquares = width * height;
-        let totalPrice = totalSquares * 10; 
-
-        document.getElementById('summary-squares').innerText = totalSquares;
-        document.getElementById('summary-price').innerText = totalPrice.toLocaleString();
-        
-        const billSquares = document.getElementById('bill-squares');
-        const billPrice = document.getElementById('bill-price');
-        if (billSquares) billSquares.innerText = totalSquares;
-        if (billPrice) billPrice.innerText = totalPrice.toLocaleString() + "$";
-
-        window.selectedSquaresCount = totalSquares;
-        window.totalCalculatedPrice = totalPrice;
-        window.selectedWidth = width;
-        window.selectedHeight = height;
-    }
-</script>
-<!-- ================= نهاية جزء أبعاد المربعات المطور والاحترافي ================= -->
-
 
     <!-- 2. نافذة الشراء والمراجعة السحابية -->
     <div class="section">
         <h3>2. نافذة الشراء والمراجعة السحابية</h3>
         <ul>
-            <li>عدد المربعات المحددة في الفاتورة: <span id="bill-squares" style="color:#fff;">1</span></li>
-            <li>إجمالي السعر المحسوب (10$ للمربع): <span id="bill-price" style="color:#d4af37;">10$</span></li>
+            <li>عدد المربعات المحددة في الفاتورة: <span id="bill-squares" style="color:#fff; font-weight:bold;">1</span></li>
+            <li>إجمالي السعر المحسوب (10$ للمربع): <span id="bill-price" style="color:#d4af37; font-weight:bold;">10$</span></li>
         </ul>
         
         <input type="text" id="txtName" placeholder="رابط الموقع أو اسم المشترك">
@@ -127,66 +74,61 @@
     <!-- 3. عدادات الواجهة الحية المتصلة بالسحاب -->
     <div class="section">
         <h3>3. عدادات الواجهة الحية المتصلة بالسحاب</h3>
-        <p style="color:#aaa;">إجمالي المربعات المحجوزة في Firebase: <span style="color:#fff;">جاري التحميل...</span></p>
-        <p style="color:#aaa;">المربعات المتبقية لجدارية المليون: <span style="color:#fff;">--</span></p>
+        <p style="color:#aaa;">إجمالي المربعات المحجوزة في Firebase: <span style="color:#fff; font-weight:bold;">جاري التحميل...</span></p>
+        <p style="color:#aaa;">المربعات المتبقية لجدارية المليون: <span style="color:#fff; font-weight:bold;">--</span></p>
     </div>
 </div>
 
 <script>
-    // الأكواد البرمجية الأساسية الذكية والمنعزلة عن أي تداخل
-    const PRICE_PER_SQUARE = 10; // سعر المربع الواحد بالدولار
-
-    function تغييرالعداد(مقدار) {
-        const input = document.getElementById('squares-count');
+    // المخ الذكي المعزول بالكامل
+    function تعديلالبعد(idالعنصر, مقدار) {
+        const input = document.getElementById(idالعنصر);
+        if (!input) return;
         let currentVal = parseInt(input.value) || 1;
         let newVal = currentVal + مقدار;
-        
         if (newVal < 1) newVal = 1;
-        if (newVal > 1000) newVal = 1000;
-        
+        if (newVal > 50) newVal = 50; 
         input.value = newVal;
-        تحديثالأسعار();
+        حسابالمساحةوالسعر();
     }
 
-    function تحديثالأسعار() {
-        const input = document.getElementById('squares-count');
-        let val = parseInt(input.value) || 1;
+    function حسابالمساحةوالسعر() {
+        const widthInput = document.getElementById('squares-width');
+        const heightInput = document.getElementById('squares-height');
+        if(!widthInput || !heightInput) return;
+
+        let width = parseInt(widthInput.value) || 1;
+        let height = parseInt(heightInput.value) || 1;
+
+        let totalSquares = width * height;
+        let totalPrice = totalSquares * 10; 
+
+        document.getElementById('summary-squares').innerText = totalSquares;
+        document.getElementById('summary-price').innerText = totalPrice.toLocaleString();
         
-        if (val < 1) val = 1;
-        input.value = val;
+        if(document.getElementById('bill-squares')) document.getElementById('bill-squares').innerText = totalSquares;
+        if(document.getElementById('bill-price')) document.getElementById('bill-price').innerText = totalPrice.toLocaleString() + "$";
 
-        // تحديث جميع النصوص في واجهة المستخدم فوراً وبنفس اللحظة
-        document.getElementById('summary-squares').innerText = val;
-        document.getElementById('summary-price').innerText = (val * PRICE_PER_SQUARE).toLocaleString();
-        document.getElementById('bill-squares').innerText = val;
-        document.getElementById('bill-price').innerText = (val * PRICE_PER_SQUARE).toLocaleString() + "$";
-
-        // تمرير القيم للمتغيرات العالمية لرفعها إلى Firebase لاحقاً
-        window.selectedSquaresCount = val;
-        window.totalCalculatedPrice = val * PRICE_PER_SQUARE;
+        window.selectedSquaresCount = totalSquares;
+        window.totalCalculatedPrice = totalPrice;
+        window.selectedWidth = width;
+        window.selectedHeight = height;
     }
 
-          // تشغيل تلقائي شامل لتهيئة الأسعار وجلب البيانات الحية من Firebase معاً
     window.onload = function() {
-        // 1. تشغيل الحساب المبدئي للأسعار فوراً
-        تحديثالأسعار();
+        حسابالمساحةوالسعر();
         
-        // 2. الاتصال بـ Firebase لجلب عدادات السحاب الحية
+        // جلب عدادات السحاب تلقائياً بدون تعارض
         if (typeof db !== 'undefined' && db !== null) {
             try {
                 db.collection("reservations").where("status", "==", "approved")
                 .onSnapshot((querySnapshot) => {
                     let totalReserved = 0;
-                    
                     querySnapshot.forEach((doc) => {
-                        let data = doc.data();
-                        totalReserved += parseInt(data.squaresCount) || 1;
+                        totalReserved += parseInt(doc.data().squaresCount) || 1;
                     });
+                    let remaining = 1000000 - totalReserved;
                     
-                    let totalWallPixels = 1000000;
-                    let remaining = totalWallPixels - totalReserved;
-                    
-                    // تحديث نصوص العدادات الحية في الأسفل فوراً وبدون تعارض
                     const paragraphs = document.querySelectorAll(".section p");
                     paragraphs.forEach(p => {
                         if (p.innerText.includes("إجمالي المربعات المحجوزة")) {
@@ -196,27 +138,16 @@
                             p.innerHTML = `المربعات المتبقية لجدارية المليون: <span style="color:#fff; font-weight:bold;">${remaining.toLocaleString()} مربع</span>`;
                         }
                     });
-                    
-                }, (error) => {
-                    console.log("خطأ في جلب بيانات Firebase: ", error);
                 });
-            } catch (e) {
-                console.log("حدث خطأ أثناء تشغيل اتصال السحاب: ", e);
-            }
+            } catch (e) { console.log(e); }
         } else {
-            // أرقام افتراضية نظيفة لحين اكتمال اتصال قاعدة البيانات
             const paragraphs = document.querySelectorAll(".section p");
             paragraphs.forEach(p => {
-                if (p.innerText.includes("إجمالي المربعات المحجوزة")) {
-                    p.innerHTML = `إجمالي المربعات المحجوزة في Firebase: <span style="color:#fff;">0 مربع</span>`;
-                }
-                if (p.innerText.includes("المربعات المتبقية")) {
-                    p.innerHTML = `المربعات المتبقية لجدارية المليون: <span style="color:#fff;">1,000,000 مربع</span>`;
-                }
+                if (p.innerText.includes("إجمالي المربعات المحجوزة")) p.innerHTML = `إجمالي المربعات المحجوزة في Firebase: <span style="color:#fff;">0 مربع</span>`;
+                if (p.innerText.includes("المربعات المتبقية")) p.innerHTML = `المربعات المتبقية لجدارية المليون: <span style="color:#fff;">1,000,000 مربع</span>`;
             });
         }
     };
- 
 </script>
 
 </body>
