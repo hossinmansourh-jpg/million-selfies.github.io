@@ -27,22 +27,21 @@
 
     <div class="container">
         <h2>🧪 مختبر التجريب السحابي المطور</h2>
-        
-        <!-- 1. محاكاة اختيار المربعات -->
-        <div class="section">
-            <h3>1. محاكاة اختيار المربعات</h3>
-            <p style="font-size:13px; color:#aaa; text-align:center;">اختر عدد المربعات أو اكتب المساحة التي تريدها بيدك:</p>
-            <div class="btn-group">
-                <button class="btn-gold" onclick="updateCounters(1)">1 مربع</button>
-                <button class="btn-gold" onclick="updateCounters(4)">4 مربعات</button>
-                <button class="btn-gold" onclick="updateCounters(9)">9 مربعات</button>
-            </div>
-            
-            <input type="number" id="customPixelsInput" min="1" max="10000" placeholder="أو اكتب أي عدد مربعات تريده هنا..." oninput="updateCounters(this.value)" onkeyup="updateCounters(this.value)">
-            
-            <button class="btn-dark" onclick="resetForm()" style="width:100%;">إعادة تعيين للصفر</button>
-        </div>
 
+        <!-- ================= بداية جزء العداد والأسعار الجديد ================= -->
+<div class="booking-container" style="margin: 20px 0; padding: 15px; border: 1px solid #d4af37; border-radius: 8px;">
+    <h3 style="color: #fff;">1. اختيار عدد المربعات المخصص</h3>
+    
+    <div class="counter-wrapper" style="display: flex; align-items: center; gap: 10px; margin: 15px 0;">
+        <button type="button" id="btn-decrease" style="width: 40px; height: 40px; background: #d4af37; color: #000; border: none; font-size: 20px; cursor: pointer; border-radius: 5px; font-weight: bold;">-</button>
+        <input type="number" id="squares-count" value="1" min="1" max="1000" step="1" style="width: 80px; height: 40px; text-align: center; font-size: 18px; border: 1px solid #d4af37; background: #111; color: #fff; border-radius: 5px;">
+        <button type="button" id="btn-increase" style="width: 40px; height: 40px; background: #d4af37; color: #000; border: none; font-size: 20px; cursor: pointer; border-radius: 5px; font-weight: bold;">+</button>
+    </div>
+
+    <div class="price-summary" style="margin-top: 15px; font-size: 16px; color: #aaa;">
+        <p>عدد المربعات المحدد: <span id="summary-squares" style="color: #fff; font-weight: bold;">1</span> مربع</p>
+        <p>إجمالي السعر: <span id="summary-price" style="color: #d4af37; font-weight: bold;">10</span> دولار</p>
+    
         <!-- 2. نافذة الشراء والرفع -->
         <div class="section">
             <h3>2. نافذة الشراء والمراجعة السحابية</h3>
@@ -86,6 +85,68 @@
         let storage = null;
         let selectedPixels = 0;
         const totalWallPixels = 1000000;
+            // --- منطق معزول لإدارة العداد وحساب الأسعار تلقائياً في المتصفح والهواتف ---
+    document.addEventListener("DOMContentLoaded", () => {
+        const inputSquares = document.getElementById("squares-count");
+        const btnDecrease = document.getElementById("btn-decrease");
+        const btnIncrease = document.getElementById("btn-increase");
+        const summarySquares = document.getElementById("summary-squares");
+        const summaryPrice = document.getElementById("summary-price");
+
+        const PRICE_PER_SQUARE = 10; // سعر المربع الواحد
+
+        function updateCalculations() {
+            if (!inputSquares || !summarySquares || !summaryPrice) return;
+            
+            let count = parseInt(inputSquares.value);
+            if (isNaN(count) || count < 1) {
+                count = 1;
+            }
+
+            inputSquares.value = count;
+            summarySquares.innerText = count;
+            summaryPrice.innerText = (count * PRICE_PER_SQUARE).toLocaleString();
+
+            // ربط العداد بالمتغيرات العالمية للمشروع لرفعها لاحقاً إلى Firebase
+            window.selectedSquaresCount = count;
+            window.totalCalculatedPrice = count * PRICE_PER_SQUARE;
+            
+            // تحديث المتغير الأساسي المعتمد في كودك القديم إذا كان مستخدماً
+            if (typeof selectedPixels !== 'undefined') {
+                selectedPixels = count;
+            }
+        }
+
+        if (btnDecrease && inputSquares) {
+            btnDecrease.addEventListener("click", (e) => {
+                e.preventDefault();
+                let current = parseInt(inputSquares.value) || 1;
+                if (current > 1) {
+                    inputSquares.value = current - 1;
+                    updateCalculations();
+                }
+            });
+        }
+
+        if (btnIncrease && inputSquares) {
+            btnIncrease.addEventListener("click", (e) => {
+                e.preventDefault();
+                let current = parseInt(inputSquares.value) || 1;
+                inputSquares.value = current + 1;
+                updateCalculations();
+            });
+        }
+
+        if (inputSquares) {
+            inputSquares.addEventListener("input", updateCalculations);
+            inputSquares.addEventListener("change", updateCalculations);
+        }
+
+        // تشغيل مبدئي فور تحميل الصفحة لمطابقة الأرقام
+        updateCalculations();
+    });
+    // -------------------------------------------------------------------------
+
 
         // 1. دالة تحديث الصندوق الأسود (السجلات)
         function logMessage(text) {
