@@ -27,22 +27,86 @@
 
     <!-- 1. قسم العداد وحساب الأسعار الذاتي والمحمي -->
     <div class="booking-container">
-        <h3>1. اختيار عدد المربعات المخصص</h3>
-        
-        <div class="counter-wrapper">
-            <!-- زر النقصان -->
-            <button type="button" class="counter-btn" onclick="تغييرالعداد(-1)">-</button>
-            <!-- حقل الإدخال -->
-            <input type="number" id="squares-count" value="1" min="1" max="1000" oninput="تحديثالأسعار()">
-            <!-- زر الزيادة -->
-            <button type="button" class="counter-btn" onclick="تغييرالعداد(1)">+</button>
+    <!-- ================= بداية جزء أبعاد المربعات المطور والاحترافي ================= -->
+<div class="booking-container" style="margin: 20px 0; padding: 15px; border: 1px solid #d4af37; border-radius: 8px; background: #0a0a0a;">
+    <h3 style="color: #fff; text-align: center;">1. حدد حجم مساحتك على الجدارية</h3>
+    
+    <div style="display: flex; justify-content: space-around; gap: 15px; margin: 20px 0;">
+        <!-- اختيار العرض (عدد Mربعات أفقياً) -->
+        <div style="text-align: center; flex: 1;">
+            <label style="color: #aaa; display: block; margin-bottom: 8px; font-size: 14px;">العرض (أفقياً)</label>
+            <div style="display: flex; align-items: center; justify-content: center; gap: 5px; direction: ltr;">
+                <button type="button" onclick="تعديلالبعد('squares-width', 1)" style="width: 35px; height: 35px; background: #d4af37; border: none; font-weight: bold; font-size: 18px; cursor: pointer; border-radius: 4px;">+</button>
+                <input type="number" id="squares-width" value="1" min="1" max="50" oninput="حسابالمساحةوالسعر()" style="width: 50px; height: 35px; text-align: center; background: #111; color: #fff; border: 1px solid #d4af37; border-radius: 4px; font-weight: bold;">
+                <button type="button" onclick="تعديلالبعد('squares-width', -1)" style="width: 35px; height: 35px; background: #d4af37; border: none; font-weight: bold; font-size: 18px; cursor: pointer; border-radius: 4px;">-</button>
+            </div>
         </div>
 
-        <div class="price-summary">
-            <p>عدد المربعات المحدد: <span id="summary-squares" style="color: #fff; font-weight: bold;">1</span> مربع</p>
-            <p>إجمالي السعر: <span id="summary-price" style="color: #d4af37; font-weight: bold;">10</span> دولار</p>
+        <!-- علامة الضرب التوضيحية -->
+        <div style="display: flex; align-items: center; color: #d4af37; font-size: 24px; font-weight: bold; margin-top: 20px;">X</div>
+
+                <!-- اختيار الطول (عدد المربعات عمودياً) -->
+        <div style="text-align: center; flex: 1;">
+            <label style="color: #aaa; display: block; margin-bottom: 8px; font-size: 14px;">الارتفاع (عمودياً)</label>
+            <div style="display: flex; align-items: center; justify-content: center; gap: 5px; direction: ltr;">
+                <button type="button" onclick="تعديلالبعد('squares-height', 1)" style="width: 35px; height: 35px; background: #d4af37; border: none; font-weight: bold; font-size: 18px; cursor: pointer; border-radius: 4px;">+</button>
+                <input type="number" id="squares-height" value="1" min="1" max="50" oninput="حسابالمساحةوالسعر()" style="width: 50px; height: 35px; text-align: center; background: #111; color: #fff; border: 1px solid #d4af37; border-radius: 4px; font-weight: bold;">
+                <button type="button" onclick="تعديلالبعد('squares-height', -1)" style="width: 35px; height: 35px; background: #d4af37; border: none; font-weight: bold; font-size: 18px; cursor: pointer; border-radius: 4px;">-</button>
+            </div>
         </div>
     </div>
+
+    <!-- ملخص الحساب التلقائي الذكي -->
+    <div class="price-summary" style="margin-top: 15px; font-size: 16px; color: #aaa; text-align: center; border-top: 1px dashed #333; padding-top: 15px;">
+        <p>المساحة المحجوزة: <span id="summary-squares" style="color: #fff; font-weight: bold;">1</span> مربع</p>
+        <p>إجمالي السعر ($10 للمربع): <span id="summary-price" style="color: #d4af37; font-weight: bold;">10</span> دولار</p>
+    </div>
+</div>
+
+<script>
+    function تعديلالبعد(idالعنصر, مقدار) {
+        const input = document.getElementById(idالعنصر);
+        if (!input) return;
+        let currentVal = parseInt(input.value) || 1;
+        let newVal = currentVal + مقدار;
+        if (newVal < 1) newVal = 1;
+        if (newVal > 50) newVal = 50; 
+        input.value = newVal;
+        حسابالمساحةوالسعر();
+    }
+</script>
+
+    }
+
+    function حسابالمساحةوالسعر() {
+        const widthInput = document.getElementById('squares-width');
+        const heightInput = document.getElementById('squares-height');
+        
+        let width = parseInt(widthInput.value) || 1;
+        let height = parseInt(heightInput.value) || 1;
+        
+        if (width < 1) { width = 1; widthInput.value = 1; }
+        if (height < 1) { height = 1; heightInput.value = 1; }
+
+        let totalSquares = width * height;
+        let totalPrice = totalSquares * 10; 
+
+        document.getElementById('summary-squares').innerText = totalSquares;
+        document.getElementById('summary-price').innerText = totalPrice.toLocaleString();
+        
+        const billSquares = document.getElementById('bill-squares');
+        const billPrice = document.getElementById('bill-price');
+        if (billSquares) billSquares.innerText = totalSquares;
+        if (billPrice) billPrice.innerText = totalPrice.toLocaleString() + "$";
+
+        window.selectedSquaresCount = totalSquares;
+        window.totalCalculatedPrice = totalPrice;
+        window.selectedWidth = width;
+        window.selectedHeight = height;
+    }
+</script>
+<!-- ================= نهاية جزء أبعاد المربعات المطور والاحترافي ================= -->
+
 
     <!-- 2. نافذة الشراء والمراجعة السحابية -->
     <div class="section">
