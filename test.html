@@ -102,37 +102,36 @@
         window.totalCalculatedPrice = val * PRICE_PER_SQUARE;
     }
 
-       // تشغيل تلقائي لجلب البيانات الحية من Firebase وتحديث الأسعار
+          // تشغيل تلقائي شامل لتهيئة الأسعار وجلب البيانات الحية من Firebase معاً
     window.onload = function() {
+        // 1. تشغيل الحساب المبدئي للأسعار فوراً
         تحديثالأسعار();
         
-        // التأكد من أن Firebase متاح ويعمل قبل جلب البيانات
+        // 2. الاتصال بـ Firebase لجلب عدادات السحاب الحية
         if (typeof db !== 'undefined' && db !== null) {
             try {
-                // جلب المربعات المحجوزة الحية من مجموعة reservations
                 db.collection("reservations").where("status", "==", "approved")
                 .onSnapshot((querySnapshot) => {
                     let totalReserved = 0;
                     
-                    // حساب إجمالي المربعات من الطلبات المقبولة
                     querySnapshot.forEach((doc) => {
                         let data = doc.data();
                         totalReserved += parseInt(data.squaresCount) || 1;
                     });
                     
-                    // حساب المربعات المتبقية من جدارية المليون
                     let totalWallPixels = 1000000;
                     let remaining = totalWallPixels - totalReserved;
-                    let percentage = ((totalReserved / totalWallPixels) * 100).toFixed(4);
                     
-                    // تحديث واجهة المستخدم بالأرقام الحقيقية القادمة من السحاب فوراً
-                    const elReserved = document.querySelector(".section p:nth-child(2) span");
-                    const elRemaining = document.querySelector(".section p:nth-child(3) span");
-                    const elPercent = document.getElementById("status-text"); // إذا كان لديك وسم للنسبة
-                    
-                    if(elReserved) elReserved.innerText = totalReserved.toLocaleString() + " مربع";
-                    if(elRemaining) elRemaining.innerText = remaining.toLocaleString() + " مربع";
-                    if(elPercent) elPercent.innerText = percentage + "%";
+                    // تحديث نصوص العدادات الحية في الأسفل فوراً وبدون تعارض
+                    const paragraphs = document.querySelectorAll(".section p");
+                    paragraphs.forEach(p => {
+                        if (p.innerText.includes("إجمالي المربعات المحجوزة")) {
+                            p.innerHTML = `إجمالي المربعات المحجوزة في Firebase: <span style="color:#fff; font-weight:bold;">${totalReserved.toLocaleString()} مربع</span>`;
+                        }
+                        if (p.innerText.includes("المربعات المتبقية")) {
+                            p.innerHTML = `المربعات المتبقية لجدارية المليون: <span style="color:#fff; font-weight:bold;">${remaining.toLocaleString()} مربع</span>`;
+                        }
+                    });
                     
                 }, (error) => {
                     console.log("خطأ في جلب بيانات Firebase: ", error);
@@ -141,15 +140,19 @@
                 console.log("حدث خطأ أثناء تشغيل اتصال السحاب: ", e);
             }
         } else {
-            // في حال عدم اتصال Firebase بعد، نضع أرقام تجريبية مؤقتة حتى لا تظل معلقة
-            const elReserved = document.querySelector(".section p:nth-child(2) span");
-            const elRemaining = document.querySelector(".section p:nth-child(3) span");
-            if(elReserved) elReserved.innerText = "0 مربع";
-            if(elRemaining) elRemaining.innerText = "1,000,000 مربع";
+            // أرقام افتراضية نظيفة لحين اكتمال اتصال قاعدة البيانات
+            const paragraphs = document.querySelectorAll(".section p");
+            paragraphs.forEach(p => {
+                if (p.innerText.includes("إجمالي المربعات المحجوزة")) {
+                    p.innerHTML = `إجمالي المربعات المحجوزة في Firebase: <span style="color:#fff;">0 مربع</span>`;
+                }
+                if (p.innerText.includes("المربعات المتبقية")) {
+                    p.innerHTML = `المربعات المتبقية لجدارية المليون: <span style="color:#fff;">1,000,000 مربع</span>`;
+                }
+            });
         }
     };
  
-    };
 </script>
 
 </body>
