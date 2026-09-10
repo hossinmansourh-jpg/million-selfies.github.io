@@ -33,15 +33,15 @@
             <h3>1. محاكاة اختيار المربعات</h3>
             <p style="font-size:13px; color:#aaa; text-align:center;">اختر عدد المربعات أو اكتب المساحة التي تريدها بيدك:</p>
             <div class="btn-group">
-                <button class="btn-gold" onclick="setPixels(1)">مربع واحد (10x10)</button>
-                <button class="btn-gold" onclick="setPixels(4)">كتلة 4 مربعات</button>
-                <button class="btn-gold" onclick="setPixels(9)">كتلة 9 مربعات</button>
+                <button class="btn-gold" onclick="setPixels(1)">1 مربع</button>
+                <button class="btn-gold" onclick="setPixels(4)">4 مربعات</button>
+                <button class="btn-gold" onclick="setPixels(9)">9 مربعات</button>
             </div>
             
-            <!-- حقل إدخال مخصص لكتابة أي رقم للزائر -->
-            <input type="number" id="customPixelsInput" min="1" max="10000" placeholder="أو اكتب عدد المربعات التي تريدها يدوياً هنا..." oninput="setCustomPixels(this.value)">
+            <!-- حقل إدخال مخصص لكتابة أي رقم للزائر يدعم كل الهواتف بدقة -->
+            <input type="number" id="customPixelsInput" min="1" max="10000" placeholder="أو اكتب أي عدد مربعات تريده هنا..." oninput="setCustomPixels(this.value)" onkeyup="setCustomPixels(this.value)">
             
-            <button class="btn-dark" onclick="resetForm()" style="width:100%;">إعادة تعيين</button>
+            <button class="btn-dark" onclick="resetForm()" style="width:100%;">إعادة تعيين للصفر</button>
         </div>
 
         <!-- 2. نافذة الشراء والرفع -->
@@ -66,9 +66,9 @@
         <div class="section">
             <h3>3. عدادات الواجهة الحية المتصلة بالسحاب</h3>
             <ul>
-                <li>إجمالي المربعات المحجوزة في Firebase: <span id="statReserved" class="val">جاري التحميل...</span></li>
-                <li>المربعات المتبقية لجدارية المليون: <span id="statRemaining" class="val">--</span></li>
-                <li>نسبة الحجز الحالية: <span id="statPercent" class="val">--</span></li>
+                <li>إجمالي المربعات المحجوزة في Firebase: <span id="statReserved" class="val">0 مربع</span></li>
+                <li>المربعات المتبقية لجدارية المليون: <span id="statRemaining" class="val">1,000,000 مربع متاح</span></li>
+                <li>نسبة الحجز الحالية: <span id="statPercent" class="val">0.000000 %</span></li>
             </ul>
         </div>
 
@@ -82,12 +82,24 @@
     <script src="https://gstatic.com"></script>
 
     <script>
-        // المتغيرات العامة الأساسية (مفتوحة ومتاحة فوراً للمتصفح)
-        let db, storage;
+        // إعدادات Firebase المعتمدة لمشروعك (تعمل فوراً الآن وبدون تأخير)
+        const firebaseConfig = {
+            apiKey: "AIzaSyCEMxWCT0siwT2t72CX24N1ajSAwqEk7Fs",
+            authDomain: "://firebaseapp.com",
+            projectId: "million-selfies",
+            storageBucket: "million-selfies.firebasestorage.app",
+            messagingSenderId: "1016907817387",
+            appId: "1:1016907817387:web:f6e9b2b76dcaecebe4b2ee"
+        };
+
+        // تهيئة الخدمات مباشرة
+        if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
+        const db = firebase.firestore();
+        const storage = firebase.storage();
+
         let selectedPixels = 0;
         const totalWallPixels = 1000000;
 
-        // دالة تحديث سجل النظام الممرر في الصندوق الأسود
         function logMessage(text) {
             const logBox = document.getElementById('logBox');
             if (logBox) {
@@ -96,16 +108,16 @@
             }
         }
 
-        // دالة تحديد الأزرار الثابتة (أصبحت خارج أي شروط لتعمل بلحظتها)
+        // دالة تحديد الأزرار الثابتة
         function setPixels(num) {
             selectedPixels = num;
-            document.getElementById('customPixelsInput').value = ""; // تفريغ خانة الكتابة عند ضغط زر جاهز
+            document.getElementById('customPixelsInput').value = ""; 
             document.getElementById('lblCount').innerText = num;
             document.getElementById('lblPrice').innerText = "$" + num;
-            logMessage("⏳ تم تحديد كتلة بمقدار [ " + num + " ] مربع، والسعر المحسوب تلقائياً هو: $" + num);
+            logMessage("⏳ تم تحديد بمقدار: " + num + " مربع. السعر: $" + num);
         }
 
-        // دالة حساب أي عدد يكتبه الزائر يدوياً بأصابعه
+        // دالة حساب أي عدد يكتبه الزائر يدوياً
         function setCustomPixels(value) {
             let num = parseInt(value);
             if (isNaN(num) || num <= 0) {
@@ -114,10 +126,9 @@
             selectedPixels = num;
             document.getElementById('lblCount').innerText = num;
             document.getElementById('lblPrice').innerText = "$" + num;
-            logMessage("✍️ قام الزائر بكتابة عدد مربعات مخصص: [ " + num + " ] مربع، السعر المحسوب: $" + num);
+            logMessage("✍️ تم كتابة عدد مربعات مخصص: " + num + " مربع. السعر: $" + num);
         }
 
-        // دالة إعادة التعيين
         function resetForm() {
             selectedPixels = 0;
             document.getElementById('lblCount').innerText = "0";
@@ -125,67 +136,62 @@
             document.getElementById('txtName').value = "";
             document.getElementById('fileImage').value = "";
             document.getElementById('customPixelsInput').value = "";
-            logMessage("🧹 تم إعادة تعيين قيم الاستمارة والعدادات إلى الصفر.");
+            logMessage("🧹 تم إعادة تعيين قيم الاستمارة للصفر.");
         }
 
-        // تشغيل ربط السحاب الحية (Firebase) بعد التحميل في الخلفية دون تعطيل الأزرار
-        window.addEventListener('load', function() {
-            const firebaseConfig = {
-                apiKey: "AIzaSyCEMxWCT0siwT2t72CX24N1ajSAwqEk7Fs",
-                authDomain: "://firebaseapp.com",
-                projectId: "million-selfies",
-                storageBucket: "million-selfies.firebasestorage.app",
-                messagingSenderId: "1016907817387",
-                appId: "1:1016907817387:web:f6e9b2b76dcaecebe4b2ee"
-            };
+        // تشغيل ربط العدادات الحية فوراً
+        logMessage("✅ تم اتصال الـ Firebase بنجاح حياً.");
+        
+        db.collection("reservations").onSnapshot(function(querySnapshot) {
+            let totalCount = querySnapshot.size; 
+            let remaining = totalWallPixels - totalCount;
+            let percent = ((totalCount / totalWallPixels) * 100).toFixed(6);
 
-            if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
-            db = firebase.firestore();
-            storage = firebase.storage();
-
-            logMessage("✅ تم تهيئة اتصال Firebase بنجاح. جاري ربط العدادات الحية...");
-
-            db.collection("reservations").onSnapshot(function(querySnapshot) {
-                let totalCount = querySnapshot.size; 
-                let remaining = totalWallPixels - totalCount;
-                let percent = ((totalCount / totalWallPixels) * 100).toFixed(6);
-
-                document.getElementById('statReserved').innerText = totalCount + " مربع";
-                document.getElementById('statRemaining').innerText = remaining.toLocaleString() + " مربع متاح";
-                document.getElementById('statPercent').innerText = percent + " %";
-                logMessage("📊 تحديث حي للإحصائيات: إجمالي الحجوزات في السيرفر حالياً هو " + totalCount);
-            }, function(error) {
-                console.error(error);
-                logMessage("❌ خطأ في الاتصال: تأكد من إعدادات القواعد الـ Rules في Firestore.");
-            });
+            document.getElementById('statReserved').innerText = totalCount + " مربع";
+            document.getElementById('statRemaining').innerText = remaining.toLocaleString() + " مربع متاح";
+            document.getElementById('statPercent').innerText = percent + " %";
+            logMessage("📊 تحديث الإحصائيات بالسيرفر: الإجمالي الحالي هو " + totalCount);
+        }, function(error) {
+            console.error(error);
+            logMessage("❌ خطأ في الاتصال بالسيرفر.");
         });
 
-        // دالة معالجة ورفع الصورة السحابية
+        // دالة رفع الصورة والطلب
         function simulatePayment(isSuccess) {
             if (!isSuccess) {
-                logMessage("❌ فشلت عملية الدفع. تم إلغاء حفظ البيانات السحابية.");
+                logMessage("❌ فشلت عملية الدفع.");
                 alert("تمت محاكاة عملية دفع فاشلة بنجاح.");
-                return;
-            }
-
-            if (!db || !storage) {
-                alert("برجاء الانتظار ثواني حتى يكتمل تحميل نظام السحاب بالكامل.");
                 return;
             }
 
             const name = document.getElementById('txtName').value.trim();
             const fileInput = document.getElementById('fileImage');
 
-            if (selectedPixels === 0) { alert("يرجى اختيار أو كتابة عدد المربعات المراد حجزها أولاً."); return; }
-            if (!name) { alert("يرجى إدخال اسم المشترك أو الرابط."); return; }
-            if (fileInput.files.length === 0) { alert("يرجى اختيار ملف صورة السيلفي لمحاكاة الرفع السحابي."); return; }
+            if (selectedPixels === 0) { alert("يرجى اختيار أو كتابة عدد المربعات أولاً."); return; }
+            if (!name) { alert("يرجى إدخال اسم المشترك."); return; }
+            if (fileInput.files.length === 0) { alert("يرجى اختيار ملف الصورة."); return; }
 
             const file = fileInput.files[0];
             const btn = document.getElementById('btnPaySuccess');
-            btn.innerText = "جاري رفع الصورة للمخزن السحابي...";
+            btn.innerText = "جاري الرفع سحابياً...";
             btn.disabled = true;
 
-            logMessage("⏳ جاري بدء رفع ملف الصورة إلى Firebase Storage...");
+            logMessage("⏳ جاري رفع الملف لـ Firebase Storage...");
 
             const fileRef = storage.ref("test_selfies/" + Date.now() + "_" + file.name);
 
+            fileRef.put(file).then(function(snapshot) {
+                return snapshot.ref.getDownloadURL();
+            })
+            .then(function(downloadURL) {
+                logMessage("🔗 تم الرفع بنجاح المستودع.");
+                return db.collection("reservations").add({
+                    row: Math.floor(Math.random() * 1000) + 1, 
+                    col: Math.floor(Math.random() * 1000) + 1,
+                    userName: name,
+                    imageUrl: downloadURL,
+                    status: "pending",
+                    createdAt: firebase.firestore.FieldValue.serverTimestamp()
+                });
+            })
+            .then(function() {
