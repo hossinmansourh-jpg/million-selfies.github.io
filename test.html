@@ -38,8 +38,7 @@
                 <button class="btn-gold" onclick="updateCounters(9)">9 مربعات</button>
             </div>
             
-            <!-- الصندوق الذهبي اليدوي - تم تغيير المسمى البرمجي ليحدث الأرقام فورا وبشكل مباشر على الهاتف -->
-            <input type="number" id="customPixelsInput" min="1" max="10000" placeholder="أو اكتب أي عدد مربعات تريده هنا..." oninput="updateCounters(this.value)">
+            <input type="number" id="customPixelsInput" min="1" max="10000" placeholder="أو اكتب أي عدد مربعات تريده هنا..." oninput="updateCounters(this.value)" onkeyup="updateCounters(this.value)">
             
             <button class="btn-dark" onclick="resetForm()" style="width:100%;">إعادة تعيين للصفر</button>
         </div>
@@ -66,9 +65,9 @@
         <div class="section">
             <h3>3. عدادات الواجهة الحية المتصلة بالسحاب</h3>
             <ul>
-                <li>إجمالي المربعات المحجوزة في Firebase: <span id="statReserved" class="val">0 مربع</span></li>
-                <li>المربعات المتبقية لجدارية المليون: <span id="statRemaining" class="val">1,000,000 مربع متاح</span></li>
-                <li>نسبة الحجز الحالية: <span id="statPercent" class="val">0.000000 %</span></li>
+                <li>إجمالي المربعات المحجوزة في Firebase: <span id="statReserved" class="val">جاري التحميل...</span></li>
+                <li>المربعات المتبقية لجدارية المليون: <span id="statRemaining" class="val">--</span></li>
+                <li>نسبة الحجز الحالية: <span id="statPercent" class="val">--</span></li>
             </ul>
         </div>
 
@@ -76,30 +75,19 @@
         <div class="log-box" id="logBox">[System] المختبر جاهز لبدء التجارب السحابية...</div>
     </div>
 
-    <!-- استدعاء حزمة مكتبات الـ SDK لـ Firebase -->
+    <!-- استدعاء مكتبات الـ SDK لـ Firebase من سيرفرات جوجل الموثوقة -->
     <script src="https://gstatic.com"></script>
     <script src="https://gstatic.com"></script>
     <script src="https://gstatic.com"></script>
 
     <script>
-        // إعدادات Firebase المعتمدة لمشروعك
-        const firebaseConfig = {
-            apiKey: "AIzaSyCEMxWCT0siwT2t72CX24N1ajSAwqEk7Fs",
-            authDomain: "://firebaseapp.com",
-            projectId: "million-selfies",
-            storageBucket: "million-selfies.firebasestorage.app",
-            messagingSenderId: "1016907817387",
-            appId: "1:1016907817387:web:f6e9b2b76dcaecebe4b2ee"
-        };
-
-        // تهيئة الخدمات بشكل مباشر ومستقل
-        if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
-        const db = firebase.firestore();
-        const storage = firebase.storage();
-
+        // المتغيرات العامة الأساسية
+        let db = null;
+        let storage = null;
         let selectedPixels = 0;
         const totalWallPixels = 1000000;
 
+        // 1. دالة تحديث الصندوق الأسود (السجلات)
         function logMessage(text) {
             const logBox = document.getElementById('logBox');
             if (logBox) {
@@ -108,73 +96,72 @@
             }
         }
 
-        // دالة موحدة ومباشرة لتحديث العدادات والأسعار فوراً سواء بالضغط أو الكتابة
+        // 2. دالة تحديث العدادات الفورية - أصبحت تعمل رغماً عن أي مشكلة اتصال في الخلفية
         function updateCounters(val) {
             let num = parseInt(val);
             if (isNaN(num) || num <= 0) {
                 num = 0;
             }
             selectedPixels = num;
-            document.getElementById('lblCount').innerText = num;
-            document.getElementById('lblPrice').innerText = "$" + num;
-            logMessage("⏳ تم تحديث المساحة المطلوبة إلى: " + num + " مربع، السعر: $" + num);
+            
+            const countEl = document.getElementById('lblCount');
+            const priceEl = document.getElementById('lblPrice');
+            
+            if (countEl) countEl.innerText = num;
+            if (priceEl) priceEl.innerText = "$" + num;
+            
+            logMessage("⏳ تم تحديث المساحة المطلوبة إلى: " + num + " مربع، السعر المحسوب تلقائياً: $" + num);
         }
 
+        // 3. دالة إعادة التعيين للصفر
         function resetForm() {
             selectedPixels = 0;
-            document.getElementById('lblCount').innerText = "0";
-            document.getElementById('lblPrice').innerText = "$0";
-            document.getElementById('txtName').value = "";
-            document.getElementById('fileImage').value = "";
-            document.getElementById('customPixelsInput').value = "";
-            logMessage("🧹 تم إعادة تعيين قيم الاستمارة للصفر.");
+            if (document.getElementById('lblCount')) document.getElementById('lblCount').innerText = "0";
+            if (document.getElementById('lblPrice')) document.getElementById('lblPrice').innerText = "$0";
+            if (document.getElementById('txtName')) document.getElementById('txtName').value = "";
+            if (document.getElementById('fileImage')) document.getElementById('fileImage').value = "";
+            if (document.getElementById('customPixelsInput')) document.getElementById('customPixelsInput').value = "";
+            logMessage("🧹 تم إعادة تعيين قيم الاستمارة بالكامل.");
         }
 
-        // جلب الإحصائيات من السيرفر وعرضها في الأسفل
-        logMessage("✅ تم ربط النظام بالسحاب حياً بنجاح.");
-        db.collection("reservations").onSnapshot(function(querySnapshot) {
-            let totalCount = querySnapshot.size; 
-            let remaining = totalWallPixels - totalCount;
-            let percent = ((totalCount / totalWallPixels) * 100).toFixed(6);
-
-            document.getElementById('statReserved').innerText = totalCount + " مربع";
-            document.getElementById('statRemaining').innerText = remaining.toLocaleString() + " مربع متاح";
-            document.getElementById('statPercent').innerText = percent + " %";
-            logMessage("📊 تحديث من السيرفر: الإجمالي المحجوز حالياً هو " + totalCount);
-        }, function(error) {
-            console.error(error);
-            logMessage("❌ خطأ في قراءة بيانات السيرفر.");
-        });
-
-        // دالة محاكاة الدفع والرفع
+        // 4. دالة معالجة ورفع الصورة والطلب للسحاب
         function simulatePayment(isSuccess) {
             if (!isSuccess) {
-                logMessage("❌ فشلت عملية الدفع.");
+                logMessage("❌ فشلت عملية الدفع. تم إلغاء حفظ البيانات السحابية.");
                 alert("تمت محاكاة عملية دفع فاشلة بنجاح.");
                 return;
             }
 
-            const name = document.getElementById('txtName').value.trim();
+            if (!db || !storage) {
+                alert("نظام السحاب لم يكتمل تحميله بعد أو هناك مشكلة بالاتصال. يرجى التحقق من شبكة الإنترنت.");
+                return;
+            }
+
+            const nameInput = document.getElementById('txtName');
             const fileInput = document.getElementById('fileImage');
+            const name = nameInput ? nameInput.value.trim() : "";
 
             if (selectedPixels === 0) { alert("يرجى اختيار أو كتابة عدد المربعات أولاً."); return; }
             if (!name) { alert("يرجى إدخال اسم المشترك."); return; }
-            if (fileInput.files.length === 0) { alert("يرجى اختيار ملف الصورة."); return; }
+            if (!fileInput || fileInput.files.length === 0) { alert("يرجى اختيار ملف صورة السيلفي."); return; }
 
             const file = fileInput.files[0];
             const btn = document.getElementById('btnPaySuccess');
-            btn.innerText = "جاري الرفع سحابياً...";
-            btn.disabled = true;
+            if (btn) {
+                btn.innerText = "جاري الرفع سحابياً...";
+                btn.disabled = true;
+            }
 
-            logMessage("⏳ جاري رفع الملف لـ Firebase Storage...");
+            logMessage("⏳ جاري رفع ملف الصورة إلى Firebase Storage...");
 
             const fileRef = storage.ref("test_selfies/" + Date.now() + "_" + file.name);
 
             fileRef.put(file).then(function(snapshot) {
+                logMessage("✔️ تم رفع الصورة بنجاح! جاري استخراج رابط المعاينة...");
                 return snapshot.ref.getDownloadURL();
             })
             .then(function(downloadURL) {
-                logMessage("🔗 تم الرفع بنجاح. جاري حفظ البيانات...");
+                logMessage("🔗 تم جلب الرابط السحابي بنجاح. جاري حفظ الطلب في Firestore...");
                 return db.collection("reservations").add({
                     row: Math.floor(Math.random() * 1000) + 1, 
                     col: Math.floor(Math.random() * 1000) + 1,
@@ -185,12 +172,25 @@
                 });
             })
             .then(function() {
-                logMessage("🟢 تم حفظ البيانات بنجاح في السيرفر!");
-                alert("🎉 نجحت العملية وتم الحفظ بالسحاب!");
+                logMessage("🟢 تم تسجيل عملية الحجز والدفع بنجاح في Firestore!");
+                alert("🎉 نجحت المحاكاة! تم رفع الملف وحفظ مستند الحجز سحابياً بنجاح.");
                 resetForm();
             })
             .catch(function(err) {
                 console.error(err);
-                logMessage("❌ فشل الرفع أو الحفظ.");
-                alert("حدث خطأ أثناء المعالجة.");
+                logMessage("❌ فشل الرفع السحابي: " + err.message);
+                alert("حدث خطأ غير متوقع أثناء المعالجة سحابياً.");
             })
+            .finally(function() {
+                if (btn) {
+                    btn.innerText = "محاكاة دفع ناجح وحفظ في السحاب ✔️";
+                    btn.disabled = false;
+                }
+            });
+        }
+
+        // 5. حماية تشغيل سيرفر الـ Firebase داخل حيز آمن (Try-Catch) لكي لا يعطل الأزرار مطلقاً
+        try {
+            const firebaseConfig = {
+                apiKey: "AIzaSyCEMxWCT0siwT2t72CX24N1ajSAwqEk7Fs",
+                authDomain: "://firebaseapp.com",
