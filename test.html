@@ -82,10 +82,12 @@
     <script src="https://gstatic.com"></script>
 
     <script>
+        // المتغيرات العامة الأساسية (مفتوحة ومتاحة فوراً للمتصفح)
         let db, storage;
         let selectedPixels = 0;
         const totalWallPixels = 1000000;
 
+        // دالة تحديث سجل النظام الممرر في الصندوق الأسود
         function logMessage(text) {
             const logBox = document.getElementById('logBox');
             if (logBox) {
@@ -94,16 +96,16 @@
             }
         }
 
-        // دالة تحديد الأزرار الثابتة
+        // دالة تحديد الأزرار الثابتة (أصبحت خارج أي شروط لتعمل بلحظتها)
         function setPixels(num) {
             selectedPixels = num;
-            document.getElementById('customPixelsInput').value = ""; // مسح الخانة اليدوية عند اختيار زر جاهز
+            document.getElementById('customPixelsInput').value = ""; // تفريغ خانة الكتابة عند ضغط زر جاهز
             document.getElementById('lblCount').innerText = num;
             document.getElementById('lblPrice').innerText = "$" + num;
             logMessage("⏳ تم تحديد كتلة بمقدار [ " + num + " ] مربع، والسعر المحسوب تلقائياً هو: $" + num);
         }
 
-        // دالة جديدة لحساب أي عدد يكتبه الزائر يدوياً
+        // دالة حساب أي عدد يكتبه الزائر يدوياً بأصابعه
         function setCustomPixels(value) {
             let num = parseInt(value);
             if (isNaN(num) || num <= 0) {
@@ -115,6 +117,7 @@
             logMessage("✍️ قام الزائر بكتابة عدد مربعات مخصص: [ " + num + " ] مربع، السعر المحسوب: $" + num);
         }
 
+        // دالة إعادة التعيين
         function resetForm() {
             selectedPixels = 0;
             document.getElementById('lblCount').innerText = "0";
@@ -125,6 +128,7 @@
             logMessage("🧹 تم إعادة تعيين قيم الاستمارة والعدادات إلى الصفر.");
         }
 
+        // تشغيل ربط السحاب الحية (Firebase) بعد التحميل في الخلفية دون تعطيل الأزرار
         window.addEventListener('load', function() {
             const firebaseConfig = {
                 apiKey: "AIzaSyCEMxWCT0siwT2t72CX24N1ajSAwqEk7Fs",
@@ -156,6 +160,7 @@
             });
         });
 
+        // دالة معالجة ورفع الصورة السحابية
         function simulatePayment(isSuccess) {
             if (!isSuccess) {
                 logMessage("❌ فشلت عملية الدفع. تم إلغاء حفظ البيانات السحابية.");
@@ -164,7 +169,7 @@
             }
 
             if (!db || !storage) {
-                alert("برجاء الانتظار حتى يكتمل تحميل نظام السحاب بالكامل.");
+                alert("برجاء الانتظار ثواني حتى يكتمل تحميل نظام السحاب بالكامل.");
                 return;
             }
 
@@ -184,9 +189,3 @@
 
             const fileRef = storage.ref("test_selfies/" + Date.now() + "_" + file.name);
 
-            fileRef.put(file).then(function(snapshot) {
-                logMessage("✔️ تم رفع الصورة بنجاح! جاري استخراج رابط المعاينة المباشر...");
-                return snapshot.ref.getDownloadURL();
-            })
-            .then(function(downloadURL) {
-                logMessage("🔗 الرابط المستخرج بنجاح.");
