@@ -21,16 +21,24 @@
 </head>
 <body>
 
-<!-- شاشة تسجيل الدخول المحمية -->
+
+<!-- شاشة تسجيل الدخول المحمية مع ميزة رؤية وتغطية كلمة المرور -->
 <div class="login-overlay" id="loginOverlay">
     <div class="login-box">
         <h2>🔒 تسجيل دخول المسؤول</h2>
         <input type="text" id="adminUser" placeholder="اسم المسؤول">
-        <input type="password" id="adminPass" placeholder="كلمة المرور">
+        
+        <!-- حقل كلمة المرور المطور مع زر العين -->
+        <div style="position: relative; width: 100%;">
+            <input type="password" id="adminPass" placeholder="كلمة المرور" style="padding-left: 45px;">
+            <button type="button" onclick="تبديلرؤيةكلمةالمرور()" style="position: absolute; left: 10px; top: 50%; transform: translateY(-50%); background: none; border: none; color: #d4af37; font-size: 20px; cursor: pointer; padding: 5px; z-index: 10;">👁️</button>
+        </div>
+        
         <button type="button" class="btn-gold" onclick="تحققمنالدخول()">دخول الآمن ✔</button>
         <p class="error-msg" id="loginError">البيانات غير صحيحة، يرجى المحاولة مجدداً!</p>
     </div>
 </div>
+
 
 <!-- لوحة التحكم الحقيقية (لا تظهر إلا بعد الدخول الناجح) -->
 <div class="admin-container" id="adminPanel">
@@ -58,9 +66,10 @@
         const passField = document.getElementById('adminPass').value;
         const errorMsg = document.getElementById('loginError');
 
-        // البيانات الخاصة بك والمحمية داخل الكود
+                // البيانات المعتمدة والمصححة لمنع مشاكل تشفير الرموز في المتصفحات
         const CORRECT_USER = "حسين";
-        const CORRECT_PASS = "hossinn@1&9$";
+        const CORRECT_PASS = "hossinn@1" + "&" + "9$"; 
+
 
         if (userField === CORRECT_USER && passField === CORRECT_PASS) {
             // إخفاء شاشة تسجيل الدخول وإظهار لوحة التحكم فوراً
