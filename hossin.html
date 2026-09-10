@@ -6,11 +6,15 @@
     <title>لوحة تحكم المسؤول الآمنة - جدارية المليون</title>
     <style>
         body { background-color: #000; color: #fff; font-family: sans-serif; padding: 20px; text-align: center; margin: 0; }
-        .admin-container { max-width: 800px; margin: 0 auto; display: none; }
-        .login-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #000; display: flex; justify-content: center; align-items: center; z-index: 9999; }
-        .login-box { border: 2px solid #d4af37; padding: 30px; border-radius: 12px; background: #0a0a0a; max-width: 350px; width: 90%; box-sizing: border-box; }
+        /* جعل لوحة التحكم مخفية في البداية */
+        #adminPanel { display: none; max-width: 800px; margin: 0 auto; padding-top: 20px; }
+        
+        /* تحديث شاشة الدخول لتكون مرئية ومقاومة لتجميد الجوالات */
+        .login-overlay { width: 100%; margin-top: 50px; display: flex; justify-content: center; align-items: center; }
+        .login-box { border: 2px solid #d4af37; padding: 30px; border-radius: 12px; background: #0a0a0a; max-width: 350px; width: 100%; box-sizing: border-box; }
+        
         h2, h3 { color: #d4af37; margin-bottom: 20px; }
-        input[type="password"] { width: 100%; padding: 15px; margin: 15px 0; border: 1px solid #555; background: #111; color: #fff; border-radius: 5px; box-sizing: border-box; font-size: 18px; text-align: center; letter-spacing: 3px; }
+        input[type="password"] { width: 100%; padding: 15px; margin: 15px 0; border: 1px solid #555; background: #111; color: #fff; border-radius: 5px; box-sizing: border-box; font-size: 18px; text-align: center; }
         .btn-gold { background: #d4af37; color: #000; padding: 14px 25px; border: none; border-radius: 5px; font-weight: bold; cursor: pointer; width: 100%; margin-top: 15px; font-size: 16px; }
         .error-msg { color: #ff4d4d; font-size: 14px; margin-top: 10px; display: none; }
         .order-card { border: 1px solid #333; padding: 15px; margin: 15px 0; border-radius: 6px; background: #111; text-align: right; }
@@ -22,11 +26,11 @@
 </head>
 <body>
 
-<!-- شاشة تسجيل الدخول الرقمية المحمية -->
+<!-- شاشة تسجيل الدخول الرقمية الظاهرة والمستقرة -->
 <div class="login-overlay" id="loginOverlay">
     <div class="login-box">
         <h2>🔒 منطقة الإدارة الآمنة</h2>
-        <p style="color: #aaa; font-size: 14px;">أدخل الرمز السري الخاص بالمسؤول حسين للدخول:</p>
+        <p style="color: #aaa; font-size: 14px;">أدخل الرمز السري الخاص بالمسؤول حسين:</p>
         
         <div class="pass-wrapper">
             <input type="password" id="adminPass" placeholder="••••••••">
@@ -65,20 +69,17 @@
         if (passField.type === "password") {
             passField.type = "text";
             toggleBtn.innerText = "🔒";
-            passField.style.letterSpacing = "normal";
         } else {
             passField.type = "password";
             toggleBtn.innerText = "👁️";
-            passField.style.letterSpacing = "3px";
         }
     }
 
-    // الرمز السري الجديد المعتمد والآمن بالكامل والمحمي من مشاكل الجوالات
+    // الرمز السري الرقمي المبسط السريع والمضمون
     function checkAdminLogin() {
         const passField = document.getElementById('adminPass').value.trim();
         const errorMsg = document.getElementById('loginError');
 
-        // الرمز السري الجديد الخاص بك (رقمي قوي مع حروف مبسطة خالية من تعارض الرموز)
         const CORRECT_PIN = "hossin9911";
 
         if (passField === CORRECT_PIN) {
