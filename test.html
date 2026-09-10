@@ -3,229 +3,199 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>مختبر التجريب الحقيقي - جدارية مليون سيلفي</title>
+    <title>مختبر التجريب السحابي الحقيقي لـ Firebase</title>
     <style>
-        body {
-            background-color: #0b0b0b;
-            color: #ffffff;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            padding: 20px;
-            margin: 0;
-        }
-        .test-container {
-            max-width: 900px;
-            margin: 0 auto;
-            background: #141414;
-            border: 1px solid #d4af37;
-            border-radius: 12px;
-            padding: 25px;
-            box-shadow: 0 4px 20px rgba(212, 175, 55, 0.1);
-        }
-        h1 { color: #d4af37; text-align: center; margin-bottom: 30px; }
-        .grid-simulator {
-            background: #1a1a1a;
-            border: 2px dashed #444;
-            padding: 20px;
-            border-radius: 8px;
-            text-align: center;
-            margin-bottom: 25px;
-        }
-        .block-selector {
-            display: flex;
-            justify-content: center;
-            gap: 15px;
-            margin-top: 15px;
-        }
-        button {
-            background: linear-gradient(45deg, #d4af37, #aa7c11);
-            color: #000;
-            border: none;
-            padding: 10px 20px;
-            font-weight: bold;
-            border-radius: 6px;
-            cursor: pointer;
-            transition: 0.3s;
-        }
-        button:hover { transform: scale(1.05); opacity: 0.9; }
-        .btn-secondary { background: #333; color: #fff; border: 1px solid #555; }
-        .status-panel {
-            background: #1e1e1e;
-            padding: 15px;
-            border-radius: 6px;
-            margin-top: 20px;
-            border-right: 4px solid #d4af37;
-        }
-        .log-box {
-            background: #000;
-            color: #00ff00;
-            font-family: monospace;
-            padding: 15px;
-            border-radius: 6px;
-            height: 180px;
-            overflow-y: auto;
-            margin-top: 20px;
-            font-size: 13px;
-        }
-        .modal-sim {
-            background: #222;
-            border: 1px solid #d4af37;
-            padding: 20px;
-            border-radius: 8px;
-            margin-top: 25px;
-        }
-        .input-group { margin-bottom: 15px; }
-        .input-group label { display: block; margin-bottom: 5px; color: #ccc; }
-        .input-group input { width: 100%; padding: 8px; background: #333; border: 1px solid #555; color: #fff; border-radius: 4px; box-sizing: border-box; }
-        .loading { display: none; color: #d4af37; font-weight: bold; margin-top: 10px; }
+        body { background-color: #000; color: #fff; font-family: system-ui, sans-serif; padding: 20px; direction: rtl; }
+        .container { max-width: 500px; margin: 0 auto; border: 2px solid #d4af37; border-radius: 12px; padding: 20px; background-color: #0a0a0a; }
+        h2, h3 { color: #d4af37; text-align: center; }
+        .section { background-color: #111; border: 1px solid #333; padding: 15px; border-radius: 8px; margin-bottom: 15px; }
+        .btn-group { display: flex; gap: 10px; margin: 10px 0; }
+        button { flex: 1; padding: 12px; border: none; border-radius: 6px; font-weight: bold; cursor: pointer; font-size: 14px; }
+        .btn-gold { background-color: #d4af37; color: #000; }
+        .btn-red { background-color: #ff4d4d; color: #fff; }
+        .btn-dark { background-color: #222; color: #fff; border: 1px solid #444; }
+        input[type="text"], input[type="file"] { width: 100%; padding: 10px; margin: 10px 0; box-sizing: border-box; background-color: #1a1a1a; border: 1px solid #444; color: #fff; border-radius: 6px; }
+        .log-box { background-color: #000; border: 1px solid #d4af37; height: 120px; overflow-y: auto; padding: 10px; font-family: monospace; font-size: 12px; color: #0f0; border-radius: 6px; text-align: left; direction: ltr; }
+        ul { list-style: none; padding: 0; }
+        li { margin: 8px 0; font-size: 14px; }
+        span.val { color: #d4af37; font-weight: bold; }
     </style>
 </head>
 <body>
 
-<div class="test-container">
-    <h1>🧪 مختبر التجريب السحابي الحقيقي لـ Firebase</h1>
-    <p style="text-align: center; color: #aaa;">هذه الصفحة متصلة الآن بقاعدة بياناتك السحابية الحقيقية لتوثيق عمليات الحجز.</p>
-
-    <div class="grid-simulator">
-        <h3>1. محاكاة اختيار المربعات (Grid Simulation)</h3>
-        <p>اختر عدد المربعات الافتراضية المراد حجزها لتجربة حساب السعر:</p>
-        <div class="block-selector">
-            <button onclick="selectBlocks(1)">مربع واحد (10x10)</button>
-            <button onclick="selectBlocks(4)">كتلة 4 مربعات</button>
-            <button onclick="selectBlocks(9)">كتلة 9 مربعات</button>
-            <button class="btn-secondary" onclick="resetTest()">إعادة تعيين</button>
-        </div>
-    </div>
-
-    <div class="modal-sim">
-        <h3>2. نافذة الشراء والمراجعة السحابية (Checkout)</h3>
-        <div class="input-group">
-            <label>عدد المربعات المحددة:</label>
-            <input type="text" id="selectedCount" value="0" disabled>
-        </div>
-        <div class="input-group">
-            <label>إجمالي السعر المحسوب (1 دولار لكل مربع):</label>
-            <input type="text" id="totalPrice" value="$0" disabled>
-        </div>
-        <div class="input-group">
-            <label>رابط الموقع الإلكتروني للمشترك:</label>
-            <input type="url" id="userUrl" placeholder="https://example.com" value="https://myphoto.com">
-        </div>
+    <div class="container">
+        <h2>🧪 مختبر التجريب السحابي المطور</h2>
         
-        <p><strong>محاكاة بوابات الدفع والرفع السحابي الحقيقي:</strong></p>
-        <button onclick="simulateAndSavePayment(true)">محاكاة دفع ناجح وحفظ في السحاب ✔️</button>
-        <button onclick="simulateAndSavePayment(false)" class="btn-secondary" style="border-color: #ff3333; color: #ff3333;">محاكاة دفع فاشل ❌</button>
-        
-        <div id="loadingIndicator" class="loading">🔄 جاري معالجة الدفع الإلكتروني والرفع السحابي الآمن إلى Firebase Firestore...</div>
+        <!-- 1. محاكاة اختيار المربعات -->
+        <div class="section">
+            <h3>1. محاكاة اختيار المربعات</h3>
+            <p style="font-size:13px; color:#aaa; text-align:center;">اختر عدد المربعات الافتراضية لتجربة الحساب:</p>
+            <div class="btn-group">
+                <button class="btn-gold" onclick="setPixels(1)">مربع واحد (10x10)</button>
+                <button class="btn-gold" onclick="setPixels(4)">كتلة 4 مربعات</button>
+                <button class="btn-gold" onclick="setPixels(9)">كتلة 9 مربعات</button>
+            </div>
+            <button class="btn-dark" onclick="resetForm()">إعادة تعيين</button>
+        </div>
+
+        <!-- 2. نافذة الشراء والرفع -->
+        <div class="section">
+            <h3>2. نافذة الشراء والمراجعة السحابية</h3>
+            <ul>
+                <li>عدد المربعات المحددة: <span id="lblCount" class="val">0</span></li>
+                <li>إجمالي السعر المحسوب (1$ للمربع): <span id="lblPrice" class="val">$0</span></li>
+            </ul>
+            
+            <input type="text" id="txtName" placeholder="رابط الموقع أو اسم المشترك">
+            
+            <label style="font-size:12px; color:#d4af37; display:block; margin-top:5px;">اختر صورة السيلفي لرفعها مباشرة:</label>
+            <input type="file" id="fileImage" accept="image/*">
+
+            <div class="btn-group">
+                <button class="btn-gold" id="btnPaySuccess" onclick="simulatePayment(true)">محاكاة دفع ناجح وحفظ في السحاب ✔️</button>
+            </div>
+            <div class="btn-group">
+                <button class="btn-red" onclick="simulatePayment(false)">محاكاة دفع فاشل ❌</button>
+            </div>
+        </div>
+
+        <!-- 3. العدادات الحية -->
+        <div class="section">
+            <h3>3. عدادات الواجهة الحية المتصلة بالسحاب</h3>
+            <ul>
+                <li>إجمالي المربعات المحجوزة في Firebase: <span id="statReserved" class="val">جاري التحميل...</span></li>
+                <li>المربعات المتبقية لجدارية المليون: <span id="statRemaining" class="val">--</span></li>
+                <li>نسبة الحجز الفكرية الحالية: <span id="statPercent" class="val">--</span></li>
+            </ul>
+        </div>
+
+        <!-- سجل النظام -->
+        <h3>📋 سجل المطور والمزامنة الحية (System Logs)</h3>
+        <div class="log-box" id="logBox">[System] المختبر جاهز لبدء التجارب السحابية...</div>
     </div>
 
-    <div class="status-panel">
-        <h3>3. عدادات الواجهة الحية المتصلة بالسحاب</h3>
-        <ul>
-            <li>إجمالي المربعات المحجوزة في Firebase: <strong id="statReserved" style="color: #d4af37;">جاري التحميل...</strong></li>
-            <li>المربعات المتبقية لجدارية المليون: <strong id="statLeft">--</strong></li>
-            <li>نسبة الحجز الفكرية الحالية: <strong id="statPercent" style="color: #00ff00;">--</strong></li>
-        </ul>
-    </div>
+    <!-- استدعاء حزمة SDK الكاملة للإصدار 8 بما فيها الـ Storage الحاسم لرفع الصور -->
+    <script src="https://gstatic.com"></script>
+    <script src="https://gstatic.com"></script>
+    <script src="https://gstatic.com"></script>
 
-    <h3>📋 سجل المطور والمزامنة الحية مع السيرفر (System Logs):</h3>
-    <div class="log-box" id="logBox"></div>
-</div>
+    <script>
+        // إعدادات Firebase المعتمدة لمشروعك
+        const firebaseConfig = {
+            apiKey: "AIzaSyCEMxWCT0siwT2t72CX24N1ajSAwqEk7Fs",
+            authDomain: "://firebaseapp.com",
+            projectId: "million-selfies",
+            storageBucket: "million-selfies.firebasestorage.app",
+            messagingSenderId: "1016907817387",
+            appId: "1:1016907817387:web:f6e9b2b76dcaecebe4b2ee"
+        };
 
-<!-- استدعاء مكتبات Firebase السحابية الرسمية (CDN) المتوافقة مع الويب -->
-<script type="module">
-    import { initializeApp } from "https://gstatic.com";
-    import { getFirestore, collection, addDoc, getDocs, onSnapshot } from "https://gstatic.com";
+        // تهيئة الخدمات
+        if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
+        const db = firebase.firestore();
+        const storage = firebase.storage();
 
-    // مفاتيح الاتصال السرية الخاصة بـ حسين
-    const firebaseConfig = {
-      apiKey: "AIzaSyCEMxWCT0siwT2t72CX24N1ajSAwqEk7Fs",
-      authDomain: "million-selfies.firebaseapp.com",
-      projectId: "million-selfies",
-      storageBucket: "million-selfies.firebasestorage.app",
-      messagingSenderId: "1016907817387",
-      appId: "1:1016907817387:web:f6e9b2b76dcaecebe4b2ee",
-      measurementId: "G-9K5E3PLFDN"
-    };
+        let selectedPixels = 0;
+        const totalWallPixels = 1000000; // مليون بكسل
 
-    // تهيئة المشروع وقاعدة البيانات
-    const app = initializeApp(firebaseConfig);
-    const db = getFirestore(app);
-
-    let currentSelectedBlocks = 0;
-    const maxBlocks = 1000000;
-
-    window.log = function(message, type = 'info') {
-        const logBox = document.getElementById('logBox');
-        let color = '#00ff00';
-        if (type === 'error') color = '#ff3333';
-        if (type === 'success') color = '#ffcc00';
-        logBox.innerHTML += `<span style="color: ${color}">[${new Date().toLocaleTimeString()}] ${message}</span><br>`;
-        logBox.scrollTop = logBox.scrollHeight;
-    }
-
-    log("تم الاتصال بسيرفر Firebase السحابي الخاص بك بنجاح! المختبر جاهز...");
-
-    // دالة الاستماع الحي لقاعدة البيانات لتحديث العدادات تلقائياً
-    onSnapshot(collection(db, "reservations"), (snapshot) => {
-        let totalReservedFromDB = 0;
-        snapshot.forEach((doc) => {
-            const data = doc.data();
-            // نقوم بحساب المربعات فقط إذا تم قبول الحجز أو كان في وضع الاختبار للتجربة
-            totalReservedFromDB += Number(data.blocksCount || 0);
-        });
-
-        // إذا كانت قاعدة البيانات فارغة تماماً في البداية نضع رقماً افتراضياً للتجربة
-        let displayReserved = totalReservedFromDB === 0 ? 759 : totalReservedFromDB;
-        let left = maxBlocks - displayReserved;
-        let percent = ((displayReserved / maxBlocks) * 100).toFixed(4);
-
-        document.getElementById('statReserved').innerText = displayReserved.toLocaleString();
-        document.getElementById('statLeft').innerText = left.toLocaleString();
-        document.getElementById('statPercent').innerText = `${percent}%`;
-        log(`المزامنة الحية: تم تحديث عدادات الموقع تلقائياً من السيرفر. إجمالي المحجوز في قاعدة البيانات: ${totalReservedFromDB} مربع.`, 'success');
-    });
-
-    window.selectBlocks = function(count) {
-        currentSelectedBlocks = count;
-        document.getElementById('selectedCount').value = count;
-        document.getElementById('totalPrice').value = `$${count}`;
-        log(`تم تحديد ${count} مربع. السعر المتوقع لبوابة الدفع: $${count}`);
-    }
-
-    window.simulateAndSavePayment = async function(isSuccessful) {
-        if (currentSelectedBlocks === 0) {
-            log("خطأ: يرجى تحديد عدد المربعات أولاً قبل البدء بعملية الدفع!", "error");
-            alert("الرجاء تحديد المربعات أولاً!");
-            return;
+        // دالة تحديث سجل النظام الممرر في الصندوق الأسود
+        function logMessage(text) {
+            const logBox = document.getElementById('logBox');
+            logBox.innerHTML += `<br>[${new Date().toLocaleTimeString()}] ${text}`;
+            logBox.scrollTop = logBox.scrollHeight;
         }
 
-        document.getElementById('loadingIndicator').style.display = 'block';
-        log(`بدء معالجة الدفع المالي بقيمة $${currentSelectedBlocks}...`, 'info');
+        // إعداد المربعات المحسوبة
+        function setPixels(num) {
+            selectedPixels = num;
+            document.getElementById('lblCount').innerText = num;
+            document.getElementById('lblPrice').innerText = `$${num}`;
+            logMessage(`تم اختيار كتلة بمقدار ${num} مربع، السعر المتوقع: $${num}`);
+        }
 
-        setTimeout(async () => {
-            document.getElementById('loadingIndicator').style.display = 'none';
+        function resetForm() {
+            selectedPixels = 0;
+            document.getElementById('lblCount').innerText = "0";
+            document.getElementById('lblPrice').innerText = "$0";
+            document.getElementById('txtName').value = "";
+            document.getElementById('fileImage').value = "";
+            logMessage("تم إعادة تعيين قيم الاستمارة بالكامل.");
+        }
 
-            if (isSuccessful) {
-                const mockTransactionId = "TXN-" + Math.floor(Math.random() * 100000000);
-                log(`نجاح الدفع المالي من البوابة البنكية! رقم العملية: ${mockTransactionId}`, 'success');
+        // جلب الإحصائيات المباشرة والعدادات الحية من السيرفر تلقائياً
+        db.collection("reservations").where("status", "==", "approved")
+        .onSnapshot((querySnapshot) => {
+            let totalApprovedCount = querySnapshot.size; // جلب عدد المربعات المقبولة حالياً
+            let remaining = totalWallPixels - totalApprovedCount;
+            let percent = ((totalApprovedCount / totalWallPixels) * 100).toFixed(6);
+
+            document.getElementById('statReserved').innerText = totalApprovedCount + " مربع";
+            document.getElementById('statRemaining').innerText = remaining.toLocaleString() + " مربع متاح";
+            document.getElementById('statPercent').innerText = percent + " %";
+            logMessage(`📊 تحديث حي للإحصائيات: إجمالي المحجوز بالسيرفر حالياً هو ${totalApprovedCount}`);
+        }, (error) => {
+            console.error(error);
+            logMessage(`❌ خطأ في الاتصال: تأكد من تشغيل قواعد (Rules) الـ Firestore في حسابك.`);
+        });
+
+        // دالة محاكاة الدفع والرفع الحقيقي للصورة
+        function simulatePayment(isSuccess) {
+            if (!isSuccess) {
+                logMessage("❌ فشلت عملية الدفع. تم إلغاء حفظ البيانات السحابية.");
+                alert("تمت محاكاة عملية دفع فاشلة بنجاح.");
+                return;
+            }
+
+            const name = document.getElementById('txtName').value.trim();
+            const fileInput = document.getElementById('fileImage');
+
+            if (selectedPixels === 0) {
+                alert("يرجى اختيار عدد المربعات المراد محاكاتها أولاً.");
+                return;
+            }
+            if (!name) {
+                alert("يرجى إدخال اسم المشترك أو الرابط.");
+                return;
+            }
+            if (fileInput.files.length === 0) {
+                alert("يرجى اختيار ملف صورة السيلفي لمحاكاة الرفع السحابي.");
+                return;
+            }
+
+            const file = fileInput.files[0];
+            const btn = document.getElementById('btnPaySuccess');
+            btn.innerText = "جاري رفع الصورة للمخزن السحابي...";
+            btn.disabled = true;
+
+            logMessage("⏳ جاري بدء رفع ملف الصورة إلى Firebase Storage...");
+
+            // 1. إنشاء مرجع فريد في المخزن السحابي
+            const fileRef = storage.ref(`test_selfies/${Date.now()}_${file.name}`);
+
+            // 2. رفع الملف
+            fileRef.put(file).then((snapshot) => {
+                logMessage("✔️ تم رفع الصورة بنجاح! جاري استخراج رابط المعاينة المباشر...");
+                return snapshot.ref.getDownloadURL();
+            })
+            .then((downloadURL) => {
+                logMessage(`🔗 الرابط المستخرج: ${downloadURL.substring(0, 40)}...`);
                 
-                log(`جاري الاتصال بـ Cloud Firestore للرفع السحابي...`, 'info');
-
-                try {
-                    // الرفع الحقيقي والفعلي لقاعدة بيانات Firebase الخاصة بك
-                    const docRef = await addDoc(collection(db, "reservations"), {
-                        blocksCount: currentSelectedBlocks,
-                        websiteUrl: document.getElementById('userUrl').value,
-                        imageUrl: "https://example.com", // رابط تجريبي للصورة
-                        status: "pending", // حالة معلقة بانتظار موافقة الإدارة
-                        paymentStatus: "paid", // تم الدفع بنجاح
-                        transactionId: mockTransactionId,
-                        createdAt: new Date()
-                    });
-
-                    log(`نجاح كبير! تم حفظ الحجز في السحابة وأخذ معرف مستند حقيقي: ${docRef.id}`, 'success');
-                    alert("مبارك! تمت العملية بالكامل وحُفظت البيانات في قاعدة بيانات Firebase السحابية الحقيقية الخاصة بك.");
-                } catch (e) {
-                    log(`خطأ أثناء الرفع السحابي: ${e.message}`, 'error');
-                }
-
+                // 3. حفظ مستند الحجز في Firestore بحالة معلقة pending بانتظار لوحة التحكم
+                return db.collection("reservations").add({
+                    row: Math.floor(Math.random() * 100) + 1, // إحداثيات عشوائية لأغراض الفحص التجريبي
+                    col: Math.floor(Math.random() * 100) + 1,
+                    userName: name,
+                    imageUrl: downloadURL,
+                    status: "pending",
+                    createdAt: firebase.firestore.FieldValue.serverTimestamp()
+                });
+            })
+            .then(() => {
+                logMessage("🟢 تم تسجيل عملية الحجز والدفع بنجاح في Firestore! بانتظار مراجعة المسؤول.");
+                alert("🎉 نجحت المحاكاة! تم رفع الملف وحفظ مستند الحجز سحابياً بنجاح.");
+                resetForm();
+            })
+            .catch((err) => {
+                console.error(err);
+                logMessage(`❌ فشل الرفع: تأكد من تفعيل Storage وتعديل القواعد الـ Rules لتسمح بالرفع.`);
+                alert("حدث خطأ أثناء الرفع السحابي، راجع سجل الأخطاء في الأسفل.");
