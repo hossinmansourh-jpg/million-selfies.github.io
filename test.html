@@ -102,9 +102,53 @@
         window.totalCalculatedPrice = val * PRICE_PER_SQUARE;
     }
 
-    // تشغيل تلقائي أول ما تفتح الصفحة لتهيئة الأرقام
+       // تشغيل تلقائي لجلب البيانات الحية من Firebase وتحديث الأسعار
     window.onload = function() {
         تحديثالأسعار();
+        
+        // التأكد من أن Firebase متاح ويعمل قبل جلب البيانات
+        if (typeof db !== 'undefined' && db !== null) {
+            try {
+                // جلب المربعات المحجوزة الحية من مجموعة reservations
+                db.collection("reservations").where("status", "==", "approved")
+                .onSnapshot((querySnapshot) => {
+                    let totalReserved = 0;
+                    
+                    // حساب إجمالي المربعات من الطلبات المقبولة
+                    querySnapshot.forEach((doc) => {
+                        let data = doc.data();
+                        totalReserved += parseInt(data.squaresCount) || 1;
+                    });
+                    
+                    // حساب المربعات المتبقية من جدارية المليون
+                    let totalWallPixels = 1000000;
+                    let remaining = totalWallPixels - totalReserved;
+                    let percentage = ((totalReserved / totalWallPixels) * 100).toFixed(4);
+                    
+                    // تحديث واجهة المستخدم بالأرقام الحقيقية القادمة من السحاب فوراً
+                    const elReserved = document.querySelector(".section p:nth-child(2) span");
+                    const elRemaining = document.querySelector(".section p:nth-child(3) span");
+                    const elPercent = document.getElementById("status-text"); // إذا كان لديك وسم للنسبة
+                    
+                    if(elReserved) elReserved.innerText = totalReserved.toLocaleString() + " مربع";
+                    if(elRemaining) elRemaining.innerText = remaining.toLocaleString() + " مربع";
+                    if(elPercent) elPercent.innerText = percentage + "%";
+                    
+                }, (error) => {
+                    console.log("خطأ في جلب بيانات Firebase: ", error);
+                });
+            } catch (e) {
+                console.log("حدث خطأ أثناء تشغيل اتصال السحاب: ", e);
+            }
+        } else {
+            // في حال عدم اتصال Firebase بعد، نضع أرقام تجريبية مؤقتة حتى لا تظل معلقة
+            const elReserved = document.querySelector(".section p:nth-child(2) span");
+            const elRemaining = document.querySelector(".section p:nth-child(3) span");
+            if(elReserved) elReserved.innerText = "0 مربع";
+            if(elRemaining) elRemaining.innerText = "1,000,000 مربع";
+        }
+    };
+ 
     };
 </script>
 
