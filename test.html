@@ -5,101 +5,21 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>مختبر التجريب السحابي الحقيقي لـ Firebase</title>
     <style>
-        body { 
-            background-color: #000; 
-            color: #fff; 
-            font-family: system-ui, -apple-system, sans-serif; 
-            padding: 20px; 
-            direction: rtl; 
-        }
-        .container { 
-            max-width: 500px; 
-            margin: 0 auto; 
-            border: 2px solid #d4af37; 
-            border-radius: 12px; 
-            padding: 20px; 
-            background-color: #0a0a0a; 
-            box-shadow: 0 4px 15px rgba(212, 175, 55, 0.2);
-        }
-        h2, h3 { 
-            color: #d4af37; 
-            text-align: center; 
-        }
-        .section { 
-            background-color: #111; 
-            border: 1px solid #333; 
-            padding: 15px; 
-            border-radius: 8px; 
-            margin-bottom: 15px; 
-        }
-        .btn-group { 
-            display: flex; 
-            gap: 10px; 
-            margin: 10px 0; 
-        }
-        button { 
-            flex: 1; 
-            padding: 12px; 
-            border: none; 
-            border-radius: 6px; 
-            font-weight: bold; 
-            cursor: pointer; 
-            font-size: 14px; 
-            transition: 0.2s;
-        }
-        .btn-gold { 
-            background-color: #d4af37; 
-            color: #000; 
-        }
-        .btn-gold:active { 
-            background-color: #fff; 
-        }
-        .btn-red { 
-            background-color: #ff4d4d; 
-            color: #fff; 
-        }
-        .btn-dark { 
-            background-color: #222; 
-            color: #fff; 
-            border: 1px solid #444; 
-        }
-        input[type="text"], input[type="file"] { 
-            width: 100%; 
-            padding: 12px; 
-            margin: 10px 0; 
-            box-sizing: border-box; 
-            background-color: #1a1a1a; 
-            border: 1px solid #444; 
-            color: #fff; 
-            border-radius: 6px; 
-            font-size: 14px;
-        }
-        .log-box { 
-            background-color: #000; 
-            border: 1px solid #d4af37; 
-            height: 140px; 
-            overflow-y: auto; 
-            padding: 10px; 
-            font-family: monospace; 
-            font-size: 12px; 
-            color: #0f0; 
-            border-radius: 6px; 
-            text-align: left; 
-            direction: ltr; 
-        }
-        ul { 
-            list-style: none; 
-            padding: 0; 
-            margin: 0;
-        }
-        li { 
-            margin: 10px 0; 
-            font-size: 15px; 
-        }
-        span.val { 
-            color: #d4af37; 
-            font-weight: bold; 
-        }
+        body { background-color: #000; color: #fff; font-family: system-ui, -apple-system, sans-serif; padding: 20px; direction: rtl; }
+        .container { max-width: 500px; margin: 0 auto; border: 2px solid #d4af37; border-radius: 12px; padding: 20px; background-color: #0a0a0a; box-shadow: 0 4px 15px rgba(212, 175, 55, 0.2); }
+        h2, h3 { color: #d4af37; text-align: center; }
+        .section { background-color: #111; border: 1px solid #333; padding: 15px; border-radius: 8px; margin-bottom: 15px; }
+        .btn-group { display: flex; gap: 10px; margin: 10px 0; }
+        button { flex: 1; padding: 12px; border: none; border-radius: 6px; font-weight: bold; cursor: pointer; font-size: 14px; transition: 0.2s; }
+        .btn-gold { background-color: #d4af37; color: #000; }
+        .btn-gold:active { background-color: #fff; }
+        .btn-red { background-color: #ff4d4d; color: #fff; }
+        .btn-dark { background-color: #222; color: #fff; border: 1px solid #444; }
+        input[type="text"], input[type="file"] { width: 100%; padding: 12px; margin: 10px 0; box-sizing: border-box; background-color: #1a1a1a; border: 1px solid #444; color: #fff; border-radius: 6px; font-size: 14px; }
+        .log-box { background-color: #000; border: 1px solid #d4af37; height: 140px; overflow-y: auto; padding: 10px; font-family: monospace; font-size: 12px; color: #0f0; border-radius: 6px; text-align: left; direction: ltr; }
+        ul { list-style: none; padding: 0; margin: 0; }
+        li { margin: 10px 0; font-size: 15px; }
+        span.val { color: #d4af37; font-weight: bold; }
     </style>
 </head>
 <body>
@@ -107,7 +27,6 @@
     <div class="container">
         <h2>🧪 مختبر التجريب السحابي المطور</h2>
         
-        <!-- 1. محاكاة اختيار المربعات -->
         <div class="section">
             <h3>1. محاكاة اختيار المربعات</h3>
             <p style="font-size:13px; color:#aaa; text-align:center;">اختر عدد المربعات الافتراضية لتجربة الحساب:</p>
@@ -119,19 +38,15 @@
             <button class="btn-dark" onclick="resetForm()" style="width:100%;">إعادة تعيين</button>
         </div>
 
-        <!-- 2. نافذة الشراء والرفع -->
         <div class="section">
             <h3>2. نافذة الشراء والمراجعة السحابية</h3>
             <ul>
                 <li>عدد المربعات المحددة: <span id="lblCount" class="val">0</span></li>
                 <li>إجمالي السعر المحسوب (1$ للمربع): <span id="lblPrice" class="val">$0</span></li>
             </ul>
-            
             <input type="text" id="txtName" placeholder="رابط الموقع أو اسم المشترك">
-            
             <label style="font-size:12px; color:#d4af37; display:block; margin-top:5px; text-align:right;">اختر صورة السيلفي لرفعها مباشرة:</label>
             <input type="file" id="fileImage" accept="image/*">
-
             <div class="btn-group">
                 <button class="btn-gold" id="btnPaySuccess" onclick="simulatePayment(true)">محاكاة دفع ناجح وحفظ في السحاب ✔️</button>
             </div>
@@ -140,60 +55,42 @@
             </div>
         </div>
 
-        <!-- 3. العدادات الحية -->
         <div class="section">
             <h3>3. عدادات الواجهة الحية المتصلة بالسحاب</h3>
             <ul>
                 <li>إجمالي المربعات المحجوزة في Firebase: <span id="statReserved" class="val">جاري التحميل...</span></li>
                 <li>المربعات المتبقية لجدارية المليون: <span id="statRemaining" class="val">--</span></li>
-                <li>نسبة الحجز الفالية الحالية: <span id="statPercent" class="val">--</span></li>
+                <li>نسبة الحجز الحالية: <span id="statPercent" class="val">--</span></li>
             </ul>
         </div>
 
-        <!-- سجل النظام -->
         <h3>📋 سجل المطور والمزامنة الحية (System Logs)</h3>
         <div class="log-box" id="logBox">[System] المختبر جاهز لبدء التجارب السحابية...</div>
     </div>
 
-    <!-- استدعاء حزمة SDK الكاملة للإصدار 8 بما فيها الـ Storage الحاسم لرفع الصور -->
+    <!-- استدعاء حزمة مكتبات الـ SDK لـ Firebase -->
     <script src="https://gstatic.com"></script>
     <script src="https://gstatic.com"></script>
     <script src="https://gstatic.com"></script>
 
     <script>
-        // إعدادات Firebase المعتمدة لمشروعك
-        const firebaseConfig = {
-            apiKey: "AIzaSyCEMxWCT0siwT2t72CX24N1ajSAwqEk7Fs",
-            authDomain: "://firebaseapp.com",
-            projectId: "million-selfies",
-            storageBucket: "million-selfies.firebasestorage.app",
-            messagingSenderId: "1016907817387",
-            appId: "1:1016907817387:web:f6e9b2b76dcaecebe4b2ee"
-        };
-
-        // تهيئة الخدمات
-        if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
-        const db = firebase.firestore();
-        const storage = firebase.storage();
-
+        let db, storage;
         let selectedPixels = 0;
-        const totalWallPixels = 1000000; // مليون بكسل
+        const totalWallPixels = 1000000;
 
-        // دالة تحديث سجل النظام الممرر في الصندوق الأسود
         function logMessage(text) {
             const logBox = document.getElementById('logBox');
             if (logBox) {
-                logBox.innerHTML += `<br>[${new Date().toLocaleTimeString()}] ${text}`;
+                logBox.innerHTML += "<br>[" + new Date().toLocaleTimeString() + "] " + text;
                 logBox.scrollTop = logBox.scrollHeight;
             }
         }
 
-        // إعداد المربعات المحسوبة وتغيير الأرقام فوراً عند الضغط
         function setPixels(num) {
             selectedPixels = num;
             document.getElementById('lblCount').innerText = num;
-            document.getElementById('lblPrice').innerText = `$${num}`;
-            logMessage(`⏳ تم تحديد كتلة بمقدار [ ${num} ] مربع، والسعر المحسوب تلقائياً هو: $${num}`);
+            document.getElementById('lblPrice').innerText = "$" + num;
+            logMessage("⏳ تم تحديد كتلة بمقدار [ " + num + " ] مربع، والسعر المحسوب تلقائياً هو: $" + num);
         }
 
         function resetForm() {
@@ -205,23 +102,37 @@
             logMessage("🧹 تم إعادة تعيين قيم الاستمارة والعدادات إلى الصفر.");
         }
 
-        // جلب الإحصائيات المباشرة والعدادات الحية من السيرفر تلقائياً
-        db.collection("reservations")
-        .onSnapshot((querySnapshot) => {
-            let totalCount = querySnapshot.size; 
-            let remaining = totalWallPixels - totalCount;
-            let percent = ((totalCount / totalWallPixels) * 100).toFixed(6);
+        window.addEventListener('load', function() {
+            const firebaseConfig = {
+                apiKey: "AIzaSyCEMxWCT0siwT2t72CX24N1ajSAwqEk7Fs",
+                authDomain: "://firebaseapp.com",
+                projectId: "million-selfies",
+                storageBucket: "million-selfies.firebasestorage.app",
+                messagingSenderId: "1016907817387",
+                appId: "1:1016907817387:web:f6e9b2b76dcaecebe4b2ee"
+            };
 
-            document.getElementById('statReserved').innerText = totalCount + " مربع";
-            document.getElementById('statRemaining').innerText = remaining.toLocaleString() + " مربع متاح";
-            document.getElementById('statPercent').innerText = percent + " %";
-            logMessage(`📊 تحديث حي للإحصائيات: إجمالي الحجوزات في السيرفر حالياً هو ${totalCount}`);
-        }, (error) => {
-            console.error(error);
-            logMessage(`❌ خطأ في الاتصال: تأكد من إعدادات القواعد الـ Rules في Firestore.`);
+            if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
+            db = firebase.firestore();
+            storage = firebase.storage();
+
+            logMessage("✅ تم تهيئة اتصال Firebase بنجاح. جاري ربط العدادات الحية...");
+
+            db.collection("reservations").onSnapshot(function(querySnapshot) {
+                let totalCount = querySnapshot.size; 
+                let remaining = totalWallPixels - totalCount;
+                let percent = ((totalCount / totalWallPixels) * 100).toFixed(6);
+
+                document.getElementById('statReserved').innerText = totalCount + " مربع";
+                document.getElementById('statRemaining').innerText = remaining.toLocaleString() + " مربع متاح";
+                document.getElementById('statPercent').innerText = percent + " %";
+                logMessage("📊 تحديث حي للإحصائيات: إجمالي الحجوزات في السيرفر حالياً هو " + totalCount);
+            }, function(error) {
+                console.error(error);
+                logMessage("❌ خطأ في الاتصال: تأكد من إعدادات القواعد الـ Rules في Firestore.");
+            });
         });
 
-        // دالة محاكاة الدفع والرفع الحقيقي للصورة
         function simulatePayment(isSuccess) {
             if (!isSuccess) {
                 logMessage("❌ فشلت عملية الدفع. تم إلغاء حفظ البيانات السحابية.");
@@ -229,21 +140,17 @@
                 return;
             }
 
+            if (!db || !storage) {
+                alert("برجاء الانتظار حتى يكتمل تحميل نظام السحاب بالكامل.");
+                return;
+            }
+
             const name = document.getElementById('txtName').value.trim();
             const fileInput = document.getElementById('fileImage');
 
-            if (selectedPixels === 0) {
-                alert("يرجى اختيار عدد المربعات المراد محاكاتها أولاً.");
-                return;
-            }
-            if (!name) {
-                alert("يرجى إدخال اسم المشترك أو الرابط.");
-                return;
-            }
-            if (fileInput.files.length === 0) {
-                alert("يرجى اختيار ملف صورة السيلفي لمحاكاة الرفع السحابي.");
-                return;
-            }
+            if (selectedPixels === 0) { alert("يرجى اختيار عدد المربعات المراد محاكاتها أولاً."); return; }
+            if (!name) { alert("يرجى إدخال اسم المشترك أو الرابط."); return; }
+            if (fileInput.files.length === 0) { alert("يرجى اختيار ملف صورة السيلفي لمحاكاة الرفع السحابي."); return; }
 
             const file = fileInput.files[0];
             const btn = document.getElementById('btnPaySuccess');
@@ -252,12 +159,38 @@
 
             logMessage("⏳ جاري بدء رفع ملف الصورة إلى Firebase Storage...");
 
-            // إنشاء مرجع فريد للملف
-            const fileRef = storage.ref(`test_selfies/${Date.now()}_${file.name}`);
+            const fileRef = storage.ref("test_selfies/" + Date.now() + "_" + file.name);
 
-            // رفع الملف
-            fileRef.put(file).then((snapshot) => {
+            fileRef.put(file).then(function(snapshot) {
                 logMessage("✔️ تم رفع الصورة بنجاح! جاري استخراج رابط المعاينة المباشر...");
                 return snapshot.ref.getDownloadURL();
             })
-            .then((downloadURL) => {
+            .then(function(downloadURL) {
+                logMessage("🔗 الرابط المستخرج بنجاح.");
+                return db.collection("reservations").add({
+                    row: Math.floor(Math.random() * 1000) + 1, 
+                    col: Math.floor(Math.random() * 1000) + 1,
+                    userName: name,
+                    imageUrl: downloadURL,
+                    status: "pending",
+                    createdAt: firebase.firestore.FieldValue.serverTimestamp()
+                });
+            })
+            .then(function() {
+                logMessage("🟢 تم تسجيل عملية الحجز والدفع بنجاح في Firestore! بانتظار مراجعة المسؤول.");
+                alert("🎉 نجحت المحاكاة! تم رفع الملف وحفظ مستند الحجز سحابياً بنجاح.");
+                resetForm();
+            })
+            .catch(function(err) {
+                console.error(err);
+                logMessage("❌ فشل الرفع السحابي.");
+                alert("حدث خطأ أثناء الرفع السحابي.");
+            })
+            .finally(function() {
+                btn.innerText = "محاكاة دفع ناجح وحفظ في السحاب ✔️";
+                btn.disabled = false;
+            });
+        }
+    </script>
+</body>
+</html>
