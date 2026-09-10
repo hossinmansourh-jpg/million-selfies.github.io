@@ -75,7 +75,47 @@
     </div>
 
     <!-- استدعاء حزمة SDK الكاملة للإصدار 8 بما فيها الـ Storage الحاسم لرفع الصور -->
-            // إعدادات Firebase المعتمدة لمشروعك
+            
+            
+
+            const file = fileInput.files[0];
+            const btn = document.getElementById('btnPaySuccess');
+            btn.innerText = "جاري رفع الصورة للمخزن السحابي...";
+            btn.disabled = true;
+
+            logMessage("⏳ جاري بدء رفع ملف الصورة إلى Firebase Storage...");
+
+            // 1. إنشاء مرجع فريد في المخزن السحابي
+            const fileRef = storage.ref(`test_selfies/${Date.now()}_${file.name}`);
+
+            // 2. رفع الملف
+            fileRef.put(file).then((snapshot) => {
+                logMessage("✔️ تم رفع الصورة بنجاح! جاري استخراج رابط المعاينة المباشر...");
+                return snapshot.ref.getDownloadURL();
+            })
+            .then((downloadURL) => {
+                logMessage(`🔗 الرابط المستخرج: ${downloadURL.substring(0, 40)}...`);
+                
+                // 3. حفظ مستند الحجز في Firestore بحالة معلقة pending بانتظار لوحة التحكم
+                return db.collection("reservations").add({
+                    row: Math.floor(Math.random() * 100) + 1, // إحداثيات عشوائية لأغراض الفحص التجريبي
+                    col: Math.floor(Math.random() * 100) + 1,
+                    userName: name,
+                    imageUrl: downloadURL,
+                    status: "pending",
+                    createdAt: firebase.firestore.FieldValue.serverTimestamp()
+                });
+            })
+            .then(() => {
+                logMessage("🟢 تم تسجيل عملية الحجز والدفع بنجاح في Firestore! بانتظار مراجعة المسؤول.");
+                alert("🎉 نجحت المحاكاة! تم رفع الملف وحفظ مستند الحجز سحابياً بنجاح.");
+                resetForm();
+            })
+            .catch((err) => {
+                console.error(err);
+                logMessage(`❌ فشل الرفع: تأكد من تفعيل Storage وتعديل القواعد الـ Rules لتسمح بالرفع.`);
+                alert("حدث خطأ أثناء الرفع السحابي، راجع سجل الأخطاء في الأسفل.");
+        // إعدادات Firebase المعتمدة لمشروعك
         const firebaseConfig = {
             apiKey: "AIzaSyCEMxWCT0siwT2t72CX24N1ajSAwqEk7Fs",
             authDomain: "://firebaseapp.com",
@@ -199,125 +239,3 @@
                 btn.disabled = false;
             });
         }
-
-
-    
-        // إعدادات Firebase المعتمدة لمشروعك
-        const firebaseConfig = {
-            apiKey: "AIzaSyCEMxWCT0siwT2t72CX24N1ajSAwqEk7Fs",
-            authDomain: "://firebaseapp.com",
-            projectId: "million-selfies",
-            storageBucket: "million-selfies.firebasestorage.app",
-            messagingSenderId: "1016907817387",
-            appId: "1:1016907817387:web:f6e9b2b76dcaecebe4b2ee"
-        };
-
-        // تهيئة الخدمات
-        if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
-        const db = firebase.firestore();
-        const storage = firebase.storage();
-
-        let selectedPixels = 0;
-        const totalWallPixels = 1000000; // مليون بكسل
-
-        // دالة تحديث سجل النظام الممرر في الصندوق الأسود
-        function logMessage(text) {
-            const logBox = document.getElementById('logBox');
-            logBox.innerHTML += `<br>[${new Date().toLocaleTimeString()}] ${text}`;
-            logBox.scrollTop = logBox.scrollHeight;
-        }
-
-        // إعداد المربعات المحسوبة
-        function setPixels(num) {
-            selectedPixels = num;
-            document.getElementById('lblCount').innerText = num;
-            document.getElementById('lblPrice').innerText = `$${num}`;
-            logMessage(`تم اختيار كتلة بمقدار ${num} مربع، السعر المتوقع: $${num}`);
-        }
-
-        function resetForm() {
-            selectedPixels = 0;
-            document.getElementById('lblCount').innerText = "0";
-            document.getElementById('lblPrice').innerText = "$0";
-            document.getElementById('txtName').value = "";
-            document.getElementById('fileImage').value = "";
-            logMessage("تم إعادة تعيين قيم الاستمارة بالكامل.");
-        }
-
-        // جلب الإحصائيات المباشرة والعدادات الحية من السيرفر تلقائياً
-        db.collection("reservations").where("status", "==", "approved")
-        .onSnapshot((querySnapshot) => {
-            let totalApprovedCount = querySnapshot.size; // جلب عدد المربعات المقبولة حالياً
-            let remaining = totalWallPixels - totalApprovedCount;
-            let percent = ((totalApprovedCount / totalWallPixels) * 100).toFixed(6);
-
-            document.getElementById('statReserved').innerText = totalApprovedCount + " مربع";
-            document.getElementById('statRemaining').innerText = remaining.toLocaleString() + " مربع متاح";
-            document.getElementById('statPercent').innerText = percent + " %";
-            logMessage(`📊 تحديث حي للإحصائيات: إجمالي المحجوز بالسيرفر حالياً هو ${totalApprovedCount}`);
-        }, (error) => {
-            console.error(error);
-            logMessage(`❌ خطأ في الاتصال: تأكد من تشغيل قواعد (Rules) الـ Firestore في حسابك.`);
-        });
-
-        // دالة محاكاة الدفع والرفع الحقيقي للصورة
-        function simulatePayment(isSuccess) {
-            if (!isSuccess) {
-                logMessage("❌ فشلت عملية الدفع. تم إلغاء حفظ البيانات السحابية.");
-                alert("تمت محاكاة عملية دفع فاشلة بنجاح.");
-                return;
-            }
-
-            const name = document.getElementById('txtName').value.trim();
-            const fileInput = document.getElementById('fileImage');
-
-            if (selectedPixels === 0) {
-                alert("يرجى اختيار عدد المربعات المراد محاكاتها أولاً.");
-                return;
-            }
-            if (!name) {
-                alert("يرجى إدخال اسم المشترك أو الرابط.");
-                return;
-            }
-            if (fileInput.files.length === 0) {
-                alert("يرجى اختيار ملف صورة السيلفي لمحاكاة الرفع السحابي.");
-                return;
-            }
-
-            const file = fileInput.files[0];
-            const btn = document.getElementById('btnPaySuccess');
-            btn.innerText = "جاري رفع الصورة للمخزن السحابي...";
-            btn.disabled = true;
-
-            logMessage("⏳ جاري بدء رفع ملف الصورة إلى Firebase Storage...");
-
-            // 1. إنشاء مرجع فريد في المخزن السحابي
-            const fileRef = storage.ref(`test_selfies/${Date.now()}_${file.name}`);
-
-            // 2. رفع الملف
-            fileRef.put(file).then((snapshot) => {
-                logMessage("✔️ تم رفع الصورة بنجاح! جاري استخراج رابط المعاينة المباشر...");
-                return snapshot.ref.getDownloadURL();
-            })
-            .then((downloadURL) => {
-                logMessage(`🔗 الرابط المستخرج: ${downloadURL.substring(0, 40)}...`);
-                
-                // 3. حفظ مستند الحجز في Firestore بحالة معلقة pending بانتظار لوحة التحكم
-                return db.collection("reservations").add({
-                    row: Math.floor(Math.random() * 100) + 1, // إحداثيات عشوائية لأغراض الفحص التجريبي
-                    col: Math.floor(Math.random() * 100) + 1,
-                    userName: name,
-                    imageUrl: downloadURL,
-                    status: "pending",
-                    createdAt: firebase.firestore.FieldValue.serverTimestamp()
-                });
-            })
-            .then(() => {
-                logMessage("🟢 تم تسجيل عملية الحجز والدفع بنجاح في Firestore! بانتظار مراجعة المسؤول.");
-                alert("🎉 نجحت المحاكاة! تم رفع الملف وحفظ مستند الحجز سحابياً بنجاح.");
-                resetForm();
-            })
-            .catch((err) => {
-                console.error(err);
-                logMessage(`❌ فشل الرفع: تأكد من تفعيل Storage وتعديل القواعد الـ Rules لتسمح بالرفع.`);
-                alert("حدث خطأ أثناء الرفع السحابي، راجع سجل الأخطاء في الأسفل.");
