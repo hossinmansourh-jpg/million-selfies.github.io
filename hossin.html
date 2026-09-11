@@ -3,72 +3,141 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>تحكم المسؤول الآمنة - جدارية المليون</title>
+    <title>لوحة تحكم حسين - إدارة الجدارية</title>
     <style>
-        body { background-color: #000; color: #fff; font-family: sans-serif; padding: 20px; text-align: center; margin: 0; }
-        .login-box { border: 2px solid #d4af37; padding: 30px; border-radius: 12px; background: #0a0a0a; max-width: 350px; margin: 50px auto; box-sizing: border-box; }
-        h2 { color: #d4af37; margin-bottom: 20px; font-size: 22px; }
-        input[type="text"] { width: 100%; padding: 15px; margin: 15px 0; border: 1px solid #555; background: #111; color: #fff; border-radius: 5px; box-sizing: border-box; font-size: 18px; text-align: center; }
-        .btn-gold { background: #d4af37; color: #000; padding: 14px 25px; border: none; border-radius: 5px; font-weight: bold; cursor: pointer; width: 100%; margin-top: 15px; font-size: 16px; }
-        .error-msg { color: #ff4d4d; font-size: 14px; margin-top: 10px; display: none; }
-        .admin-container { max-width: 800px; margin: 0 auto; display: none; padding-top: 20px; }
-        .order-card { border: 1px solid #333; padding: 15px; margin: 15px 0; border-radius: 6px; background: #111; text-align: right; }
-        .btn-approve { background: #2ecc71; color: #fff; padding: 8px 15px; border: none; border-radius: 4px; cursor: pointer; font-weight: bold; }
-        .btn-reject { background: #e74c3c; color: #fff; padding: 8px 15px; border: none; border-radius: 4px; cursor: pointer; font-weight: bold; margin-right: 10px; }
+        body { font-family: Arial, sans-serif; background: #f4f7f6; padding: 20px; text-align: center; }
+        .login-container, .dashboard-container { background: white; padding: 30px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); max-width: 500px; margin: auto; }
+        .hidden { display: none; }
+        input { width: 80%; padding: 10px; margin: 10px 0; border: 1px solid #ccc; border-radius: 6px; text-align: center; font-size: 18px; }
+        button { background: #28a745; color: white; border: none; padding: 12px 20px; font-size: 16px; border-radius: 6px; cursor: pointer; transition: 0.3s; }
+        button:hover { opacity: 0.9; }
+        .btn-reject { background: #dc3545; margin-right: 10px; }
+        .order-card { background: #fff; border: 1px solid #ddd; padding: 15px; margin: 15px 0; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
+        .order-card img { max-width: 100%; max-height: 200px; border-radius: 6px; margin-bottom: 10px; }
     </style>
+    <!-- روابط مكتبات Firebase الأساسية -->
+    <script src="https://gstatic.com"></script>
+    <script src="https://gstatic.com"></script>
+    <script src="https://gstatic.com"></script>
 </head>
 <body>
 
-<!-- شاشة تسجيل الدخول المرئية والواضحة تلقائياً -->
-<div id="loginOverlay">
-    <div class="login-box">
-        <h2>🔒 منطقة الإدارة الآمنة</h2>
-        <p style="color: #aaa; font-size: 14px;">أدخل الرمز السري المباشر للمسؤول حسين:</p>
-        
-        <!-- حقل نصي مرئي عادي لتفادي مشاكل حجب زر العين في الجوالات -->
-        <input type="text" id="adminPass" placeholder="اكتب الرمز السري هنا">
-        
-        <button type="button" class="btn-gold" onclick="checkAdminLogin()">فتح لوحة التحكم ✔</button>
-        <p class="error-msg" id="loginError">الرمز السري غير صحيح، يرجى المحاولة مجدداً!</p>
+    <!-- شاشة الحماية الرقمية لحسين -->
+    <div id="loginScreen" class="login-container">
+        <h2>🔒 لوحة تحكم المسؤول</h2>
+        <p>يرجى إدخال الرمز السري للدخول:</p>
+        <input type="password" id="pinInput" placeholder="XXXX" maxlength="10">
+        <br>
+        <button onclick="checkPin()">دخول</button>
     </div>
-</div>
 
-<!-- لوحة التحكم الحقيقية المفتوحة לחسين -->
-<div class="admin-container" id="adminPanel">
-    <h2>🛠️ لوحة تحكم المسؤول (أهلاً حسين)</h2>
-    <p style="color: #aaa;">يمكنك من هنا مراجعة الطلبات المعلقة وقبولها لتظهر حية على الجدارية.</p>
-    
-    <div id="ordersList">
-        <div class="order-card">
-            <h4>طلب حجز جديد #1024</h4>
-            <p>اسم المشترك: أحمد علي</p>
-            <p>المساحة المطلوبة: 4 مربعات (2 × 2)</p>
-            <p>المبلغ المدفوع: 40 دولار</p>
-            <p>الحالة: <span style="color:#f1c40f; font-weight:bold;">معلق (Pending)</span></p>
-            <button class="btn-approve" onclick="alert('تم قبول الطلب ونشره حياً بنجاح!')">قبول ونشر حياً ✔</button>
-            <button class="btn-reject" onclick="alert('تم رفض الطلب وإرجاع المبلغ')">رفض الطلب ❌</button>
-        </div>
+    <!-- لوحة الإدارة الحية بعد تخطي الحماية -->
+    <div id="dashboardScreen" class="dashboard-container hidden">
+        <h2>👋 أهلاً بك يا حسين في لوحتك</h2>
+        <p>الطلبات الجديدة المعلقة قيد الانتظار (Pending):</p>
+        <hr>
+        <div id="ordersList">جاري تحميل الطلبات المعلقة...</div>
     </div>
-</div>
 
-<script>
-    // الرمز السري المعتمد والآمن والنهائي لمشروعك
-    function checkAdminLogin() {
-        const passField = document.getElementById('adminPass').value.trim();
-        const errorMsg = document.getElementById('loginError');
+    <script>
+        // تكوين Firebase الخاص بمشروعك (ضع بياناتك الحقيقية هنا)
+        const firebaseConfig = {
+            apiKey: "YOUR_API_KEY",
+            authDomain: "YOUR_AUTH_DOMAIN",
+            projectId: "YOUR_PROJECT_ID",
+            storageBucket: "YOUR_STORAGE_BUCKET",
+            messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
+            appId: "YOUR_APP_ID"
+        };
+        
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.firestore();
+        const storage = firebase.storage();
 
-        const CORRECT_PIN = "hossin9911";
-
-        if (passField === CORRECT_PIN) {
-            document.getElementById('loginOverlay').style.display = 'none';
-            document.getElementById('adminPanel').style.display = 'block';
-            errorMsg.style.display = 'none';
-        } else {
-            errorMsg.style.display = 'block';
-            document.getElementById('adminPass').value = "";
+        // نظام الحماية الرقمي الخاص بك hossin9911
+        function checkPin() {
+            const pin = document.getElementById('pinInput').value;
+            if(pin === 'hossin9911') {
+                document.getElementById('loginScreen').classList.add('hidden');
+                document.getElementById('dashboardScreen').classList.remove('hidden');
+                loadPendingOrders(); // تشغيل جلب البيانات فوراً
+            } else {
+                alert('الرمز السري غير صحيح المرجو المحاولة مرة أخرى.');
+            }
         }
-    }
-</script>
 
+        // جلب الطلبات التي حالتها المعلقة Pending فقط من السحاب
+        function loadPendingOrders() {
+            db.collection("wall_orders").where("status", "==", "Pending")
+            .onSnapshot((querySnapshot) => {
+                const ordersList = document.getElementById('ordersList');
+                ordersList.innerHTML = '';
+                
+                if(querySnapshot.empty) {
+                    ordersList.innerHTML = '<p>🎉 لا توجد طلبات معلقة حالياً، كل شيء نظيف!</p>';
+                    return;
+                }
+
+                querySnapshot.forEach((doc) => {
+                    const data = doc.data();
+                    const orderId = doc.id;
+
+                    const card = document.createElement('div');
+                    card.className = 'order-card';
+                    card.innerHTML = `
+                        <img src="${data.imageUrl}" alt="سيلفي الزائر">
+                        <p><strong>المساحة:</strong> ${data.width} × ${data.height} (مربع)</p>
+                        <p><strong>المبلغ المدفوع:</strong> $${data.totalPrice}</p>
+                        <button onclick="approveOrder('${orderId}')">قبول ✅</button>
+                        <button class="btn-reject" onclick="rejectAndRefund('${orderId}', '${data.chargeId}', '${data.imagePath}')">رفض واسترجاع تلقائي ❌</button>
+                    `;
+                    ordersList.appendChild(card);
+                });
+            });
+        }
+
+        // 1. في حال الضغط على قبول
+        function approveOrder(orderId) {
+            db.collection("wall_orders").document(orderId).update({
+                status: "Approved"
+            }).then(() => {
+                alert("تم قبول الصورة بنجاح وتثبيتها في الجدارية علناً! 🎉");
+            });
+        }
+
+        // 2. في حال الضغط على رفض واسترجاع ذاتي
+        function rejectAndRefund(orderId, chargeId, imagePath) {
+            if(confirm("هل أنت متأكد من رفض هذه الصورة؟ سيتم إعادة الأموال تلقائياً للمشتري وحذف البيانات.")) {
+                
+                // رابط الدالة الآمنة لـ Stripe لاسترجاع الأموال
+                const refundUrl = `https://YOUR_REGION-YOUR_PROJECT_ID.cloudfunctions.net/refundPayment`;
+
+                // إرسال طلب فوري لـ Stripe بالخلفية لإعادة المال للفيزا
+                fetch(refundUrl, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ chargeId: chargeId })
+                })
+                .then(response => response.json())
+                .then(result => {
+                    if(result.success) {
+                        // أ: حذف الصورة من المخزن السحابي (Storage) لتوفير المساحة
+                        storage.ref(imagePath).delete();
+
+                        // ب: حذف الطلب أو تصفير المربعات في قاعدة البيانات (Firestore) لفتحها مجدداً للزوار
+                        db.collection("wall_orders").document(orderId).delete().then(() => {
+                            alert("🚀 تم رفض الصورة بنجاح، وتم استرجاع المبلغ فورا للعميل بنجاح، وتحرير المربعات!");
+                        });
+                    } else {
+                        alert("حدث خطأ أثناء استرجاع الأموال من Stripe: " + result.error);
+                    }
+                })
+                .catch(err => {
+                    alert("فشل الاتصال بخادم الاسترجاع، يرجى التحقق يدوياً.");
+                    console.error(err);
+                });
+            }
+        }
+    </script>
 </body>
 </html>
