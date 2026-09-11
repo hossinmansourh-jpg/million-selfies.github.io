@@ -1181,6 +1181,18 @@
                 <label>رابط حسابك (اختياري)</label>
                 <input type="url" id="social-link" placeholder="https://instagram.com/yourname" />
             </div>
+  <!-- صندوق الشروط والأحكام الآمن -->
+<div style="background: #fff3cd; border: 1px solid #ffeeba; padding: 12px; border-radius: 8px; text-align: right; margin: 15px 0; direction: rtl;">
+    <h4 style="margin: 0 0 5px 0; color: #856404; font-size: 15px;">⚠️ شروط وأحكام رفع الصور:</h4>
+    <p style="font-size: 13px; color: #665118; line-height: 1.5; margin: 0 0 10px 0;">
+        بإتمامك لعملية الدفع، أنت توافق على أن الصورة المرفوعة تخضع للمراجعة البشرية. **يمنع منعاً باتاً رفع الصور المخلة بالآداب العامة، أو الصور السياسية، أو صور الكراهية**. في حال مخالفة الشروط، يحق للإدارة رفض الصورة، وسيتم استرجاع أموالك تلقائياً لبطاقتك البنكية.
+    </p>
+    <label style="font-size: 13px; font-weight: bold; cursor: pointer; display: flex; align-items: center; gap: 8px;">
+        <input type="checkbox" id="termsCheckbox" style="width: 16px; height: 16px; cursor: pointer;">
+        لقد قرأت الشروط وأوافق عليها بالكامل.
+    </label>
+</div>
+          
 
             <div class="payment-methods">
                 <button class="payment-btn active" onclick="selectPayment('crypto')">💎 USDT (TRC20)</button>
@@ -1365,6 +1377,13 @@
                 alert('⚠️ يرجى رفع صورة السيلفي');
                 return;
             }
+      // فحص هل وافق الزائر على الشروط والأحكام أم لا
+const termsCheckbox = document.getElementById('termsCheckbox');
+if (!termsCheckbox || !termsCheckbox.checked) {
+    alert('⚠️ يجب عليك قراءة الشروط والأحكام والموافقة عليها أولاً لإتمام الدفع!');
+    return;
+}
+      
 
             // هنا سيتم رفع الصورة إلى Firebase Storage
             // وحفظ البيانات في Firestore
