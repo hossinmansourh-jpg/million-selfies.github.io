@@ -1458,38 +1458,38 @@ function closeBookingModal() {
     selectedCell = null;
 }
 
-
-        function submitBooking() {
-            const name = document.getElementById('userNameInput').value.trim();
-            const fileInput = document.getElementById('imageFileInput');
-            const socialLink = document.getElementById('social-link').value.trim();
-
-            if (!name) {
-                alert('⚠️ يرجى إدخال اسمك');
-                return;
-            }
-            if (!fileInput.files || fileInput.files.length === 0) {
-                alert('⚠️ يرجى رفع صورة السيلفي');
-                return;
-            }
-      // فحص هل وافق الزائر على الشروط والأحكام أم لا
-const termsCheckbox = document.getElementById('termsCheckbox');
-if (!termsCheckbox || !termsCheckbox.checked) {
-    alert('⚠️ يجب عليك قراءة الشروط والأحكام والموافقة عليها أولاً لإتمام الدفع!');
-    return;
+function submitBooking() {
+    const name = document.getElementById('booking-name')?.value;
+    const fileInput = document.getElementById('booking-file');
+    const socialLink = document.getElementById('booking-social')?.value;
+    
+    if (!name) {
+        alert(currentLanguage === 'ar' ? '⚠️ يرجى إدخال اسمك!' : '⚠️ Please enter your name!');
+        return;
+    }
+    
+    if (!fileInput || !fileInput.files || fileInput.files.length === 0) {
+        alert(currentLanguage === 'ar' ? '⚠️ يرجى رفع صورة السيلفي!' : '⚠️ Please upload your selfie!');
+        return;
+    }
+    
+    const termsCheckbox = document.getElementById('booking-terms');
+    if (!termsCheckbox || !termsCheckbox.checked) {
+        alert(currentLanguage === 'ar' ? '⚠️ يجب قراءة الشروط والأحكام والموافقة عليها أولاً لإتمام الدفع!' : '⚠️ You must accept the terms and conditions first!');
+        return;
+    }
+    
+    // محاكاة تنبيه الرفع لحين ربط الـ Firebase الفعلي بالأسفل
+    alert(currentLanguage === 'ar' ? '⏰ جاري معالجة الطلب، سيتم مراجعته خلال 24 ساعة!' : '⏰ Processing, your request will be reviewed within 24 hours!');
+    
+    closeBookingModal();
+    
+    // إعادة تعيين الحقول بأمان
+    if(document.getElementById('booking-name')) document.getElementById('booking-name').value = '';
+    if(document.getElementById('booking-file')) document.getElementById('booking-file').value = '';
+    if(document.getElementById('booking-social')) document.getElementById('booking-social').value = '';
 }
-      
 
-            // هنا سيتم رفع الصورة إلى Firebase Storage
-            // وحفظ البيانات في Firestore
-            alert('🎉 تم استلام طلبك! سيتم مراجعته خلال 24 ساعة.');
-            closeBookingModal();
-            
-            // إعادة تعيين الحقول
-            document.getElementById('userNameInput').value = '';
-            document.getElementById('imageFileInput').value = '';
-            document.getElementById('social-link').value = '';
-        }
 
         document.getElementById('btnCancelBooking').addEventListener('click', closeBookingModal);
         document.getElementById('btnSubmitBooking').addEventListener('click', submitBooking);
