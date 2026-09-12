@@ -1577,51 +1577,61 @@ renderReservedBlocks();
                         window.open(block.link, '_blank');
                     });
 
-                    gridContainer.appendChild(div);
-                });
-            }
+                    // ===== MOUSE EVENT HANDLING =====
+function getCellFromMouseEvent(e) {
+    const rect = gridContainer.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+    const scrollLeft = gridWrapper.scrollLeft;
+    const scrollTop = gridWrapper.scrollTop;
+    const adjustedX = x + scrollLeft;
+    const adjustedY = y + scrollTop;
+    const col = Math.floor(adjustedX / CELL_SIZE);
+    const row = Math.floor(adjustedY / CELL_SIZE);
+    
+    if (row >= 0 && row < GRID_SIZE && col >= 0 && col < GRID_SIZE) {
+        return { row, col };
+    }
+    return null;
+}
 
-            function getCellFromMouseEvent(e) {
-                const rect = gridContainer.getBoundingClientRect();
-                const x = e.clientX - rect.left;
-                const y = e.clientY - rect.top;
-                const scrollLeft = gridWrapper.scrollLeft;
-                const scrollTop = gridWrapper.scrollTop;
-                const adjustedX = (x + scrollLeft) / currentScale;
-                const adjustedY = (y + scrollTop) / currentScale;
-                const col = Math.floor(adjustedX / CELL_SIZE);
-                const row = Math.floor(adjustedY / CELL_SIZE);
+gridWrapper.addEventListener('mousemove', (e) => {
+    const cell = getCellFromMouseEvent(e);
+    if (!cell) {
+        tooltip.classList.remove('active');
+        return;
+    }
+    
+    const block = reservedBlocks.find(b => 
+        cell.row >= b.row && cell.row < (b.row + b.size) &&
+        cell.col >= b.col && cell.col < (b.col + b.size)
+    );
+    
+    if (block) {
+        tooltip.style.left = (e.clientX + 15) + 'px';
+        tooltip.style.top = (e.clientY + 15) + 'px';
+        tooltip.textContent = `ID: ${block.id} (Row: ${block.row}, Col: ${block.col})`;
+        tooltip.classList.add('active');
+    } else {
+        tooltip.classList.remove('active');
+    }
+});
 
-                if (row >= 0 && row < GRID_SIZE && col >= 0 && col < GRID_SIZE) return { row, col };
-                return null;
-            }
+gridWrapper.addEventListener('mouseleave', () => {
+    tooltip.classList.remove('active');
+});
 
-            gridWrapper.addEventListener('mousemove', function(e) {
-                const cell = getCellFromMouseEvent(e);
-                if (!cell) { tooltip.classList.remove('visible'); return; }
+gridWrapper.addEventListener('click', (e) => {
+    if (e.target.closest('.reserved-cell')) return;
+    const cell = getCellFromMouseEvent(e);
+    if (!cell) return;
+    
+    // فتح مودال الحجز عند النقر على مربع فارغ
+    if (typeof openBookingModal === 'function') {
+        openBookingModal(cell);
+    }
+});
 
-                const block = reservedBlocks.find(b => 
-                    cell.row >= b.row && cell.row < b.row + b.heightCells &&
-                    cell.col >= b.col && cell.col < b.col + b.widthCells
-                );
-
-                if (block) tooltip.classList.remove('visible');
-                else {
-                    tooltip.style.left = (e.clientX + 12) + 'px';
-                    tooltip.style.top = (e.clientY - 10) + 'px';
-                    tooltip.classList.add('visible');
-                }
-            });
-
-            gridWrapper.addEventListener('mouseleave', function() {
-                tooltip.classList.remove('visible');
-            });
-
-            gridWrapper.addEventListener('click', function(e) {
-                if (e.target.closest('.reserved-block')) return;
-                const cell = getCellFromMouseEvent(e);
-                if (!cell) return;
-                const block = reservedBlocks.find(b => 
                     cell.row >= b.row && cell.row < b.row + b.heightCells &&
                     cell.col >= b.col && cell.col < b.col + b.widthCells
                 );
