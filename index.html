@@ -1622,36 +1622,37 @@ gridWrapper.addEventListener('mouseleave', () => {
 });
 
 gridWrapper.addEventListener('click', (e) => {
-    if (e.target.closest('.reserved-cell')) return;
+        if (e.target.closest('.reserved-cell')) return;
     const cell = getCellFromMouseEvent(e);
     if (!cell) return;
     
-    // فتح مودال الحجز عند النقر على مربع فارغ
+    // فتح مودال الحجز عند النقر على مربع فارغ بشكل مؤمن
     if (typeof openBookingModal === 'function') {
         openBookingModal(cell);
     }
 });
 
-                    cell.row >= b.row && cell.row < b.row + b.heightCells &&
-                    cell.col >= b.col && cell.col < b.col + b.widthCells
-                );
-                if (block) {
-                    window.open(block.link, '_blank');
-                } else {
-                    openBookingModal(cell);
-                }
-            });
+// ===== INITIALIZATION =====
+function init() {
+    if (typeof renderReservedBlocks === 'function') {
+        renderReservedBlocks();
+    }
+    if (typeof updateStats === 'function') {
+        updateStats();
+    }
+    if (typeof hideSkeletonLoader === 'function') {
+        hideSkeletonLoader();
+    }
+    
+    // ضبط التمرير الافتراضي لمركز الخريطة بأمان
+    if (gridWrapper) {
+        gridWrapper.scrollLeft = (gridContainer.offsetWidth - gridWrapper.offsetWidth) / 2;
+        gridWrapper.scrollTop = (gridContainer.offsetHeight - gridWrapper.offsetHeight) / 2;
+    }
+}
 
-            function init() {
-                renderReservedBlocks();
-                updateStats();
-                hideSkeletonLoader();
-                gridWrapper.scrollLeft = 20 * CELL_SIZE;
-                gridWrapper.scrollTop = 30 * CELL_SIZE;
-            }
-
-            init();
-        })();
+// تشغيل دالة البداية فوراً بمجرد تحميل السكريبت
+init();
 
         // ===== ADMIN FUNCTIONS =====
         function handleLogin() {
