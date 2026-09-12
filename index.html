@@ -1522,28 +1522,48 @@ function submitBooking() {
             reservedBlocks.forEach(block => {
                 totalReservedCells += block.widthCells * block.heightCells;
             });
+const remainingCells = TOTAL_CELLS - totalReservedCells;
+const reservedPercentage = ((totalReservedCells / TOTAL_CELLS) * 100).toFixed(2);
 
-            const remainingCells = TOTAL_CELLS - totalReservedCells;
-                if (typeof hideSkeletonLoader === 'function') {
+function formatNumber(num) {
+    return num.toLocaleString();
+}
 
-            function formatNumber(num) {
-                return num.toLocaleString('en-US');
-            }
+function updateStats() {
+    const percentageEl = document.getElementById('reserved-percentage');
+    if (percentageEl) {
+        percentageEl.textContent = reservedPercentage + '%';
+    }
+    
+    // إخفاء حتمي ومؤمن للبقعة الصفراء بمجرد حساب الإحصائيات
+    if (typeof hideSkeletonLoader === 'function') {
+        hideSkeletonLoader();
+    }
+}
 
-            function updateStats() {
-                document.getElementById('counter-remaining').textContent = formatNumber(remainingCells);
-                document.getElementById('counter-reserved').textContent = formatNumber(totalReservedCells);
-                document.getElementById('counter-blocks').textContent = formatNumber(reservedBlocks.length);
-                document.getElementById('progress-bar-inner').style.width = reservedPercentage + '%';
-                document.getElementById('progress-percent-text').textContent = reservedPercentage.toFixed(2) + '%';
-            }
+function renderReservedBlocks() {
+    const gridContainer = document.getElementById('grid-container');
+    if (!gridContainer) return;
 
-            function renderReservedBlocks() {
-                reservedBlocks.forEach((block) => {
-                    const div = document.createElement('div');
-                    div.className = 'reserved-block';
-                    div.style.gridRow = (block.row + 1) + ' / ' + (block.row + 1 + block.heightCells);
-                    div.style.gridColumn = (block.col + 1) + ' / ' + (block.col + 1 + block.widthCells);
+    reservedBlocks.forEach(block => {
+        const div = document.createElement('div');
+        div.className = 'reserved-cell';
+        div.style.gridRow = `span ${block.size}`;
+        div.style.gridColumn = `span ${block.size}`;
+        
+        // إلحاق الصورة بداخل المربع التفاعلي
+        if (block.image) {
+            div.style.backgroundImage = `url('${block.image}')`;
+            div.style.backgroundSize = 'cover';
+        }
+        
+        gridContainer.appendChild(div);
+    });
+}
+
+// استدعاء تشغيل الإحصائيات والرسم فوراً
+updateStats();
+renderReservedBlocks();
 
                     const img = document.createElement('img');
                     img.src = block.image;
