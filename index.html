@@ -1197,42 +1197,7 @@
     </label>
 </div>
 
-<!-- 2. أزرار الدفع الثلاثة تحت بعضها -->
-<div id="paymentOptionsContainer" style="display: flex; flex-direction: column; gap: 12px; margin-top: 15px; width: 100%;">
-    <button id="payViaCardBtn" onclick="processInternationalPayment('Payeer')" style="background: #007bff; color: white; border: none; padding: 12px; font-size: 16px; border-radius: 6px; cursor: pointer; font-weight: bold; width: 100%; transition: 0.3s;">
-        💳 دفع آمن بالفيزا / ماستركارد أو PayPal
-    </button>
 
-    <button id="payViaCryptoBtn" onclick="processCryptoPayment()" style="background: #f0a500; color: white; border: none; padding: 12px; font-size: 16px; border-radius: 6px; cursor: pointer; font-weight: bold; width: 100%; transition: 0.3s;">
-        🪙 دفع سريع عبر العملات الرقمية المحمية (USDT)
-    </button>
-
-    <button id="payViaLocalBtn" onclick="showLocalPaymentDetails()" style="background: #28a745; color: white; border: none; padding: 12px; font-size: 16px; border-radius: 6px; cursor: pointer; font-weight: bold; width: 100%; transition: 0.3s;">
-        🇸🇾 تحويل محلي فوري داخل سوريا (شام كاش)
-    </button>
-</div>
-
-<!-- 3. صندوق معلومات الدفع المحلي لشام كاش (يحتوي على الباركود) -->
-<div id="localPaymentDetails" style="display: none; background: #e2f0d9; border: 1px solid #b5e2a3; padding: 15px; border-radius: 8px; text-align: right; margin-top: 15px; direction: rtl;">
-    <p style="margin: 0 0 8px 0; font-size: 14px; color: #385723; font-weight: bold;">🔒 تفاصيل التحويل الفوري عبر شام كاش:</p>
-    <p style="margin: 0 0 12px 0; font-size: 13px; color: #385723; line-height: 1.5;">
-        قم بمسح الباركود أدناه عبر تطبيق شام كاش، أو حوّل القيمة المطلوبة إلى رقم الحساب المرفق، ثم ارفع لقطة شاشة لإيصال التحويل لتأكيد حجز مربعاتك:
-    </p>
-    
-    <div style="text-align: center; margin-bottom: 15px; background: white; padding: 10px; border-radius: 8px; display: inline-block; width: 100%; box-sizing: border-radius;">
-        <img src="chama-barcode.png" alt="باركود حساب شام كاش لحسين" style="max-width: 180px; height: auto; border: 1px solid #ccc; padding: 5px; border-radius: 4px;">
-        <div style="margin-top: 8px; font-size: 16px; font-weight: bold; color: #1e3c1a;">
-            رقم الحساب: <span id="chamaAccountNumber">ضع_رقم_حسابك_هنا</span>
-        </div>
-    </div>
-    
-    <label style="display: block; margin-bottom: 5px; font-size: 13px; font-weight: bold;">📸 ارفع صورة إيصال التحويل (شام كاش):</label>
-    <input type="file" id="localReceiptInput" accept="image/*" style="width: 100%; font-size: 14px; background: #fff; padding: 5px; border-radius: 4px; border: 1px solid #ccc;">
-    
-    <button onclick="submitLocalBooking()" style="background: #385723; color: white; border: none; padding: 10px 15px; font-size: 15px; border-radius: 4px; cursor: pointer; margin-top: 12px; width: 100%; font-weight: bold;">
-        تأكيد إرسال إيصال الدفع للمراجعة
-    </button>
-</div>
 
 <!-- 4. كود جافا سكريبت الذكي لرفع الصور الفعلي لـ Firebase -->
 <script>
