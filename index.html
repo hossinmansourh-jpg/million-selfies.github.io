@@ -1348,16 +1348,18 @@ function submitLocalBooking() {
 
         // ===== SKELETON =====
         function hideSkeletonLoader() {
-            // ===== LOADER CLEANUP =====
-setTimeout(() => {
-    const loader = document.querySelector('.skeleton-loader');
-    if (loader) {
-        loader.classList.add('hidden');
-        setTimeout(() => {
-            loader.style.display = 'none';
-        }, 500);
-    }
-}, 800);
+            function hideSkeletonLoader() {
+    // ===== LOADER CLEANUP =====
+    setTimeout(() => {
+        const loader = document.querySelector('.skeleton-loader');
+        if (loader) {
+            loader.classList.add('hidden');
+            setTimeout(() => {
+                loader.style.display = 'none';
+            }, 500);
+        }
+    }, 800);
+}
 
 // ===== LANGUAGE =====
 function toggleLanguage() {
@@ -1369,7 +1371,7 @@ function setLanguage(lang) {
     document.documentElement.lang = lang;
     document.documentElement.dir = lang === 'ar' ? 'rtl' : 'ltr';
     
-    // إصلاح حلقة الترجمة التي كانت مكسورة في تحديدك
+    // حلقة الترجمة القياسية السليمة
     document.querySelectorAll('[data-i18n]').forEach(el => {
         const key = el.getAttribute('data-i18n');
         const newText = window.translations ? (window.translations[lang]?.[key] || key) : key;
@@ -1381,13 +1383,20 @@ function setLanguage(lang) {
     });
 }
 
-        // ===== PAYMENT =====
-        function selectPayment(method) {
-            selectedPaymentMethod = method;
-            document.querySelectorAll('.payment-btn').forEach(btn => btn.classList.remove('active'));
-            event.target.classList.add('active');
-            updatePaymentDetails();
-        }
+// ===== PAYMENT =====
+function selectPayment(method, element) {
+    selectedPaymentMethod = method;
+    document.querySelectorAll('.payment-method-btn').forEach(btn => {
+        btn.classList.remove('active');
+    });
+    if (element) {
+        element.classList.add('active');
+    } else if (typeof event !== 'undefined' && event.target) {
+        event.target.classList.add('active');
+    }
+    updatePaymentDetails();
+}
+
 
         function updatePaymentDetails() {
             const detailsContainer = document.getElementById('payment-details');
