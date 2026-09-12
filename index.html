@@ -1181,34 +1181,141 @@
                 <label>رابط حسابك (اختياري)</label>
                 <input type="url" id="social-link" placeholder="https://instagram.com/yourname" />
             </div>
-  <!-- صندوق الشروط والأحكام الآمن -->
+  <!-- =================================================== -->
+<!-- بداية منظومة الشروط والأحكام وخيارات الدفع المتعددة الحية -->
+<!-- =================================================== -->
+
+<!-- 1. صندوق الشروط والأحكام الأصفر -->
 <div style="background: #fff3cd; border: 1px solid #ffeeba; padding: 12px; border-radius: 8px; text-align: right; margin: 15px 0; direction: rtl;">
     <h4 style="margin: 0 0 5px 0; color: #856404; font-size: 15px;">⚠️ شروط وأحكام رفع الصور:</h4>
     <p style="font-size: 13px; color: #665118; line-height: 1.5; margin: 0 0 10px 0;">
-        بإتمامك لعملية الدفع، أنت توافق على أن الصورة المرفوعة تخضع للمراجعة البشرية. **يمنع منعاً باتاً رفع الصور المخلة بالآداب العامة، أو الصور السياسية، أو صور الكراهية**. في حال مخالفة الشروط، يحق للإدارة رفض الصورة، وسيتم استرجاع أموالك تلقائياً لبطاقتك البنكية.
+        بإتمامك لعملية الدفع، أنت توافق على أن الصورة المرفوعة تخضع للمراجعة البشرية. **يمنع منعاً باتاً رفع الصور المخلة بالآداب العامة، أو الصور السياسية، أو صور الكراهية**. في حال مخالفة الشروط، يحق للإدارة رفض الصورة، وسيتم استرجاع أموالك تلقائياً.
     </p>
     <label style="font-size: 13px; font-weight: bold; cursor: pointer; display: flex; align-items: center; gap: 8px;">
         <input type="checkbox" id="termsCheckbox" style="width: 16px; height: 16px; cursor: pointer;">
         لقد قرأت الشروط وأوافق عليها بالكامل.
     </label>
 </div>
-          
 
-            <div class="payment-methods">
-                <button class="payment-btn active" onclick="selectPayment('crypto')">💎 USDT (TRC20)</button>
-                <button class="payment-btn" onclick="selectPayment('card')">💳 فيزا/ماستركارد</button>
-                <button class="payment-btn" onclick="selectPayment('epay')">🏦 Payeer / Perfect Money</button>
-            </div>
+<!-- 2. أزرار الدفع الثلاثة تحت بعضها -->
+<div id="paymentOptionsContainer" style="display: flex; flex-direction: column; gap: 12px; margin-top: 15px; width: 100%;">
+    <button id="payViaCardBtn" onclick="processInternationalPayment('Payeer')" style="background: #007bff; color: white; border: none; padding: 12px; font-size: 16px; border-radius: 6px; cursor: pointer; font-weight: bold; width: 100%; transition: 0.3s;">
+        💳 دفع آمن بالفيزا / ماستركارد أو PayPal
+    </button>
 
-            <div class="payment-details" id="payment-details"></div>
+    <button id="payViaCryptoBtn" onclick="processCryptoPayment()" style="background: #f0a500; color: white; border: none; padding: 12px; font-size: 16px; border-radius: 6px; cursor: pointer; font-weight: bold; width: 100%; transition: 0.3s;">
+        🪙 دفع سريع عبر العملات الرقمية المحمية (USDT)
+    </button>
 
-            <div class="review-notice">
-                🔒 <strong>نظام المراجعة البشرية:</strong>
-                <span>سيتم مراجعة صورتك قبل ظهورها على الجدارية.</span>
-            </div>
+    <button id="payViaLocalBtn" onclick="showLocalPaymentDetails()" style="background: #28a745; color: white; border: none; padding: 12px; font-size: 16px; border-radius: 6px; cursor: pointer; font-weight: bold; width: 100%; transition: 0.3s;">
+        🇸🇾 تحويل محلي فوري داخل سوريا (شام كاش)
+    </button>
+</div>
 
-            <button class="modal-btn" id="btnSubmitBooking">تأكيد ورفع الطلب 🔥</button>
+<!-- 3. صندوق معلومات الدفع المحلي لشام كاش (يحتوي على الباركود) -->
+<div id="localPaymentDetails" style="display: none; background: #e2f0d9; border: 1px solid #b5e2a3; padding: 15px; border-radius: 8px; text-align: right; margin-top: 15px; direction: rtl;">
+    <p style="margin: 0 0 8px 0; font-size: 14px; color: #385723; font-weight: bold;">🔒 تفاصيل التحويل الفوري عبر شام كاش:</p>
+    <p style="margin: 0 0 12px 0; font-size: 13px; color: #385723; line-height: 1.5;">
+        قم بمسح الباركود أدناه عبر تطبيق شام كاش، أو حوّل القيمة المطلوبة إلى رقم الحساب المرفق، ثم ارفع لقطة شاشة لإيصال التحويل لتأكيد حجز مربعاتك:
+    </p>
+    
+    <div style="text-align: center; margin-bottom: 15px; background: white; padding: 10px; border-radius: 8px; display: inline-block; width: 100%; box-sizing: border-radius;">
+        <img src="chama-barcode.png" alt="باركود حساب شام كاش لحسين" style="max-width: 180px; height: auto; border: 1px solid #ccc; padding: 5px; border-radius: 4px;">
+        <div style="margin-top: 8px; font-size: 16px; font-weight: bold; color: #1e3c1a;">
+            رقم الحساب: <span id="chamaAccountNumber">ضع_رقم_حسابك_هنا</span>
         </div>
+    </div>
+    
+    <label style="display: block; margin-bottom: 5px; font-size: 13px; font-weight: bold;">📸 ارفع صورة إيصال التحويل (شام كاش):</label>
+    <input type="file" id="localReceiptInput" accept="image/*" style="width: 100%; font-size: 14px; background: #fff; padding: 5px; border-radius: 4px; border: 1px solid #ccc;">
+    
+    <button onclick="submitLocalBooking()" style="background: #385723; color: white; border: none; padding: 10px 15px; font-size: 15px; border-radius: 4px; cursor: pointer; margin-top: 12px; width: 100%; font-weight: bold;">
+        تأكيد إرسال إيصال الدفع للمراجعة
+    </button>
+</div>
+
+<!-- 4. كود جافا سكريبت الذكي لرفع الصور الفعلي لـ Firebase -->
+<script>
+function showLocalPaymentDetails() {
+    const checkbox = document.getElementById('termsCheckbox');
+    if (!checkbox || !checkbox.checked) {
+        alert('⚠️ يجب عليك قراءة الشروط والأحكام والموافقة عليها أولاً لإتمام الدفع!');
+        return;
+    }
+    const localBox = document.getElementById('localPaymentDetails');
+    localBox.style.display = (localBox.style.display === 'none') ? 'block' : 'none';
+    if(localBox.style.display === 'block') localBox.scrollIntoView({ behavior: 'smooth' });
+}
+
+function processInternationalPayment(g) {
+    if (!document.getElementById('termsCheckbox').checked) { alert('⚠️ يجب الموافقة على الشروط أولاً!'); return; }
+    alert("🚀 جاري تحضير بوابة الدفع الآمنة بالبطاقات عبر " + g);
+}
+
+function processCryptoPayment() {
+    if (!document.getElementById('termsCheckbox').checked) { alert('⚠️ يجب الموافقة على الشروط أولاً!'); return; }
+    alert("🪙 جاري توليد كود الدفع الرقمي الآمن لعملة USDT");
+}
+
+// دالة الرفع الحقيقي الفوري لـ Firebase (السيلفي + الإيصال)
+function submitLocalBooking() {
+    const checkbox = document.getElementById('termsCheckbox');
+    if (!checkbox || !checkbox.checked) { alert('⚠️ يجب الموافقة على الشروط أولاً!'); return; }
+
+    const receiptInput = document.getElementById('localReceiptInput');
+    const selfieInput = document.getElementById('selfieInput'); // حقل السيلفي الأصلي بموقعك
+    
+    if (!receiptInput.files || receiptInput.files.length === 0) {
+        alert('❌ يرجى رفع صورة إيصال التحويل البنكي أولاً لتأكيد طلبك!');
+        return;
+    }
+
+    alert("⏳ جاري رفع الصور وتأكيد الحجز سحابياً، يرجى الانتظار ولا تغلق الصفحة...");
+
+    const timestamp = Date.now();
+    const selfieFile = selfieInput.files[0];
+    const receiptFile = receiptInput.files[0];
+
+    const selfiePath = `selfies/${timestamp}_selfie.png`;
+    const receiptPath = `receipts/${timestamp}_receipt.png`;
+
+    // رفع صورة السيلفي
+    firebase.storage().ref(selfiePath).put(selfieFile).then(snapshot => {
+        return snapshot.ref.getDownloadURL();
+    }).then(selfieUrl => {
+        // رفع صورة الإيصال
+        return firebase.storage().ref(receiptPath).put(receiptFile).then(snapshot => {
+            return snapshot.ref.getDownloadURL().then(receiptUrl => {
+                return { selfieUrl, receiptUrl };
+            });
+        });
+    }).then(urls => {
+        // حفظ المستند بالكامل في Firestore بوضع الانتظار Pending
+        return firebase.firestore().collection("wall_orders").add({
+            imageUrl: urls.selfieUrl,
+            imagePath: selfiePath,
+            receiptUrl: urls.receiptUrl,
+            receiptPath: receiptPath,
+            paymentMethod: 'Local',
+            status: 'Pending',
+            width: selectedWidth || 1, // يقرأ الأبعاد التلقائية لمشروعك
+            height: selectedHeight || 1,
+            totalPrice: (selectedWidth || 1) * (selectedHeight || 1) * 10,
+            createdAt: firebase.firestore.FieldValue.serverTimestamp()
+        });
+    }).then(() => {
+        alert("🎉 مبروك يا حسين! تم رفع طلب الزائر بنجاح ووصل إلى لوحة تحكمك الحية للمراجعة!");
+        closeBookingModal(); // غلق النافذة تلقائياً
+    }).catch(error => {
+        alert("حدث خطأ أثناء الرفع السحابي: " + error.message);
+        console.error(error);
+    });
+}
+</script>
+<!-- =================================================== -->
+<!-- نهاية منظومة خيارات الدفع المتعددة المحدثة -->
+<!-- =================================================== -->
+
     </div>
 
     <script>
