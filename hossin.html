@@ -67,34 +67,67 @@
         }
 
         // جلب الطلبات التي حالتها المعلقة Pending فقط من السحاب
+        
         function loadPendingOrders() {
-            db.collection("wall_orders").where("status", "==", "Pending")
-            .onSnapshot((querySnapshot) => {
-                const ordersList = document.getElementById('ordersList');
-                ordersList.innerHTML = '';
-                
-                if(querySnapshot.empty) {
-                    ordersList.innerHTML = '<p>🎉 لا توجد طلبات معلقة حالياً، كل شيء نظيف!</p>';
-                    return;
-                }
-
-                querySnapshot.forEach((doc) => {
-                    const data = doc.data();
-                    const orderId = doc.id;
-
-                    const card = document.createElement('div');
-                    card.className = 'order-card';
-                    card.innerHTML = `
-                        <img src="${data.imageUrl}" alt="سيلفي الزائر">
-                        <p><strong>المساحة:</strong> ${data.width} × ${data.height} (مربع)</p>
-                        <p><strong>المبلغ المدفوع:</strong> $${data.totalPrice}</p>
-                        <button onclick="approveOrder('${orderId}')">قبول ✅</button>
-                        <button class="btn-reject" onclick="rejectAndRefund('${orderId}', '${data.chargeId}', '${data.imagePath}')">رفض واسترجاع تلقائي ❌</button>
-                    `;
-                    ordersList.appendChild(card);
-                });
-            });
+    db.collection("wall_orders").where("status", "==", "Pending")
+    .onSnapshot((querySnapshot) => {
+        const ordersList = document.getElementById('ordersList');
+        ordersList.innerHTML = '';
+        
+        if(querySnapshot.empty) {
+            ordersList.innerHTML = '<p>🎉 لا توجد طلبات معلقة حالياً، كل شيء نظيف!</p>';
+            return;
         }
+
+        querySnapshot.forEach((doc) => {
+            const data = doc.data();
+            const orderId = doc.id;
+
+            const card = document.createElement('div');
+            card.className = 'order-card';
+            
+            let receiptHTML = '';
+            let paymentBadge = `<span class="badge-intl" style="background: #dee2e6; color: #495057; padding: 4px 8px; border-radius: 4px; font-size: 12px; font-weight: bold;">💳 دفع دولي إلكتروني</span>`;
+            
+            if (data.paymentMethod === 'Local' || data.receiptUrl) {
+                paymentBadge = `<span class="badge-local" style="background: #e2f0d9; color: #385723; padding: 4px 8px; border-radius: 4px; font-size: 12px; font-weight: bold;">🇸🇾 تحويل محلي (شام كاش)</span>`;
+                receiptHTML = `
+                    <div class="image-box" style="flex: 1; min-width: 200px; max-width: 250px; text-align: center; display: inline-block; margin: 10px;">
+                        <a href="${data.receiptUrl}" target="_blank">
+                            <img src="${data.receiptUrl}" alt="إيصال تحويل شام كاش" style="max-width: 100%; max-height: 200px; border-radius: 6px; border: 1px solid #ccc;">
+                        </a>
+                        <p style="font-size: 12px; font-weight: bold; color: #555; margin-top: 5px;">🧾 إيصال تحويل شام كاش (اضغط للتكبير)</p>
+                    </div>
+                `;
+            }
+
+            card.innerHTML = `
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; direction: rtl;">
+                    <strong>طلب رقم: #${orderId.substring(0,6)}</strong>
+                    ${paymentBadge}
+                </div>
+                <div class="order-images" style="display: flex; gap: 15px; margin-bottom: 15px; justify-content: center; flex-wrap: wrap;">
+                    <div class="image-box" style="flex: 1; min-width: 200px; max-width: 250px; text-align: center; display: inline-block; margin: 10px;">
+                        <a href="${data.imageUrl}" target="_blank">
+                            <img src="${data.imageUrl}" alt="سيلفي الزائر" style="max-width: 100%; max-height: 200px; border-radius: 6px; border: 1px solid #ccc;">
+                        </a>
+                        <p style="font-size: 12px; font-weight: bold; color: #555; margin-top: 5px;">📸 صورة سيلفي الزائر</p>
+                    </div>
+                    ${receiptHTML}
+                </div>
+                <p style="text-align: right; direction: rtl;"><strong>المساحة المطلوب حجزها:</strong> ${data.width} × ${data.height} (مربعات)</p>
+                <p style="text-align: right; direction: rtl;"><strong>المبلغ المفترض استلامه:</strong> $${data.totalPrice}</p>
+                <hr>
+                <div style="text-align: center;">
+                    <button onclick="approveOrder('${orderId}')" style="background: #28a745; color: white; border: none; padding: 10px 15px; font-size: 15px; border-radius: 6px; cursor: pointer; font-weight: bold;">قبول وتثبيت الجدارية ✅</button>
+                    <button class="btn-reject" onclick="rejectOrder('${orderId}', '${data.imagePath}', '${data.receiptPath || ''}')" style="background: #dc3545; color: white; border: none; padding: 10px 15px; font-size: 15px; border-radius: 6px; cursor: pointer; font-weight: bold; margin-right: 10px;">رفض وإلغاء الطلب ❌</button>
+                </div>
+            `;
+            ordersList.appendChild(card);
+        });
+    });
+}
+
 
         // 1. في حال الضغط على قبول
         function approveOrder(orderId) {
