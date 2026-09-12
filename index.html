@@ -1524,7 +1524,7 @@ function submitBooking() {
             });
 
             const remainingCells = TOTAL_CELLS - totalReservedCells;
-            const reservedPercentage = (totalReservedCells / TOTAL_CELLS) * 100;
+                if (typeof hideSkeletonLoader === 'function') {
 
             function formatNumber(num) {
                 return num.toLocaleString('en-US');
