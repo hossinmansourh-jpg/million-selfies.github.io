@@ -1716,37 +1716,3 @@ init();
                     <td><img src="${res.image}" class="thumb-preview" onclick="window.open('${res.image}', '_blank')" /></td>
                     <td><a href="${res.link}" target="_blank" style="color:var(--accent-gold);">${res.link}</a></td>
                     <td><span class="status-badge ${statusClass}">${statusText}</span></td>
-                    <td>
-                        ${res.status === 'pending' ? `
-                            <button class="action-btn btn-approve" onclick="approveReservation('${res.id}')">✅ موافقة</button>
-                            <button class="action-btn btn-reject" onclick="rejectReservation('${res.id}')">❌ رفض</button>
-                        ` : ''}
-                        ${res.status === 'approved' ? `
-                            <button class="action-btn btn-reject" onclick="hideReservation('${res.id}')">🚫 حظر</button>
-                        ` : ''}
-                    </td>
-                `;
-                tbody.appendChild(row);
-            });
-        }
-
-        function approveReservation(id) {
-            const res = reservations.find(r => r.id === id);
-            if (res) { res.status = 'approved'; updateDashboard(); alert('✅ تمت الموافقة'); }
-        }
-
-        function rejectReservation(id) {
-            const res = reservations.find(r => r.id === id);
-            if (res) { res.status = 'rejected'; updateDashboard(); alert('❌ تم الرفض'); }
-        }
-
-        function hideReservation(id) {
-            const res = reservations.find(r => r.id === id);
-            if (res) { res.status = 'rejected'; updateDashboard(); alert('🚫 تم الحظر'); }
-        }
-
-        // Initialize
-        document.getElementById('zoom-controls').style.display = 'flex';
-    </script>
-</body>
-</html>
