@@ -1399,56 +1399,65 @@ function selectPayment(method, element) {
 
 
         function updatePaymentDetails() {
-            const detailsContainer = document.getElementById('payment-details');
-            const isArabic = currentLanguage === 'ar';
+    const detailsContainer = document.getElementById('payment-details-container');
+    if (!detailsContainer) return;
+    
+    const isArabic = currentLanguage === 'ar';
+    detailsContainer.innerHTML = ''; // تنظيف الحاوية أولاً
 
-            if (selectedPaymentMethod === 'crypto') {
-                const walletAddress = 'TUxYqV5d2E7bV9wKp3mNqR8sT1uW4xZ6cA';
-                detailsContainer.innerHTML = `
-                    <div style="text-align:center; margin-bottom:10px; font-weight:700; color: var(--accent-gold);">💎 USDT (TRC20)</div>
-                    <div class="wallet-address">
-                        <span style="flex:1;">${walletAddress}</span>
-                        <button class="copy-btn" onclick="copyWalletAddress('${walletAddress}')">📋 نسخ</button>
-                    </div>
-                `;
-            } else if (selectedPaymentMethod === 'card') {
-                detailsContainer.innerHTML = `
-                    <div style="text-align:center; margin-bottom:10px; font-weight:700; color: var(--accent-gold);">💳 فيزا/ماستركارد</div>
-                    <div style="text-align:center; margin-top:15px;">
-                        <button class="modal-btn" onclick="window.open('https://payment.example.com/checkout', '_blank')">🔗 اذهب لصفحة الدفع</button>
-                    </div>
-                `;
-            } else {
-                detailsContainer.innerHTML = `
-                    <div style="text-align:center; margin-bottom:10px; font-weight:700; color: var(--accent-gold);">🏦 البنوك الإلكترونية</div>
-                    <div style="display:flex; flex-direction:column; gap:12px;">
-                        <div>Payeer: P123456789</div>
-                        <div>Perfect Money: PM987654321</div>
-                    </div>
-                `;
-            }
-        }
+    if (selectedPaymentMethod === 'crypto') {
+        const walletAddress = "0x1234567890abcdef1234567890abcdef12345678"; // ضع عنوان محفظتك هنا
+        detailsContainer.innerHTML = `
+            <div style="text-align: center; margin-top: 15px;">
+                <div class="wallet-box" style="word-break: break-all; padding: 10px; background: #222; border: 1px solid #ffcc00; color: #fff; margin-bottom: 10px;">${walletAddress}</div>
+                <span style="font-size: 12px; color: #888; display: block; margin-bottom: 5px;">${isArabic ? 'انقر للنسخ' : 'Click to copy'}</span>
+                <button class="btn-copy" onclick="copyWalletAddress('${walletAddress}')" style="background: #ffcc00; color: #000; border: none; padding: 5px 15px; cursor: pointer; font-weight: bold;">${isArabic ? 'نسخ العنوان' : 'Copy Address'}</button>
+            </div>
+        `;
+    } else if (selectedPaymentMethod === 'sham') {
+        detailsContainer.innerHTML = `
+            <div style="text-align: center; margin-top: 15px;">
+                <div style="font-weight: bold; color: #ffcc00; margin-bottom: 10px;">${isArabic ? 'الدفع عبر شام كاش' : 'Pay via Sham Cash'}</div>
+                <img src="chama-barcode.png" alt="Barcode" style="max-width: 150px; margin-bottom: 10px; display: block; margin-left: auto; margin-right: auto;">
+                <button class="btn-pay" style="background: #ffcc00; color: #000; border: none; padding: 5px 15px; font-weight: bold;">${isArabic ? 'تأكيد الدفع' : 'Confirm Payment'}</button>
+            </div>
+        `;
+    } else if (selectedPaymentMethod === 'perfect') {
+        detailsContainer.innerHTML = `
+            <div style="text-align: center; margin-top: 15px;">
+                <div style="font-weight: bold; color: #ffcc00; margin-bottom: 5px;">Perfect Money</div>
+                <div style="color: #fff; margin-bottom: 10px;">Account: U12345678</div>
+                <button class="btn-pay" style="background: #ffcc00; color: #000; border: none; padding: 5px 15px; font-weight: bold;">${isArabic ? 'ادفع الآن' : 'Pay Now'}</button>
+            </div>
+        `;
+    }
+}
 
-        function copyWalletAddress(address) {
-            navigator.clipboard.writeText(address).then(() => {
-                alert('✅ تم نسخ العنوان!');
-            });
-        }
+function copyWalletAddress(address) {
+    navigator.clipboard.writeText(address).then(() => {
+        const isArabic = currentLanguage === 'ar';
+        alert(isArabic ? '✔️ تم نسخ العنوان بنجاح!' : '✔️ Address copied successfully!');
+    }).catch(err => {
+        console.error('Failed to copy: ', err);
+    });
+}
 
-        // ===== BOOKING MODAL =====
-        function openBookingModal(cell) {
-            selectedCell = cell;
-            document.getElementById('coordInfo').textContent = `المربع: X:${cell.col * 10}, Y:${cell.row * 10} (10×10 بكسل)`;
-            document.getElementById('bookingModal').classList.add('active');
-            document.body.style.overflow = 'hidden';
-            updatePaymentDetails();
-        }
+// ===== BOOKING MODAL =====
+function openBookingModal(cell) {
+    selectedCell = cell;
+    const modal = document.getElementById('booking-modal');
+    if (modal) modal.style.display = 'block';
+    document.body.style.overflow = 'hidden';
+    updatePaymentDetails();
+}
 
-        function closeBookingModal() {
-            document.getElementById('bookingModal').classList.remove('active');
-            document.body.style.overflow = '';
-            selectedCell = null;
-        }
+function closeBookingModal() {
+    const modal = document.getElementById('booking-modal');
+    if (modal) modal.style.display = 'none';
+    document.body.style.overflow = 'auto';
+    selectedCell = null;
+}
+
 
         function submitBooking() {
             const name = document.getElementById('userNameInput').value.trim();
