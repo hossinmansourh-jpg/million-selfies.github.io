@@ -1348,33 +1348,38 @@ function submitLocalBooking() {
 
         // ===== SKELETON =====
         function hideSkeletonLoader() {
-            setTimeout(() => {
-                const loader = document.getElementById('skeleton-loader');
-                if (loader) {
-                    loader.classList.add('hidden');
-                    setTimeout(() => loader.remove(), 500);
-                }
-            }, 800);
-        }
+            // ===== LOADER CLEANUP =====
+setTimeout(() => {
+    const loader = document.querySelector('.skeleton-loader');
+    if (loader) {
+        loader.classList.add('hidden');
+        setTimeout(() => {
+            loader.style.display = 'none';
+        }, 500);
+    }
+}, 800);
 
-        // ===== LANGUAGE =====
-        function toggleLanguage() {
-            setLanguage(currentLanguage === 'ar' ? 'en' : 'ar');
-        }
+// ===== LANGUAGE =====
+function toggleLanguage() {
+    setLanguage(currentLanguage === 'ar' ? 'en' : 'ar');
+}
 
-        function setLanguage(lang) {
-            currentLanguage = lang;
-            document.documentElement.lang = lang;
-            document.documentElement.dir = lang === 'ar' ? 'rtl' : 'ltr';
-            document.getElementById('lang-icon').textContent = lang === 'ar' ? '🇸🇦' : '🇬🇧';
-            document.getElementById('lang-text').textContent = lang === 'ar' ? 'English' : 'عربي';
-
-            document.querySelectorAll('[data-ar][data-en]').forEach(el => {
-                const newText = lang === 'ar' ? el.getAttribute('data-ar') : el.getAttribute('data-en');
-                if (el.tagName === 'INPUT') el.placeholder = newText;
-                else el.textContent = newText;
-            });
+function setLanguage(lang) {
+    currentLanguage = lang;
+    document.documentElement.lang = lang;
+    document.documentElement.dir = lang === 'ar' ? 'rtl' : 'ltr';
+    
+    // إصلاح حلقة الترجمة التي كانت مكسورة في تحديدك
+    document.querySelectorAll('[data-i18n]').forEach(el => {
+        const key = el.getAttribute('data-i18n');
+        const newText = window.translations ? (window.translations[lang]?.[key] || key) : key;
+        if (el.tagName === 'INPUT' || el.tagName === 'TEXTAREA') {
+            el.placeholder = newText;
+        } else {
+            el.textContent = newText;
         }
+    });
+}
 
         // ===== PAYMENT =====
         function selectPayment(method) {
