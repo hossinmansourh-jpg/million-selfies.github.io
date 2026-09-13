@@ -23,7 +23,6 @@
     justify-content: center;
   }
 
-  /* زر تبديل اللغة الجديد */
   .lang-switch {
     display: flex;
     background: #14141c;
@@ -54,7 +53,6 @@
     box-shadow: 0 0 10px rgba(212, 160, 23, 0.4);
   }
 
-  /* ===== شارة "تحدي رقمي" ===== */
   .top-badge-wrap { display: flex; justify-content: center; margin-top: 8px; }
   .top-badge {
     background: linear-gradient(135deg, #1a1a24, #14141c);
@@ -71,25 +69,21 @@
     gap: 8px;
   }
 
-  /* ===== العنوان ===== */
   .hero-title { text-align: center; font-size: 28px; font-weight: 900; color: #f5b301; line-height: 1.3; }
   .hero-subtitle { text-align: center; font-size: 13px; color: #d0d0d0; line-height: 1.8; }
   .hero-subtitle .hl { color: #f5b301; font-weight: 700; }
 
-  /* ===== الإحصائيات ===== */
   .stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
   .stat { background: #14141c; border: 1.5px solid #2a2a35; border-top: 3px solid #d4a017; border-radius: 10px; padding: 12px 6px; text-align: center; }
   .stat-num { font-size: 18px; font-weight: 900; color: #f5b301; }
   .stat-lbl { font-size: 10px; color: #a0a0a0; font-weight: 600; margin-top: 4px; }
 
-  /* ===== شريط التقدم ===== */
   .progress-head { display: flex; justify-content: space-between; margin-bottom: 8px; }
   .progress-head .lbl { font-size: 13px; font-weight: 700; color: #e0e0e0; }
   .progress-head .pct { font-size: 15px; font-weight: 900; color: #f5b301; }
   .progress-bar { height: 8px; background: #1e1e28; border-radius: 10px; overflow: hidden; }
   .progress-fill { height: 100%; background: linear-gradient(90deg, #d4a017, #f5b301); width: 0%; transition: width 1s; }
 
-  /* ===== عنوان الجدارية والمفتاح ===== */
   .wall-title { text-align: center; font-size: 20px; font-weight: 900; }
   .legend { display: flex; justify-content: center; gap: 14px; font-size: 11px; color: #b0b0b0; flex-wrap: wrap; }
   .legend-item { display: flex; align-items: center; gap: 5px; }
@@ -97,7 +91,6 @@
   .lg-box.empty { border: 1.5px solid #555; }
   .lg-box.taken { background: #d4a017; }
 
-  /* ===== الشبكة ===== */
   .grid-wrap {
     background: #0e0e14;
     border: 1.5px solid #2a2a35;
@@ -114,7 +107,6 @@
 
   .grid-hint { text-align: center; font-size: 11px; color: #666; padding: 6px; }
 
-  /* ===== أزرار التكبير أسفل الشبكة ===== */
   .zoom-controls {
     display: flex;
     justify-content: center;
@@ -144,18 +136,12 @@
     transform: translateY(-2px);
   }
   .zoom-controls button:active { transform: scale(0.9); }
-  .zoom-controls button:disabled {
-    opacity: 0.3;
-    cursor: not-allowed;
-    transform: none;
-  }
+  .zoom-controls button:disabled { opacity: 0.3; cursor: not-allowed; transform: none; }
 
-  /* ===== الأزرار العامة ===== */
   .btn { background: linear-gradient(135deg, #d4a017, #f5b301); color: #000; border: none; padding: 14px 20px; border-radius: 12px; font-weight: 900; font-size: 16px; cursor: pointer; width: 100%; font-family: 'Cairo'; }
   .btn:disabled { opacity: 0.5; cursor: not-allowed; }
   .btn-outline { background: transparent; color: #f5b301; border: 2px solid #d4a017; }
 
-  /* ===== النوافذ المنبثقة ===== */
   .modal { position: fixed; inset: 0; background: rgba(0,0,0,0.85); display: none; align-items: center; justify-content: center; padding: 15px; z-index: 999; overflow-y: auto; }
   .modal.open { display: flex; }
   .modal-content { background: #14141c; border: 2px solid #d4a017; border-radius: 16px; padding: 20px; max-width: 420px; width: 100%; max-height: 90vh; overflow-y: auto; margin: auto; }
@@ -166,35 +152,6 @@
   .field input:focus, .field textarea:focus, .field select:focus { outline: none; border-color: #d4a017; }
   .barcode { width: 100%; max-width: 260px; margin: 10px auto; display: block; border-radius: 10px; background: #fff; padding: 8px; }
 
-  /* ===== اختيار عدد المربعات ===== */
-  .quantity-picker {
-    display: flex;
-    gap: 8px;
-    flex-wrap: wrap;
-    margin-top: 5px;
-  }
-  .quantity-picker button {
-    flex: 1;
-    min-width: 50px;
-    padding: 10px 6px;
-    border-radius: 10px;
-    border: 1.5px solid #2a2a35;
-    background: #0e0e14;
-    color: #d0d0d0;
-    font-family: 'Cairo';
-    font-weight: 900;
-    font-size: 14px;
-    cursor: pointer;
-    transition: 0.2s;
-  }
-  .quantity-picker button.active {
-    background: linear-gradient(135deg, #d4a017, #f5b301);
-    color: #000;
-    border-color: #d4a017;
-    box-shadow: 0 0 15px rgba(212, 160, 23, 0.4);
-  }
-
-  /* عرض المبلغ الإجمالي */
   .total-price {
     background: linear-gradient(135deg, #1a1a24, #14141c);
     border: 2px solid #d4a017;
@@ -207,12 +164,24 @@
   .total-price .amount { font-size: 26px; font-weight: 900; color: #f5b301; }
   .total-price .amount small { font-size: 14px; color: #d0d0d0; font-weight: 700; }
 
+  /* معلومات الشبكة المتوقعة */
+  .grid-preview {
+    background: #0e0e14;
+    border: 1px solid #2a2a35;
+    border-radius: 8px;
+    padding: 10px;
+    font-size: 12px;
+    color: #a0a0a0;
+    text-align: center;
+    margin-top: 6px;
+  }
+  .grid-preview strong { color: #f5b301; }
+
   .msg { padding: 10px 14px; border-radius: 8px; font-size: 13px; font-weight: 700; text-align: center; display: none; margin-bottom: 12px; }
   .msg.show { display: block; }
   .msg.ok { background: #1e3a1e; color: #7fff7f; border: 1px solid #3a5a3a; }
   .msg.err { background: #3a1e1e; color: #ff7f7f; border: 1px solid #5a3a3a; }
 
-  /* ===== زر الإدارة السفلي ===== */
   .admin-btn {
     position: fixed;
     bottom: 15px;
@@ -239,7 +208,6 @@
     transform: translateX(-50%) scale(1.1);
   }
 
-  /* ===== حقل كلمة المرور ===== */
   .pwd-wrap { position: relative; }
   .pwd-wrap input { padding-left: 45px; }
   .pwd-toggle { position: absolute; left: 12px; top: 50%; transform: translateY(-50%); cursor: pointer; font-size: 18px; user-select: none; background: transparent; border: none; color: #f5b301; padding: 0; }
@@ -249,7 +217,6 @@
 </head>
 <body>
 
-<!-- الشريط العلوي الثابت (زر اللغة) -->
 <div class="sticky-top">
   <div class="lang-switch">
     <button id="btnAr" class="active">🇸🇾 عربي</button>
@@ -259,7 +226,6 @@
 
 <div class="container">
 
-  <!-- شارة تحدي رقمي -->
   <div class="top-badge-wrap">
     <div class="top-badge" data-i18n="badge">🚀 تحدي رقمي تاريخي</div>
   </div>
@@ -295,7 +261,6 @@
     </div>
   </div>
 
-  <!-- أزرار التكبير أسفل الشبكة -->
   <div class="zoom-controls">
     <button id="zoomOut" title="تصغير">−</button>
     <button id="zoomIn" title="تكبير">＋</button>
@@ -305,7 +270,6 @@
 
 </div>
 
-<!-- زر الإدارة -->
 <button class="admin-btn" id="adminBtn" title="دخول الإدارة">🔒</button>
 
 <!-- Modal: Admin Login -->
@@ -313,12 +277,10 @@
   <div class="modal-content">
     <h3>🔒 <span data-i18n="adminTitle">دخول الإدارة</span></h3>
     <div id="adminMsg" class="msg"></div>
-
     <div class="field">
       <label data-i18n="fieldEmail">📧 البريد الإلكتروني</label>
       <input type="email" id="adminEmail" placeholder="admin@example.com">
     </div>
-
     <div class="field">
       <label data-i18n="fieldPassword">🔑 كلمة المرور</label>
       <div class="pwd-wrap">
@@ -326,7 +288,6 @@
         <button type="button" class="pwd-toggle" id="adminTogglePwd">👁️</button>
       </div>
     </div>
-
     <button class="btn" id="adminSubmit" data-i18n="btnAdminLogin">دخول الإدارة</button>
     <button class="btn btn-outline" id="adminCancel" style="margin-top: 10px;" data-i18n="btnCancel">إلغاء</button>
   </div>
@@ -339,18 +300,13 @@
     <div id="bookingMsg" class="msg"></div>
 
     <div class="field">
-      <label data-i18n="fieldQuantity">🔢 عدد المربعات</label>
-      <div class="quantity-picker" id="quantityPicker">
-        <button data-qty="1" class="active">1</button>
-        <button data-qty="2">2</button>
-        <button data-qty="5">5</button>
-        <button data-qty="10">10</button>
-        <button data-qty="25">25</button>
-        <button data-qty="50">50</button>
+      <label data-i18n="fieldQuantity">🔢 عدد المربعات (1 - 400)</label>
+      <input type="number" id="quantityInput" min="1" max="400" value="1" style="text-align:center; font-size:18px; font-weight:900;">
+      <div class="grid-preview" id="gridPreview">
+        <span data-i18n="gridPreviewLabel">الشبكة المتوقعة:</span> <strong id="gridPreviewText">1×1</strong>
       </div>
     </div>
 
-    <!-- المبلغ الإجمالي -->
     <div class="total-price">
       <div class="label" data-i18n="totalPriceLabel">💰 المبلغ الإجمالي</div>
       <div class="amount" id="totalPrice">1 <small>$</small></div>
@@ -414,19 +370,17 @@ const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
 
-// ⚙️ إعدادات الشبكة
+// ⚙️ إعدادات
 const GRID_COLS = 1000;
 const GRID_ROWS = 1000;
 const TOTAL_CELLS = GRID_COLS * GRID_ROWS;
 const BOOKINGS_COLLECTION = "bookings";
+const PRICE_PER_SQUARE = 1;
+const MAX_QUANTITY = 400;
 
-// 📏 أحجام المربعات
 const CELL_SIZES = [14, 18, 22, 28, 36, 48];
 let cellSizeIndex = 2;
 let CELL_SIZE = CELL_SIZES[cellSizeIndex];
-
-// 💵 سعر المربع
-const PRICE_PER_SQUARE = 1; // 1 دولار
 
 // 🌐 الترجمات
 const I18N = {
@@ -444,7 +398,8 @@ const I18N = {
     fieldEmail: "📧 البريد الإلكتروني", fieldPassword: "🔑 كلمة المرور",
     pwdPlaceholder: "كلمة المرور",
     bookTitle: "🎯 حجز المربعات",
-    fieldQuantity: "🔢 عدد المربعات",
+    fieldQuantity: "🔢 عدد المربعات (1 - 400)",
+    gridPreviewLabel: "الشبكة المتوقعة:",
     totalPriceLabel: "💰 المبلغ الإجمالي",
     fieldVisitorName: "👤 اسمك", fieldVisitorPhone: "📱 رقم هاتفك (اختياري)",
     bookSelfie: "📸 ارفع صورتك (سيلفي)",
@@ -453,16 +408,17 @@ const I18N = {
     bookPayDesc: "أرسل المبلغ إلى الباركود، ثم ارفع صورة الإيصال:",
     bookReceipt: "🧾 ارفع صورة الإيصال", btnSubmit: "✅ إرسال الطلب", btnCancel: "إلغاء", btnCancel2: "❌ إلغاء",
     msgName: "⚠️ اكتب اسمك أولاً",
+    msgQtyInvalid: "⚠️ عدد المربعات يجب أن يكون بين 1 و 400",
     msgUploadSelfie: "⚠️ ارفع صورة السيلفي أولاً",
     msgUploadReceipt: "⚠️ ارفع صورة الإيصال أولاً",
     msgSelfieBig: "⚠️ حجم السيلفي الأصلي يجب أن يكون أقل من 15 ميجا",
     msgReceiptBig: "⚠️ حجم الإيصال الأصلي يجب أن يكون أقل من 15 ميجا",
+    msgNotEnough: "⚠️ لا توجد مربعات كافية متجاورة. اختر مربعًا آخر أو عددًا أقل.",
     msgCompressSelfie: "⏳ جارٍ ضغط ورفع السيلفي...",
     msgCompressReceipt: "⏳ جارٍ ضغط ورفع الإيصال...",
     msgBookingOk: "✅ تم إرسال طلبك! سيتم مراجعته من الإدارة.",
     msgError: "❌ خطأ: ", msgUploading: "⏳ جارٍ الرفع...",
     msgTaken: "هذا المربع محجوز بالفعل. اختر مربعًا آخر.",
-    msgNotEnough: "⚠️ لا توجد مربعات كافية متجاورة. اختر عددًا أقل أو مربعًا آخر.",
     msgAdminOk: "✅ تم تسجيل دخول الإدارة",
     msgAdminErr: "⚠️ بيانات خاطئة"
   },
@@ -480,7 +436,8 @@ const I18N = {
     fieldEmail: "📧 Email", fieldPassword: "🔑 Password",
     pwdPlaceholder: "Password",
     bookTitle: "🎯 Book Squares",
-    fieldQuantity: "🔢 Number of squares",
+    fieldQuantity: "🔢 Number of squares (1 - 400)",
+    gridPreviewLabel: "Expected grid:",
     totalPriceLabel: "💰 Total Price",
     fieldVisitorName: "👤 Your name", fieldVisitorPhone: "📱 Phone (optional)",
     bookSelfie: "📸 Upload your selfie",
@@ -489,16 +446,17 @@ const I18N = {
     bookPayDesc: "Send the amount to the barcode, then upload the receipt:",
     bookReceipt: "🧾 Upload receipt image", btnSubmit: "✅ Submit Request", btnCancel: "Cancel", btnCancel2: "❌ Cancel",
     msgName: "⚠️ Write your name first",
+    msgQtyInvalid: "⚠️ Quantity must be between 1 and 400",
     msgUploadSelfie: "⚠️ Upload selfie first",
     msgUploadReceipt: "⚠️ Upload receipt first",
     msgSelfieBig: "⚠️ Original selfie must be under 15 MB",
     msgReceiptBig: "⚠️ Original receipt must be under 15 MB",
+    msgNotEnough: "⚠️ Not enough adjacent squares. Choose another square or fewer.",
     msgCompressSelfie: "⏳ Compressing & uploading selfie...",
     msgCompressReceipt: "⏳ Compressing & uploading receipt...",
     msgBookingOk: "✅ Request submitted! Awaiting admin review.",
     msgError: "❌ Error: ", msgUploading: "⏳ Uploading...",
     msgTaken: "This square is already booked. Choose another.",
-    msgNotEnough: "⚠️ Not enough adjacent squares. Choose fewer or a different square.",
     msgAdminOk: "✅ Admin logged in",
     msgAdminErr: "⚠️ Wrong credentials"
   }
@@ -508,19 +466,19 @@ let currentLang = localStorage.getItem('site_lang') || 'ar';
 let isAdmin = false;
 let selectedCellIndex = null;
 let selectedQuantity = 1;
+let selectedGridShape = { rows: 1, cols: 1 };
+let selfieAspectRatio = 1; // نسبة الصورة (width / height)
 
 function t(key) { return I18N[currentLang][key] || key; }
 
 function applyLang() {
   const html = document.documentElement;
   if (currentLang === 'ar') {
-    html.lang = 'ar';
-    html.dir = 'rtl';
+    html.lang = 'ar'; html.dir = 'rtl';
     document.getElementById('btnAr').classList.add('active');
     document.getElementById('btnEn').classList.remove('active');
   } else {
-    html.lang = 'en';
-    html.dir = 'ltr';
+    html.lang = 'en'; html.dir = 'ltr';
     document.getElementById('btnEn').classList.add('active');
     document.getElementById('btnAr').classList.remove('active');
   }
@@ -533,17 +491,85 @@ function applyLang() {
     if (I18N[currentLang][key]) el.placeholder = I18N[currentLang][key];
   });
   updateTotalPrice();
+  updateGridPreview();
 }
 
 document.getElementById('btnAr').addEventListener('click', () => {
-  currentLang = 'ar';
-  localStorage.setItem('site_lang', 'ar');
-  applyLang();
+  currentLang = 'ar'; localStorage.setItem('site_lang', 'ar'); applyLang();
 });
 document.getElementById('btnEn').addEventListener('click', () => {
-  currentLang = 'en';
-  localStorage.setItem('site_lang', 'en');
-  applyLang();
+  currentLang = 'en'; localStorage.setItem('site_lang', 'en'); applyLang();
+});
+
+// ===== 🧮 حساب الشبكة تلقائيًا =====
+// تُستخدم للحصول على أفضل تركيبة (rows × cols) لعدد معين ونسبة صورة
+function computeGridShape(total, aspect) {
+  // aspect = width / height
+  let best = { rows: 1, cols: total, diff: Infinity };
+
+  for (let rows = 1; rows <= Math.ceil(Math.sqrt(total)); rows++) {
+    if (total % rows !== 0) continue;
+    const cols = total / rows;
+
+    // نسبة الشبكة الفعلية (عرض : ارتفاع)
+    // كل مربع 1:1، إذن نسبة الشبكة = cols / rows
+    const gridAspect = cols / rows;
+    const diff = Math.abs(gridAspect - aspect);
+
+    if (diff < best.diff) {
+      best = { rows, cols, diff };
+    }
+  }
+
+  // جرب أيضًا الأزواج المقلوبة
+  for (let cols = 1; cols <= Math.ceil(Math.sqrt(total)); cols++) {
+    if (total % cols !== 0) continue;
+    const rows = total / cols;
+    const gridAspect = cols / rows;
+    const diff = Math.abs(gridAspect - aspect);
+    if (diff < best.diff) {
+      best = { rows, cols, diff };
+    }
+  }
+
+  return { rows: best.rows, cols: best.cols };
+}
+
+// ===== عدد المربعات =====
+function updateTotalPrice() {
+  const total = selectedQuantity * PRICE_PER_SQUARE;
+  document.getElementById('totalPrice').innerHTML = `${total} <small>$</small>`;
+}
+
+function updateGridPreview() {
+  const shape = computeGridShape(selectedQuantity, selfieAspectRatio);
+  selectedGridShape = shape;
+  document.getElementById('gridPreviewText').textContent = `${shape.rows}×${shape.cols}`;
+}
+
+document.getElementById('quantityInput').addEventListener('input', (e) => {
+  let val = parseInt(e.target.value) || 1;
+  if (val < 1) val = 1;
+  if (val > MAX_QUANTITY) val = MAX_QUANTITY;
+  selectedQuantity = val;
+  updateTotalPrice();
+  updateGridPreview();
+});
+
+// ===== تحميل نسبة الصورة =====
+document.getElementById('selfieInput').addEventListener('change', (e) => {
+  const file = e.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = (ev) => {
+    const img = new Image();
+    img.onload = () => {
+      selfieAspectRatio = img.width / img.height;
+      updateGridPreview();
+    };
+    img.src = ev.target.result;
+  };
+  reader.readAsDataURL(file);
 });
 
 // ===== أزرار التكبير =====
@@ -558,57 +584,41 @@ function changeCellSize(delta) {
   renderVisibleCells();
   updateZoomButtons();
 }
-
 function updateZoomButtons() {
   document.getElementById('zoomIn').disabled = cellSizeIndex >= CELL_SIZES.length - 1;
   document.getElementById('zoomOut').disabled = cellSizeIndex <= 0;
 }
-
 document.getElementById('zoomIn').addEventListener('click', () => changeCellSize(1));
 document.getElementById('zoomOut').addEventListener('click', () => changeCellSize(-1));
 
-// ===== عدد المربعات =====
-function updateTotalPrice() {
-  const total = selectedQuantity * PRICE_PER_SQUARE;
-  const symbol = currentLang === 'ar' ? '$' : '$';
-  document.getElementById('totalPrice').innerHTML = `${total} <small>${symbol}</small>`;
-}
-
-document.querySelectorAll('#quantityPicker button').forEach(btn => {
-  btn.addEventListener('click', () => {
-    document.querySelectorAll('#quantityPicker button').forEach(b => b.classList.remove('active'));
-    btn.classList.add('active');
-    selectedQuantity = parseInt(btn.dataset.qty);
-    updateTotalPrice();
-  });
-});
-
-// 🗜️ ضغط الصور
-const MAX_WIDTH = 1000, MAX_HEIGHT = 1000;
-const TARGET_MAX_KB = 300;
-const INITIAL_QUALITY = 0.85, MIN_QUALITY = 0.5;
-
-async function compressImage(file) {
+// ===== 🗜️ ضغط + قص مركزي =====
+async function compressAndCrop(file) {
   return new Promise((resolve, reject) => {
     const reader = new FileReader();
     reader.onload = (e) => {
       const img = new Image();
       img.onload = () => {
-        let { width, height } = img;
-        if (width > MAX_WIDTH || height > MAX_HEIGHT) {
-          const ratio = Math.min(MAX_WIDTH / width, MAX_HEIGHT / height);
-          width = Math.round(width * ratio);
-          height = Math.round(height * ratio);
-        }
+        // 1) القص المركزي إلى مربع
+        const size = Math.min(img.width, img.height);
+        const sx = (img.width - size) / 2;
+        const sy = (img.height - size) / 2;
+
+        // 2) تصغير إلى 1000 بكسل كحد أقصى
+        const MAX = 1000;
+        const target = Math.min(size, MAX);
+
         const canvas = document.createElement('canvas');
-        canvas.width = width;
-        canvas.height = height;
-        canvas.getContext('2d').drawImage(img, 0, 0, width, height);
-        let quality = INITIAL_QUALITY;
+        canvas.width = target;
+        canvas.height = target;
+        const ctx = canvas.getContext('2d');
+        ctx.drawImage(img, sx, sy, size, size, 0, 0, target, target);
+
+        // 3) ضغط تدريجي
+        let quality = 0.85;
         const tryCompress = () => {
           canvas.toBlob((b) => {
-            if (!b) { reject(new Error('فشل ضغط الصورة')); return; }
-            if ((b.size / 1024) > TARGET_MAX_KB && quality > MIN_QUALITY) {
+            if (!b) { reject(new Error('فشل الضغط')); return; }
+            if ((b.size / 1024) > 300 && quality > 0.5) {
               quality -= 0.1;
               tryCompress();
             } else resolve(b);
@@ -624,8 +634,42 @@ async function compressImage(file) {
   });
 }
 
-async function uploadToImgBB(file) {
-  const compressedBlob = await compressImage(file);
+async function compressImage(file) {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      const img = new Image();
+      img.onload = () => {
+        let { width, height } = img;
+        const MAX = 1000;
+        if (width > MAX || height > MAX) {
+          const ratio = Math.min(MAX / width, MAX / height);
+          width = Math.round(width * ratio);
+          height = Math.round(height * ratio);
+        }
+        const canvas = document.createElement('canvas');
+        canvas.width = width; canvas.height = height;
+        canvas.getContext('2d').drawImage(img, 0, 0, width, height);
+        let quality = 0.85;
+        const tryCompress = () => {
+          canvas.toBlob((b) => {
+            if (!b) { reject(new Error('فشل الضغط')); return; }
+            if ((b.size / 1024) > 300 && quality > 0.5) {
+              quality -= 0.1; tryCompress();
+            } else resolve(b);
+          }, 'image/jpeg', quality);
+        };
+        tryCompress();
+      };
+      img.onerror = () => reject(new Error('فشل تحميل الصورة'));
+      img.src = e.target.result;
+    };
+    reader.onerror = () => reject(new Error('فشل قراءة الملف'));
+    reader.readAsDataURL(file);
+  });
+}
+
+async function uploadToImgBB(blob) {
   return new Promise((resolve, reject) => {
     const reader = new FileReader();
     reader.onload = async () => {
@@ -641,50 +685,40 @@ async function uploadToImgBB(file) {
       } catch (e) { reject(e); }
     };
     reader.onerror = () => reject(new Error('فشل قراءة الملف'));
-    reader.readAsDataURL(compressedBlob);
+    reader.readAsDataURL(blob);
   });
 }
 
 // ====== Admin Login ======
 const adminModal = document.getElementById('adminModal');
 const adminMsg = document.getElementById('adminMsg');
-
 function showAdminMsg(text, type = 'err') {
   adminMsg.textContent = text;
   adminMsg.className = 'msg show ' + type;
   setTimeout(() => { adminMsg.className = 'msg'; }, 5000);
 }
-
 document.getElementById('adminBtn').addEventListener('click', () => {
   if (isAdmin) {
     signOut(auth).then(() => {
       isAdmin = false;
       const btn = document.getElementById('adminBtn');
-      btn.textContent = '🔒';
-      btn.style.color = '#555';
-      btn.style.borderColor = '#2a2a35';
+      btn.textContent = '🔒'; btn.style.color = '#555'; btn.style.borderColor = '#2a2a35';
     });
-  } else {
-    adminModal.classList.add('open');
-  }
+  } else adminModal.classList.add('open');
 });
-
 document.getElementById('adminCancel').addEventListener('click', () => adminModal.classList.remove('open'));
-
 document.getElementById('adminTogglePwd').addEventListener('click', (e) => {
   e.preventDefault();
   const pwd = document.getElementById('adminPassword');
   if (pwd.type === 'password') { pwd.type = 'text'; e.target.textContent = '🙈'; }
   else { pwd.type = 'password'; e.target.textContent = '👁️'; }
 });
-
 document.getElementById('adminSubmit').addEventListener('click', async () => {
   const email = document.getElementById('adminEmail').value.trim();
   const password = document.getElementById('adminPassword').value;
   if (!email || !password) { showAdminMsg(t('msgAdminErr')); return; }
   const btn = document.getElementById('adminSubmit');
-  btn.disabled = true;
-  btn.textContent = '⏳...';
+  btn.disabled = true; btn.textContent = '⏳...';
   try {
     await signInWithEmailAndPassword(auth, email, password);
     showAdminMsg(t('msgAdminOk'), 'ok');
@@ -692,26 +726,17 @@ document.getElementById('adminSubmit').addEventListener('click', async () => {
       adminModal.classList.remove('open');
       window.location.href = 'hossin.html';
     }, 1000);
-  } catch (e) {
-    showAdminMsg(t('msgAdminErr'));
-  } finally {
-    btn.disabled = false;
-    btn.textContent = t('btnAdminLogin');
-  }
+  } catch (e) { showAdminMsg(t('msgAdminErr')); }
+  finally { btn.disabled = false; btn.textContent = t('btnAdminLogin'); }
 });
-
 onAuthStateChanged(auth, (user) => {
   const btn = document.getElementById('adminBtn');
   if (user) {
     isAdmin = true;
-    btn.textContent = '🔓';
-    btn.style.color = '#f5b301';
-    btn.style.borderColor = '#d4a017';
+    btn.textContent = '🔓'; btn.style.color = '#f5b301'; btn.style.borderColor = '#d4a017';
   } else {
     isAdmin = false;
-    btn.textContent = '🔒';
-    btn.style.color = '#555';
-    btn.style.borderColor = '#2a2a35';
+    btn.textContent = '🔒'; btn.style.color = '#555'; btn.style.borderColor = '#2a2a35';
   }
 });
 
@@ -742,8 +767,7 @@ function renderVisibleCells() {
     const r = Math.floor(idx / GRID_COLS);
     const c = idx % GRID_COLS;
     if (r < startRow || r > endRow || c < startCol || c > endCol) {
-      cellMap[idx].remove();
-      delete cellMap[idx];
+      cellMap[idx].remove(); delete cellMap[idx];
     }
   });
 
@@ -772,7 +796,26 @@ function renderVisibleCells() {
       if (takenSet.has(idx)) {
         cell.style.background = '#d4a017';
         const d = bookingData[idx];
-        if (d && d.selfieUrl) {
+        if (d && d.selfieUrl && d.gridShape) {
+          // 🎨 عرض جزء الصورة على هذا المربع
+          const { rows, cols } = d.gridShape;
+          const startCell = d.startCell;
+          const startRow = Math.floor(startCell / GRID_COLS);
+          const startCol = startCell % GRID_COLS;
+          const localRow = r - startRow;
+          const localCol = c - startCol;
+
+          if (localRow >= 0 && localRow < rows && localCol >= 0 && localCol < cols) {
+            cell.style.backgroundImage = `url(${d.selfieUrl})`;
+            cell.style.backgroundSize = `${cols * 100}% ${rows * 100}%`;
+            const xPct = cols > 1 ? (localCol / (cols - 1)) * 100 : 0;
+            const yPct = rows > 1 ? (localRow / (rows - 1)) * 100 : 0;
+            cell.style.backgroundPosition = `${xPct}% ${yPct}%`;
+          } else {
+            cell.style.background = '#333';
+          }
+        } else if (d && d.selfieUrl) {
+          // توافق مع الحجوزات القديمة
           cell.style.backgroundImage = `url(${d.selfieUrl})`;
           cell.style.background = '#333';
         }
@@ -804,17 +847,12 @@ async function loadBookings() {
     bookingData = {};
     snap.forEach(d => {
       const data = d.data();
-      // التعامل مع الحجز المتعدد
-      if (Array.isArray(data.cellIndices)) {
-        data.cellIndices.forEach(i => {
-          takenSet.add(i);
-          bookingData[i] = data;
-        });
-      } else if (typeof data.cellIndex === 'number') {
-        takenSet.add(data.cellIndex);
-        bookingData[data.cellIndex] = data;
-      }
-      takenCount += (data.quantity || 1);
+      const cells = data.cellIndices || (typeof data.cellIndex === 'number' ? [data.cellIndex] : []);
+      cells.forEach(i => {
+        takenSet.add(i);
+        bookingData[i] = data;
+      });
+      takenCount += cells.length || 1;
       if (data.selfieUrl) selfieCount++;
     });
     updateStats(takenCount, selfieCount);
@@ -835,24 +873,27 @@ function updateStats(taken, selfies) {
 // ====== Booking ======
 const bookingModal = document.getElementById('bookingModal');
 const bookingMsg = document.getElementById('bookingMsg');
-
 function showBookingMsg(text, type = 'err') {
   bookingMsg.textContent = text;
   bookingMsg.className = 'msg show ' + type;
 }
 
-// التحقق من المربعات المتجاورة
-function getAdjacentCells(startIndex, quantity) {
-  const cells = [];
+// حساب المربعات للتأكد من التوفر
+function computeCellsForGrid(startIndex, rows, cols) {
   const startRow = Math.floor(startIndex / GRID_COLS);
   const startCol = startIndex % GRID_COLS;
 
-  for (let i = 0; i < quantity; i++) {
-    const col = startCol + i;
-    if (col >= GRID_COLS) return null; // تجاوز الصف
-    const idx = startRow * GRID_COLS + col;
-    if (takenSet.has(idx)) return null; // مربع محجوز
-    cells.push(idx);
+  // التحقق من الحدود
+  if (startRow + rows > GRID_ROWS) return null;
+  if (startCol + cols > GRID_COLS) return null;
+
+  const cells = [];
+  for (let r = 0; r < rows; r++) {
+    for (let c = 0; c < cols; c++) {
+      const idx = (startRow + r) * GRID_COLS + (startCol + c);
+      if (takenSet.has(idx)) return null;
+      cells.push(idx);
+    }
   }
   return cells;
 }
@@ -861,9 +902,9 @@ function openBooking(index) {
   if (takenSet.has(index)) { alert(t('msgTaken')); return; }
   selectedCellIndex = index;
   selectedQuantity = 1;
-  document.querySelectorAll('#quantityPicker button').forEach(b => b.classList.remove('active'));
-  document.querySelector('#quantityPicker button[data-qty="1"]').classList.add('active');
+  document.getElementById('quantityInput').value = 1;
   updateTotalPrice();
+  updateGridPreview();
 
   bookingMsg.className = 'msg';
   document.getElementById('visitorName').value = '';
@@ -887,17 +928,18 @@ document.getElementById('submitBooking').addEventListener('click', async () => {
   const note = document.getElementById('userNote').value.trim();
 
   if (!visitorName) { showBookingMsg(t('msgName')); return; }
+  if (selectedQuantity < 1 || selectedQuantity > MAX_QUANTITY) {
+    showBookingMsg(t('msgQtyInvalid')); return;
+  }
   if (!selfieFile) { showBookingMsg(t('msgUploadSelfie')); return; }
   if (!receiptFile) { showBookingMsg(t('msgUploadReceipt')); return; }
   if (selfieFile.size > 15 * 1024 * 1024) { showBookingMsg(t('msgSelfieBig')); return; }
   if (receiptFile.size > 15 * 1024 * 1024) { showBookingMsg(t('msgReceiptBig')); return; }
 
-  // التحقق من المربعات المتجاورة
-  const cellIndices = getAdjacentCells(selectedCellIndex, selectedQuantity);
-  if (!cellIndices) {
-    showBookingMsg(t('msgNotEnough'));
-    return;
-  }
+  // حساب الشبكة
+  const shape = computeGridShape(selectedQuantity, selfieAspectRatio);
+  const cells = computeCellsForGrid(selectedCellIndex, shape.rows, shape.cols);
+  if (!cells) { showBookingMsg(t('msgNotEnough')); return; }
 
   const btn = document.getElementById('submitBooking');
   btn.disabled = true;
@@ -908,15 +950,19 @@ document.getElementById('submitBooking').addEventListener('click', async () => {
     const ts = Date.now();
 
     showBookingMsg(t('msgCompressSelfie'), 'ok');
-    const selfieUrl = await uploadToImgBB(selfieFile);
+    // ضغط + قص مركزي للسيلفي
+    const selfieBlob = await compressAndCrop(selfieFile);
+    const selfieUrl = await uploadToImgBB(selfieBlob);
 
     showBookingMsg(t('msgCompressReceipt'), 'ok');
-    const receiptUrl = await uploadToImgBB(receiptFile);
+    const receiptBlob = await compressImage(receiptFile);
+    const receiptUrl = await uploadToImgBB(receiptBlob);
 
     const bookingId = `${guestId}_${selectedCellIndex}_${ts}`;
     await setDoc(doc(db, BOOKINGS_COLLECTION, bookingId), {
-      cellIndex: selectedCellIndex,           // أول مربع (للتوافق)
-      cellIndices: cellIndices,                // جميع المربعات
+      startCell: selectedCellIndex,
+      cellIndices: cells,
+      gridShape: { rows: shape.rows, cols: shape.cols },
       quantity: selectedQuantity,
       totalPrice: selectedQuantity * PRICE_PER_SQUARE,
       uid: guestId,
