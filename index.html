@@ -36,12 +36,32 @@
   .lg-box.empty { border: 1.5px solid #555; }
   .lg-box.taken { background: #d4a017; }
 
-  .grid-wrap { background: #0e0e14; border: 1.5px solid #2a2a35; border-radius: 12px; padding: 8px; max-height: 420px; overflow: auto; }
-  .grid { display: grid; grid-template-columns: repeat(20, 1fr); gap: 2px; min-width: 600px; }
-  .cell { aspect-ratio: 1; background: #1a1a24; border-radius: 2px; border: 0.5px solid #22222e; cursor: pointer; position: relative; background-size: cover; background-position: center; transition: 0.2s; }
-  .cell:hover { transform: scale(1.15); z-index: 2; }
+  /* ⬇️ الشبكة: أطول + تقنية عرض ذكية */
+  .grid-wrap {
+    background: #0e0e14;
+    border: 1.5px solid #2a2a35;
+    border-radius: 12px;
+    padding: 8px;
+    height: 70vh;              /* أطول من الحجم السابق */
+    min-height: 500px;
+    overflow: auto;
+    position: relative;
+  }
+  .grid-inner { position: relative; }
+  .grid-canvas {
+    display: grid;
+    grid-template-columns: repeat(1000, 20px); /* مليون مربع: 1000×1000 */
+    gap: 2px;
+    width: max-content;
+    position: relative;
+  }
+  .cell { width: 20px; height: 20px; background: #1a1a24; border-radius: 2px; border: 0.5px solid #22222e; cursor: pointer; background-size: cover; background-position: center; transition: 0.15s; }
+  .cell:hover { transform: scale(1.4); z-index: 10; box-shadow: 0 0 6px #d4a017; }
   .cell.taken { background-color: #d4a017; }
   .cell.taken.selfie { background-color: #333; }
+  .cell.hidden { visibility: hidden; }
+
+  .grid-hint { text-align: center; font-size: 11px; color: #666; padding: 6px; }
 
   .btn { background: linear-gradient(135deg, #d4a017, #f5b301); color: #000; border: none; padding: 14px 20px; border-radius: 12px; font-weight: 900; font-size: 16px; cursor: pointer; width: 100%; font-family: 'Cairo'; }
   .btn:disabled { opacity: 0.5; cursor: not-allowed; }
@@ -56,9 +76,6 @@
   .field input, .field textarea { width: 100%; padding: 10px; border-radius: 8px; border: 1.5px solid #2a2a35; background: #0e0e14; color: #fff; font-family: 'Cairo'; font-size: 14px; }
   .field input:focus, .field textarea:focus { outline: none; border-color: #d4a017; }
   .barcode { width: 100%; max-width: 260px; margin: 10px auto; display: block; border-radius: 10px; background: #fff; padding: 8px; }
-
-  .info-box { background: #14141c; border: 1.5px solid #2a2a35; border-radius: 10px; padding: 14px; font-size: 13px; color: #c0c0c0; line-height: 1.8; }
-  .info-box strong { color: #f5b301; }
 
   .msg { padding: 10px 14px; border-radius: 8px; font-size: 13px; font-weight: 700; text-align: center; display: none; margin-bottom: 12px; }
   .msg.show { display: block; }
@@ -77,10 +94,13 @@
 
   .link-small { color: #f5b301; font-size: 12px; text-align: center; cursor: pointer; text-decoration: underline; margin-top: 8px; display: block; }
 
-  /* حقل كلمة المرور مع زر العين */
   .pwd-wrap { position: relative; }
   .pwd-wrap input { padding-left: 45px; }
   .pwd-toggle { position: absolute; left: 12px; top: 50%; transform: translateY(-50%); cursor: pointer; font-size: 18px; user-select: none; background: transparent; border: none; color: #f5b301; padding: 0; }
+
+  /* عند التبديل للإنجليزية */
+  html[lang="en"] .pwd-toggle { left: auto; right: 12px; }
+  html[lang="en"] .pwd-wrap input { padding-left: 10px; padding-right: 45px; }
 </style>
 </head>
 <body>
@@ -89,124 +109,118 @@
 
   <div class="header">
     <div id="authArea">
-      <button class="lang-btn" id="loginBtn">🔐 تسجيل الدخول</button>
+      <button class="lang-btn" id="loginBtn" data-i18n="login">🔐 تسجيل الدخول</button>
     </div>
-    <div class="badge">🚀 تحدي رقمي تاريخي</div>
+    <div style="display:flex; gap:8px; align-items:center;">
+      <button class="lang-btn" id="langToggle">🇬🇧 EN</button>
+      <div class="badge" data-i18n="badge">🚀 تحدي رقمي تاريخي</div>
+    </div>
   </div>
 
-  <h1 class="hero-title">جدارية مليون صورة سيلفي</h1>
+  <h1 class="hero-title" data-i18n="heroTitle">جدارية مليون صورة سيلفي</h1>
   <p class="hero-subtitle">
-    كن جزءاً من <span class="hl">أكبر لوحة رقمية تفاعلية</span> في العالم.<br>
-    احجز مربعاتك واترك <span class="hl">بصمتك للأبد</span>.<br>
-    كل مربع 10×10 بكسل بـ <span class="hl">دولار واحد فقط</span>.
+    <span data-i18n="hero1">كن جزءاً من</span> <span class="hl" data-i18n="hero2">أكبر لوحة رقمية تفاعلية</span> <span data-i18n="hero3">في العالم.</span><br>
+    <span data-i18n="hero4">احجز مربعاتك واترك</span> <span class="hl" data-i18n="hero5">بصمتك للأبد</span>.<br>
+    <span data-i18n="hero6">كل مربع 10×10 بكسل بـ</span> <span class="hl" data-i18n="hero7">دولار واحد فقط</span>.
   </p>
 
   <div class="stats">
-    <div class="stat"><div class="stat-num" id="statSelfies">0</div><div class="stat-lbl">صورة سيلفي</div></div>
-    <div class="stat"><div class="stat-num" id="statTaken">0</div><div class="stat-lbl">مربعات محجوزة</div></div>
-    <div class="stat"><div class="stat-num" id="statFree">1,000,000</div><div class="stat-lbl">مربعات متبقية</div></div>
+    <div class="stat"><div class="stat-num" id="statSelfies">0</div><div class="stat-lbl" data-i18n="statSelfies">صورة سيلفي</div></div>
+    <div class="stat"><div class="stat-num" id="statTaken">0</div><div class="stat-lbl" data-i18n="statTaken">مربعات محجوزة</div></div>
+    <div class="stat"><div class="stat-num" id="statFree">1,000,000</div><div class="stat-lbl" data-i18n="statFree">مربعات متبقية</div></div>
   </div>
 
   <div>
-    <div class="progress-head"><span class="lbl">نسبة الحجز</span><span class="pct" id="progressPct">0%</span></div>
+    <div class="progress-head"><span class="lbl" data-i18n="progressLbl">نسبة الحجز</span><span class="pct" id="progressPct">0%</span></div>
     <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
   </div>
 
-  <h2 class="wall-title">🖼️ لوحة الجدارية التفاعلية</h2>
+  <h2 class="wall-title" data-i18n="wallTitle">🖼️ لوحة الجدارية التفاعلية</h2>
   <div class="legend">
-    <div class="legend-item"><span class="lg-box empty"></span> مربع فارغ</div>
-    <div class="legend-item"><span class="lg-box taken"></span> محجوز</div>
-    <span>انقر على أي مربع للحجز</span>
+    <div class="legend-item"><span class="lg-box empty"></span> <span data-i18n="legendEmpty">مربع فارغ</span></div>
+    <div class="legend-item"><span class="lg-box taken"></span> <span data-i18n="legendTaken">محجوز</span></div>
+    <span data-i18n="legendHint">انقر على أي مربع للحجز</span>
   </div>
 
-  <div class="grid-wrap">
-    <div class="grid" id="grid">
-      <div class="loading">⏳ جارٍ تحميل الجدارية...</div>
+  <div class="grid-wrap" id="gridWrap">
+    <div class="grid-inner" id="gridInner">
+      <div class="grid-canvas" id="grid"></div>
     </div>
   </div>
-
-  <div class="info-box">
-    <strong>💡 كيف يعمل الموقع؟</strong><br>
-    1. أنشئ حسابًا بالبريد الإلكتروني أو سجّل الدخول.<br>
-    2. اختر مربعًا فارغًا من الشبكة.<br>
-    3. ارفع صورتك (سيلفي) + أرسل مبلغ 1$ عبر "شام كاش".<br>
-    4. ارفع صورة الإيصال.<br>
-    5. بعد موافقة الإدارة، سيظهر مربعك في الجدارية للأبد! ✅
-  </div>
+  <div class="grid-hint" data-i18n="gridHint">💡 مرر داخل الشبكة لاستكشاف المليون مربع</div>
 
 </div>
 
 <!-- Modal: Auth -->
 <div class="modal" id="authModal">
   <div class="modal-content">
-    <h3>🔐 حسابك</h3>
+    <h3>🔐 <span data-i18n="authTitle">حسابك</span></h3>
     <div id="authMsg" class="msg"></div>
 
     <div class="tab-btns">
-      <button id="tabLogin" class="active">تسجيل دخول</button>
-      <button id="tabSignup">حساب جديد</button>
+      <button id="tabLogin" class="active" data-i18n="tabLogin">تسجيل دخول</button>
+      <button id="tabSignup" data-i18n="tabSignup">حساب جديد</button>
     </div>
 
     <div class="field">
-      <label>📧 البريد الإلكتروني</label>
+      <label data-i18n="fieldEmail">📧 البريد الإلكتروني</label>
       <input type="email" id="authEmail" placeholder="example@gmail.com">
     </div>
 
     <div class="field">
-      <label>🔑 كلمة المرور</label>
+      <label data-i18n="fieldPassword">🔑 كلمة المرور</label>
       <div class="pwd-wrap">
-        <input type="password" id="authPassword" placeholder="6 أحرف على الأقل">
+        <input type="password" id="authPassword" data-i18n-ph="pwdPlaceholder" placeholder="6 أحرف على الأقل">
         <button type="button" class="pwd-toggle" id="togglePassword">👁️</button>
       </div>
     </div>
 
     <div class="field" id="nameField" style="display:none;">
-      <label>👤 الاسم (اختياري)</label>
-      <input type="text" id="authName" placeholder="اسمك">
+      <label data-i18n="fieldName">👤 الاسم (اختياري)</label>
+      <input type="text" id="authName" data-i18n-ph="namePlaceholder" placeholder="اسمك">
     </div>
 
-    <button class="btn" id="authSubmit">دخول</button>
-    <span class="link-small" id="forgotPassword">🔁 نسيت كلمة المرور؟</span>
-    <button class="btn btn-outline" id="authCancel" style="margin-top: 10px;">إلغاء</button>
+    <button class="btn" id="authSubmit" data-i18n="btnLogin">دخول</button>
+    <span class="link-small" id="forgotPassword" data-i18n="forgotPwd">🔁 نسيت كلمة المرور؟</span>
+    <button class="btn btn-outline" id="authCancel" style="margin-top: 10px;" data-i18n="btnCancel">إلغاء</button>
   </div>
 </div>
 
 <!-- Modal: Booking -->
 <div class="modal" id="bookingModal">
   <div class="modal-content">
-    <h3>🎯 حجز المربع رقم <span id="cellNumber">-</span></h3>
+    <h3><span data-i18n="bookTitle">🎯 حجز المربع رقم</span> <span id="cellNumber">-</span></h3>
     <div id="bookingMsg" class="msg"></div>
 
     <div class="field">
-      <label>📸 ارفع صورتك (سيلفي)</label>
+      <label data-i18n="bookSelfie">📸 ارفع صورتك (سيلفي)</label>
       <input type="file" id="selfieInput" accept="image/*">
     </div>
     <div class="field">
-      <label>📝 تعليق قصير (اختياري)</label>
-      <input type="text" id="userNote" maxlength="50" placeholder="مثال: محمد من دمشق">
+      <label data-i18n="bookNote">📝 تعليق قصير (اختياري)</label>
+      <input type="text" id="userNote" maxlength="50" data-i18n-ph="notePlaceholder" placeholder="مثال: محمد من دمشق">
     </div>
     <div class="field">
-      <label>💳 الدفع عبر شام كاش</label>
-      <p style="font-size: 13px; color: #c0c0c0; margin-bottom: 8px;">
-        أرسل <strong style="color:#f5b301">1 دولار</strong> (أو ما يعادله) إلى الباركود، ثم ارفع صورة الإيصال:
+      <label data-i18n="bookPay">💳 الدفع عبر شام كاش</label>
+      <p style="font-size: 13px; color: #c0c0c0; margin-bottom: 8px;" data-i18n="bookPayDesc">
+        أرسل 1 دولار (أو ما يعادله) إلى الباركود، ثم ارفع صورة الإيصال:
       </p>
       <img src="chama-barcode.png" alt="شام كاش" class="barcode" onerror="this.style.display='none'">
     </div>
     <div class="field">
-      <label>🧾 ارفع صورة الإيصال</label>
+      <label data-i18n="bookReceipt">🧾 ارفع صورة الإيصال</label>
       <input type="file" id="receiptInput" accept="image/*">
     </div>
 
-    <button class="btn" id="submitBooking">✅ إرسال الطلب</button>
-    <button class="btn btn-outline" id="cancelBooking" style="margin-top: 10px;">❌ إلغاء</button>
+    <button class="btn" id="submitBooking" data-i18n="btnSubmit">✅ إرسال الطلب</button>
+    <button class="btn btn-outline" id="cancelBooking" style="margin-top: 10px;" data-i18n="btnCancel2">❌ إلغاء</button>
   </div>
 </div>
 
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
 import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged, signOut, updateProfile, sendPasswordResetEmail } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
-import { getFirestore, collection, doc, getDoc, getDocs, setDoc, query, orderBy, limit, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
-import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-storage.js";
+import { getFirestore, collection, doc, setDoc, getDocs, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
 const firebaseConfig = {
   apiKey: "AIzaSyCEMxWCT0siwT2t72CX24N1ajSAwqEk7Fs",
@@ -217,21 +231,212 @@ const firebaseConfig = {
   appId: "1:1016907817387:web:f6e9b2b76dcaecebe4b2ee"
 };
 
+const IMGBB_API_KEY = "e710fb83dc1a03553b26b80aae11";
+
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
-const storage = getStorage(app);
 
 // ⚙️ إعدادات
-const GRID_SIZE = 20;
-const TOTAL_CELLS = 1000000;
+const GRID_COLS = 1000;            // 1000 عمود
+const GRID_ROWS = 1000;            // 1000 صف = مليون مربع
+const TOTAL_CELLS = GRID_COLS * GRID_ROWS;
 const BOOKINGS_COLLECTION = "bookings";
-const SELFIES_FOLDER = "selfies";
-const RECEIPTS_FOLDER = "receipts";
+const CELL_SIZE = 22;              // 20px + 2px gap
 
+// 🌐 الترجمات
+const I18N = {
+  ar: {
+    login: "🔐 تسجيل الدخول",
+    badge: "🚀 تحدي رقمي تاريخي",
+    heroTitle: "جدارية مليون صورة سيلفي",
+    hero1: "كن جزءاً من", hero2: "أكبر لوحة رقمية تفاعلية", hero3: "في العالم.",
+    hero4: "احجز مربعاتك واترك", hero5: "بصمتك للأبد", hero6: "كل مربع 10×10 بكسل بـ", hero7: "دولار واحد فقط",
+    statSelfies: "صورة سيلفي", statTaken: "مربعات محجوزة", statFree: "مربعات متبقية",
+    progressLbl: "نسبة الحجز",
+    wallTitle: "🖼️ لوحة الجدارية التفاعلية",
+    legendEmpty: "مربع فارغ", legendTaken: "محجوز", legendHint: "انقر على أي مربع للحجز",
+    gridHint: "💡 مرر داخل الشبكة لاستكشاف المليون مربع",
+    authTitle: "حسابك", tabLogin: "تسجيل دخول", tabSignup: "حساب جديد",
+    fieldEmail: "📧 البريد الإلكتروني", fieldPassword: "🔑 كلمة المرور", fieldName: "👤 الاسم (اختياري)",
+    pwdPlaceholder: "6 أحرف على الأقل", namePlaceholder: "اسمك",
+    btnLogin: "دخول", btnSignup: "إنشاء حساب", forgotPwd: "🔁 نسيت كلمة المرور؟", btnCancel: "إلغاء",
+    bookTitle: "🎯 حجز المربع رقم", bookSelfie: "📸 ارفع صورتك (سيلفي)",
+    bookNote: "📝 تعليق قصير (اختياري)", notePlaceholder: "مثال: محمد من دمشق",
+    bookPay: "💳 الدفع عبر شام كاش",
+    bookPayDesc: "أرسل 1 دولار (أو ما يعادله) إلى الباركود، ثم ارفع صورة الإيصال:",
+    bookReceipt: "🧾 ارفع صورة الإيصال", btnSubmit: "✅ إرسال الطلب", btnCancel2: "❌ إلغاء",
+    msgFill: "⚠️ املأ البريد وكلمة المرور", msgPwdShort: "⚠️ كلمة المرور 6 أحرف على الأقل",
+    msgSignupOk: "✅ تم إنشاء الحساب بنجاح!", msgLoginOk: "✅ تم تسجيل الدخول!",
+    msgEmailUsed: "⚠️ البريد مستخدم مسبقًا", msgUserNotFound: "⚠️ لا يوجد حساب بهذا البريد",
+    msgWrongPwd: "⚠️ البريد أو كلمة المرور خاطئة", msgInvalidEmail: "⚠️ البريد غير صحيح",
+    msgWeakPwd: "⚠️ كلمة المرور ضعيفة",
+    msgForgotOk: "✅ تم إرسال رابط الاستعادة إلى بريدك", msgForgotErr: "⚠️ تعذر الإرسال: ",
+    msgWriteEmail: "⚠️ اكتب بريدك أولاً",
+    msgTaken: "هذا المربع محجوز بالفعل. اختر مربعًا آخر.",
+    msgUploadSelfie: "⚠️ ارفع صورة السيلفي أولاً", msgUploadReceipt: "⚠️ ارفع صورة الإيصال أولاً",
+    msgSelfieBig: "⚠️ حجم السيلفي الأصلي يجب أن يكون أقل من 15 ميجا",
+    msgReceiptBig: "⚠️ حجم الإيصال الأصلي يجب أن يكون أقل من 15 ميجا",
+    msgCompressSelfie: "⏳ جارٍ ضغط ورفع السيلفي...", msgCompressReceipt: "⏳ جارٍ ضغط ورفع الإيصال...",
+    msgBookingOk: "✅ تم إرسال طلبك! سيتم مراجعته من الإدارة.",
+    msgError: "❌ خطأ: ", msgUploading: "⏳ جارٍ الرفع...",
+    logout: "خروج", loginBtn: "🔐 تسجيل الدخول"
+  },
+  en: {
+    login: "🔐 Login",
+    badge: "🚀 Historic Digital Challenge",
+    heroTitle: "Million Selfie Wall",
+    hero1: "Be part of", hero2: "the largest interactive digital wall", hero3: "in the world.",
+    hero4: "Book your squares and leave", hero5: "your mark forever", hero6: "Each 10×10 px square for", hero7: "only one dollar",
+    statSelfies: "Selfies", statTaken: "Booked Squares", statFree: "Remaining Squares",
+    progressLbl: "Booking Rate",
+    wallTitle: "🖼️ Interactive Wall Board",
+    legendEmpty: "Empty", legendTaken: "Booked", legendHint: "Click any square to book",
+    gridHint: "💡 Scroll inside the grid to explore a million squares",
+    authTitle: "Your Account", tabLogin: "Login", tabSignup: "Sign Up",
+    fieldEmail: "📧 Email", fieldPassword: "🔑 Password", fieldName: "👤 Name (optional)",
+    pwdPlaceholder: "At least 6 characters", namePlaceholder: "Your name",
+    btnLogin: "Login", btnSignup: "Create Account", forgotPwd: "🔁 Forgot password?", btnCancel: "Cancel",
+    bookTitle: "🎯 Book Square #", bookSelfie: "📸 Upload your selfie",
+    bookNote: "📝 Short note (optional)", notePlaceholder: "e.g., Mohamed from Damascus",
+    bookPay: "💳 Payment via Sham Cash",
+    bookPayDesc: "Send $1 (or equivalent) to the barcode, then upload the receipt:",
+    bookReceipt: "🧾 Upload receipt image", btnSubmit: "✅ Submit Request", btnCancel2: "❌ Cancel",
+    msgFill: "⚠️ Fill in email and password", msgPwdShort: "⚠️ Password at least 6 characters",
+    msgSignupOk: "✅ Account created successfully!", msgLoginOk: "✅ Logged in!",
+    msgEmailUsed: "⚠️ Email already in use", msgUserNotFound: "⚠️ No account with this email",
+    msgWrongPwd: "⚠️ Wrong email or password", msgInvalidEmail: "⚠️ Invalid email",
+    msgWeakPwd: "⚠️ Weak password",
+    msgForgotOk: "✅ Reset link sent to your email", msgForgotErr: "⚠️ Failed to send: ",
+    msgWriteEmail: "⚠️ Write your email first",
+    msgTaken: "This square is already booked. Choose another.",
+    msgUploadSelfie: "⚠️ Upload selfie first", msgUploadReceipt: "⚠️ Upload receipt first",
+    msgSelfieBig: "⚠️ Original selfie must be under 15 MB",
+    msgReceiptBig: "⚠️ Original receipt must be under 15 MB",
+    msgCompressSelfie: "⏳ Compressing & uploading selfie...", msgCompressReceipt: "⏳ Compressing & uploading receipt...",
+    msgBookingOk: "✅ Request submitted! Awaiting admin review.",
+    msgError: "❌ Error: ", msgUploading: "⏳ Uploading...",
+    logout: "Logout", loginBtn: "🔐 Login"
+  }
+};
+
+let currentLang = localStorage.getItem('site_lang') || 'ar';
 let currentUser = null;
 let selectedCellIndex = null;
 let isSignupMode = false;
+
+// 🌐 دالة الترجمة
+function t(key) { return I18N[currentLang][key] || key; }
+
+function applyLang() {
+  const html = document.documentElement;
+  if (currentLang === 'ar') {
+    html.lang = 'ar';
+    html.dir = 'rtl';
+    document.getElementById('langToggle').textContent = '🇬🇧 EN';
+  } else {
+    html.lang = 'en';
+    html.dir = 'ltr';
+    document.getElementById('langToggle').textContent = '🇸🇦 AR';
+  }
+  document.querySelectorAll('[data-i18n]').forEach(el => {
+    const key = el.getAttribute('data-i18n');
+    if (I18N[currentLang][key]) el.textContent = I18N[currentLang][key];
+  });
+  document.querySelectorAll('[data-i18n-ph]').forEach(el => {
+    const key = el.getAttribute('data-i18n-ph');
+    if (I18N[currentLang][key]) el.placeholder = I18N[currentLang][key];
+  });
+  // تحديث زر الدخول/الخروج
+  if (currentUser) {
+    updateUserBar(currentUser);
+  } else {
+    document.getElementById('authArea').innerHTML = `<button class="lang-btn" id="loginBtn">${t('login')}</button>`;
+  }
+  // تحديث زر الإرسال
+  const submitBtn = document.getElementById('authSubmit');
+  if (submitBtn) submitBtn.textContent = isSignupMode ? t('btnSignup') : t('btnLogin');
+}
+
+document.getElementById('langToggle').addEventListener('click', () => {
+  currentLang = currentLang === 'ar' ? 'en' : 'ar';
+  localStorage.setItem('site_lang', currentLang);
+  applyLang();
+});
+
+// 🗜️ إعدادات ضغط الصور
+const MAX_WIDTH = 1000;
+const MAX_HEIGHT = 1000;
+const TARGET_MIN_KB = 100;
+const TARGET_MAX_KB = 300;
+const INITIAL_QUALITY = 0.85;
+const MIN_QUALITY = 0.5;
+
+// 🗜️ دالة ضغط الصورة
+async function compressImage(file) {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      const img = new Image();
+      img.onload = () => {
+        let { width, height } = img;
+        if (width > MAX_WIDTH || height > MAX_HEIGHT) {
+          const ratio = Math.min(MAX_WIDTH / width, MAX_HEIGHT / height);
+          width = Math.round(width * ratio);
+          height = Math.round(height * ratio);
+        }
+        const canvas = document.createElement('canvas');
+        canvas.width = width;
+        canvas.height = height;
+        const ctx = canvas.getContext('2d');
+        ctx.drawImage(img, 0, 0, width, height);
+        let quality = INITIAL_QUALITY;
+        const tryCompress = () => {
+          canvas.toBlob((b) => {
+            if (!b) { reject(new Error('فشل ضغط الصورة')); return; }
+            const sizeKB = b.size / 1024;
+            if (sizeKB > TARGET_MAX_KB && quality > MIN_QUALITY) {
+              quality -= 0.1;
+              tryCompress();
+            } else {
+              resolve(b);
+            }
+          }, 'image/jpeg', quality);
+        };
+        tryCompress();
+      };
+      img.onerror = () => reject(new Error('فشل تحميل الصورة'));
+      img.src = e.target.result;
+    };
+    reader.onerror = () => reject(new Error('فشل قراءة الملف'));
+    reader.readAsDataURL(file);
+  });
+}
+
+// 📤 رفع الصورة إلى ImgBB
+async function uploadToImgBB(file) {
+  const compressedBlob = await compressImage(file);
+  const sizeKB = (compressedBlob.size / 1024).toFixed(0);
+  console.log(`📦 الحجم بعد الضغط: ${sizeKB} كيلوبايت`);
+
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = async () => {
+      try {
+        const base64 = reader.result.split(',')[1];
+        const formData = new FormData();
+        formData.append('key', IMGBB_API_KEY);
+        formData.append('image', base64);
+        const res = await fetch('https://api.imgbb.com/1/upload', { method: 'POST', body: formData });
+        const data = await res.json();
+        if (data.success && data.data && data.data.url) resolve(data.data.url);
+        else reject(new Error(data.error?.message || 'فشل الرفع'));
+      } catch (e) { reject(e); }
+    };
+    reader.onerror = () => reject(new Error('فشل قراءة الملف'));
+    reader.readAsDataURL(compressedBlob);
+  });
+}
 
 // ====== Auth UI ======
 const authModal = document.getElementById('authModal');
@@ -249,16 +454,14 @@ document.addEventListener('click', (e) => {
   }
 });
 
-document.getElementById('authCancel').addEventListener('click', () => {
-  authModal.classList.remove('open');
-});
+document.getElementById('authCancel').addEventListener('click', () => authModal.classList.remove('open'));
 
 document.getElementById('tabLogin').addEventListener('click', () => {
   isSignupMode = false;
   document.getElementById('tabLogin').classList.add('active');
   document.getElementById('tabSignup').classList.remove('active');
   document.getElementById('nameField').style.display = 'none';
-  document.getElementById('authSubmit').textContent = 'دخول';
+  document.getElementById('authSubmit').textContent = t('btnLogin');
 });
 
 document.getElementById('tabSignup').addEventListener('click', () => {
@@ -266,20 +469,14 @@ document.getElementById('tabSignup').addEventListener('click', () => {
   document.getElementById('tabSignup').classList.add('active');
   document.getElementById('tabLogin').classList.remove('active');
   document.getElementById('nameField').style.display = 'block';
-  document.getElementById('authSubmit').textContent = 'إنشاء حساب';
+  document.getElementById('authSubmit').textContent = t('btnSignup');
 });
 
-// 👁️ إظهار/إخفاء كلمة المرور
 document.getElementById('togglePassword').addEventListener('click', (e) => {
   e.preventDefault();
   const pwd = document.getElementById('authPassword');
-  if (pwd.type === 'password') {
-    pwd.type = 'text';
-    e.target.textContent = '🙈';
-  } else {
-    pwd.type = 'password';
-    e.target.textContent = '👁️';
-  }
+  if (pwd.type === 'password') { pwd.type = 'text'; e.target.textContent = '🙈'; }
+  else { pwd.type = 'password'; e.target.textContent = '👁️'; }
 });
 
 document.getElementById('authSubmit').addEventListener('click', async () => {
@@ -287,8 +484,8 @@ document.getElementById('authSubmit').addEventListener('click', async () => {
   const password = document.getElementById('authPassword').value;
   const name = document.getElementById('authName').value.trim();
 
-  if (!email || !password) { showAuthMsg('⚠️ املأ البريد وكلمة المرور'); return; }
-  if (password.length < 6) { showAuthMsg('⚠️ كلمة المرور 6 أحرف على الأقل'); return; }
+  if (!email || !password) { showAuthMsg(t('msgFill')); return; }
+  if (password.length < 6) { showAuthMsg(t('msgPwdShort')); return; }
 
   const btn = document.getElementById('authSubmit');
   btn.disabled = true;
@@ -298,10 +495,10 @@ document.getElementById('authSubmit').addEventListener('click', async () => {
     if (isSignupMode) {
       const cred = await createUserWithEmailAndPassword(auth, email, password);
       if (name) await updateProfile(cred.user, { displayName: name });
-      showAuthMsg('✅ تم إنشاء الحساب بنجاح!', 'ok');
+      showAuthMsg(t('msgSignupOk'), 'ok');
     } else {
       await signInWithEmailAndPassword(auth, email, password);
-      showAuthMsg('✅ تم تسجيل الدخول!', 'ok');
+      showAuthMsg(t('msgLoginOk'), 'ok');
     }
     setTimeout(() => {
       authModal.classList.remove('open');
@@ -313,80 +510,141 @@ document.getElementById('authSubmit').addEventListener('click', async () => {
     }, 800);
   } catch (e) {
     let msg = e.message;
-    if (msg.includes('email-already-in-use')) msg = '⚠️ البريد مستخدم مسبقًا';
-    else if (msg.includes('user-not-found')) msg = '⚠️ لا يوجد حساب بهذا البريد';
-    else if (msg.includes('wrong-password') || msg.includes('invalid-credential')) msg = '⚠️ البريد أو كلمة المرور خاطئة';
-    else if (msg.includes('invalid-email')) msg = '⚠️ البريد غير صحيح';
-    else if (msg.includes('weak-password')) msg = '⚠️ كلمة المرور ضعيفة';
+    if (msg.includes('email-already-in-use')) msg = t('msgEmailUsed');
+    else if (msg.includes('user-not-found')) msg = t('msgUserNotFound');
+    else if (msg.includes('wrong-password') || msg.includes('invalid-credential')) msg = t('msgWrongPwd');
+    else if (msg.includes('invalid-email')) msg = t('msgInvalidEmail');
+    else if (msg.includes('weak-password')) msg = t('msgWeakPwd');
     showAuthMsg(msg);
   } finally {
     btn.disabled = false;
-    btn.textContent = isSignupMode ? 'إنشاء حساب' : 'دخول';
+    btn.textContent = isSignupMode ? t('btnSignup') : t('btnLogin');
   }
 });
 
 document.getElementById('forgotPassword').addEventListener('click', async () => {
   const email = document.getElementById('authEmail').value.trim();
-  if (!email) { showAuthMsg('⚠️ اكتب بريدك أولاً'); return; }
+  if (!email) { showAuthMsg(t('msgWriteEmail')); return; }
   try {
     await sendPasswordResetEmail(auth, email);
-    showAuthMsg('✅ تم إرسال رابط الاستعادة إلى بريدك', 'ok');
-  } catch (e) {
-    showAuthMsg('⚠️ تعذر الإرسال: ' + e.message);
-  }
+    showAuthMsg(t('msgForgotOk'), 'ok');
+  } catch (e) { showAuthMsg(t('msgForgotErr') + e.message); }
 });
+
+function updateUserBar(user) {
+  const name = user.displayName || user.email.split('@')[0];
+  document.getElementById('authArea').innerHTML = `
+    <div class="user-bar">
+      <span class="name">👤 ${name}</span>
+      <span class="logout" id="logoutBtn">${t('logout')}</span>
+    </div>`;
+  document.getElementById('logoutBtn').addEventListener('click', () => signOut(auth));
+}
 
 onAuthStateChanged(auth, (user) => {
   currentUser = user;
-  const area = document.getElementById('authArea');
-  if (user) {
-    const name = user.displayName || user.email.split('@')[0];
-    area.innerHTML = `
-      <div class="user-bar">
-        <span class="name">👤 ${name}</span>
-        <span class="logout" id="logoutBtn">خروج</span>
-      </div>`;
-    document.getElementById('logoutBtn').addEventListener('click', () => signOut(auth));
-  } else {
-    area.innerHTML = `<button class="lang-btn" id="loginBtn">🔐 تسجيل الدخول</button>`;
+  if (user) updateUserBar(user);
+  else {
+    document.getElementById('authArea').innerHTML = `<button class="lang-btn" id="loginBtn">${t('login')}</button>`;
   }
 });
 
-// ====== Grid ======
+// ====== Grid (Lazy Rendering) ======
 const gridEl = document.getElementById('grid');
-const cellMap = {};
+const gridWrap = document.getElementById('gridWrap');
+const cellMap = {};           // index -> element (فقط المرئية)
+const takenSet = new Set();   // مجموعة indices المحجوزة
+let bookingData = {};         // index -> data (للمحجوزة)
 
-function buildGrid() {
-  gridEl.innerHTML = '';
-  for (let i = 0; i < GRID_SIZE * GRID_SIZE; i++) {
-    const cell = document.createElement('div');
-    cell.className = 'cell';
-    cell.dataset.index = i;
-    cell.addEventListener('click', () => openBooking(i));
-    gridEl.appendChild(cell);
-    cellMap[i] = cell;
+// بناء الشبكة الكاملة (بدون عناصر) - أبعاد فقط
+gridEl.style.width = (GRID_COLS * CELL_SIZE) + 'px';
+gridEl.style.height = (GRID_ROWS * CELL_SIZE) + 'px';
+gridEl.style.position = 'relative';
+
+// عرض المربعات المرئية فقط
+function renderVisibleCells() {
+  const scrollTop = gridWrap.scrollTop;
+  const scrollLeft = gridWrap.scrollLeft;
+  const viewportH = gridWrap.clientHeight;
+  const viewportW = gridWrap.clientWidth;
+
+  const startRow = Math.max(0, Math.floor(scrollTop / CELL_SIZE) - 2);
+  const endRow = Math.min(GRID_ROWS - 1, Math.ceil((scrollTop + viewportH) / CELL_SIZE) + 2);
+  const startCol = Math.max(0, Math.floor(scrollLeft / CELL_SIZE) - 2);
+  const endCol = Math.min(GRID_COLS - 1, Math.ceil((scrollLeft + viewportW) / CELL_SIZE) + 2);
+
+  // إزالة المربعات التي خرجت من الرؤية
+  Object.keys(cellMap).forEach(idx => {
+    const r = Math.floor(idx / GRID_COLS);
+    const c = idx % GRID_COLS;
+    if (r < startRow || r > endRow || c < startCol || c > endCol) {
+      cellMap[idx].remove();
+      delete cellMap[idx];
+    }
+  });
+
+  // إضافة المربعات الجديدة
+  const frag = document.createDocumentFragment();
+  for (let r = startRow; r <= endRow; r++) {
+    for (let c = startCol; c <= endCol; c++) {
+      const idx = r * GRID_COLS + c;
+      if (cellMap[idx]) continue;
+
+      const cell = document.createElement('div');
+      cell.className = 'cell';
+      cell.style.position = 'absolute';
+      cell.style.left = (c * CELL_SIZE) + 'px';
+      cell.style.top = (r * CELL_SIZE) + 'px';
+      cell.dataset.index = idx;
+
+      if (takenSet.has(idx)) {
+        cell.classList.add('taken');
+        const d = bookingData[idx];
+        if (d && d.selfieUrl) {
+          cell.classList.add('selfie');
+          cell.style.backgroundImage = `url(${d.selfieUrl})`;
+        }
+        cell.title = (d && d.userNote) || 'محجوز';
+      }
+
+      cell.addEventListener('click', () => openBooking(idx));
+      frag.appendChild(cell);
+      cellMap[idx] = cell;
+    }
   }
+  gridEl.appendChild(frag);
 }
 
+gridWrap.addEventListener('scroll', () => {
+  if (gridWrap._ticking) return;
+  gridWrap._ticking = true;
+  requestAnimationFrame(() => {
+    renderVisibleCells();
+    gridWrap._ticking = false;
+  });
+});
+
+// ====== تحميل الحجوزات ======
 async function loadBookings() {
   try {
     const snap = await getDocs(collection(db, BOOKINGS_COLLECTION));
     let takenCount = 0, selfieCount = 0;
+    takenSet.clear();
+    bookingData = {};
     snap.forEach(d => {
       const data = d.data();
       const idx = data.cellIndex;
-      if (cellMap[idx]) {
-        cellMap[idx].classList.add('taken');
-        if (data.selfieUrl) {
-          cellMap[idx].classList.add('selfie');
-          cellMap[idx].style.backgroundImage = `url(${data.selfieUrl})`;
-          selfieCount++;
-        }
-        cellMap[idx].title = data.userNote || 'محجوز';
+      if (typeof idx === 'number') {
+        takenSet.add(idx);
+        bookingData[idx] = data;
       }
       takenCount++;
+      if (data.selfieUrl) selfieCount++;
     });
     updateStats(takenCount, selfieCount);
+    // إعادة رسم المربعات المرئية
+    Object.keys(cellMap).forEach(k => { cellMap[k].remove(); delete cellMap[k]; });
+    renderVisibleCells();
   } catch (e) {
     console.error(e);
   }
@@ -411,14 +669,8 @@ function showBookingMsg(text, type = 'err') {
 }
 
 function openBooking(index) {
-  if (!currentUser) {
-    authModal.classList.add('open');
-    return;
-  }
-  if (cellMap[index].classList.contains('taken')) {
-    alert("هذا المربع محجوز بالفعل. اختر مربعًا آخر.");
-    return;
-  }
+  if (!currentUser) { authModal.classList.add('open'); return; }
+  if (takenSet.has(index)) { alert(t('msgTaken')); return; }
   selectedCellIndex = index;
   document.getElementById('cellNumber').textContent = index + 1;
   bookingMsg.className = 'msg';
@@ -439,24 +691,24 @@ document.getElementById('submitBooking').addEventListener('click', async () => {
   const receiptFile = document.getElementById('receiptInput').files[0];
   const note = document.getElementById('userNote').value.trim();
 
-  if (!selfieFile) { showBookingMsg("⚠️ ارفع صورة السيلفي أولاً"); return; }
-  if (!receiptFile) { showBookingMsg("⚠️ ارفع صورة الإيصال أولاً"); return; }
+  if (!selfieFile) { showBookingMsg(t('msgUploadSelfie')); return; }
+  if (!receiptFile) { showBookingMsg(t('msgUploadReceipt')); return; }
+  if (selfieFile.size > 15 * 1024 * 1024) { showBookingMsg(t('msgSelfieBig')); return; }
+  if (receiptFile.size > 15 * 1024 * 1024) { showBookingMsg(t('msgReceiptBig')); return; }
 
   const btn = document.getElementById('submitBooking');
   btn.disabled = true;
-  btn.textContent = '⏳ جارٍ الإرسال...';
+  btn.textContent = t('msgUploading');
 
   try {
     const uid = currentUser.uid;
     const ts = Date.now();
 
-    const selfieRef = ref(storage, `${SELFIES_FOLDER}/${uid}_${ts}.jpg`);
-    await uploadBytes(selfieRef, selfieFile);
-    const selfieUrl = await getDownloadURL(selfieRef);
+    showBookingMsg(t('msgCompressSelfie'), 'ok');
+    const selfieUrl = await uploadToImgBB(selfieFile);
 
-    const receiptRef = ref(storage, `${RECEIPTS_FOLDER}/${uid}_${ts}.jpg`);
-    await uploadBytes(receiptRef, receiptFile);
-    const receiptUrl = await getDownloadURL(receiptRef);
+    showBookingMsg(t('msgCompressReceipt'), 'ok');
+    const receiptUrl = await uploadToImgBB(receiptFile);
 
     const bookingId = `${uid}_${selectedCellIndex}_${ts}`;
     await setDoc(doc(db, BOOKINGS_COLLECTION, bookingId), {
@@ -472,7 +724,7 @@ document.getElementById('submitBooking').addEventListener('click', async () => {
       timestamp: ts
     });
 
-    showBookingMsg("✅ تم إرسال طلبك! سيتم مراجعته من الإدارة.", 'ok');
+    showBookingMsg(t('msgBookingOk'), 'ok');
     setTimeout(() => {
       bookingModal.classList.remove('open');
       loadBookings();
@@ -480,15 +732,16 @@ document.getElementById('submitBooking').addEventListener('click', async () => {
 
   } catch (e) {
     console.error(e);
-    showBookingMsg("❌ خطأ: " + e.message);
+    showBookingMsg(t('msgError') + e.message);
   } finally {
     btn.disabled = false;
-    btn.textContent = '✅ إرسال الطلب';
+    btn.textContent = t('btnSubmit');
   }
 });
 
 // ====== Init ======
-buildGrid();
+applyLang();
+renderVisibleCells();
 loadBookings();
 setInterval(loadBookings, 60000);
 </script>
