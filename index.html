@@ -76,6 +76,11 @@
   .tab-btns button.active { background: #d4a017; color: #000; border-color: #d4a017; }
 
   .link-small { color: #f5b301; font-size: 12px; text-align: center; cursor: pointer; text-decoration: underline; margin-top: 8px; display: block; }
+
+  /* حقل كلمة المرور مع زر العين */
+  .pwd-wrap { position: relative; }
+  .pwd-wrap input { padding-left: 45px; }
+  .pwd-toggle { position: absolute; left: 12px; top: 50%; transform: translateY(-50%); cursor: pointer; font-size: 18px; user-select: none; background: transparent; border: none; color: #f5b301; padding: 0; }
 </style>
 </head>
 <body>
@@ -146,10 +151,15 @@
       <label>📧 البريد الإلكتروني</label>
       <input type="email" id="authEmail" placeholder="example@gmail.com">
     </div>
+
     <div class="field">
       <label>🔑 كلمة المرور</label>
-      <input type="password" id="authPassword" placeholder="6 أحرف على الأقل">
+      <div class="pwd-wrap">
+        <input type="password" id="authPassword" placeholder="6 أحرف على الأقل">
+        <button type="button" class="pwd-toggle" id="togglePassword">👁️</button>
+      </div>
     </div>
+
     <div class="field" id="nameField" style="display:none;">
       <label>👤 الاسم (اختياري)</label>
       <input type="text" id="authName" placeholder="اسمك">
@@ -230,11 +240,13 @@ const authMsg = document.getElementById('authMsg');
 function showAuthMsg(text, type = 'err') {
   authMsg.textContent = text;
   authMsg.className = 'msg show ' + type;
-  setTimeout(() => { authMsg.className = 'msg'; }, 4000);
+  setTimeout(() => { authMsg.className = 'msg'; }, 5000);
 }
 
-document.getElementById('loginBtn')?.addEventListener('click', () => {
-  authModal.classList.add('open');
+document.addEventListener('click', (e) => {
+  if (e.target && e.target.id === 'loginBtn') {
+    authModal.classList.add('open');
+  }
 });
 
 document.getElementById('authCancel').addEventListener('click', () => {
@@ -255,6 +267,19 @@ document.getElementById('tabSignup').addEventListener('click', () => {
   document.getElementById('tabLogin').classList.remove('active');
   document.getElementById('nameField').style.display = 'block';
   document.getElementById('authSubmit').textContent = 'إنشاء حساب';
+});
+
+// 👁️ إظهار/إخفاء كلمة المرور
+document.getElementById('togglePassword').addEventListener('click', (e) => {
+  e.preventDefault();
+  const pwd = document.getElementById('authPassword');
+  if (pwd.type === 'password') {
+    pwd.type = 'text';
+    e.target.textContent = '🙈';
+  } else {
+    pwd.type = 'password';
+    e.target.textContent = '👁️';
+  }
 });
 
 document.getElementById('authSubmit').addEventListener('click', async () => {
@@ -283,12 +308,14 @@ document.getElementById('authSubmit').addEventListener('click', async () => {
       document.getElementById('authEmail').value = '';
       document.getElementById('authPassword').value = '';
       document.getElementById('authName').value = '';
+      document.getElementById('authPassword').type = 'password';
+      document.getElementById('togglePassword').textContent = '👁️';
     }, 800);
   } catch (e) {
     let msg = e.message;
     if (msg.includes('email-already-in-use')) msg = '⚠️ البريد مستخدم مسبقًا';
     else if (msg.includes('user-not-found')) msg = '⚠️ لا يوجد حساب بهذا البريد';
-    else if (msg.includes('wrong-password')) msg = '⚠️ كلمة المرور خاطئة';
+    else if (msg.includes('wrong-password') || msg.includes('invalid-credential')) msg = '⚠️ البريد أو كلمة المرور خاطئة';
     else if (msg.includes('invalid-email')) msg = '⚠️ البريد غير صحيح';
     else if (msg.includes('weak-password')) msg = '⚠️ كلمة المرور ضعيفة';
     showAuthMsg(msg);
@@ -322,9 +349,6 @@ onAuthStateChanged(auth, (user) => {
     document.getElementById('logoutBtn').addEventListener('click', () => signOut(auth));
   } else {
     area.innerHTML = `<button class="lang-btn" id="loginBtn">🔐 تسجيل الدخول</button>`;
-    document.getElementById('loginBtn').addEventListener('click', () => {
-      authModal.classList.add('open');
-    });
   }
 });
 
