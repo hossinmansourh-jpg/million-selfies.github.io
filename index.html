@@ -7,77 +7,143 @@
 <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&display=swap" rel="stylesheet">
 <style>
   * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Cairo', sans-serif; }
-  body { background: #0a0a0f; color: #fff; min-height: 100vh; padding: 15px; }
-  .container { max-width: 480px; margin: 0 auto; display: flex; flex-direction: column; gap: 20px; }
+  body { background: #0a0a0f; color: #fff; min-height: 100vh; padding: 15px; padding-bottom: 70px; }
+  .container { max-width: 480px; margin: 0 auto; display: flex; flex-direction: column; gap: 18px; }
 
-  .header { display: flex; justify-content: space-between; align-items: center; gap: 10px; }
-  .lang-btn { background: transparent; border: 2px solid #d4a017; color: #fff; padding: 8px 16px; border-radius: 30px; font-weight: 700; font-size: 14px; cursor: pointer; }
-  .badge { border: 2px solid #d4a017; color: #f5b301; padding: 8px 14px; border-radius: 30px; font-size: 12px; font-weight: 700; white-space: nowrap; }
+  /* ===== شارة "تحدي رقمي" في المنتصف ===== */
+  .top-badge-wrap { display: flex; justify-content: center; margin-bottom: 5px; }
+  .top-badge {
+    background: linear-gradient(135deg, #1a1a24, #14141c);
+    border: 2px solid #d4a017;
+    color: #f5b301;
+    padding: 10px 24px;
+    border-radius: 30px;
+    font-size: 13px;
+    font-weight: 900;
+    letter-spacing: 0.5px;
+    box-shadow: 0 0 20px rgba(212, 160, 23, 0.25);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
 
-  .hero-title { text-align: center; font-size: 30px; font-weight: 900; color: #f5b301; line-height: 1.3; }
-  .hero-subtitle { text-align: center; font-size: 14px; color: #d0d0d0; line-height: 1.9; }
+  /* ===== شريط أدوات علوي ===== */
+  .top-toolbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px;
+  }
+
+  /* زر تبديل اللغة الجديد */
+  .lang-switch {
+    display: flex;
+    background: #14141c;
+    border: 1.5px solid #2a2a35;
+    border-radius: 30px;
+    padding: 3px;
+    gap: 2px;
+  }
+  .lang-switch button {
+    background: transparent;
+    border: none;
+    color: #888;
+    padding: 6px 12px;
+    border-radius: 25px;
+    font-family: 'Cairo';
+    font-weight: 900;
+    font-size: 12px;
+    cursor: pointer;
+    transition: 0.25s;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+  .lang-switch button.active {
+    background: linear-gradient(135deg, #d4a017, #f5b301);
+    color: #000;
+    box-shadow: 0 0 10px rgba(212, 160, 23, 0.4);
+  }
+
+  /* أزرار التحكم بحجم المربعات */
+  .zoom-controls {
+    display: flex;
+    background: #14141c;
+    border: 1.5px solid #2a2a35;
+    border-radius: 30px;
+    overflow: hidden;
+  }
+  .zoom-controls button {
+    background: transparent;
+    border: none;
+    color: #f5b301;
+    width: 40px;
+    height: 36px;
+    font-size: 20px;
+    font-weight: 900;
+    cursor: pointer;
+    transition: 0.2s;
+    font-family: 'Cairo';
+  }
+  .zoom-controls button:hover {
+    background: #d4a017;
+    color: #000;
+  }
+  .zoom-controls button:active { transform: scale(0.9); }
+  .zoom-controls .divider {
+    width: 1.5px;
+    background: #2a2a35;
+  }
+
+  /* ===== العنوان ===== */
+  .hero-title { text-align: center; font-size: 28px; font-weight: 900; color: #f5b301; line-height: 1.3; }
+  .hero-subtitle { text-align: center; font-size: 13px; color: #d0d0d0; line-height: 1.8; }
   .hero-subtitle .hl { color: #f5b301; font-weight: 700; }
 
-  .stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
-  .stat { background: #14141c; border: 1.5px solid #2a2a35; border-top: 3px solid #d4a017; border-radius: 10px; padding: 14px 6px; text-align: center; }
-  .stat-num { font-size: 20px; font-weight: 900; color: #f5b301; }
-  .stat-lbl { font-size: 11px; color: #a0a0a0; font-weight: 600; margin-top: 4px; }
+  /* ===== الإحصائيات ===== */
+  .stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+  .stat { background: #14141c; border: 1.5px solid #2a2a35; border-top: 3px solid #d4a017; border-radius: 10px; padding: 12px 6px; text-align: center; }
+  .stat-num { font-size: 18px; font-weight: 900; color: #f5b301; }
+  .stat-lbl { font-size: 10px; color: #a0a0a0; font-weight: 600; margin-top: 4px; }
 
+  /* ===== شريط التقدم ===== */
   .progress-head { display: flex; justify-content: space-between; margin-bottom: 8px; }
-  .progress-head .lbl { font-size: 14px; font-weight: 700; color: #e0e0e0; }
-  .progress-head .pct { font-size: 16px; font-weight: 900; color: #f5b301; }
+  .progress-head .lbl { font-size: 13px; font-weight: 700; color: #e0e0e0; }
+  .progress-head .pct { font-size: 15px; font-weight: 900; color: #f5b301; }
   .progress-bar { height: 8px; background: #1e1e28; border-radius: 10px; overflow: hidden; }
   .progress-fill { height: 100%; background: linear-gradient(90deg, #d4a017, #f5b301); width: 0%; transition: width 1s; }
 
-  .wall-title { text-align: center; font-size: 22px; font-weight: 900; }
-  .legend { display: flex; justify-content: center; gap: 16px; font-size: 12px; color: #b0b0b0; flex-wrap: wrap; }
-  .legend-item { display: flex; align-items: center; gap: 6px; }
-  .lg-box { width: 14px; height: 14px; border-radius: 3px; }
+  /* ===== عنوان الجدارية والمفتاح ===== */
+  .wall-title { text-align: center; font-size: 20px; font-weight: 900; }
+  .legend { display: flex; justify-content: center; gap: 14px; font-size: 11px; color: #b0b0b0; flex-wrap: wrap; }
+  .legend-item { display: flex; align-items: center; gap: 5px; }
+  .lg-box { width: 12px; height: 12px; border-radius: 3px; }
   .lg-box.empty { border: 1.5px solid #555; }
   .lg-box.taken { background: #d4a017; }
 
-  /* ⬇️ الشبكة: أطول + LTR دائماً + Lazy Rendering */
+  /* ===== الشبكة ===== */
   .grid-wrap {
     background: #0e0e14;
     border: 1.5px solid #2a2a35;
     border-radius: 12px;
     padding: 8px;
-    height: 70vh;
-    min-height: 500px;
+    height: 65vh;
+    min-height: 450px;
     overflow: auto;
     position: relative;
-    direction: ltr;              /* 👈 إصلاح RTL */
+    direction: ltr;
   }
   .grid-inner { position: relative; }
-  .grid-canvas {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-  }
-  .cell {
-    position: absolute;
-    width: 20px;
-    height: 20px;
-    background: #1a1a24;
-    border-radius: 2px;
-    border: 0.5px solid #22222e;
-    cursor: pointer;
-    background-size: cover;
-    background-position: center;
-    transition: 0.15s;
-  }
-  .cell:hover { transform: scale(1.4); z-index: 10; box-shadow: 0 0 6px #d4a017; }
-  .cell.taken { background-color: #d4a017; }
-  .cell.taken.selfie { background-color: #333; }
+  .grid-canvas { position: absolute; top: 0; left: 0; width: 100%; height: 100%; }
 
   .grid-hint { text-align: center; font-size: 11px; color: #666; padding: 6px; }
 
+  /* ===== الأزرار العامة ===== */
   .btn { background: linear-gradient(135deg, #d4a017, #f5b301); color: #000; border: none; padding: 14px 20px; border-radius: 12px; font-weight: 900; font-size: 16px; cursor: pointer; width: 100%; font-family: 'Cairo'; }
   .btn:disabled { opacity: 0.5; cursor: not-allowed; }
   .btn-outline { background: transparent; color: #f5b301; border: 2px solid #d4a017; }
 
+  /* ===== النوافذ المنبثقة ===== */
   .modal { position: fixed; inset: 0; background: rgba(0,0,0,0.85); display: none; align-items: center; justify-content: center; padding: 15px; z-index: 999; overflow-y: auto; }
   .modal.open { display: flex; }
   .modal-content { background: #14141c; border: 2px solid #d4a017; border-radius: 16px; padding: 20px; max-width: 420px; width: 100%; max-height: 90vh; overflow-y: auto; margin: auto; }
@@ -93,38 +159,67 @@
   .msg.ok { background: #1e3a1e; color: #7fff7f; border: 1px solid #3a5a3a; }
   .msg.err { background: #3a1e1e; color: #ff7f7f; border: 1px solid #5a3a3a; }
 
-  .user-bar { display: flex; align-items: center; gap: 10px; background: #14141c; border: 1.5px solid #2a2a35; padding: 8px 12px; border-radius: 30px; font-size: 12px; max-width: 200px; }
-  .user-bar .name { flex: 1; font-weight: 700; color: #f5b301; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-  .user-bar .logout { color: #ff7f7f; cursor: pointer; font-size: 11px; font-weight: 700; }
+  /* ===== زر الإدارة السفلي ===== */
+  .admin-btn {
+    position: fixed;
+    bottom: 15px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: #14141c;
+    border: 1.5px solid #2a2a35;
+    color: #555;
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    cursor: pointer;
+    font-size: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: 0.3s;
+    z-index: 100;
+  }
+  .admin-btn:hover {
+    border-color: #d4a017;
+    color: #f5b301;
+    box-shadow: 0 0 15px rgba(212, 160, 23, 0.3);
+    transform: translateX(-50%) scale(1.1);
+  }
 
-  .loading { text-align: center; color: #f5b301; padding: 20px; font-weight: 700; }
+  /* ===== حقل كلمة المرور ===== */
+  .pwd-wrap { position: relative; }
+  .pwd-wrap input { padding-left: 45px; }
+  .pwd-toggle { position: absolute; left: 12px; top: 50%; transform: translateY(-50%); cursor: pointer; font-size: 18px; user-select: none; background: transparent; border: none; color: #f5b301; padding: 0; }
+  html[lang="en"] .pwd-toggle { left: auto; right: 12px; }
+  html[lang="en"] .pwd-wrap input { padding-left: 10px; padding-right: 45px; }
 
+  /* ===== تبويبات ===== */
   .tab-btns { display: flex; gap: 8px; margin-bottom: 16px; }
   .tab-btns button { flex: 1; padding: 10px; border-radius: 8px; border: 1.5px solid #2a2a35; background: #0e0e14; color: #a0a0a0; font-family: 'Cairo'; font-weight: 700; font-size: 13px; cursor: pointer; }
   .tab-btns button.active { background: #d4a017; color: #000; border-color: #d4a017; }
 
   .link-small { color: #f5b301; font-size: 12px; text-align: center; cursor: pointer; text-decoration: underline; margin-top: 8px; display: block; }
-
-  .pwd-wrap { position: relative; }
-  .pwd-wrap input { padding-left: 45px; }
-  .pwd-toggle { position: absolute; left: 12px; top: 50%; transform: translateY(-50%); cursor: pointer; font-size: 18px; user-select: none; background: transparent; border: none; color: #f5b301; padding: 0; }
-
-  /* عند التبديل للإنجليزية */
-  html[lang="en"] .pwd-toggle { left: auto; right: 12px; }
-  html[lang="en"] .pwd-wrap input { padding-left: 10px; padding-right: 45px; }
 </style>
 </head>
 <body>
 
 <div class="container">
 
-  <div class="header">
-    <div id="authArea">
-      <button class="lang-btn" id="loginBtn" data-i18n="login">🔐 تسجيل الدخول</button>
+  <!-- شارة تحدي رقمي في المنتصف -->
+  <div class="top-badge-wrap">
+    <div class="top-badge" data-i18n="badge">🚀 تحدي رقمي تاريخي</div>
+  </div>
+
+  <!-- شريط الأدوات: اللغة + التكبير -->
+  <div class="top-toolbar">
+    <div class="lang-switch">
+      <button id="btnAr" class="active">🇸🇾 عربي</button>
+      <button id="btnEn">🇬🇧 EN</button>
     </div>
-    <div style="display:flex; gap:8px; align-items:center;">
-      <button class="lang-btn" id="langToggle">🇬🇧 EN</button>
-      <div class="badge" data-i18n="badge">🚀 تحدي رقمي تاريخي</div>
+    <div class="zoom-controls">
+      <button id="zoomIn" title="تكبير">＋</button>
+      <div class="divider"></div>
+      <button id="zoomOut" title="تصغير">−</button>
     </div>
   </div>
 
@@ -162,38 +257,30 @@
 
 </div>
 
-<!-- Modal: Auth -->
-<div class="modal" id="authModal">
-  <div class="modal-content">
-    <h3>🔐 <span data-i18n="authTitle">حسابك</span></h3>
-    <div id="authMsg" class="msg"></div>
+<!-- زر الإدارة (أسفل الصفحة، أيقونة صغيرة) -->
+<button class="admin-btn" id="adminBtn" title="دخول الإدارة">🔒</button>
 
-    <div class="tab-btns">
-      <button id="tabLogin" class="active" data-i18n="tabLogin">تسجيل دخول</button>
-      <button id="tabSignup" data-i18n="tabSignup">حساب جديد</button>
-    </div>
+<!-- Modal: Admin Login -->
+<div class="modal" id="adminModal">
+  <div class="modal-content">
+    <h3>🔒 <span data-i18n="adminTitle">دخول الإدارة</span></h3>
+    <div id="adminMsg" class="msg"></div>
 
     <div class="field">
       <label data-i18n="fieldEmail">📧 البريد الإلكتروني</label>
-      <input type="email" id="authEmail" placeholder="example@gmail.com">
+      <input type="email" id="adminEmail" placeholder="admin@example.com">
     </div>
 
     <div class="field">
       <label data-i18n="fieldPassword">🔑 كلمة المرور</label>
       <div class="pwd-wrap">
-        <input type="password" id="authPassword" data-i18n-ph="pwdPlaceholder" placeholder="6 أحرف على الأقل">
-        <button type="button" class="pwd-toggle" id="togglePassword">👁️</button>
+        <input type="password" id="adminPassword" data-i18n-ph="pwdPlaceholder" placeholder="كلمة المرور">
+        <button type="button" class="pwd-toggle" id="adminTogglePwd">👁️</button>
       </div>
     </div>
 
-    <div class="field" id="nameField" style="display:none;">
-      <label data-i18n="fieldName">👤 الاسم (اختياري)</label>
-      <input type="text" id="authName" data-i18n-ph="namePlaceholder" placeholder="اسمك">
-    </div>
-
-    <button class="btn" id="authSubmit" data-i18n="btnLogin">دخول</button>
-    <span class="link-small" id="forgotPassword" data-i18n="forgotPwd">🔁 نسيت كلمة المرور؟</span>
-    <button class="btn btn-outline" id="authCancel" style="margin-top: 10px;" data-i18n="btnCancel">إلغاء</button>
+    <button class="btn" id="adminSubmit" data-i18n="btnAdminLogin">دخول الإدارة</button>
+    <button class="btn btn-outline" id="adminCancel" style="margin-top: 10px;" data-i18n="btnCancel">إلغاء</button>
   </div>
 </div>
 
@@ -204,13 +291,25 @@
     <div id="bookingMsg" class="msg"></div>
 
     <div class="field">
+      <label data-i18n="fieldVisitorName">👤 اسمك</label>
+      <input type="text" id="visitorName" maxlength="40" placeholder="مثال: محمد">
+    </div>
+
+    <div class="field">
+      <label data-i18n="fieldVisitorPhone">📱 رقم هاتفك (اختياري)</label>
+      <input type="tel" id="visitorPhone" maxlength="20" placeholder="+963...">
+    </div>
+
+    <div class="field">
       <label data-i18n="bookSelfie">📸 ارفع صورتك (سيلفي)</label>
       <input type="file" id="selfieInput" accept="image/*">
     </div>
+
     <div class="field">
       <label data-i18n="bookNote">📝 تعليق قصير (اختياري)</label>
-      <input type="text" id="userNote" maxlength="50" data-i18n-ph="notePlaceholder" placeholder="مثال: محمد من دمشق">
+      <input type="text" id="userNote" maxlength="50" data-i18n-ph="notePlaceholder" placeholder="مثال: من دمشق">
     </div>
+
     <div class="field">
       <label data-i18n="bookPay">💳 الدفع عبر شام كاش</label>
       <p style="font-size: 13px; color: #c0c0c0; margin-bottom: 8px;" data-i18n="bookPayDesc">
@@ -218,6 +317,7 @@
       </p>
       <img src="chama-barcode.png" alt="شام كاش" class="barcode" onerror="this.style.display='none'">
     </div>
+
     <div class="field">
       <label data-i18n="bookReceipt">🧾 ارفع صورة الإيصال</label>
       <input type="file" id="receiptInput" accept="image/*">
@@ -230,7 +330,7 @@
 
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged, signOut, updateProfile, sendPasswordResetEmail } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+import { getAuth, signInWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
 import { getFirestore, collection, doc, setDoc, getDocs, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
 const firebaseConfig = {
@@ -249,16 +349,19 @@ const auth = getAuth(app);
 const db = getFirestore(app);
 
 // ⚙️ إعدادات الشبكة
-const GRID_COLS = 1000;            // 1000 عمود
-const GRID_ROWS = 1000;            // 1000 صف = مليون مربع
+const GRID_COLS = 1000;
+const GRID_ROWS = 1000;
 const TOTAL_CELLS = GRID_COLS * GRID_ROWS;
 const BOOKINGS_COLLECTION = "bookings";
-const CELL_SIZE = 22;              // 20px + 2px gap
+
+// 📏 أحجام المربعات المتاحة (بالبكسل)
+const CELL_SIZES = [14, 18, 22, 28, 36, 48];
+let cellSizeIndex = 2; // يبدأ من 22px
+let CELL_SIZE = CELL_SIZES[cellSizeIndex];
 
 // 🌐 الترجمات
 const I18N = {
   ar: {
-    login: "🔐 تسجيل الدخول",
     badge: "🚀 تحدي رقمي تاريخي",
     heroTitle: "جدارية مليون صورة سيلفي",
     hero1: "كن جزءاً من", hero2: "أكبر لوحة رقمية تفاعلية", hero3: "في العالم.",
@@ -268,33 +371,31 @@ const I18N = {
     wallTitle: "🖼️ لوحة الجدارية التفاعلية",
     legendEmpty: "مربع فارغ", legendTaken: "محجوز", legendHint: "انقر على أي مربع للحجز",
     gridHint: "💡 مرر داخل الشبكة لاستكشاف المليون مربع",
-    authTitle: "حسابك", tabLogin: "تسجيل دخول", tabSignup: "حساب جديد",
-    fieldEmail: "📧 البريد الإلكتروني", fieldPassword: "🔑 كلمة المرور", fieldName: "👤 الاسم (اختياري)",
-    pwdPlaceholder: "6 أحرف على الأقل", namePlaceholder: "اسمك",
-    btnLogin: "دخول", btnSignup: "إنشاء حساب", forgotPwd: "🔁 نسيت كلمة المرور؟", btnCancel: "إلغاء",
-    bookTitle: "🎯 حجز المربع رقم", bookSelfie: "📸 ارفع صورتك (سيلفي)",
-    bookNote: "📝 تعليق قصير (اختياري)", notePlaceholder: "مثال: محمد من دمشق",
+    adminTitle: "دخول الإدارة", btnAdminLogin: "دخول",
+    fieldEmail: "📧 البريد الإلكتروني", fieldPassword: "🔑 كلمة المرور",
+    pwdPlaceholder: "كلمة المرور",
+    bookTitle: "🎯 حجز المربع رقم",
+    fieldVisitorName: "👤 اسمك", fieldVisitorPhone: "📱 رقم هاتفك (اختياري)",
+    bookSelfie: "📸 ارفع صورتك (سيلفي)",
+    bookNote: "📝 تعليق قصير (اختياري)", notePlaceholder: "مثال: من دمشق",
     bookPay: "💳 الدفع عبر شام كاش",
     bookPayDesc: "أرسل 1 دولار (أو ما يعادله) إلى الباركود، ثم ارفع صورة الإيصال:",
-    bookReceipt: "🧾 ارفع صورة الإيصال", btnSubmit: "✅ إرسال الطلب", btnCancel2: "❌ إلغاء",
-    msgFill: "⚠️ املأ البريد وكلمة المرور", msgPwdShort: "⚠️ كلمة المرور 6 أحرف على الأقل",
-    msgSignupOk: "✅ تم إنشاء الحساب بنجاح!", msgLoginOk: "✅ تم تسجيل الدخول!",
-    msgEmailUsed: "⚠️ البريد مستخدم مسبقًا", msgUserNotFound: "⚠️ لا يوجد حساب بهذا البريد",
-    msgWrongPwd: "⚠️ البريد أو كلمة المرور خاطئة", msgInvalidEmail: "⚠️ البريد غير صحيح",
-    msgWeakPwd: "⚠️ كلمة المرور ضعيفة",
-    msgForgotOk: "✅ تم إرسال رابط الاستعادة إلى بريدك", msgForgotErr: "⚠️ تعذر الإرسال: ",
-    msgWriteEmail: "⚠️ اكتب بريدك أولاً",
-    msgTaken: "هذا المربع محجوز بالفعل. اختر مربعًا آخر.",
-    msgUploadSelfie: "⚠️ ارفع صورة السيلفي أولاً", msgUploadReceipt: "⚠️ ارفع صورة الإيصال أولاً",
+    bookReceipt: "🧾 ارفع صورة الإيصال", btnSubmit: "✅ إرسال الطلب", btnCancel: "إلغاء", btnCancel2: "❌ إلغاء",
+    msgName: "⚠️ اكتب اسمك أولاً",
+    msgUploadSelfie: "⚠️ ارفع صورة السيلفي أولاً",
+    msgUploadReceipt: "⚠️ ارفع صورة الإيصال أولاً",
     msgSelfieBig: "⚠️ حجم السيلفي الأصلي يجب أن يكون أقل من 15 ميجا",
     msgReceiptBig: "⚠️ حجم الإيصال الأصلي يجب أن يكون أقل من 15 ميجا",
-    msgCompressSelfie: "⏳ جارٍ ضغط ورفع السيلفي...", msgCompressReceipt: "⏳ جارٍ ضغط ورفع الإيصال...",
+    msgCompressSelfie: "⏳ جارٍ ضغط ورفع السيلفي...",
+    msgCompressReceipt: "⏳ جارٍ ضغط ورفع الإيصال...",
     msgBookingOk: "✅ تم إرسال طلبك! سيتم مراجعته من الإدارة.",
     msgError: "❌ خطأ: ", msgUploading: "⏳ جارٍ الرفع...",
-    logout: "خروج", loginBtn: "🔐 تسجيل الدخول"
+    msgTaken: "هذا المربع محجوز بالفعل. اختر مربعًا آخر.",
+    msgAdminOk: "✅ تم تسجيل دخول الإدارة",
+    msgAdminErr: "⚠️ بيانات خاطئة",
+    msgAdminOnly: "⚠️ هذه اللوحة مخصصة للإدارة فقط"
   },
   en: {
-    login: "🔐 Login",
     badge: "🚀 Historic Digital Challenge",
     heroTitle: "Million Selfie Wall",
     hero1: "Be part of", hero2: "the largest interactive digital wall", hero3: "in the world.",
@@ -304,51 +405,51 @@ const I18N = {
     wallTitle: "🖼️ Interactive Wall Board",
     legendEmpty: "Empty", legendTaken: "Booked", legendHint: "Click any square to book",
     gridHint: "💡 Scroll inside the grid to explore a million squares",
-    authTitle: "Your Account", tabLogin: "Login", tabSignup: "Sign Up",
-    fieldEmail: "📧 Email", fieldPassword: "🔑 Password", fieldName: "👤 Name (optional)",
-    pwdPlaceholder: "At least 6 characters", namePlaceholder: "Your name",
-    btnLogin: "Login", btnSignup: "Create Account", forgotPwd: "🔁 Forgot password?", btnCancel: "Cancel",
-    bookTitle: "🎯 Book Square #", bookSelfie: "📸 Upload your selfie",
-    bookNote: "📝 Short note (optional)", notePlaceholder: "e.g., Mohamed from Damascus",
+    adminTitle: "Admin Login", btnAdminLogin: "Login",
+    fieldEmail: "📧 Email", fieldPassword: "🔑 Password",
+    pwdPlaceholder: "Password",
+    bookTitle: "🎯 Book Square #",
+    fieldVisitorName: "👤 Your name", fieldVisitorPhone: "📱 Phone (optional)",
+    bookSelfie: "📸 Upload your selfie",
+    bookNote: "📝 Short note (optional)", notePlaceholder: "e.g., From Damascus",
     bookPay: "💳 Payment via Sham Cash",
     bookPayDesc: "Send $1 (or equivalent) to the barcode, then upload the receipt:",
-    bookReceipt: "🧾 Upload receipt image", btnSubmit: "✅ Submit Request", btnCancel2: "❌ Cancel",
-    msgFill: "⚠️ Fill in email and password", msgPwdShort: "⚠️ Password at least 6 characters",
-    msgSignupOk: "✅ Account created successfully!", msgLoginOk: "✅ Logged in!",
-    msgEmailUsed: "⚠️ Email already in use", msgUserNotFound: "⚠️ No account with this email",
-    msgWrongPwd: "⚠️ Wrong email or password", msgInvalidEmail: "⚠️ Invalid email",
-    msgWeakPwd: "⚠️ Weak password",
-    msgForgotOk: "✅ Reset link sent to your email", msgForgotErr: "⚠️ Failed to send: ",
-    msgWriteEmail: "⚠️ Write your email first",
-    msgTaken: "This square is already booked. Choose another.",
-    msgUploadSelfie: "⚠️ Upload selfie first", msgUploadReceipt: "⚠️ Upload receipt first",
+    bookReceipt: "🧾 Upload receipt image", btnSubmit: "✅ Submit Request", btnCancel: "Cancel", btnCancel2: "❌ Cancel",
+    msgName: "⚠️ Write your name first",
+    msgUploadSelfie: "⚠️ Upload selfie first",
+    msgUploadReceipt: "⚠️ Upload receipt first",
     msgSelfieBig: "⚠️ Original selfie must be under 15 MB",
     msgReceiptBig: "⚠️ Original receipt must be under 15 MB",
-    msgCompressSelfie: "⏳ Compressing & uploading selfie...", msgCompressReceipt: "⏳ Compressing & uploading receipt...",
+    msgCompressSelfie: "⏳ Compressing & uploading selfie...",
+    msgCompressReceipt: "⏳ Compressing & uploading receipt...",
     msgBookingOk: "✅ Request submitted! Awaiting admin review.",
     msgError: "❌ Error: ", msgUploading: "⏳ Uploading...",
-    logout: "Logout", loginBtn: "🔐 Login"
+    msgTaken: "This square is already booked. Choose another.",
+    msgAdminOk: "✅ Admin logged in",
+    msgAdminErr: "⚠️ Wrong credentials",
+    msgAdminOnly: "⚠️ This panel is for admin only"
   }
 };
 
 let currentLang = localStorage.getItem('site_lang') || 'ar';
-let currentUser = null;
+let isAdmin = false;
 let selectedCellIndex = null;
-let isSignupMode = false;
 
-// 🌐 دالة الترجمة
 function t(key) { return I18N[currentLang][key] || key; }
 
+// 🌐 تطبيق اللغة
 function applyLang() {
   const html = document.documentElement;
   if (currentLang === 'ar') {
     html.lang = 'ar';
     html.dir = 'rtl';
-    document.getElementById('langToggle').textContent = '🇬🇧 EN';
+    document.getElementById('btnAr').classList.add('active');
+    document.getElementById('btnEn').classList.remove('active');
   } else {
     html.lang = 'en';
     html.dir = 'ltr';
-    document.getElementById('langToggle').textContent = '🇸🇦 AR';
+    document.getElementById('btnEn').classList.add('active');
+    document.getElementById('btnAr').classList.remove('active');
   }
   document.querySelectorAll('[data-i18n]').forEach(el => {
     const key = el.getAttribute('data-i18n');
@@ -358,23 +459,39 @@ function applyLang() {
     const key = el.getAttribute('data-i18n-ph');
     if (I18N[currentLang][key]) el.placeholder = I18N[currentLang][key];
   });
-  if (currentUser) updateUserBar(currentUser);
-  else {
-    document.getElementById('authArea').innerHTML = `<button class="lang-btn" id="loginBtn">${t('login')}</button>`;
-  }
-  const submitBtn = document.getElementById('authSubmit');
-  if (submitBtn) submitBtn.textContent = isSignupMode ? t('btnSignup') : t('btnLogin');
 }
 
-document.getElementById('langToggle').addEventListener('click', () => {
-  currentLang = currentLang === 'ar' ? 'en' : 'ar';
-  localStorage.setItem('site_lang', currentLang);
+document.getElementById('btnAr').addEventListener('click', () => {
+  currentLang = 'ar';
+  localStorage.setItem('site_lang', 'ar');
+  applyLang();
+});
+document.getElementById('btnEn').addEventListener('click', () => {
+  currentLang = 'en';
+  localStorage.setItem('site_lang', 'en');
   applyLang();
 });
 
+// ===== تكبير/تصغير =====
+function changeCellSize(delta) {
+  const newIndex = Math.max(0, Math.min(CELL_SIZES.length - 1, cellSizeIndex + delta));
+  if (newIndex === cellSizeIndex) return;
+  cellSizeIndex = newIndex;
+  CELL_SIZE = CELL_SIZES[cellSizeIndex];
+  // إعادة بناء الشبكة
+  gridInner.style.width = (GRID_COLS * CELL_SIZE) + 'px';
+  gridInner.style.height = (GRID_ROWS * CELL_SIZE) + 'px';
+  // مسح الخلايا القديمة
+  Object.keys(cellMap).forEach(k => { cellMap[k].remove(); delete cellMap[k]; });
+  renderVisibleCells();
+}
+
+document.getElementById('zoomIn').addEventListener('click', () => changeCellSize(1));
+document.getElementById('zoomOut').addEventListener('click', () => changeCellSize(-1));
+
 // 🗜️ ضغط الصور
 const MAX_WIDTH = 1000, MAX_HEIGHT = 1000;
-const TARGET_MIN_KB = 100, TARGET_MAX_KB = 300;
+const TARGET_MAX_KB = 300;
 const INITIAL_QUALITY = 0.85, MIN_QUALITY = 0.5;
 
 async function compressImage(file) {
@@ -397,13 +514,10 @@ async function compressImage(file) {
         const tryCompress = () => {
           canvas.toBlob((b) => {
             if (!b) { reject(new Error('فشل ضغط الصورة')); return; }
-            const sizeKB = b.size / 1024;
-            if (sizeKB > TARGET_MAX_KB && quality > MIN_QUALITY) {
+            if ((b.size / 1024) > TARGET_MAX_KB && quality > MIN_QUALITY) {
               quality -= 0.1;
               tryCompress();
-            } else {
-              resolve(b);
-            }
+            } else resolve(b);
           }, 'image/jpeg', quality);
         };
         tryCompress();
@@ -418,7 +532,6 @@ async function compressImage(file) {
 
 async function uploadToImgBB(file) {
   const compressedBlob = await compressImage(file);
-  console.log(`📦 الحجم بعد الضغط: ${(compressedBlob.size / 1024).toFixed(0)} كيلوبايت`);
   return new Promise((resolve, reject) => {
     const reader = new FileReader();
     reader.onload = async () => {
@@ -438,114 +551,82 @@ async function uploadToImgBB(file) {
   });
 }
 
-// ====== Auth ======
-const authModal = document.getElementById('authModal');
-const authMsg = document.getElementById('authMsg');
+// ====== Admin Login ======
+const adminModal = document.getElementById('adminModal');
+const adminMsg = document.getElementById('adminMsg');
 
-function showAuthMsg(text, type = 'err') {
-  authMsg.textContent = text;
-  authMsg.className = 'msg show ' + type;
-  setTimeout(() => { authMsg.className = 'msg'; }, 5000);
+function showAdminMsg(text, type = 'err') {
+  adminMsg.textContent = text;
+  adminMsg.className = 'msg show ' + type;
+  setTimeout(() => { adminMsg.className = 'msg'; }, 5000);
 }
 
-document.addEventListener('click', (e) => {
-  if (e.target && e.target.id === 'loginBtn') authModal.classList.add('open');
+document.getElementById('adminBtn').addEventListener('click', () => {
+  if (isAdmin) {
+    // إذا كان مسجلًا، يخرج
+    signOut(auth).then(() => {
+      isAdmin = false;
+      document.getElementById('adminBtn').textContent = '🔒';
+      document.getElementById('adminBtn').style.color = '#555';
+      document.getElementById('adminBtn').style.borderColor = '#2a2a35';
+    });
+  } else {
+    adminModal.classList.add('open');
+  }
 });
 
-document.getElementById('authCancel').addEventListener('click', () => authModal.classList.remove('open'));
+document.getElementById('adminCancel').addEventListener('click', () => adminModal.classList.remove('open'));
 
-document.getElementById('tabLogin').addEventListener('click', () => {
-  isSignupMode = false;
-  document.getElementById('tabLogin').classList.add('active');
-  document.getElementById('tabSignup').classList.remove('active');
-  document.getElementById('nameField').style.display = 'none';
-  document.getElementById('authSubmit').textContent = t('btnLogin');
-});
-
-document.getElementById('tabSignup').addEventListener('click', () => {
-  isSignupMode = true;
-  document.getElementById('tabSignup').classList.add('active');
-  document.getElementById('tabLogin').classList.remove('active');
-  document.getElementById('nameField').style.display = 'block';
-  document.getElementById('authSubmit').textContent = t('btnSignup');
-});
-
-document.getElementById('togglePassword').addEventListener('click', (e) => {
+document.getElementById('adminTogglePwd').addEventListener('click', (e) => {
   e.preventDefault();
-  const pwd = document.getElementById('authPassword');
+  const pwd = document.getElementById('adminPassword');
   if (pwd.type === 'password') { pwd.type = 'text'; e.target.textContent = '🙈'; }
   else { pwd.type = 'password'; e.target.textContent = '👁️'; }
 });
 
-document.getElementById('authSubmit').addEventListener('click', async () => {
-  const email = document.getElementById('authEmail').value.trim();
-  const password = document.getElementById('authPassword').value;
-  const name = document.getElementById('authName').value.trim();
+document.getElementById('adminSubmit').addEventListener('click', async () => {
+  const email = document.getElementById('adminEmail').value.trim();
+  const password = document.getElementById('adminPassword').value;
 
-  if (!email || !password) { showAuthMsg(t('msgFill')); return; }
-  if (password.length < 6) { showAuthMsg(t('msgPwdShort')); return; }
+  if (!email || !password) { showAdminMsg(t('msgAdminErr')); return; }
 
-  const btn = document.getElementById('authSubmit');
+  const btn = document.getElementById('adminSubmit');
   btn.disabled = true;
   btn.textContent = '⏳...';
 
   try {
-    if (isSignupMode) {
-      const cred = await createUserWithEmailAndPassword(auth, email, password);
-      if (name) await updateProfile(cred.user, { displayName: name });
-      showAuthMsg(t('msgSignupOk'), 'ok');
-    } else {
-      await signInWithEmailAndPassword(auth, email, password);
-      showAuthMsg(t('msgLoginOk'), 'ok');
-    }
+    await signInWithEmailAndPassword(auth, email, password);
+    showAdminMsg(t('msgAdminOk'), 'ok');
     setTimeout(() => {
-      authModal.classList.remove('open');
-      document.getElementById('authEmail').value = '';
-      document.getElementById('authPassword').value = '';
-      document.getElementById('authName').value = '';
-      document.getElementById('authPassword').type = 'password';
-      document.getElementById('togglePassword').textContent = '👁️';
-    }, 800);
+      adminModal.classList.remove('open');
+      // التوجيه للوحة الإدارة
+      window.location.href = 'hossin.html';
+    }, 1000);
   } catch (e) {
-    let msg = e.message;
-    if (msg.includes('email-already-in-use')) msg = t('msgEmailUsed');
-    else if (msg.includes('user-not-found')) msg = t('msgUserNotFound');
-    else if (msg.includes('wrong-password') || msg.includes('invalid-credential')) msg = t('msgWrongPwd');
-    else if (msg.includes('invalid-email')) msg = t('msgInvalidEmail');
-    else if (msg.includes('weak-password')) msg = t('msgWeakPwd');
-    showAuthMsg(msg);
+    showAdminMsg(t('msgAdminErr'));
   } finally {
     btn.disabled = false;
-    btn.textContent = isSignupMode ? t('btnSignup') : t('btnLogin');
+    btn.textContent = t('btnAdminLogin');
   }
 });
 
-document.getElementById('forgotPassword').addEventListener('click', async () => {
-  const email = document.getElementById('authEmail').value.trim();
-  if (!email) { showAuthMsg(t('msgWriteEmail')); return; }
-  try {
-    await sendPasswordResetEmail(auth, email);
-    showAuthMsg(t('msgForgotOk'), 'ok');
-  } catch (e) { showAuthMsg(t('msgForgotErr') + e.message); }
-});
-
-function updateUserBar(user) {
-  const name = user.displayName || user.email.split('@')[0];
-  document.getElementById('authArea').innerHTML = `
-    <div class="user-bar">
-      <span class="name">👤 ${name}</span>
-      <span class="logout" id="logoutBtn">${t('logout')}</span>
-    </div>`;
-  document.getElementById('logoutBtn').addEventListener('click', () => signOut(auth));
-}
-
 onAuthStateChanged(auth, (user) => {
-  currentUser = user;
-  if (user) updateUserBar(user);
-  else document.getElementById('authArea').innerHTML = `<button class="lang-btn" id="loginBtn">${t('login')}</button>`;
+  if (user) {
+    isAdmin = true;
+    const btn = document.getElementById('adminBtn');
+    btn.textContent = '🔓';
+    btn.style.color = '#f5b301';
+    btn.style.borderColor = '#d4a017';
+  } else {
+    isAdmin = false;
+    const btn = document.getElementById('adminBtn');
+    btn.textContent = '🔒';
+    btn.style.color = '#555';
+    btn.style.borderColor = '#2a2a35';
+  }
 });
 
-// ====== Grid (Lazy Rendering) ======
+// ====== Grid ======
 const gridEl = document.getElementById('grid');
 const gridWrap = document.getElementById('gridWrap');
 const gridInner = document.getElementById('gridInner');
@@ -553,7 +634,6 @@ const cellMap = {};
 const takenSet = new Set();
 let bookingData = {};
 
-// ✅ الأبعاد الكاملة على gridInner (لتفعيل التمرير)
 gridInner.style.width = (GRID_COLS * CELL_SIZE) + 'px';
 gridInner.style.height = (GRID_ROWS * CELL_SIZE) + 'px';
 gridInner.style.position = 'relative';
@@ -569,7 +649,6 @@ function renderVisibleCells() {
   const startCol = Math.max(0, Math.floor(scrollLeft / CELL_SIZE) - 3);
   const endCol = Math.min(GRID_COLS - 1, Math.ceil((scrollLeft + viewportW) / CELL_SIZE) + 3);
 
-  // إزالة المربعات الخارجة
   Object.keys(cellMap).forEach(idx => {
     const r = Math.floor(idx / GRID_COLS);
     const c = idx % GRID_COLS;
@@ -579,7 +658,6 @@ function renderVisibleCells() {
     }
   });
 
-  // إضافة الجديدة
   const frag = document.createDocumentFragment();
   for (let r = startRow; r <= endRow; r++) {
     for (let c = startCol; c <= endCol; c++) {
@@ -588,16 +666,26 @@ function renderVisibleCells() {
 
       const cell = document.createElement('div');
       cell.className = 'cell';
+      cell.style.position = 'absolute';
       cell.style.left = (c * CELL_SIZE) + 'px';
       cell.style.top = (r * CELL_SIZE) + 'px';
+      cell.style.width = (CELL_SIZE - 2) + 'px';
+      cell.style.height = (CELL_SIZE - 2) + 'px';
+      cell.style.background = '#1a1a24';
+      cell.style.borderRadius = '2px';
+      cell.style.border = '0.5px solid #22222e';
+      cell.style.cursor = 'pointer';
+      cell.style.backgroundSize = 'cover';
+      cell.style.backgroundPosition = 'center';
+      cell.style.transition = '0.15s';
       cell.dataset.index = idx;
 
       if (takenSet.has(idx)) {
-        cell.classList.add('taken');
+        cell.style.background = '#d4a017';
         const d = bookingData[idx];
         if (d && d.selfieUrl) {
-          cell.classList.add('selfie');
           cell.style.backgroundImage = `url(${d.selfieUrl})`;
+          cell.style.background = '#333';
         }
         cell.title = (d && d.userNote) || 'محجوز';
       }
@@ -636,7 +724,6 @@ async function loadBookings() {
       if (data.selfieUrl) selfieCount++;
     });
     updateStats(takenCount, selfieCount);
-    // إعادة رسم
     Object.keys(cellMap).forEach(k => { cellMap[k].remove(); delete cellMap[k]; });
     renderVisibleCells();
   } catch (e) { console.error(e); }
@@ -661,11 +748,12 @@ function showBookingMsg(text, type = 'err') {
 }
 
 function openBooking(index) {
-  if (!currentUser) { authModal.classList.add('open'); return; }
   if (takenSet.has(index)) { alert(t('msgTaken')); return; }
   selectedCellIndex = index;
   document.getElementById('cellNumber').textContent = index + 1;
   bookingMsg.className = 'msg';
+  document.getElementById('visitorName').value = '';
+  document.getElementById('visitorPhone').value = '';
   document.getElementById('selfieInput').value = '';
   document.getElementById('receiptInput').value = '';
   document.getElementById('userNote').value = '';
@@ -678,11 +766,13 @@ document.getElementById('cancelBooking').addEventListener('click', () => {
 });
 
 document.getElementById('submitBooking').addEventListener('click', async () => {
-  if (!currentUser) return;
+  const visitorName = document.getElementById('visitorName').value.trim();
+  const visitorPhone = document.getElementById('visitorPhone').value.trim();
   const selfieFile = document.getElementById('selfieInput').files[0];
   const receiptFile = document.getElementById('receiptInput').files[0];
   const note = document.getElementById('userNote').value.trim();
 
+  if (!visitorName) { showBookingMsg(t('msgName')); return; }
   if (!selfieFile) { showBookingMsg(t('msgUploadSelfie')); return; }
   if (!receiptFile) { showBookingMsg(t('msgUploadReceipt')); return; }
   if (selfieFile.size > 15 * 1024 * 1024) { showBookingMsg(t('msgSelfieBig')); return; }
@@ -693,7 +783,8 @@ document.getElementById('submitBooking').addEventListener('click', async () => {
   btn.textContent = t('msgUploading');
 
   try {
-    const uid = currentUser.uid;
+    // معرّف فريد للحجز (بدون حساب)
+    const guestId = 'guest_' + Math.random().toString(36).substr(2, 9) + '_' + Date.now();
     const ts = Date.now();
 
     showBookingMsg(t('msgCompressSelfie'), 'ok');
@@ -702,12 +793,12 @@ document.getElementById('submitBooking').addEventListener('click', async () => {
     showBookingMsg(t('msgCompressReceipt'), 'ok');
     const receiptUrl = await uploadToImgBB(receiptFile);
 
-    const bookingId = `${uid}_${selectedCellIndex}_${ts}`;
+    const bookingId = `${guestId}_${selectedCellIndex}_${ts}`;
     await setDoc(doc(db, BOOKINGS_COLLECTION, bookingId), {
       cellIndex: selectedCellIndex,
-      uid: uid,
-      userName: currentUser.displayName || currentUser.email.split('@')[0],
-      userEmail: currentUser.email,
+      uid: guestId,
+      userName: visitorName,
+      userPhone: visitorPhone,
       userNote: note,
       selfieUrl: selfieUrl,
       receiptUrl: receiptUrl,
@@ -736,7 +827,6 @@ renderVisibleCells();
 loadBookings();
 setInterval(loadBookings, 60000);
 
-// إعادة الرسم عند تغيير حجم النافذة
 window.addEventListener('resize', () => {
   Object.keys(cellMap).forEach(k => { cellMap[k].remove(); delete cellMap[k]; });
   renderVisibleCells();
