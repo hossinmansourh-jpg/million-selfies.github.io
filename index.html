@@ -36,30 +36,41 @@
   .lg-box.empty { border: 1.5px solid #555; }
   .lg-box.taken { background: #d4a017; }
 
-  /* ⬇️ الشبكة: أطول + تقنية عرض ذكية */
+  /* ⬇️ الشبكة: أطول + LTR دائماً + Lazy Rendering */
   .grid-wrap {
     background: #0e0e14;
     border: 1.5px solid #2a2a35;
     border-radius: 12px;
     padding: 8px;
-    height: 70vh;              /* أطول من الحجم السابق */
+    height: 70vh;
     min-height: 500px;
     overflow: auto;
     position: relative;
+    direction: ltr;              /* 👈 إصلاح RTL */
   }
   .grid-inner { position: relative; }
   .grid-canvas {
-    display: grid;
-    grid-template-columns: repeat(1000, 20px); /* مليون مربع: 1000×1000 */
-    gap: 2px;
-    width: max-content;
-    position: relative;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
   }
-  .cell { width: 20px; height: 20px; background: #1a1a24; border-radius: 2px; border: 0.5px solid #22222e; cursor: pointer; background-size: cover; background-position: center; transition: 0.15s; }
+  .cell {
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    background: #1a1a24;
+    border-radius: 2px;
+    border: 0.5px solid #22222e;
+    cursor: pointer;
+    background-size: cover;
+    background-position: center;
+    transition: 0.15s;
+  }
   .cell:hover { transform: scale(1.4); z-index: 10; box-shadow: 0 0 6px #d4a017; }
   .cell.taken { background-color: #d4a017; }
   .cell.taken.selfie { background-color: #333; }
-  .cell.hidden { visibility: hidden; }
 
   .grid-hint { text-align: center; font-size: 11px; color: #666; padding: 6px; }
 
@@ -237,7 +248,7 @@ const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
 
-// ⚙️ إعدادات
+// ⚙️ إعدادات الشبكة
 const GRID_COLS = 1000;            // 1000 عمود
 const GRID_ROWS = 1000;            // 1000 صف = مليون مربع
 const TOTAL_CELLS = GRID_COLS * GRID_ROWS;
@@ -347,13 +358,10 @@ function applyLang() {
     const key = el.getAttribute('data-i18n-ph');
     if (I18N[currentLang][key]) el.placeholder = I18N[currentLang][key];
   });
-  // تحديث زر الدخول/الخروج
-  if (currentUser) {
-    updateUserBar(currentUser);
-  } else {
+  if (currentUser) updateUserBar(currentUser);
+  else {
     document.getElementById('authArea').innerHTML = `<button class="lang-btn" id="loginBtn">${t('login')}</button>`;
   }
-  // تحديث زر الإرسال
   const submitBtn = document.getElementById('authSubmit');
   if (submitBtn) submitBtn.textContent = isSignupMode ? t('btnSignup') : t('btnLogin');
 }
@@ -364,15 +372,11 @@ document.getElementById('langToggle').addEventListener('click', () => {
   applyLang();
 });
 
-// 🗜️ إعدادات ضغط الصور
-const MAX_WIDTH = 1000;
-const MAX_HEIGHT = 1000;
-const TARGET_MIN_KB = 100;
-const TARGET_MAX_KB = 300;
-const INITIAL_QUALITY = 0.85;
-const MIN_QUALITY = 0.5;
+// 🗜️ ضغط الصور
+const MAX_WIDTH = 1000, MAX_HEIGHT = 1000;
+const TARGET_MIN_KB = 100, TARGET_MAX_KB = 300;
+const INITIAL_QUALITY = 0.85, MIN_QUALITY = 0.5;
 
-// 🗜️ دالة ضغط الصورة
 async function compressImage(file) {
   return new Promise((resolve, reject) => {
     const reader = new FileReader();
@@ -388,8 +392,7 @@ async function compressImage(file) {
         const canvas = document.createElement('canvas');
         canvas.width = width;
         canvas.height = height;
-        const ctx = canvas.getContext('2d');
-        ctx.drawImage(img, 0, 0, width, height);
+        canvas.getContext('2d').drawImage(img, 0, 0, width, height);
         let quality = INITIAL_QUALITY;
         const tryCompress = () => {
           canvas.toBlob((b) => {
@@ -413,12 +416,9 @@ async function compressImage(file) {
   });
 }
 
-// 📤 رفع الصورة إلى ImgBB
 async function uploadToImgBB(file) {
   const compressedBlob = await compressImage(file);
-  const sizeKB = (compressedBlob.size / 1024).toFixed(0);
-  console.log(`📦 الحجم بعد الضغط: ${sizeKB} كيلوبايت`);
-
+  console.log(`📦 الحجم بعد الضغط: ${(compressedBlob.size / 1024).toFixed(0)} كيلوبايت`);
   return new Promise((resolve, reject) => {
     const reader = new FileReader();
     reader.onload = async () => {
@@ -438,7 +438,7 @@ async function uploadToImgBB(file) {
   });
 }
 
-// ====== Auth UI ======
+// ====== Auth ======
 const authModal = document.getElementById('authModal');
 const authMsg = document.getElementById('authMsg');
 
@@ -449,9 +449,7 @@ function showAuthMsg(text, type = 'err') {
 }
 
 document.addEventListener('click', (e) => {
-  if (e.target && e.target.id === 'loginBtn') {
-    authModal.classList.add('open');
-  }
+  if (e.target && e.target.id === 'loginBtn') authModal.classList.add('open');
 });
 
 document.getElementById('authCancel').addEventListener('click', () => authModal.classList.remove('open'));
@@ -544,36 +542,34 @@ function updateUserBar(user) {
 onAuthStateChanged(auth, (user) => {
   currentUser = user;
   if (user) updateUserBar(user);
-  else {
-    document.getElementById('authArea').innerHTML = `<button class="lang-btn" id="loginBtn">${t('login')}</button>`;
-  }
+  else document.getElementById('authArea').innerHTML = `<button class="lang-btn" id="loginBtn">${t('login')}</button>`;
 });
 
 // ====== Grid (Lazy Rendering) ======
 const gridEl = document.getElementById('grid');
 const gridWrap = document.getElementById('gridWrap');
-const cellMap = {};           // index -> element (فقط المرئية)
-const takenSet = new Set();   // مجموعة indices المحجوزة
-let bookingData = {};         // index -> data (للمحجوزة)
+const gridInner = document.getElementById('gridInner');
+const cellMap = {};
+const takenSet = new Set();
+let bookingData = {};
 
-// بناء الشبكة الكاملة (بدون عناصر) - أبعاد فقط
-gridEl.style.width = (GRID_COLS * CELL_SIZE) + 'px';
-gridEl.style.height = (GRID_ROWS * CELL_SIZE) + 'px';
-gridEl.style.position = 'relative';
+// ✅ الأبعاد الكاملة على gridInner (لتفعيل التمرير)
+gridInner.style.width = (GRID_COLS * CELL_SIZE) + 'px';
+gridInner.style.height = (GRID_ROWS * CELL_SIZE) + 'px';
+gridInner.style.position = 'relative';
 
-// عرض المربعات المرئية فقط
 function renderVisibleCells() {
   const scrollTop = gridWrap.scrollTop;
-  const scrollLeft = gridWrap.scrollLeft;
+  const scrollLeft = Math.max(0, gridWrap.scrollLeft);
   const viewportH = gridWrap.clientHeight;
   const viewportW = gridWrap.clientWidth;
 
-  const startRow = Math.max(0, Math.floor(scrollTop / CELL_SIZE) - 2);
-  const endRow = Math.min(GRID_ROWS - 1, Math.ceil((scrollTop + viewportH) / CELL_SIZE) + 2);
-  const startCol = Math.max(0, Math.floor(scrollLeft / CELL_SIZE) - 2);
-  const endCol = Math.min(GRID_COLS - 1, Math.ceil((scrollLeft + viewportW) / CELL_SIZE) + 2);
+  const startRow = Math.max(0, Math.floor(scrollTop / CELL_SIZE) - 3);
+  const endRow = Math.min(GRID_ROWS - 1, Math.ceil((scrollTop + viewportH) / CELL_SIZE) + 3);
+  const startCol = Math.max(0, Math.floor(scrollLeft / CELL_SIZE) - 3);
+  const endCol = Math.min(GRID_COLS - 1, Math.ceil((scrollLeft + viewportW) / CELL_SIZE) + 3);
 
-  // إزالة المربعات التي خرجت من الرؤية
+  // إزالة المربعات الخارجة
   Object.keys(cellMap).forEach(idx => {
     const r = Math.floor(idx / GRID_COLS);
     const c = idx % GRID_COLS;
@@ -583,7 +579,7 @@ function renderVisibleCells() {
     }
   });
 
-  // إضافة المربعات الجديدة
+  // إضافة الجديدة
   const frag = document.createDocumentFragment();
   for (let r = startRow; r <= endRow; r++) {
     for (let c = startCol; c <= endCol; c++) {
@@ -592,7 +588,6 @@ function renderVisibleCells() {
 
       const cell = document.createElement('div');
       cell.className = 'cell';
-      cell.style.position = 'absolute';
       cell.style.left = (c * CELL_SIZE) + 'px';
       cell.style.top = (r * CELL_SIZE) + 'px';
       cell.dataset.index = idx;
@@ -624,7 +619,6 @@ gridWrap.addEventListener('scroll', () => {
   });
 });
 
-// ====== تحميل الحجوزات ======
 async function loadBookings() {
   try {
     const snap = await getDocs(collection(db, BOOKINGS_COLLECTION));
@@ -642,12 +636,10 @@ async function loadBookings() {
       if (data.selfieUrl) selfieCount++;
     });
     updateStats(takenCount, selfieCount);
-    // إعادة رسم المربعات المرئية
+    // إعادة رسم
     Object.keys(cellMap).forEach(k => { cellMap[k].remove(); delete cellMap[k]; });
     renderVisibleCells();
-  } catch (e) {
-    console.error(e);
-  }
+  } catch (e) { console.error(e); }
 }
 
 function updateStats(taken, selfies) {
@@ -729,7 +721,6 @@ document.getElementById('submitBooking').addEventListener('click', async () => {
       bookingModal.classList.remove('open');
       loadBookings();
     }, 2500);
-
   } catch (e) {
     console.error(e);
     showBookingMsg(t('msgError') + e.message);
@@ -744,6 +735,12 @@ applyLang();
 renderVisibleCells();
 loadBookings();
 setInterval(loadBookings, 60000);
+
+// إعادة الرسم عند تغيير حجم النافذة
+window.addEventListener('resize', () => {
+  Object.keys(cellMap).forEach(k => { cellMap[k].remove(); delete cellMap[k]; });
+  renderVisibleCells();
+});
 </script>
 
 </body>
