@@ -7,32 +7,20 @@
 <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&display=swap" rel="stylesheet">
 <style>
   * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Cairo', sans-serif; }
-  body { background: #0a0a0f; color: #fff; min-height: 100vh; padding: 15px; padding-bottom: 70px; }
+  body { background: #0a0a0f; color: #fff; min-height: 100vh; padding: 15px; padding-bottom: 80px; }
   .container { max-width: 480px; margin: 0 auto; display: flex; flex-direction: column; gap: 18px; }
 
-  /* ===== شارة "تحدي رقمي" في المنتصف ===== */
-  .top-badge-wrap { display: flex; justify-content: center; margin-bottom: 5px; }
-  .top-badge {
-    background: linear-gradient(135deg, #1a1a24, #14141c);
-    border: 2px solid #d4a017;
-    color: #f5b301;
-    padding: 10px 24px;
-    border-radius: 30px;
-    font-size: 13px;
-    font-weight: 900;
-    letter-spacing: 0.5px;
-    box-shadow: 0 0 20px rgba(212, 160, 23, 0.25);
+  /* ===== الشريط العلوي الثابت ===== */
+  .sticky-top {
+    position: sticky;
+    top: 0;
+    z-index: 500;
+    background: #0a0a0f;
+    padding: 10px 0;
+    margin: -10px 0 0 0;
+    border-bottom: 1px solid #1a1a24;
     display: flex;
-    align-items: center;
-    gap: 8px;
-  }
-
-  /* ===== شريط أدوات علوي ===== */
-  .top-toolbar {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    gap: 10px;
+    justify-content: center;
   }
 
   /* زر تبديل اللغة الجديد */
@@ -43,12 +31,13 @@
     border-radius: 30px;
     padding: 3px;
     gap: 2px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.5);
   }
   .lang-switch button {
     background: transparent;
     border: none;
     color: #888;
-    padding: 6px 12px;
+    padding: 6px 14px;
     border-radius: 25px;
     font-family: 'Cairo';
     font-weight: 900;
@@ -65,34 +54,21 @@
     box-shadow: 0 0 10px rgba(212, 160, 23, 0.4);
   }
 
-  /* أزرار التحكم بحجم المربعات */
-  .zoom-controls {
-    display: flex;
-    background: #14141c;
-    border: 1.5px solid #2a2a35;
-    border-radius: 30px;
-    overflow: hidden;
-  }
-  .zoom-controls button {
-    background: transparent;
-    border: none;
+  /* ===== شارة "تحدي رقمي" ===== */
+  .top-badge-wrap { display: flex; justify-content: center; margin-top: 8px; }
+  .top-badge {
+    background: linear-gradient(135deg, #1a1a24, #14141c);
+    border: 2px solid #d4a017;
     color: #f5b301;
-    width: 40px;
-    height: 36px;
-    font-size: 20px;
+    padding: 10px 24px;
+    border-radius: 30px;
+    font-size: 13px;
     font-weight: 900;
-    cursor: pointer;
-    transition: 0.2s;
-    font-family: 'Cairo';
-  }
-  .zoom-controls button:hover {
-    background: #d4a017;
-    color: #000;
-  }
-  .zoom-controls button:active { transform: scale(0.9); }
-  .zoom-controls .divider {
-    width: 1.5px;
-    background: #2a2a35;
+    letter-spacing: 0.5px;
+    box-shadow: 0 0 20px rgba(212, 160, 23, 0.25);
+    display: flex;
+    align-items: center;
+    gap: 8px;
   }
 
   /* ===== العنوان ===== */
@@ -127,8 +103,8 @@
     border: 1.5px solid #2a2a35;
     border-radius: 12px;
     padding: 8px;
-    height: 65vh;
-    min-height: 450px;
+    height: 60vh;
+    min-height: 400px;
     overflow: auto;
     position: relative;
     direction: ltr;
@@ -137,6 +113,42 @@
   .grid-canvas { position: absolute; top: 0; left: 0; width: 100%; height: 100%; }
 
   .grid-hint { text-align: center; font-size: 11px; color: #666; padding: 6px; }
+
+  /* ===== أزرار التكبير أسفل الشبكة ===== */
+  .zoom-controls {
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+    margin-top: 10px;
+  }
+  .zoom-controls button {
+    background: #14141c;
+    border: 1.5px solid #d4a017;
+    color: #f5b301;
+    width: 52px;
+    height: 52px;
+    border-radius: 50%;
+    font-size: 26px;
+    font-weight: 900;
+    cursor: pointer;
+    transition: 0.2s;
+    font-family: 'Cairo';
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+  }
+  .zoom-controls button:hover {
+    background: #d4a017;
+    color: #000;
+    transform: translateY(-2px);
+  }
+  .zoom-controls button:active { transform: scale(0.9); }
+  .zoom-controls button:disabled {
+    opacity: 0.3;
+    cursor: not-allowed;
+    transform: none;
+  }
 
   /* ===== الأزرار العامة ===== */
   .btn { background: linear-gradient(135deg, #d4a017, #f5b301); color: #000; border: none; padding: 14px 20px; border-radius: 12px; font-weight: 900; font-size: 16px; cursor: pointer; width: 100%; font-family: 'Cairo'; }
@@ -150,9 +162,50 @@
   .modal-content h3 { color: #f5b301; margin-bottom: 15px; font-size: 18px; text-align: center; }
   .field { margin-bottom: 14px; }
   .field label { display: block; margin-bottom: 6px; color: #d0d0d0; font-size: 13px; font-weight: 700; }
-  .field input, .field textarea { width: 100%; padding: 10px; border-radius: 8px; border: 1.5px solid #2a2a35; background: #0e0e14; color: #fff; font-family: 'Cairo'; font-size: 14px; }
-  .field input:focus, .field textarea:focus { outline: none; border-color: #d4a017; }
+  .field input, .field textarea, .field select { width: 100%; padding: 10px; border-radius: 8px; border: 1.5px solid #2a2a35; background: #0e0e14; color: #fff; font-family: 'Cairo'; font-size: 14px; }
+  .field input:focus, .field textarea:focus, .field select:focus { outline: none; border-color: #d4a017; }
   .barcode { width: 100%; max-width: 260px; margin: 10px auto; display: block; border-radius: 10px; background: #fff; padding: 8px; }
+
+  /* ===== اختيار عدد المربعات ===== */
+  .quantity-picker {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin-top: 5px;
+  }
+  .quantity-picker button {
+    flex: 1;
+    min-width: 50px;
+    padding: 10px 6px;
+    border-radius: 10px;
+    border: 1.5px solid #2a2a35;
+    background: #0e0e14;
+    color: #d0d0d0;
+    font-family: 'Cairo';
+    font-weight: 900;
+    font-size: 14px;
+    cursor: pointer;
+    transition: 0.2s;
+  }
+  .quantity-picker button.active {
+    background: linear-gradient(135deg, #d4a017, #f5b301);
+    color: #000;
+    border-color: #d4a017;
+    box-shadow: 0 0 15px rgba(212, 160, 23, 0.4);
+  }
+
+  /* عرض المبلغ الإجمالي */
+  .total-price {
+    background: linear-gradient(135deg, #1a1a24, #14141c);
+    border: 2px solid #d4a017;
+    border-radius: 12px;
+    padding: 14px;
+    text-align: center;
+    margin-bottom: 14px;
+  }
+  .total-price .label { font-size: 12px; color: #a0a0a0; margin-bottom: 4px; }
+  .total-price .amount { font-size: 26px; font-weight: 900; color: #f5b301; }
+  .total-price .amount small { font-size: 14px; color: #d0d0d0; font-weight: 700; }
 
   .msg { padding: 10px 14px; border-radius: 8px; font-size: 13px; font-weight: 700; text-align: center; display: none; margin-bottom: 12px; }
   .msg.show { display: block; }
@@ -192,35 +245,23 @@
   .pwd-toggle { position: absolute; left: 12px; top: 50%; transform: translateY(-50%); cursor: pointer; font-size: 18px; user-select: none; background: transparent; border: none; color: #f5b301; padding: 0; }
   html[lang="en"] .pwd-toggle { left: auto; right: 12px; }
   html[lang="en"] .pwd-wrap input { padding-left: 10px; padding-right: 45px; }
-
-  /* ===== تبويبات ===== */
-  .tab-btns { display: flex; gap: 8px; margin-bottom: 16px; }
-  .tab-btns button { flex: 1; padding: 10px; border-radius: 8px; border: 1.5px solid #2a2a35; background: #0e0e14; color: #a0a0a0; font-family: 'Cairo'; font-weight: 700; font-size: 13px; cursor: pointer; }
-  .tab-btns button.active { background: #d4a017; color: #000; border-color: #d4a017; }
-
-  .link-small { color: #f5b301; font-size: 12px; text-align: center; cursor: pointer; text-decoration: underline; margin-top: 8px; display: block; }
 </style>
 </head>
 <body>
 
+<!-- الشريط العلوي الثابت (زر اللغة) -->
+<div class="sticky-top">
+  <div class="lang-switch">
+    <button id="btnAr" class="active">🇸🇾 عربي</button>
+    <button id="btnEn">🇬🇧 EN</button>
+  </div>
+</div>
+
 <div class="container">
 
-  <!-- شارة تحدي رقمي في المنتصف -->
+  <!-- شارة تحدي رقمي -->
   <div class="top-badge-wrap">
     <div class="top-badge" data-i18n="badge">🚀 تحدي رقمي تاريخي</div>
-  </div>
-
-  <!-- شريط الأدوات: اللغة + التكبير -->
-  <div class="top-toolbar">
-    <div class="lang-switch">
-      <button id="btnAr" class="active">🇸🇾 عربي</button>
-      <button id="btnEn">🇬🇧 EN</button>
-    </div>
-    <div class="zoom-controls">
-      <button id="zoomIn" title="تكبير">＋</button>
-      <div class="divider"></div>
-      <button id="zoomOut" title="تصغير">−</button>
-    </div>
   </div>
 
   <h1 class="hero-title" data-i18n="heroTitle">جدارية مليون صورة سيلفي</h1>
@@ -253,11 +294,18 @@
       <div class="grid-canvas" id="grid"></div>
     </div>
   </div>
+
+  <!-- أزرار التكبير أسفل الشبكة -->
+  <div class="zoom-controls">
+    <button id="zoomOut" title="تصغير">−</button>
+    <button id="zoomIn" title="تكبير">＋</button>
+  </div>
+
   <div class="grid-hint" data-i18n="gridHint">💡 مرر داخل الشبكة لاستكشاف المليون مربع</div>
 
 </div>
 
-<!-- زر الإدارة (أسفل الصفحة، أيقونة صغيرة) -->
+<!-- زر الإدارة -->
 <button class="admin-btn" id="adminBtn" title="دخول الإدارة">🔒</button>
 
 <!-- Modal: Admin Login -->
@@ -287,8 +335,26 @@
 <!-- Modal: Booking -->
 <div class="modal" id="bookingModal">
   <div class="modal-content">
-    <h3><span data-i18n="bookTitle">🎯 حجز المربع رقم</span> <span id="cellNumber">-</span></h3>
+    <h3><span data-i18n="bookTitle">🎯 حجز المربعات</span></h3>
     <div id="bookingMsg" class="msg"></div>
+
+    <div class="field">
+      <label data-i18n="fieldQuantity">🔢 عدد المربعات</label>
+      <div class="quantity-picker" id="quantityPicker">
+        <button data-qty="1" class="active">1</button>
+        <button data-qty="2">2</button>
+        <button data-qty="5">5</button>
+        <button data-qty="10">10</button>
+        <button data-qty="25">25</button>
+        <button data-qty="50">50</button>
+      </div>
+    </div>
+
+    <!-- المبلغ الإجمالي -->
+    <div class="total-price">
+      <div class="label" data-i18n="totalPriceLabel">💰 المبلغ الإجمالي</div>
+      <div class="amount" id="totalPrice">1 <small>$</small></div>
+    </div>
 
     <div class="field">
       <label data-i18n="fieldVisitorName">👤 اسمك</label>
@@ -313,7 +379,7 @@
     <div class="field">
       <label data-i18n="bookPay">💳 الدفع عبر شام كاش</label>
       <p style="font-size: 13px; color: #c0c0c0; margin-bottom: 8px;" data-i18n="bookPayDesc">
-        أرسل 1 دولار (أو ما يعادله) إلى الباركود، ثم ارفع صورة الإيصال:
+        أرسل المبلغ إلى الباركود، ثم ارفع صورة الإيصال:
       </p>
       <img src="chama-barcode.png" alt="شام كاش" class="barcode" onerror="this.style.display='none'">
     </div>
@@ -354,10 +420,13 @@ const GRID_ROWS = 1000;
 const TOTAL_CELLS = GRID_COLS * GRID_ROWS;
 const BOOKINGS_COLLECTION = "bookings";
 
-// 📏 أحجام المربعات المتاحة (بالبكسل)
+// 📏 أحجام المربعات
 const CELL_SIZES = [14, 18, 22, 28, 36, 48];
-let cellSizeIndex = 2; // يبدأ من 22px
+let cellSizeIndex = 2;
 let CELL_SIZE = CELL_SIZES[cellSizeIndex];
+
+// 💵 سعر المربع
+const PRICE_PER_SQUARE = 1; // 1 دولار
 
 // 🌐 الترجمات
 const I18N = {
@@ -374,12 +443,14 @@ const I18N = {
     adminTitle: "دخول الإدارة", btnAdminLogin: "دخول",
     fieldEmail: "📧 البريد الإلكتروني", fieldPassword: "🔑 كلمة المرور",
     pwdPlaceholder: "كلمة المرور",
-    bookTitle: "🎯 حجز المربع رقم",
+    bookTitle: "🎯 حجز المربعات",
+    fieldQuantity: "🔢 عدد المربعات",
+    totalPriceLabel: "💰 المبلغ الإجمالي",
     fieldVisitorName: "👤 اسمك", fieldVisitorPhone: "📱 رقم هاتفك (اختياري)",
     bookSelfie: "📸 ارفع صورتك (سيلفي)",
     bookNote: "📝 تعليق قصير (اختياري)", notePlaceholder: "مثال: من دمشق",
     bookPay: "💳 الدفع عبر شام كاش",
-    bookPayDesc: "أرسل 1 دولار (أو ما يعادله) إلى الباركود، ثم ارفع صورة الإيصال:",
+    bookPayDesc: "أرسل المبلغ إلى الباركود، ثم ارفع صورة الإيصال:",
     bookReceipt: "🧾 ارفع صورة الإيصال", btnSubmit: "✅ إرسال الطلب", btnCancel: "إلغاء", btnCancel2: "❌ إلغاء",
     msgName: "⚠️ اكتب اسمك أولاً",
     msgUploadSelfie: "⚠️ ارفع صورة السيلفي أولاً",
@@ -391,9 +462,9 @@ const I18N = {
     msgBookingOk: "✅ تم إرسال طلبك! سيتم مراجعته من الإدارة.",
     msgError: "❌ خطأ: ", msgUploading: "⏳ جارٍ الرفع...",
     msgTaken: "هذا المربع محجوز بالفعل. اختر مربعًا آخر.",
+    msgNotEnough: "⚠️ لا توجد مربعات كافية متجاورة. اختر عددًا أقل أو مربعًا آخر.",
     msgAdminOk: "✅ تم تسجيل دخول الإدارة",
-    msgAdminErr: "⚠️ بيانات خاطئة",
-    msgAdminOnly: "⚠️ هذه اللوحة مخصصة للإدارة فقط"
+    msgAdminErr: "⚠️ بيانات خاطئة"
   },
   en: {
     badge: "🚀 Historic Digital Challenge",
@@ -408,12 +479,14 @@ const I18N = {
     adminTitle: "Admin Login", btnAdminLogin: "Login",
     fieldEmail: "📧 Email", fieldPassword: "🔑 Password",
     pwdPlaceholder: "Password",
-    bookTitle: "🎯 Book Square #",
+    bookTitle: "🎯 Book Squares",
+    fieldQuantity: "🔢 Number of squares",
+    totalPriceLabel: "💰 Total Price",
     fieldVisitorName: "👤 Your name", fieldVisitorPhone: "📱 Phone (optional)",
     bookSelfie: "📸 Upload your selfie",
     bookNote: "📝 Short note (optional)", notePlaceholder: "e.g., From Damascus",
     bookPay: "💳 Payment via Sham Cash",
-    bookPayDesc: "Send $1 (or equivalent) to the barcode, then upload the receipt:",
+    bookPayDesc: "Send the amount to the barcode, then upload the receipt:",
     bookReceipt: "🧾 Upload receipt image", btnSubmit: "✅ Submit Request", btnCancel: "Cancel", btnCancel2: "❌ Cancel",
     msgName: "⚠️ Write your name first",
     msgUploadSelfie: "⚠️ Upload selfie first",
@@ -425,19 +498,19 @@ const I18N = {
     msgBookingOk: "✅ Request submitted! Awaiting admin review.",
     msgError: "❌ Error: ", msgUploading: "⏳ Uploading...",
     msgTaken: "This square is already booked. Choose another.",
+    msgNotEnough: "⚠️ Not enough adjacent squares. Choose fewer or a different square.",
     msgAdminOk: "✅ Admin logged in",
-    msgAdminErr: "⚠️ Wrong credentials",
-    msgAdminOnly: "⚠️ This panel is for admin only"
+    msgAdminErr: "⚠️ Wrong credentials"
   }
 };
 
 let currentLang = localStorage.getItem('site_lang') || 'ar';
 let isAdmin = false;
 let selectedCellIndex = null;
+let selectedQuantity = 1;
 
 function t(key) { return I18N[currentLang][key] || key; }
 
-// 🌐 تطبيق اللغة
 function applyLang() {
   const html = document.documentElement;
   if (currentLang === 'ar') {
@@ -459,6 +532,7 @@ function applyLang() {
     const key = el.getAttribute('data-i18n-ph');
     if (I18N[currentLang][key]) el.placeholder = I18N[currentLang][key];
   });
+  updateTotalPrice();
 }
 
 document.getElementById('btnAr').addEventListener('click', () => {
@@ -472,22 +546,42 @@ document.getElementById('btnEn').addEventListener('click', () => {
   applyLang();
 });
 
-// ===== تكبير/تصغير =====
+// ===== أزرار التكبير =====
 function changeCellSize(delta) {
   const newIndex = Math.max(0, Math.min(CELL_SIZES.length - 1, cellSizeIndex + delta));
   if (newIndex === cellSizeIndex) return;
   cellSizeIndex = newIndex;
   CELL_SIZE = CELL_SIZES[cellSizeIndex];
-  // إعادة بناء الشبكة
   gridInner.style.width = (GRID_COLS * CELL_SIZE) + 'px';
   gridInner.style.height = (GRID_ROWS * CELL_SIZE) + 'px';
-  // مسح الخلايا القديمة
   Object.keys(cellMap).forEach(k => { cellMap[k].remove(); delete cellMap[k]; });
   renderVisibleCells();
+  updateZoomButtons();
+}
+
+function updateZoomButtons() {
+  document.getElementById('zoomIn').disabled = cellSizeIndex >= CELL_SIZES.length - 1;
+  document.getElementById('zoomOut').disabled = cellSizeIndex <= 0;
 }
 
 document.getElementById('zoomIn').addEventListener('click', () => changeCellSize(1));
 document.getElementById('zoomOut').addEventListener('click', () => changeCellSize(-1));
+
+// ===== عدد المربعات =====
+function updateTotalPrice() {
+  const total = selectedQuantity * PRICE_PER_SQUARE;
+  const symbol = currentLang === 'ar' ? '$' : '$';
+  document.getElementById('totalPrice').innerHTML = `${total} <small>${symbol}</small>`;
+}
+
+document.querySelectorAll('#quantityPicker button').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('#quantityPicker button').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    selectedQuantity = parseInt(btn.dataset.qty);
+    updateTotalPrice();
+  });
+});
 
 // 🗜️ ضغط الصور
 const MAX_WIDTH = 1000, MAX_HEIGHT = 1000;
@@ -563,12 +657,12 @@ function showAdminMsg(text, type = 'err') {
 
 document.getElementById('adminBtn').addEventListener('click', () => {
   if (isAdmin) {
-    // إذا كان مسجلًا، يخرج
     signOut(auth).then(() => {
       isAdmin = false;
-      document.getElementById('adminBtn').textContent = '🔒';
-      document.getElementById('adminBtn').style.color = '#555';
-      document.getElementById('adminBtn').style.borderColor = '#2a2a35';
+      const btn = document.getElementById('adminBtn');
+      btn.textContent = '🔒';
+      btn.style.color = '#555';
+      btn.style.borderColor = '#2a2a35';
     });
   } else {
     adminModal.classList.add('open');
@@ -587,19 +681,15 @@ document.getElementById('adminTogglePwd').addEventListener('click', (e) => {
 document.getElementById('adminSubmit').addEventListener('click', async () => {
   const email = document.getElementById('adminEmail').value.trim();
   const password = document.getElementById('adminPassword').value;
-
   if (!email || !password) { showAdminMsg(t('msgAdminErr')); return; }
-
   const btn = document.getElementById('adminSubmit');
   btn.disabled = true;
   btn.textContent = '⏳...';
-
   try {
     await signInWithEmailAndPassword(auth, email, password);
     showAdminMsg(t('msgAdminOk'), 'ok');
     setTimeout(() => {
       adminModal.classList.remove('open');
-      // التوجيه للوحة الإدارة
       window.location.href = 'hossin.html';
     }, 1000);
   } catch (e) {
@@ -611,15 +701,14 @@ document.getElementById('adminSubmit').addEventListener('click', async () => {
 });
 
 onAuthStateChanged(auth, (user) => {
+  const btn = document.getElementById('adminBtn');
   if (user) {
     isAdmin = true;
-    const btn = document.getElementById('adminBtn');
     btn.textContent = '🔓';
     btn.style.color = '#f5b301';
     btn.style.borderColor = '#d4a017';
   } else {
     isAdmin = false;
-    const btn = document.getElementById('adminBtn');
     btn.textContent = '🔒';
     btn.style.color = '#555';
     btn.style.borderColor = '#2a2a35';
@@ -715,12 +804,17 @@ async function loadBookings() {
     bookingData = {};
     snap.forEach(d => {
       const data = d.data();
-      const idx = data.cellIndex;
-      if (typeof idx === 'number') {
-        takenSet.add(idx);
-        bookingData[idx] = data;
+      // التعامل مع الحجز المتعدد
+      if (Array.isArray(data.cellIndices)) {
+        data.cellIndices.forEach(i => {
+          takenSet.add(i);
+          bookingData[i] = data;
+        });
+      } else if (typeof data.cellIndex === 'number') {
+        takenSet.add(data.cellIndex);
+        bookingData[data.cellIndex] = data;
       }
-      takenCount++;
+      takenCount += (data.quantity || 1);
       if (data.selfieUrl) selfieCount++;
     });
     updateStats(takenCount, selfieCount);
@@ -747,10 +841,30 @@ function showBookingMsg(text, type = 'err') {
   bookingMsg.className = 'msg show ' + type;
 }
 
+// التحقق من المربعات المتجاورة
+function getAdjacentCells(startIndex, quantity) {
+  const cells = [];
+  const startRow = Math.floor(startIndex / GRID_COLS);
+  const startCol = startIndex % GRID_COLS;
+
+  for (let i = 0; i < quantity; i++) {
+    const col = startCol + i;
+    if (col >= GRID_COLS) return null; // تجاوز الصف
+    const idx = startRow * GRID_COLS + col;
+    if (takenSet.has(idx)) return null; // مربع محجوز
+    cells.push(idx);
+  }
+  return cells;
+}
+
 function openBooking(index) {
   if (takenSet.has(index)) { alert(t('msgTaken')); return; }
   selectedCellIndex = index;
-  document.getElementById('cellNumber').textContent = index + 1;
+  selectedQuantity = 1;
+  document.querySelectorAll('#quantityPicker button').forEach(b => b.classList.remove('active'));
+  document.querySelector('#quantityPicker button[data-qty="1"]').classList.add('active');
+  updateTotalPrice();
+
   bookingMsg.className = 'msg';
   document.getElementById('visitorName').value = '';
   document.getElementById('visitorPhone').value = '';
@@ -778,12 +892,18 @@ document.getElementById('submitBooking').addEventListener('click', async () => {
   if (selfieFile.size > 15 * 1024 * 1024) { showBookingMsg(t('msgSelfieBig')); return; }
   if (receiptFile.size > 15 * 1024 * 1024) { showBookingMsg(t('msgReceiptBig')); return; }
 
+  // التحقق من المربعات المتجاورة
+  const cellIndices = getAdjacentCells(selectedCellIndex, selectedQuantity);
+  if (!cellIndices) {
+    showBookingMsg(t('msgNotEnough'));
+    return;
+  }
+
   const btn = document.getElementById('submitBooking');
   btn.disabled = true;
   btn.textContent = t('msgUploading');
 
   try {
-    // معرّف فريد للحجز (بدون حساب)
     const guestId = 'guest_' + Math.random().toString(36).substr(2, 9) + '_' + Date.now();
     const ts = Date.now();
 
@@ -795,7 +915,10 @@ document.getElementById('submitBooking').addEventListener('click', async () => {
 
     const bookingId = `${guestId}_${selectedCellIndex}_${ts}`;
     await setDoc(doc(db, BOOKINGS_COLLECTION, bookingId), {
-      cellIndex: selectedCellIndex,
+      cellIndex: selectedCellIndex,           // أول مربع (للتوافق)
+      cellIndices: cellIndices,                // جميع المربعات
+      quantity: selectedQuantity,
+      totalPrice: selectedQuantity * PRICE_PER_SQUARE,
       uid: guestId,
       userName: visitorName,
       userPhone: visitorPhone,
@@ -825,6 +948,7 @@ document.getElementById('submitBooking').addEventListener('click', async () => {
 applyLang();
 renderVisibleCells();
 loadBookings();
+updateZoomButtons();
 setInterval(loadBookings, 60000);
 
 window.addEventListener('resize', () => {
