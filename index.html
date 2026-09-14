@@ -811,6 +811,8 @@ function renderVisibleCells() {
             const xPct = cols > 1 ? (localCol / (cols - 1)) * 100 : 0;
             const yPct = rows > 1 ? (localRow / (rows - 1)) * 100 : 0;
             cell.style.backgroundPosition = `${xPct}% ${yPct}%`;
+           cell.style.border = 'none';
+cell.style.borderRadius = '0';
           } else {
             cell.style.background = '#333';
           }
