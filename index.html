@@ -104,7 +104,21 @@
   }
   .grid-inner { position: relative; }
   .grid-canvas { position: absolute; top: 0; left: 0; width: 100%; height: 100%; }
-
+.images-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 5;
+}
+.images-overlay img {
+  position: absolute;
+  object-fit: cover;
+  border: none;
+  outline: none;
+}
   .grid-hint { text-align: center; font-size: 11px; color: #666; padding: 6px; }
 
   .zoom-controls {
@@ -258,6 +272,7 @@
   <div class="grid-wrap" id="gridWrap">
     <div class="grid-inner" id="gridInner">
       <div class="grid-canvas" id="grid"></div>
+             <div class="images-overlay" id="imagesOverlay"></div>
     </div>
   </div>
 
@@ -767,7 +782,8 @@ function renderVisibleCells() {
     const r = Math.floor(idx / GRID_COLS);
     const c = idx % GRID_COLS;
     if (r < startRow || r > endRow || c < startCol || c > endCol) {
-      cellMap[idx].remove(); delete cellMap[idx];
+      cellMap[idx].remove();
+      delete cellMap[idx];
     }
   });
 
@@ -788,40 +804,14 @@ function renderVisibleCells() {
       cell.style.borderRadius = '2px';
       cell.style.border = '0.5px solid #22222e';
       cell.style.cursor = 'pointer';
-      cell.style.backgroundSize = 'cover';
-      cell.style.backgroundPosition = 'center';
       cell.style.transition = '0.15s';
       cell.dataset.index = idx;
 
       if (takenSet.has(idx)) {
         cell.style.background = '#d4a017';
         const d = bookingData[idx];
-        if (d && d.selfieUrl && d.gridShape) {
-          // 🎨 عرض جزء الصورة على هذا المربع
-          const { rows, cols } = d.gridShape;
-          const startCell = d.startCell;
-          const startRow = Math.floor(startCell / GRID_COLS);
-          const startCol = startCell % GRID_COLS;
-          const localRow = r - startRow;
-          const localCol = c - startCol;
-
-          if (localRow >= 0 && localRow < rows && localCol >= 0 && localCol < cols) {
-            cell.style.backgroundImage = `url(${d.selfieUrl})`;
-            cell.style.backgroundSize = `${cols * 100}% ${rows * 100}%`;
-            const xPct = cols > 1 ? (localCol / (cols - 1)) * 100 : 0;
-            const yPct = rows > 1 ? (localRow / (rows - 1)) * 100 : 0;
-            cell.style.backgroundPosition = `${xPct}% ${yPct}%`;
-           cell.style.border = 'none';
-cell.style.borderRadius = '0';
-          } else {
-            cell.style.background = '#333';
-          }
-        } else if (d && d.selfieUrl) {
-          // توافق مع الحجوزات القديمة
-          cell.style.backgroundImage = `url(${d.selfieUrl})`;
-          cell.style.background = '#333';
-        }
-        cell.title = (d && d.userNote) || 'محجوز';
+        if (d && d.userNote) cell.title = d.userNote;
+        else cell.title = 'محجوز';
       }
 
       cell.addEventListener('click', () => openBooking(idx));
@@ -830,6 +820,43 @@ cell.style.borderRadius = '0';
     }
   }
   gridEl.appendChild(frag);
+
+  renderImagesOverlay();
+}
+
+// 🎨 رسم الصور كطبقات كاملة فوق المربعات
+function renderImagesOverlay() {
+  const overlay = document.getElementById('imagesOverlay');
+  if (!overlay) return;
+  overlay.innerHTML = '';
+
+  const seen = new Set();
+  Object.keys(bookingData).forEach(idx => {
+    const d = bookingData[idx];
+    if (!d) return;
+    const key = (d.uid || '') + '_' + (d.startCell || idx);
+    if (seen.has(key)) return;
+    seen.add(key);
+
+    if (!d.selfieUrl || !d.gridShape) return;
+
+    const startCell = d.startCell !== undefined ? d.startCell : parseInt(idx);
+    const startRow = Math.floor(startCell / GRID_COLS);
+    const startCol = startCell % GRID_COLS;
+    const x = startCol * CELL_SIZE;
+    const y = startRow * CELL_SIZE;
+    const w = d.gridShape.cols * CELL_SIZE - 2;
+    const h = d.gridShape.rows * CELL_SIZE - 2;
+
+    const img = document.createElement('img');
+    img.src = d.selfieUrl;
+    img.style.left = x + 'px';
+    img.style.top = y + 'px';
+    img.style.width = w + 'px';
+    img.style.height = h + 'px';
+    img.alt = d.userNote || 'صورة محجوزة';
+    overlay.appendChild(img);
+  });
 }
 
 gridWrap.addEventListener('scroll', () => {
