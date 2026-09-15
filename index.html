@@ -104,21 +104,22 @@
   }
   .grid-inner { position: relative; }
   .grid-canvas { position: absolute; top: 0; left: 0; width: 100%; height: 100%; }
-.images-overlay {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  pointer-events: none;
-  z-index: 5;
-}
-.images-overlay img {
-  position: absolute;
-  object-fit: cover;
-  border: none;
-  outline: none;
-}
+  .images-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 5;
+  }
+  .images-overlay img {
+    position: absolute;
+    object-fit: cover;
+    border: none;
+    outline: none;
+  }
+
   .grid-hint { text-align: center; font-size: 11px; color: #666; padding: 6px; }
 
   .zoom-controls {
@@ -153,7 +154,7 @@
   .zoom-controls button:disabled { opacity: 0.3; cursor: not-allowed; transform: none; }
 
   .btn { background: linear-gradient(135deg, #d4a017, #f5b301); color: #000; border: none; padding: 14px 20px; border-radius: 12px; font-weight: 900; font-size: 16px; cursor: pointer; width: 100%; font-family: 'Cairo'; }
-  .btn:disabled { opacity: 0.5; cursor: not-allowed; }
+  .btn:disabled { opacity: 0.4; cursor: not-allowed; }
   .btn-outline { background: transparent; color: #f5b301; border: 2px solid #d4a017; }
 
   .modal { position: fixed; inset: 0; background: rgba(0,0,0,0.85); display: none; align-items: center; justify-content: center; padding: 15px; z-index: 999; overflow-y: auto; }
@@ -178,7 +179,6 @@
   .total-price .amount { font-size: 26px; font-weight: 900; color: #f5b301; }
   .total-price .amount small { font-size: 14px; color: #d0d0d0; font-weight: 700; }
 
-  /* معلومات الشبكة المتوقعة */
   .grid-preview {
     background: #0e0e14;
     border: 1px solid #2a2a35;
@@ -227,6 +227,104 @@
   .pwd-toggle { position: absolute; left: 12px; top: 50%; transform: translateY(-50%); cursor: pointer; font-size: 18px; user-select: none; background: transparent; border: none; color: #f5b301; padding: 0; }
   html[lang="en"] .pwd-toggle { left: auto; right: 12px; }
   html[lang="en"] .pwd-wrap input { padding-left: 10px; padding-right: 45px; }
+
+  /* ===== شروط الاستخدام ===== */
+  .terms-box {
+    background: #0e0e14;
+    border: 1.5px solid #2a2a35;
+    border-radius: 10px;
+    margin-bottom: 14px;
+    overflow: hidden;
+    transition: 0.3s;
+  }
+  .terms-box.accepted {
+    border-color: #3a9a3a;
+    background: rgba(58, 154, 58, 0.05);
+  }
+  .terms-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 14px;
+    cursor: pointer;
+    user-select: none;
+    transition: 0.2s;
+  }
+  .terms-header:hover {
+    background: #1a1a24;
+  }
+  .terms-header-right {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex: 1;
+  }
+  .terms-checkbox {
+    width: 22px;
+    height: 22px;
+    min-width: 22px;
+    border: 2px solid #555;
+    border-radius: 5px;
+    background: #0e0e14;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: 0.2s;
+  }
+  .terms-checkbox.checked {
+    background: linear-gradient(135deg, #2a7a2a, #3a9a3a);
+    border-color: #3a9a3a;
+  }
+  .terms-checkbox.checked::after {
+    content: '✓';
+    color: #fff;
+    font-weight: 900;
+    font-size: 16px;
+  }
+  .terms-label {
+    font-size: 13px;
+    font-weight: 700;
+    color: #fff;
+    cursor: pointer;
+    flex: 1;
+  }
+  .terms-toggle-icon {
+    color: #f5b301;
+    font-size: 14px;
+    font-weight: 900;
+    transition: transform 0.3s;
+    margin-right: 8px;
+  }
+  .terms-toggle-icon.open {
+    transform: rotate(180deg);
+  }
+  .terms-content {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.4s ease;
+    background: #0a0a0f;
+  }
+  .terms-content.open {
+    max-height: 400px;
+    overflow-y: auto;
+    border-top: 1px solid #2a2a35;
+  }
+  .terms-text {
+    padding: 14px;
+    font-size: 12px;
+    line-height: 1.9;
+    color: #c0c0c0;
+  }
+  .terms-text ol {
+    padding-right: 20px;
+  }
+  .terms-text li {
+    margin-bottom: 8px;
+  }
+  .terms-text strong {
+    color: #f5b301;
+  }
 </style>
 </head>
 <body>
@@ -272,7 +370,7 @@
   <div class="grid-wrap" id="gridWrap">
     <div class="grid-inner" id="gridInner">
       <div class="grid-canvas" id="grid"></div>
-             <div class="images-overlay" id="imagesOverlay"></div>
+      <div class="images-overlay" id="imagesOverlay"></div>
     </div>
   </div>
 
@@ -348,11 +446,38 @@
     </div>
 
     <div class="field">
-      <label data-i18n="bookPay">💳 الدفع عبر شام كاش</label>
-      <p style="font-size: 13px; color: #c0c0c0; margin-bottom: 8px;" data-i18n="bookPayDesc">
-        أرسل المبلغ إلى الباركود، ثم ارفع صورة الإيصال:
-      </p>
-      <img src="chama-barcode.png" alt="شام كاش" class="barcode" onerror="this.style.display='none'">
+      <label data-i18n="bookPayMethod">💳 اختر طريقة الدفع</label>
+      <div id="paymentMethods" style="display:flex; gap:8px; margin-bottom:12px;">
+        <button type="button" class="pay-method active" data-method="chamacash" style="flex:1; padding:10px; border-radius:8px; border:1.5px solid #d4a017; background:linear-gradient(135deg,#d4a017,#f5b301); color:#000; font-family:'Cairo'; font-weight:900; font-size:13px; cursor:pointer;">🟢 شام كاش</button>
+        <button type="button" class="pay-method" data-method="usdt" style="flex:1; padding:10px; border-radius:8px; border:1.5px solid #2a2a35; background:#0e0e14; color:#a0a0a0; font-family:'Cairo'; font-weight:900; font-size:13px; cursor:pointer;">🟡 USDT</button>
+      </div>
+
+      <!-- تفاصيل شام كاش -->
+      <div id="payChamaCash" class="pay-details">
+        <p style="font-size: 13px; color: #c0c0c0; margin-bottom: 8px;" data-i18n="bookPayDesc">
+          أرسل المبلغ إلى الباركود، ثم ارفع صورة الإيصال:
+        </p>
+        <img src="chama-barcode.png" alt="شام كاش" class="barcode" onerror="this.style.display='none'">
+      </div>
+
+      <!-- تفاصيل USDT -->
+      <div id="payUSDT" class="pay-details" style="display:none;">
+        <p style="font-size: 13px; color: #c0c0c0; margin-bottom: 8px;" data-i18n="usdtDesc">
+          أرسل المبلغ عبر USDT (TRC20) إلى العنوان التالي:
+        </p>
+        <div style="background:#0e0e14; border:1.5px solid #d4a017; border-radius:8px; padding:12px; margin-bottom:8px; word-break:break-all; font-size:11px; font-family:monospace; direction:ltr; text-align:center; color:#f5b301;">
+          TGRAeYyz8off9oiqPVcph5YkZJuVL6Cngy
+        </div>
+        <button type="button" id="copyUsdtBtn" style="width:100%; padding:8px; border-radius:8px; border:1.5px solid #d4a017; background:#0e0e14; color:#f5b301; font-family:'Cairo'; font-weight:700; font-size:12px; cursor:pointer; margin-bottom:10px;">
+          📋 نسخ العنوان
+        </button>
+        <div style="background:#fff; border-radius:8px; padding:8px; text-align:center; margin-bottom:10px;">
+          <img src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=TGRAeYyz8off9oiqPVcph5YkZJuVL6Cngy" alt="QR" style="width:100%; max-width:180px; display:block; margin:0 auto;">
+        </div>
+        <p style="font-size:11px; color:#888; text-align:center;" data-i18n="usdtWarning">
+          ⚠️ تأكد من استخدام شبكة TRC20 فقط
+        </p>
+      </div>
     </div>
 
     <div class="field">
@@ -360,13 +485,55 @@
       <input type="file" id="receiptInput" accept="image/*">
     </div>
 
-    <button class="btn" id="submitBooking" data-i18n="btnSubmit">✅ إرسال الطلب</button>
+    <!-- شروط الاستخدام -->
+    <div class="terms-box" id="termsBox">
+      <div class="terms-header" id="termsHeader">
+        <div class="terms-header-right">
+          <div class="terms-checkbox" id="termsCheckbox"></div>
+          <span class="terms-label" data-i18n="termsLabel">أوافق على شروط الاستخدام</span>
+        </div>
+        <span class="terms-toggle-icon" id="termsToggleIcon">▼</span>
+      </div>
+      <div class="terms-content" id="termsContent">
+        <div class="terms-text">
+          <ol>
+            <li><strong>الملكية:</strong> المربع المحجوز يصبح ملكًا للزائر بعد تأكيد الدفع.</li>
+            <li><strong>لا استرداد:</strong> لا يمكن استرداد المبلغ بعد تأكيد الحجز.</li>
+            <li><strong>الصورة:</strong> يجب أن تكون الصورة المرفوعة:
+              <ul style="padding-right:18px; margin-top:4px;">
+                <li>مناسبة (لا تحتوي محتوى مسيء).</li>
+                <li>حقيقية (لا صور مسروقة).</li>
+                <li>خالية من حقوق النشر.</li>
+              </ul>
+            </li>
+            <li><strong>حق الإدارة:</strong> يحق للموقع:
+              <ul style="padding-right:18px; margin-top:4px;">
+                <li>رفض أي صورة غير مناسبة.</li>
+                <li>حذف أي حجز مخالف.</li>
+                <li>الاحتفاظ بحق التعديل.</li>
+              </ul>
+            </li>
+            <li><strong>الاستمرارية:</strong> الصورة ستبقى على الموقع للأبد بعد الموافقة.</li>
+            <li><strong>عدم التغيير:</strong> لا يمكن تغيير الصورة بعد الموافقة.</li>
+            <li><strong>إخلاء المسؤولية:</strong> الموقع غير مسؤول عن:
+              <ul style="padding-right:18px; margin-top:4px;">
+                <li>انقطاع الخدمة.</li>
+                <li>فقدان البيانات (نادر، لكن ممكن).</li>
+              </ul>
+            </li>
+            <li><strong>الدفع:</strong> جميع المدفوعات نهائية.</li>
+          </ol>
+        </div>
+      </div>
+    </div>
+
+    <button class="btn" id="submitBooking" data-i18n="btnSubmit" disabled>✅ إرسال الطلب</button>
     <button class="btn btn-outline" id="cancelBooking" style="margin-top: 10px;" data-i18n="btnCancel2">❌ إلغاء</button>
   </div>
 </div>
 
 <script type="module">
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+ import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
 import { getAuth, signInWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
 import { getFirestore, collection, doc, setDoc, getDocs, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
@@ -380,6 +547,7 @@ const firebaseConfig = {
 };
 
 const IMGBB_API_KEY = "b2d98272187f15bc84d99356a2936fc6";
+const USDT_ADDRESS = "TGRAeYyz8off9oiqPVcph5YkZJuVL6Cngy";
 
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
@@ -419,9 +587,13 @@ const I18N = {
     fieldVisitorName: "👤 اسمك", fieldVisitorPhone: "📱 رقم هاتفك (اختياري)",
     bookSelfie: "📸 ارفع صورتك (سيلفي)",
     bookNote: "📝 تعليق قصير (اختياري)", notePlaceholder: "مثال: من دمشق",
-    bookPay: "💳 الدفع عبر شام كاش",
+    bookPayMethod: "💳 اختر طريقة الدفع",
     bookPayDesc: "أرسل المبلغ إلى الباركود، ثم ارفع صورة الإيصال:",
-    bookReceipt: "🧾 ارفع صورة الإيصال", btnSubmit: "✅ إرسال الطلب", btnCancel: "إلغاء", btnCancel2: "❌ إلغاء",
+    usdtDesc: "أرسل المبلغ عبر USDT (TRC20) إلى العنوان التالي:",
+    usdtWarning: "⚠️ تأكد من استخدام شبكة TRC20 فقط",
+    bookReceipt: "🧾 ارفع صورة الإيصال",
+    termsLabel: "أوافق على شروط الاستخدام",
+    btnSubmit: "✅ إرسال الطلب", btnCancel: "إلغاء", btnCancel2: "❌ إلغاء",
     msgName: "⚠️ اكتب اسمك أولاً",
     msgQtyInvalid: "⚠️ عدد المربعات يجب أن يكون بين 1 و 400",
     msgUploadSelfie: "⚠️ ارفع صورة السيلفي أولاً",
@@ -429,13 +601,16 @@ const I18N = {
     msgSelfieBig: "⚠️ حجم السيلفي الأصلي يجب أن يكون أقل من 15 ميجا",
     msgReceiptBig: "⚠️ حجم الإيصال الأصلي يجب أن يكون أقل من 15 ميجا",
     msgNotEnough: "⚠️ لا توجد مربعات كافية متجاورة. اختر مربعًا آخر أو عددًا أقل.",
+    msgTerms: "⚠️ يجب الموافقة على شروط الاستخدام أولاً",
     msgCompressSelfie: "⏳ جارٍ ضغط ورفع السيلفي...",
     msgCompressReceipt: "⏳ جارٍ ضغط ورفع الإيصال...",
     msgBookingOk: "✅ تم إرسال طلبك! سيتم مراجعته من الإدارة.",
     msgError: "❌ خطأ: ", msgUploading: "⏳ جارٍ الرفع...",
     msgTaken: "هذا المربع محجوز بالفعل. اختر مربعًا آخر.",
     msgAdminOk: "✅ تم تسجيل دخول الإدارة",
-    msgAdminErr: "⚠️ بيانات خاطئة"
+    msgAdminErr: "⚠️ بيانات خاطئة",
+    msgCopied: "✅ تم نسخ العنوان",
+    msgCopyErr: "⚠️ فشل النسخ"
   },
   en: {
     badge: "🚀 Historic Digital Challenge",
@@ -457,9 +632,13 @@ const I18N = {
     fieldVisitorName: "👤 Your name", fieldVisitorPhone: "📱 Phone (optional)",
     bookSelfie: "📸 Upload your selfie",
     bookNote: "📝 Short note (optional)", notePlaceholder: "e.g., From Damascus",
-    bookPay: "💳 Payment via Sham Cash",
+    bookPayMethod: "💳 Choose payment method",
     bookPayDesc: "Send the amount to the barcode, then upload the receipt:",
-    bookReceipt: "🧾 Upload receipt image", btnSubmit: "✅ Submit Request", btnCancel: "Cancel", btnCancel2: "❌ Cancel",
+    usdtDesc: "Send the amount via USDT (TRC20) to this address:",
+    usdtWarning: "⚠️ Make sure to use TRC20 network only",
+    bookReceipt: "🧾 Upload receipt image",
+    termsLabel: "I agree to the Terms of Use",
+    btnSubmit: "✅ Submit Request", btnCancel: "Cancel", btnCancel2: "❌ Cancel",
     msgName: "⚠️ Write your name first",
     msgQtyInvalid: "⚠️ Quantity must be between 1 and 400",
     msgUploadSelfie: "⚠️ Upload selfie first",
@@ -467,13 +646,16 @@ const I18N = {
     msgSelfieBig: "⚠️ Original selfie must be under 15 MB",
     msgReceiptBig: "⚠️ Original receipt must be under 15 MB",
     msgNotEnough: "⚠️ Not enough adjacent squares. Choose another square or fewer.",
+    msgTerms: "⚠️ You must agree to the Terms of Use first",
     msgCompressSelfie: "⏳ Compressing & uploading selfie...",
     msgCompressReceipt: "⏳ Compressing & uploading receipt...",
     msgBookingOk: "✅ Request submitted! Awaiting admin review.",
     msgError: "❌ Error: ", msgUploading: "⏳ Uploading...",
     msgTaken: "This square is already booked. Choose another.",
     msgAdminOk: "✅ Admin logged in",
-    msgAdminErr: "⚠️ Wrong credentials"
+    msgAdminErr: "⚠️ Wrong credentials",
+    msgCopied: "✅ Address copied",
+    msgCopyErr: "⚠️ Copy failed"
   }
 };
 
@@ -482,7 +664,8 @@ let isAdmin = false;
 let selectedCellIndex = null;
 let selectedQuantity = 1;
 let selectedGridShape = { rows: 1, cols: 1 };
-let selfieAspectRatio = 1; // نسبة الصورة (width / height)
+let selfieAspectRatio = 1;
+let selectedPayment = 'chamacash';
 
 function t(key) { return I18N[currentLang][key] || key; }
 
@@ -517,40 +700,25 @@ document.getElementById('btnEn').addEventListener('click', () => {
 });
 
 // ===== 🧮 حساب الشبكة تلقائيًا =====
-// تُستخدم للحصول على أفضل تركيبة (rows × cols) لعدد معين ونسبة صورة
 function computeGridShape(total, aspect) {
-  // aspect = width / height
   let best = { rows: 1, cols: total, diff: Infinity };
-
   for (let rows = 1; rows <= Math.ceil(Math.sqrt(total)); rows++) {
     if (total % rows !== 0) continue;
     const cols = total / rows;
-
-    // نسبة الشبكة الفعلية (عرض : ارتفاع)
-    // كل مربع 1:1، إذن نسبة الشبكة = cols / rows
     const gridAspect = cols / rows;
     const diff = Math.abs(gridAspect - aspect);
-
-    if (diff < best.diff) {
-      best = { rows, cols, diff };
-    }
+    if (diff < best.diff) best = { rows, cols, diff };
   }
-
-  // جرب أيضًا الأزواج المقلوبة
   for (let cols = 1; cols <= Math.ceil(Math.sqrt(total)); cols++) {
     if (total % cols !== 0) continue;
     const rows = total / cols;
     const gridAspect = cols / rows;
     const diff = Math.abs(gridAspect - aspect);
-    if (diff < best.diff) {
-      best = { rows, cols, diff };
-    }
+    if (diff < best.diff) best = { rows, cols, diff };
   }
-
   return { rows: best.rows, cols: best.cols };
 }
 
-// ===== عدد المربعات =====
 function updateTotalPrice() {
   const total = selectedQuantity * PRICE_PER_SQUARE;
   document.getElementById('totalPrice').innerHTML = `${total} <small>$</small>`;
@@ -571,7 +739,6 @@ document.getElementById('quantityInput').addEventListener('input', (e) => {
   updateGridPreview();
 });
 
-// ===== تحميل نسبة الصورة =====
 document.getElementById('selfieInput').addEventListener('change', (e) => {
   const file = e.target.files[0];
   if (!file) return;
@@ -606,6 +773,75 @@ function updateZoomButtons() {
 document.getElementById('zoomIn').addEventListener('click', () => changeCellSize(1));
 document.getElementById('zoomOut').addEventListener('click', () => changeCellSize(-1));
 
+// ===== شروط الاستخدام =====
+let termsAccepted = false;
+
+const termsBox = document.getElementById('termsBox');
+const termsHeader = document.getElementById('termsHeader');
+const termsCheckbox = document.getElementById('termsCheckbox');
+const termsContent = document.getElementById('termsContent');
+const termsToggleIcon = document.getElementById('termsToggleIcon');
+const submitBtn = document.getElementById('submitBooking');
+
+termsHeader.addEventListener('click', (e) => {
+  // إذا ضغط على المربع الصغير
+  if (e.target === termsCheckbox || e.target.classList.contains('terms-checkbox')) {
+    termsAccepted = !termsAccepted;
+    termsCheckbox.classList.toggle('checked', termsAccepted);
+    termsBox.classList.toggle('accepted', termsAccepted);
+    updateSubmitButton();
+  } else {
+    // إذا ضغط على الشريط → افتح/أغلق الشروط
+    termsContent.classList.toggle('open');
+    termsToggleIcon.classList.toggle('open');
+  }
+});
+
+// عند الضغط على النص "أوافق"
+document.querySelector('.terms-label').addEventListener('click', (e) => {
+  e.stopPropagation();
+  termsAccepted = !termsAccepted;
+  termsCheckbox.classList.toggle('checked', termsAccepted);
+  termsBox.classList.toggle('accepted', termsAccepted);
+  updateSubmitButton();
+});
+
+function updateSubmitButton() {
+  submitBtn.disabled = !termsAccepted;
+}
+
+// ===== طرق الدفع =====
+document.querySelectorAll('.pay-method').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.pay-method').forEach(b => {
+      b.classList.remove('active');
+      b.style.background = '#0e0e14';
+      b.style.color = '#a0a0a0';
+      b.style.borderColor = '#2a2a35';
+    });
+    btn.classList.add('active');
+    btn.style.background = 'linear-gradient(135deg, #d4a017, #f5b301)';
+    btn.style.color = '#000';
+    btn.style.borderColor = '#d4a017';
+    selectedPayment = btn.dataset.method;
+
+    document.getElementById('payChamaCash').style.display = selectedPayment === 'chamacash' ? 'block' : 'none';
+    document.getElementById('payUSDT').style.display = selectedPayment === 'usdt' ? 'block' : 'none';
+  });
+});
+
+document.getElementById('copyUsdtBtn').addEventListener('click', async () => {
+  try {
+    await navigator.clipboard.writeText(USDT_ADDRESS);
+    const btn = document.getElementById('copyUsdtBtn');
+    const oldText = btn.textContent;
+    btn.textContent = '✅ ' + t('msgCopied');
+    setTimeout(() => { btn.textContent = oldText; }, 2000);
+  } catch (e) {
+    alert(USDT_ADDRESS);
+  }
+});
+
 // ===== 🗜️ ضغط + قص مركزي =====
 async function compressAndCrop(file) {
   return new Promise((resolve, reject) => {
@@ -613,29 +849,22 @@ async function compressAndCrop(file) {
     reader.onload = (e) => {
       const img = new Image();
       img.onload = () => {
-        // 1) القص المركزي إلى مربع
         const size = Math.min(img.width, img.height);
         const sx = (img.width - size) / 2;
         const sy = (img.height - size) / 2;
-
-        // 2) تصغير إلى 1000 بكسل كحد أقصى
         const MAX = 1000;
         const target = Math.min(size, MAX);
-
         const canvas = document.createElement('canvas');
         canvas.width = target;
         canvas.height = target;
         const ctx = canvas.getContext('2d');
         ctx.drawImage(img, sx, sy, size, size, 0, 0, target, target);
-
-        // 3) ضغط تدريجي
         let quality = 0.85;
         const tryCompress = () => {
           canvas.toBlob((b) => {
             if (!b) { reject(new Error('فشل الضغط')); return; }
             if ((b.size / 1024) > 300 && quality > 0.5) {
-              quality -= 0.1;
-              tryCompress();
+              quality -= 0.1; tryCompress();
             } else resolve(b);
           }, 'image/jpeg', quality);
         };
@@ -807,13 +1036,6 @@ function renderVisibleCells() {
       cell.style.transition = '0.15s';
       cell.dataset.index = idx;
 
-      if (takenSet.has(idx)) {
-        cell.style.background = '#d4a017';
-        const d = bookingData[idx];
-        if (d && d.userNote) cell.title = d.userNote;
-        else cell.title = 'محجوز';
-      }
-
       cell.addEventListener('click', () => openBooking(idx));
       frag.appendChild(cell);
       cellMap[idx] = cell;
@@ -824,7 +1046,6 @@ function renderVisibleCells() {
   renderImagesOverlay();
 }
 
-// 🎨 رسم الصور كطبقات كاملة فوق المربعات
 function renderImagesOverlay() {
   const overlay = document.getElementById('imagesOverlay');
   if (!overlay) return;
@@ -837,7 +1058,6 @@ function renderImagesOverlay() {
     const key = (d.uid || '') + '_' + (d.startCell || idx);
     if (seen.has(key)) return;
     seen.add(key);
-
     if (!d.selfieUrl || !d.gridShape) return;
 
     const startCell = d.startCell !== undefined ? d.startCell : parseInt(idx);
@@ -876,6 +1096,8 @@ async function loadBookings() {
     bookingData = {};
     snap.forEach(d => {
       const data = d.data();
+      // فقط المقبولة
+      if (data.status !== 'approved') return;
       const cells = data.cellIndices || (typeof data.cellIndex === 'number' ? [data.cellIndex] : []);
       cells.forEach(i => {
         takenSet.add(i);
@@ -907,15 +1129,11 @@ function showBookingMsg(text, type = 'err') {
   bookingMsg.className = 'msg show ' + type;
 }
 
-// حساب المربعات للتأكد من التوفر
 function computeCellsForGrid(startIndex, rows, cols) {
   const startRow = Math.floor(startIndex / GRID_COLS);
   const startCol = startIndex % GRID_COLS;
-
-  // التحقق من الحدود
   if (startRow + rows > GRID_ROWS) return null;
   if (startCol + cols > GRID_COLS) return null;
-
   const cells = [];
   for (let r = 0; r < rows; r++) {
     for (let c = 0; c < cols; c++) {
@@ -935,6 +1153,30 @@ function openBooking(index) {
   updateTotalPrice();
   updateGridPreview();
 
+  // إعادة تعيين الشروط
+  termsAccepted = false;
+  termsCheckbox.classList.remove('checked');
+  termsBox.classList.remove('accepted');
+  termsContent.classList.remove('open');
+  termsToggleIcon.classList.remove('open');
+  updateSubmitButton();
+
+  // إعادة تعيين طريقة الدفع
+  selectedPayment = 'chamacash';
+  document.querySelectorAll('.pay-method').forEach(b => {
+    b.classList.remove('active');
+    b.style.background = '#0e0e14';
+    b.style.color = '#a0a0a0';
+    b.style.borderColor = '#2a2a35';
+  });
+  const chamaBtn = document.querySelector('.pay-method[data-method="chamacash"]');
+  chamaBtn.classList.add('active');
+  chamaBtn.style.background = 'linear-gradient(135deg, #d4a017, #f5b301)';
+  chamaBtn.style.color = '#000';
+  chamaBtn.style.borderColor = '#d4a017';
+  document.getElementById('payChamaCash').style.display = 'block';
+  document.getElementById('payUSDT').style.display = 'none';
+
   bookingMsg.className = 'msg';
   document.getElementById('visitorName').value = '';
   document.getElementById('visitorPhone').value = '';
@@ -950,6 +1192,8 @@ document.getElementById('cancelBooking').addEventListener('click', () => {
 });
 
 document.getElementById('submitBooking').addEventListener('click', async () => {
+  if (!termsAccepted) { showBookingMsg(t('msgTerms')); return; }
+
   const visitorName = document.getElementById('visitorName').value.trim();
   const visitorPhone = document.getElementById('visitorPhone').value.trim();
   const selfieFile = document.getElementById('selfieInput').files[0];
@@ -965,7 +1209,6 @@ document.getElementById('submitBooking').addEventListener('click', async () => {
   if (selfieFile.size > 15 * 1024 * 1024) { showBookingMsg(t('msgSelfieBig')); return; }
   if (receiptFile.size > 15 * 1024 * 1024) { showBookingMsg(t('msgReceiptBig')); return; }
 
-  // حساب الشبكة
   const shape = computeGridShape(selectedQuantity, selfieAspectRatio);
   const cells = computeCellsForGrid(selectedCellIndex, shape.rows, shape.cols);
   if (!cells) { showBookingMsg(t('msgNotEnough')); return; }
@@ -979,7 +1222,6 @@ document.getElementById('submitBooking').addEventListener('click', async () => {
     const ts = Date.now();
 
     showBookingMsg(t('msgCompressSelfie'), 'ok');
-    // ضغط + قص مركزي للسيلفي
     const selfieBlob = await compressAndCrop(selfieFile);
     const selfieUrl = await uploadToImgBB(selfieBlob);
 
@@ -994,6 +1236,7 @@ document.getElementById('submitBooking').addEventListener('click', async () => {
       gridShape: { rows: shape.rows, cols: shape.cols },
       quantity: selectedQuantity,
       totalPrice: selectedQuantity * PRICE_PER_SQUARE,
+      paymentMethod: selectedPayment,
       uid: guestId,
       userName: visitorName,
       userPhone: visitorPhone,
@@ -1001,6 +1244,9 @@ document.getElementById('submitBooking').addEventListener('click', async () => {
       selfieUrl: selfieUrl,
       receiptUrl: receiptUrl,
       status: 'pending',
+      termsAccepted: true,
+      termsAcceptedAt: serverTimestamp(),
+      termsVersion: '1.0',
       createdAt: serverTimestamp(),
       timestamp: ts
     });
@@ -1024,6 +1270,7 @@ applyLang();
 renderVisibleCells();
 loadBookings();
 updateZoomButtons();
+updateSubmitButton();
 setInterval(loadBookings, 60000);
 
 window.addEventListener('resize', () => {
