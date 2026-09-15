@@ -434,7 +434,14 @@
       <label data-i18n="fieldVisitorPhone">📱 رقم هاتفك (اختياري)</label>
       <input type="tel" id="visitorPhone" maxlength="20" placeholder="+963...">
     </div>
-
+<div class="field">
+  <label data-i18n="fieldVisitorLink">🔗 رابط حسابك (اختياري)</label>
+  <input type="url" id="visitorLink" maxlength="200" placeholder="https://facebook.com/username">
+  <p style="font-size:11px; color:#888; margin-top:4px;" data-i18n="visitorLinkHint">
+    سيظهر الرابط عند الضغط على صورتك في الشبكة
+  </p>
+</div>
+   
     <div class="field">
       <label data-i18n="bookSelfie">📸 ارفع صورتك (سيلفي)</label>
       <input type="file" id="selfieInput" accept="image/*">
@@ -585,6 +592,8 @@ const I18N = {
     gridPreviewLabel: "الشبكة المتوقعة:",
     totalPriceLabel: "💰 المبلغ الإجمالي",
     fieldVisitorName: "👤 اسمك", fieldVisitorPhone: "📱 رقم هاتفك (اختياري)",
+    fieldVisitorLink: "🔗 رابط حسابك (اختياري)",
+    visitorLinkHint: "سيظهر الرابط عند الضغط على صورتك في الشبكة",
     bookSelfie: "📸 ارفع صورتك (سيلفي)",
     bookNote: "📝 تعليق قصير (اختياري)", notePlaceholder: "مثال: من دمشق",
     bookPayMethod: "💳 اختر طريقة الدفع",
@@ -630,6 +639,8 @@ const I18N = {
     gridPreviewLabel: "Expected grid:",
     totalPriceLabel: "💰 Total Price",
     fieldVisitorName: "👤 Your name", fieldVisitorPhone: "📱 Phone (optional)",
+    fieldVisitorLink: "🔗 Your profile link (optional)",
+    visitorLinkHint: "Link will open when someone clicks your photo",
     bookSelfie: "📸 Upload your selfie",
     bookNote: "📝 Short note (optional)", notePlaceholder: "e.g., From Damascus",
     bookPayMethod: "💳 Choose payment method",
@@ -1190,8 +1201,9 @@ document.getElementById('submitBooking').addEventListener('click', async () => {
   if (!termsAccepted) { showBookingMsg(t('msgTerms')); return; }
 
   const visitorName = document.getElementById('visitorName').value.trim();
-  const visitorPhone = document.getElementById('visitorPhone').value.trim();
-  const selfieFile = document.getElementById('selfieInput').files[0];
+const visitorPhone = document.getElementById('visitorPhone').value.trim();
+const visitorLink = document.getElementById('visitorLink').value.trim();
+const selfieFile = document.getElementById('selfieInput').files[0];
   const receiptFile = document.getElementById('receiptInput').files[0];
   const note = document.getElementById('userNote').value.trim();
 
