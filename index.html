@@ -1243,11 +1243,43 @@ document.getElementById('submitBooking').addEventListener('click', async () => {
   }
 });
 
+// ====== تتبع الزيارات ======
+async function trackVisit() {
+  try {
+    const SESSION_KEY = 'last_visit_time';
+    const SESSION_DURATION = 30 * 60 * 1000; // 30 دقيقة
+    const lastVisit = parseInt(localStorage.getItem(SESSION_KEY) || '0');
+    const now = Date.now();
+
+    if (now - lastVisit < SESSION_DURATION) {
+      console.log('⏭️ زيارة مكررة خلال الجلسة — تم تخطيها');
+      return;
+    }
+
+    const visitId = 'visit_' + now + '_' + Math.random().toString(36).substr(2, 6);
+    await setDoc(doc(db, 'visits', visitId), {
+      timestamp: now,
+      date: new Date().toISOString().split('T')[0],
+      userAgent: navigator.userAgent.substring(0, 200),
+      language: navigator.language || 'unknown',
+      screen: window.screen.width + 'x' + window.screen.height,
+      referrer: document.referrer || 'direct'
+    });
+
+    localStorage.setItem(SESSION_KEY, now.toString());
+    console.log('✅ تم تسجيل الزيارة');
+  } catch (e) {
+    console.error('فشل تسجيل الزيارة:', e);
+  }
+}
+
+// ====== Init ======
 applyLang();
 renderVisibleCells();
 loadBookings();
 updateZoomButtons();
 updateSubmitButton();
+trackVisit();
 setInterval(loadBookings, 60000);
 
 window.addEventListener('resize', () => {
