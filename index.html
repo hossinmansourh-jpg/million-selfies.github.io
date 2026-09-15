@@ -10,7 +10,6 @@
   body { background: #0a0a0f; color: #fff; min-height: 100vh; padding: 15px; padding-bottom: 80px; }
   .container { max-width: 480px; margin: 0 auto; display: flex; flex-direction: column; gap: 18px; }
 
-  /* ===== الشريط العلوي الثابت ===== */
   .sticky-top {
     position: sticky;
     top: 0;
@@ -316,15 +315,9 @@
     line-height: 1.9;
     color: #c0c0c0;
   }
-  .terms-text ol {
-    padding-right: 20px;
-  }
-  .terms-text li {
-    margin-bottom: 8px;
-  }
-  .terms-text strong {
-    color: #f5b301;
-  }
+  .terms-text ol { padding-right: 20px; }
+  .terms-text li { margin-bottom: 8px; }
+  .terms-text strong { color: #f5b301; }
 </style>
 </head>
 <body>
@@ -434,14 +427,15 @@
       <label data-i18n="fieldVisitorPhone">📱 رقم هاتفك (اختياري)</label>
       <input type="tel" id="visitorPhone" maxlength="20" placeholder="+963...">
     </div>
-<div class="field">
-  <label data-i18n="fieldVisitorLink">🔗 رابط حسابك (اختياري)</label>
-  <input type="url" id="visitorLink" maxlength="200" placeholder="https://facebook.com/username">
-  <p style="font-size:11px; color:#888; margin-top:4px;" data-i18n="visitorLinkHint">
-    سيظهر الرابط عند الضغط على صورتك في الشبكة
-  </p>
-</div>
-   
+
+    <div class="field">
+      <label data-i18n="fieldVisitorLink">🔗 رابط حسابك (اختياري)</label>
+      <input type="url" id="visitorLink" maxlength="200" placeholder="https://facebook.com/username">
+      <p style="font-size:11px; color:#888; margin-top:4px;" data-i18n="visitorLinkHint">
+        سيظهر الرابط عند الضغط على صورتك في الشبكة
+      </p>
+    </div>
+
     <div class="field">
       <label data-i18n="bookSelfie">📸 ارفع صورتك (سيلفي)</label>
       <input type="file" id="selfieInput" accept="image/*">
@@ -459,7 +453,6 @@
         <button type="button" class="pay-method" data-method="usdt" style="flex:1; padding:10px; border-radius:8px; border:1.5px solid #2a2a35; background:#0e0e14; color:#a0a0a0; font-family:'Cairo'; font-weight:900; font-size:13px; cursor:pointer;">🟡 USDT</button>
       </div>
 
-      <!-- تفاصيل شام كاش -->
       <div id="payChamaCash" class="pay-details">
         <p style="font-size: 13px; color: #c0c0c0; margin-bottom: 8px;" data-i18n="bookPayDesc">
           أرسل المبلغ إلى الباركود، ثم ارفع صورة الإيصال:
@@ -467,7 +460,6 @@
         <img src="chama-barcode.png" alt="شام كاش" class="barcode" onerror="this.style.display='none'">
       </div>
 
-      <!-- تفاصيل USDT -->
       <div id="payUSDT" class="pay-details" style="display:none;">
         <p style="font-size: 13px; color: #c0c0c0; margin-bottom: 8px;" data-i18n="usdtDesc">
           أرسل المبلغ عبر USDT (TRC20) إلى العنوان التالي:
@@ -560,7 +552,6 @@ const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
 
-// ⚙️ إعدادات
 const GRID_COLS = 1000;
 const GRID_ROWS = 1000;
 const TOTAL_CELLS = GRID_COLS * GRID_ROWS;
@@ -572,7 +563,6 @@ const CELL_SIZES = [14, 18, 22, 28, 36, 48];
 let cellSizeIndex = 2;
 let CELL_SIZE = CELL_SIZES[cellSizeIndex];
 
-// 🌐 الترجمات
 const I18N = {
   ar: {
     badge: "🚀 تحدي رقمي تاريخي",
@@ -710,7 +700,6 @@ document.getElementById('btnEn').addEventListener('click', () => {
   currentLang = 'en'; localStorage.setItem('site_lang', 'en'); applyLang();
 });
 
-// ===== 🧮 حساب الشبكة تلقائيًا =====
 function computeGridShape(total, aspect) {
   let best = { rows: 1, cols: total, diff: Infinity };
   for (let rows = 1; rows <= Math.ceil(Math.sqrt(total)); rows++) {
@@ -765,7 +754,6 @@ document.getElementById('selfieInput').addEventListener('change', (e) => {
   reader.readAsDataURL(file);
 });
 
-// ===== أزرار التكبير =====
 function changeCellSize(delta) {
   const newIndex = Math.max(0, Math.min(CELL_SIZES.length - 1, cellSizeIndex + delta));
   if (newIndex === cellSizeIndex) return;
@@ -784,9 +772,7 @@ function updateZoomButtons() {
 document.getElementById('zoomIn').addEventListener('click', () => changeCellSize(1));
 document.getElementById('zoomOut').addEventListener('click', () => changeCellSize(-1));
 
-// ===== شروط الاستخدام =====
 let termsAccepted = false;
-
 const termsBox = document.getElementById('termsBox');
 const termsHeader = document.getElementById('termsHeader');
 const termsCheckbox = document.getElementById('termsCheckbox');
@@ -795,20 +781,17 @@ const termsToggleIcon = document.getElementById('termsToggleIcon');
 const submitBtn = document.getElementById('submitBooking');
 
 termsHeader.addEventListener('click', (e) => {
-  // إذا ضغط على المربع الصغير
   if (e.target === termsCheckbox || e.target.classList.contains('terms-checkbox')) {
     termsAccepted = !termsAccepted;
     termsCheckbox.classList.toggle('checked', termsAccepted);
     termsBox.classList.toggle('accepted', termsAccepted);
     updateSubmitButton();
   } else {
-    // إذا ضغط على الشريط → افتح/أغلق الشروط
     termsContent.classList.toggle('open');
     termsToggleIcon.classList.toggle('open');
   }
 });
 
-// عند الضغط على النص "أوافق"
 document.querySelector('.terms-label').addEventListener('click', (e) => {
   e.stopPropagation();
   termsAccepted = !termsAccepted;
@@ -821,7 +804,6 @@ function updateSubmitButton() {
   submitBtn.disabled = !termsAccepted;
 }
 
-// ===== طرق الدفع =====
 document.querySelectorAll('.pay-method').forEach(btn => {
   btn.addEventListener('click', () => {
     document.querySelectorAll('.pay-method').forEach(b => {
@@ -835,7 +817,6 @@ document.querySelectorAll('.pay-method').forEach(btn => {
     btn.style.color = '#000';
     btn.style.borderColor = '#d4a017';
     selectedPayment = btn.dataset.method;
-
     document.getElementById('payChamaCash').style.display = selectedPayment === 'chamacash' ? 'block' : 'none';
     document.getElementById('payUSDT').style.display = selectedPayment === 'usdt' ? 'block' : 'none';
   });
@@ -853,7 +834,6 @@ document.getElementById('copyUsdtBtn').addEventListener('click', async () => {
   }
 });
 
-// ===== 🗜️ ضغط + قص مركزي =====
 async function compressAndCrop(file) {
   return new Promise((resolve, reject) => {
     const reader = new FileReader();
@@ -944,7 +924,6 @@ async function uploadToImgBB(blob) {
   });
 }
 
-// ====== Admin Login ======
 const adminModal = document.getElementById('adminModal');
 const adminMsg = document.getElementById('adminMsg');
 function showAdminMsg(text, type = 'err') {
@@ -952,33 +931,13 @@ function showAdminMsg(text, type = 'err') {
   adminMsg.className = 'msg show ' + type;
   setTimeout(() => { adminMsg.className = 'msg'; }, 5000);
 }
+
 document.getElementById('adminBtn').addEventListener('click', () => {
-  // الانتقال مباشرة إلى لوحة الإدارة
   window.location.href = 'hossin.html';
 });
+
 document.getElementById('adminCancel').addEventListener('click', () => adminModal.classList.remove('open'));
-document.getElementById('adminTogglePwd').addEventListener('click', (e) => {
-  e.preventDefault();
-  const pwd = document.getElementById('adminPassword');
-  if (pwd.type === 'password') { pwd.type = 'text'; e.target.textContent = '🙈'; }
-  else { pwd.type = 'password'; e.target.textContent = '👁️'; }
-});
-document.getElementById('adminSubmit').addEventListener('click', async () => {
-  const email = document.getElementById('adminEmail').value.trim();
-  const password = document.getElementById('adminPassword').value;
-  if (!email || !password) { showAdminMsg(t('msgAdminErr')); return; }
-  const btn = document.getElementById('adminSubmit');
-  btn.disabled = true; btn.textContent = '⏳...';
-  try {
-    await signInWithEmailAndPassword(auth, email, password);
-    showAdminMsg(t('msgAdminOk'), 'ok');
-    setTimeout(() => {
-      adminModal.classList.remove('open');
-      window.location.href = 'hossin.html';
-    }, 1000);
-  } catch (e) { showAdminMsg(t('msgAdminErr')); }
-  finally { btn.disabled = false; btn.textContent = t('btnAdminLogin'); }
-});
+
 onAuthStateChanged(auth, (user) => {
   const btn = document.getElementById('adminBtn');
   if (user) {
@@ -990,7 +949,6 @@ onAuthStateChanged(auth, (user) => {
   }
 });
 
-// ====== Grid ======
 const gridEl = document.getElementById('grid');
 const gridWrap = document.getElementById('gridWrap');
 const gridInner = document.getElementById('gridInner');
@@ -1081,6 +1039,21 @@ function renderImagesOverlay() {
     img.style.width = w + 'px';
     img.style.height = h + 'px';
     img.alt = d.userNote || 'صورة محجوزة';
+
+    // 🔗 إذا كان هناك رابط، اجعله قابلًا للنقر
+    if (d.userLink && d.userLink.trim()) {
+      img.style.pointerEvents = 'auto';
+      img.style.cursor = 'pointer';
+      img.addEventListener('click', (e) => {
+        e.stopPropagation();
+        let url = d.userLink.trim();
+        if (!/^https?:\/\//i.test(url)) {
+          url = 'https://' + url;
+        }
+        window.open(url, '_blank', 'noopener');
+      });
+    }
+
     overlay.appendChild(img);
   });
 }
@@ -1102,7 +1075,6 @@ async function loadBookings() {
     bookingData = {};
     snap.forEach(d => {
       const data = d.data();
-      // فقط المقبولة
       if (data.status !== 'approved') return;
       const cells = data.cellIndices || (typeof data.cellIndex === 'number' ? [data.cellIndex] : []);
       cells.forEach(i => {
@@ -1127,7 +1099,6 @@ function updateStats(taken, selfies) {
   document.getElementById('progressFill').style.width = Math.max(pct, 0.1) + '%';
 }
 
-// ====== Booking ======
 const bookingModal = document.getElementById('bookingModal');
 const bookingMsg = document.getElementById('bookingMsg');
 function showBookingMsg(text, type = 'err') {
@@ -1159,7 +1130,6 @@ function openBooking(index) {
   updateTotalPrice();
   updateGridPreview();
 
-  // إعادة تعيين الشروط
   termsAccepted = false;
   termsCheckbox.classList.remove('checked');
   termsBox.classList.remove('accepted');
@@ -1167,7 +1137,6 @@ function openBooking(index) {
   termsToggleIcon.classList.remove('open');
   updateSubmitButton();
 
-  // إعادة تعيين طريقة الدفع
   selectedPayment = 'chamacash';
   document.querySelectorAll('.pay-method').forEach(b => {
     b.classList.remove('active');
@@ -1186,6 +1155,7 @@ function openBooking(index) {
   bookingMsg.className = 'msg';
   document.getElementById('visitorName').value = '';
   document.getElementById('visitorPhone').value = '';
+  document.getElementById('visitorLink').value = '';
   document.getElementById('selfieInput').value = '';
   document.getElementById('receiptInput').value = '';
   document.getElementById('userNote').value = '';
@@ -1201,9 +1171,9 @@ document.getElementById('submitBooking').addEventListener('click', async () => {
   if (!termsAccepted) { showBookingMsg(t('msgTerms')); return; }
 
   const visitorName = document.getElementById('visitorName').value.trim();
-const visitorPhone = document.getElementById('visitorPhone').value.trim();
-const visitorLink = document.getElementById('visitorLink').value.trim();
-const selfieFile = document.getElementById('selfieInput').files[0];
+  const visitorPhone = document.getElementById('visitorPhone').value.trim();
+  const visitorLink = document.getElementById('visitorLink').value.trim();
+  const selfieFile = document.getElementById('selfieInput').files[0];
   const receiptFile = document.getElementById('receiptInput').files[0];
   const note = document.getElementById('userNote').value.trim();
 
@@ -1247,6 +1217,7 @@ const selfieFile = document.getElementById('selfieInput').files[0];
       uid: guestId,
       userName: visitorName,
       userPhone: visitorPhone,
+      userLink: visitorLink,
       userNote: note,
       selfieUrl: selfieUrl,
       receiptUrl: receiptUrl,
@@ -1272,7 +1243,6 @@ const selfieFile = document.getElementById('selfieInput').files[0];
   }
 });
 
-// ====== Init ======
 applyLang();
 renderVisibleCells();
 loadBookings();
