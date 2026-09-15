@@ -34,10 +34,14 @@
   .header button { padding: 8px 14px; border-radius: 8px; border: 1.5px solid #2a2a35; background: #14141c; color: #f5b301; font-family: 'Cairo'; font-weight: 700; font-size: 13px; cursor: pointer; }
   .header button:hover { border-color: #d4a017; background: #1a1a24; }
 
+  .section-title { color: #f5b301; font-size: 15px; font-weight: 900; margin: 15px 0 10px; padding-right: 8px; border-right: 3px solid #d4a017; }
+
   .stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 10px; margin-bottom: 20px; }
   .stat { background: #14141c; border: 1.5px solid #2a2a35; border-top: 3px solid #d4a017; border-radius: 10px; padding: 15px; text-align: center; }
   .stat-num { font-size: 22px; font-weight: 900; color: #f5b301; }
   .stat-lbl { font-size: 11px; color: #a0a0a0; margin-top: 4px; font-weight: 600; }
+  .stat-visits { border-top-color: #4a9eff; }
+  .stat-visits .stat-num { color: #4a9eff; }
 
   .tabs { display: flex; gap: 8px; margin-bottom: 15px; overflow-x: auto; padding-bottom: 5px; }
   .tabs button { padding: 10px 16px; border-radius: 25px; border: 1.5px solid #2a2a35; background: #0e0e14; color: #a0a0a0; font-family: 'Cairo'; font-weight: 700; font-size: 13px; cursor: pointer; white-space: nowrap; }
@@ -60,7 +64,7 @@
   .card-info { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 10px; margin-bottom: 12px; }
   .info-item { font-size: 13px; }
   .info-item .label { color: #888; font-size: 11px; display: block; margin-bottom: 2px; }
-  .info-item .value { color: #fff; font-weight: 700; }
+  .info-item .value { color: #fff; font-weight: 700; word-break: break-all; }
 
   .card-images { display: flex; gap: 10px; margin-bottom: 12px; flex-wrap: wrap; }
   .card-image { flex: 1; min-width: 130px; }
@@ -93,7 +97,6 @@
 </head>
 <body>
 
-<!-- ===== شاشة تسجيل الدخول ===== -->
 <div class="login-screen" id="loginScreen">
   <div class="login-card">
     <h1>🔒 لوحة التحكم</h1>
@@ -108,7 +111,6 @@
   </div>
 </div>
 
-<!-- ===== لوحة التحكم ===== -->
 <div class="dashboard" id="dashboard">
   <div class="container">
     <div class="header">
@@ -119,6 +121,15 @@
       </div>
     </div>
 
+    <div class="section-title">👥 إحصائيات الزوار</div>
+    <div class="stats">
+      <div class="stat stat-visits"><div class="stat-num" id="statVisitsTotal">0</div><div class="stat-lbl">إجمالي الزيارات</div></div>
+      <div class="stat stat-visits"><div class="stat-num" id="statVisitsToday">0</div><div class="stat-lbl">زيارات اليوم</div></div>
+      <div class="stat stat-visits"><div class="stat-num" id="statVisitsWeek">0</div><div class="stat-lbl">آخر 7 أيام</div></div>
+      <div class="stat stat-visits"><div class="stat-num" id="statVisitsMonth">0</div><div class="stat-lbl">آخر 30 يومًا</div></div>
+    </div>
+
+    <div class="section-title">📋 إحصائيات الطلبات</div>
     <div class="stats">
       <div class="stat"><div class="stat-num" id="statTotal">0</div><div class="stat-lbl">إجمالي الطلبات</div></div>
       <div class="stat"><div class="stat-num" id="statPending">0</div><div class="stat-lbl">قيد الانتظار</div></div>
@@ -168,6 +179,7 @@ const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
 const BOOKINGS_COLLECTION = "bookings";
+const VISITS_COLLECTION = "visits";
 const ADMIN_EMAIL = "hossinmansourh@gmail.com";
 
 let allBookings = [];
@@ -189,7 +201,6 @@ document.getElementById('togglePwd').addEventListener('click', (e) => {
 async function login() {
   const password = pwdInput.value;
   if (!password) { showError('⚠️ أدخل كلمة المرور'); return; }
-
   loginBtn.disabled = true;
   loginBtn.textContent = '⏳...';
   try {
@@ -219,6 +230,7 @@ onAuthStateChanged(auth, (user) => {
     loginScreen.style.display = 'none';
     dashboard.classList.add('show');
     loadBookings();
+    loadVisits();
   } else {
     loginScreen.style.display = 'flex';
     dashboard.classList.remove('show');
@@ -232,6 +244,36 @@ document.getElementById('logoutBtn').addEventListener('click', () => {
   });
 });
 
+// ===== تحميل الزيارات =====
+async function loadVisits() {
+  try {
+    const snap = await getDocs(collection(db, VISITS_COLLECTION));
+    const now = Date.now();
+    const today = new Date().toISOString().split('T')[0];
+    const weekAgo = now - (7 * 24 * 60 * 60 * 1000);
+    const monthAgo = now - (30 * 24 * 60 * 60 * 1000);
+
+    let total = 0, todayCount = 0, weekCount = 0, monthCount = 0;
+
+    snap.forEach(d => {
+      const v = d.data();
+      total++;
+      if (v.date === today) todayCount++;
+      if (v.timestamp >= weekAgo) weekCount++;
+      if (v.timestamp >= monthAgo) monthCount++;
+    });
+
+    document.getElementById('statVisitsTotal').textContent = total.toLocaleString('en');
+    document.getElementById('statVisitsToday').textContent = todayCount.toLocaleString('en');
+    document.getElementById('statVisitsWeek').textContent = weekCount.toLocaleString('en');
+    document.getElementById('statVisitsMonth').textContent = monthCount.toLocaleString('en');
+  } catch (e) {
+    console.error('فشل تحميل الزيارات:', e);
+    document.getElementById('statVisitsTotal').textContent = '!';
+  }
+}
+
+// ===== تحميل الطلبات =====
 async function loadBookings() {
   const container = document.getElementById('cardsContainer');
   container.innerHTML = '<div class="loading-text">⏳ جارٍ تحميل الطلبات...</div>';
@@ -297,6 +339,7 @@ function renderCards() {
       <div class="card-info">
         <div class="info-item"><span class="label">👤 الاسم</span><span class="value">${escapeHtml(b.userName || '-')}</span></div>
         <div class="info-item"><span class="label">📱 الهاتف</span><span class="value">${escapeHtml(b.userPhone || '-')}</span></div>
+        ${b.userLink ? `<div class="info-item" style="grid-column:1/-1;"><span class="label">🔗 رابط الحساب</span><span class="value"><a href="${escapeHtml(b.userLink)}" target="_blank" rel="noopener" style="color:#f5b301; text-decoration:underline;">${escapeHtml(b.userLink)}</a></span></div>` : ''}
         <div class="info-item"><span class="label">🔢 عدد المربعات</span><span class="value">${cells}</span></div>
         <div class="info-item"><span class="label">💰 المبلغ</span><span class="value">$${b.totalPrice || cells}</span></div>
         <div class="info-item"><span class="label">📐 الشبكة</span><span class="value">${b.gridShape ? b.gridShape.rows + '×' + b.gridShape.cols : '-'}</span></div>
@@ -378,6 +421,7 @@ document.getElementById('searchInput').addEventListener('input', (e) => {
 
 document.getElementById('refreshBtn').addEventListener('click', () => {
   loadBookings();
+  loadVisits();
   showToast('🔄 جارٍ التحديث...', 'ok');
 });
 
@@ -388,7 +432,12 @@ function showToast(text, type = 'ok') {
   setTimeout(() => { toast.classList.remove('show'); }, 3000);
 }
 
-setInterval(() => { if (auth.currentUser) loadBookings(); }, 30000);
+setInterval(() => {
+  if (auth.currentUser) {
+    loadBookings();
+    loadVisits();
+  }
+}, 30000);
 </script>
 
 </body>
