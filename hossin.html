@@ -10,7 +10,6 @@
   body { background: #0a0a0f; color: #fff; min-height: 100vh; padding: 15px; }
   .container { max-width: 900px; margin: 0 auto; }
 
-  /* ===== شاشة تسجيل الدخول ===== */
   .login-screen { display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 100vh; gap: 20px; padding: 20px; }
   .login-card { background: #14141c; border: 2px solid #d4a017; border-radius: 16px; padding: 30px; max-width: 400px; width: 100%; text-align: center; box-shadow: 0 0 30px rgba(212,160,23,0.2); }
   .login-card h1 { color: #f5b301; font-size: 24px; margin-bottom: 10px; }
@@ -26,7 +25,6 @@
   .error-msg { color: #ff7f7f; font-size: 13px; margin-top: 10px; display: none; background: #3a1e1e; padding: 10px; border-radius: 8px; border: 1px solid #5a3a3a; }
   .error-msg.show { display: block; }
 
-  /* ===== لوحة التحكم ===== */
   .dashboard { display: none; }
   .dashboard.show { display: block; }
 
@@ -36,23 +34,19 @@
   .header button { padding: 8px 14px; border-radius: 8px; border: 1.5px solid #2a2a35; background: #14141c; color: #f5b301; font-family: 'Cairo'; font-weight: 700; font-size: 13px; cursor: pointer; }
   .header button:hover { border-color: #d4a017; background: #1a1a24; }
 
-  /* ===== الإحصائيات ===== */
   .stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 10px; margin-bottom: 20px; }
   .stat { background: #14141c; border: 1.5px solid #2a2a35; border-top: 3px solid #d4a017; border-radius: 10px; padding: 15px; text-align: center; }
   .stat-num { font-size: 22px; font-weight: 900; color: #f5b301; }
   .stat-lbl { font-size: 11px; color: #a0a0a0; margin-top: 4px; font-weight: 600; }
 
-  /* ===== التبويبات ===== */
   .tabs { display: flex; gap: 8px; margin-bottom: 15px; overflow-x: auto; padding-bottom: 5px; }
   .tabs button { padding: 10px 16px; border-radius: 25px; border: 1.5px solid #2a2a35; background: #0e0e14; color: #a0a0a0; font-family: 'Cairo'; font-weight: 700; font-size: 13px; cursor: pointer; white-space: nowrap; }
   .tabs button.active { background: linear-gradient(135deg, #d4a017, #f5b301); color: #000; border-color: #d4a017; }
 
-  /* ===== البحث ===== */
   .search-bar { margin-bottom: 15px; }
   .search-bar input { width: 100%; padding: 12px 16px; border-radius: 10px; border: 1.5px solid #2a2a35; background: #14141c; color: #fff; font-family: 'Cairo'; font-size: 14px; }
   .search-bar input:focus { outline: none; border-color: #d4a017; }
 
-  /* ===== البطاقات ===== */
   .cards { display: flex; flex-direction: column; gap: 12px; }
   .card { background: #14141c; border: 1.5px solid #2a2a35; border-radius: 12px; padding: 15px; transition: 0.2s; }
   .card:hover { border-color: #d4a017; }
@@ -86,12 +80,10 @@
   .loading-text { text-align: center; color: #f5b301; padding: 40px 20px; font-weight: 700; font-size: 14px; }
   .empty-text { text-align: center; color: #666; padding: 40px 20px; font-size: 14px; }
 
-  /* ===== عرض الصورة المكبّرة ===== */
   .image-modal { position: fixed; inset: 0; background: rgba(0,0,0,0.95); display: none; align-items: center; justify-content: center; padding: 20px; z-index: 9999; cursor: zoom-out; }
   .image-modal.show { display: flex; }
   .image-modal img { max-width: 100%; max-height: 90vh; border-radius: 10px; }
 
-  /* ===== التنبيهات ===== */
   .toast { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); background: #14141c; border: 2px solid #d4a017; color: #fff; padding: 12px 20px; border-radius: 30px; font-family: 'Cairo'; font-weight: 700; font-size: 13px; z-index: 10000; display: none; box-shadow: 0 4px 20px rgba(0,0,0,0.6); }
   .toast.show { display: block; animation: fadeIn 0.3s; }
   .toast.ok { border-color: #3a9a3a; color: #7fff7f; }
@@ -105,8 +97,8 @@
 <div class="login-screen" id="loginScreen">
   <div class="login-card">
     <h1>🔒 لوحة التحكم</h1>
-    <p>سجّل دخولك بحساب الإدارة</p>
-    <input type="email" id="emailInput" placeholder="📧 البريد الإلكتروني" value="hossinmansourh@gmail.com">
+    <p>أدخل كلمة المرور للدخول</p>
+    <input type="hidden" id="emailInput" value="hossinmansourh@gmail.com">
     <div class="pwd-wrap">
       <input type="password" id="pwdInput" placeholder="🔑 كلمة المرور">
       <button type="button" class="pwd-toggle" id="togglePwd">👁️</button>
@@ -152,12 +144,10 @@
   </div>
 </div>
 
-<!-- ===== صورة مكبّرة ===== -->
 <div class="image-modal" id="imageModal">
   <img src="" alt="" id="modalImg">
 </div>
 
-<!-- ===== التنبيهات ===== -->
 <div class="toast" id="toast"></div>
 
 <script type="module">
@@ -178,15 +168,14 @@ const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
 const BOOKINGS_COLLECTION = "bookings";
+const ADMIN_EMAIL = "hossinmansourh@gmail.com";
 
 let allBookings = [];
 let currentTab = "pending";
 let currentSearch = "";
 
-// ===== Auth =====
 const loginScreen = document.getElementById('loginScreen');
 const dashboard = document.getElementById('dashboard');
-const emailInput = document.getElementById('emailInput');
 const pwdInput = document.getElementById('pwdInput');
 const errorMsg = document.getElementById('errorMsg');
 const loginBtn = document.getElementById('loginBtn');
@@ -198,20 +187,17 @@ document.getElementById('togglePwd').addEventListener('click', (e) => {
 });
 
 async function login() {
-  const email = emailInput.value.trim();
   const password = pwdInput.value;
-  if (!email || !password) { showError('⚠️ املأ البريد وكلمة المرور'); return; }
+  if (!password) { showError('⚠️ أدخل كلمة المرور'); return; }
 
   loginBtn.disabled = true;
   loginBtn.textContent = '⏳...';
   try {
-    await signInWithEmailAndPassword(auth, email, password);
+    await signInWithEmailAndPassword(auth, ADMIN_EMAIL, password);
     showError('');
   } catch (e) {
-    let msg = '⚠️ بيانات خاطئة';
-    if (e.message.includes('user-not-found')) msg = '⚠️ لا يوجد حساب بهذا البريد';
-    else if (e.message.includes('wrong-password') || e.message.includes('invalid-credential')) msg = '⚠️ كلمة المرور خاطئة';
-    else if (e.message.includes('invalid-email')) msg = '⚠️ البريد غير صحيح';
+    let msg = '⚠️ كلمة المرور خاطئة';
+    if (e.message.includes('user-not-found')) msg = '⚠️ لا يوجد حساب إداري';
     else if (e.message.includes('too-many-requests')) msg = '⚠️ محاولات كثيرة، انتظر قليلًا';
     showError(msg);
   } finally {
@@ -246,17 +232,13 @@ document.getElementById('logoutBtn').addEventListener('click', () => {
   });
 });
 
-// ===== تحميل الطلبات =====
 async function loadBookings() {
   const container = document.getElementById('cardsContainer');
   container.innerHTML = '<div class="loading-text">⏳ جارٍ تحميل الطلبات...</div>';
-
   try {
     const snap = await getDocs(collection(db, BOOKINGS_COLLECTION));
     allBookings = [];
-    snap.forEach(d => {
-      allBookings.push({ id: d.id, ...d.data() });
-    });
+    snap.forEach(d => { allBookings.push({ id: d.id, ...d.data() }); });
     allBookings.sort((a, b) => (b.timestamp || 0) - (a.timestamp || 0));
     updateStats();
     renderCards();
@@ -272,7 +254,6 @@ function updateStats() {
   const approved = allBookings.filter(b => b.status === 'approved').length;
   const rejected = allBookings.filter(b => b.status === 'rejected').length;
   const revenue = allBookings.filter(b => b.status === 'approved').reduce((s, b) => s + (b.totalPrice || 0), 0);
-
   document.getElementById('statTotal').textContent = total;
   document.getElementById('statPending').textContent = pending;
   document.getElementById('statApproved').textContent = approved;
@@ -283,11 +264,7 @@ function updateStats() {
 function renderCards() {
   const container = document.getElementById('cardsContainer');
   let filtered = allBookings;
-
-  if (currentTab !== 'all') {
-    filtered = filtered.filter(b => (b.status || 'pending') === currentTab);
-  }
-
+  if (currentTab !== 'all') filtered = filtered.filter(b => (b.status || 'pending') === currentTab);
   if (currentSearch.trim()) {
     const s = currentSearch.trim().toLowerCase();
     filtered = filtered.filter(b =>
@@ -296,21 +273,17 @@ function renderCards() {
       (b.startCell !== undefined && b.startCell.toString().includes(s))
     );
   }
-
   if (filtered.length === 0) {
     container.innerHTML = '<div class="empty-text">📭 لا توجد طلبات</div>';
     return;
   }
-
   container.innerHTML = '';
   filtered.forEach(b => {
     const card = document.createElement('div');
     card.className = 'card';
-
     const status = b.status || 'pending';
     const statusText = status === 'approved' ? '✅ مقبول' : status === 'rejected' ? '❌ مرفوض' : '⏳ قيد الانتظار';
     const statusClass = 'status-' + status;
-
     const date = b.timestamp ? new Date(b.timestamp).toLocaleString('ar-SY', { dateStyle: 'short', timeStyle: 'short' }) : '-';
     const cells = b.cellIndices ? b.cellIndices.length : (b.quantity || 1);
     const payMethod = b.paymentMethod === 'usdt' ? '🟡 USDT' : '🟢 شام كاش';
@@ -352,7 +325,6 @@ function escapeHtml(text) {
   return div.innerHTML;
 }
 
-// ===== الموافقة / الرفض / الحذف =====
 window.approveBooking = async (id) => {
   if (!confirm('هل تريد قبول هذا الحجز؟')) return;
   try {
@@ -390,7 +362,6 @@ document.getElementById('imageModal').addEventListener('click', () => {
   document.getElementById('imageModal').classList.remove('show');
 });
 
-// ===== التبويبات والبحث =====
 document.querySelectorAll('.tabs button').forEach(btn => {
   btn.addEventListener('click', () => {
     document.querySelectorAll('.tabs button').forEach(b => b.classList.remove('active'));
@@ -410,7 +381,6 @@ document.getElementById('refreshBtn').addEventListener('click', () => {
   showToast('🔄 جارٍ التحديث...', 'ok');
 });
 
-// ===== التنبيهات =====
 function showToast(text, type = 'ok') {
   const toast = document.getElementById('toast');
   toast.textContent = text;
@@ -418,10 +388,7 @@ function showToast(text, type = 'ok') {
   setTimeout(() => { toast.classList.remove('show'); }, 3000);
 }
 
-// تحديث تلقائي كل 30 ثانية
-setInterval(() => {
-  if (auth.currentUser) loadBookings();
-}, 30000);
+setInterval(() => { if (auth.currentUser) loadBookings(); }, 30000);
 </script>
 
 </body>
