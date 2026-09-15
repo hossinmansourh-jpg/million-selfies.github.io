@@ -942,13 +942,8 @@ function showAdminMsg(text, type = 'err') {
   setTimeout(() => { adminMsg.className = 'msg'; }, 5000);
 }
 document.getElementById('adminBtn').addEventListener('click', () => {
-  if (isAdmin) {
-    signOut(auth).then(() => {
-      isAdmin = false;
-      const btn = document.getElementById('adminBtn');
-      btn.textContent = '🔒'; btn.style.color = '#555'; btn.style.borderColor = '#2a2a35';
-    });
-  } else adminModal.classList.add('open');
+  // الانتقال مباشرة إلى لوحة الإدارة
+  window.location.href = 'hossin.html';
 });
 document.getElementById('adminCancel').addEventListener('click', () => adminModal.classList.remove('open'));
 document.getElementById('adminTogglePwd').addEventListener('click', (e) => {
