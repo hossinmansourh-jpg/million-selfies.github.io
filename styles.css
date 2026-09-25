@@ -466,14 +466,12 @@ body {
   border: 2px solid var(--bg-light);
 }
 
-/* 🆕 صندوق Legend للشخصي (أزرق) */
 .legend-box.personal {
   background: rgba(74, 158, 255, 0.5);
   border: 2px solid rgba(74, 158, 255, 0.95);
   box-shadow: 0 0 8px rgba(74, 158, 255, 0.6);
 }
 
-/* 🆕 صندوق Legend للتجاري (تهشير ذهبي) */
 .legend-box.business {
   background: 
     repeating-linear-gradient(
@@ -1705,7 +1703,6 @@ body {
    ============================================ */
 
 @media (max-width: 600px) {
-  /* 🔹 لوحة الصدارة - عمود واحد */
   .leaderboard-grid {
     grid-template-columns: 1fr;
     gap: 15px;
@@ -1715,7 +1712,6 @@ body {
     grid-column: span 1 !important;
   }
   
-  /* 🔹 نافذة الحجز - ملء الشاشة من الأسفل */
   .modal {
     padding: 0;
     align-items: flex-end;
@@ -1735,7 +1731,6 @@ body {
     to { transform: translateY(0); }
   }
   
-  /* 🔹 زر الإغلاق */
   .close-btn {
     top: 12px;
     left: 12px;
@@ -1745,7 +1740,6 @@ body {
     box-shadow: 0 4px 15px rgba(154, 58, 58, 0.5);
   }
   
-  /* 🔹 العنوان */
   .modal-content h2 {
     font-size: 20px;
     margin-bottom: 18px;
@@ -1753,7 +1747,6 @@ body {
     padding-left: 15px;
   }
   
-  /* 🔹 حقول الإدخال */
   .form-group {
     margin-bottom: 14px;
   }
@@ -1771,7 +1764,6 @@ body {
     border-radius: 10px;
   }
   
-  /* 🔹 Radio Buttons */
   .booking-type-options {
     grid-template-columns: 1fr;
     gap: 8px;
@@ -1798,7 +1790,6 @@ body {
     font-size: 12px;
   }
   
-  /* 🔹 زر الإرسال */
   .submit-btn {
     position: sticky;
     bottom: 0;
@@ -1808,7 +1799,6 @@ body {
     box-shadow: 0 -8px 20px rgba(10, 10, 15, 0.9);
   }
   
-  /* 🔹 بطاقة صاحب الصورة */
   .owner-card {
     min-width: auto;
     width: 90%;
@@ -1840,7 +1830,6 @@ body {
     text-align: center;
   }
   
-  /* 🔹 الإحصائيات */
   .stats {
     gap: 6px;
     padding: 15px 8px;
@@ -1859,20 +1848,17 @@ body {
     font-size: 10px;
   }
   
-  /* 🔹 الأيقونات */
   .how-icon { font-size: 26px; }
   .guide-icon { font-size: 24px; }
   .how-step { padding: 20px 14px; }
   .guide-step { padding: 16px 14px; }
   
-  /* 🔹 العناوين */
   .how-title,
   .guide-title,
   .section-title {
     font-size: 18px;
   }
   
-  /* 🔹 بانر الإحالة */
   .referral-banner {
     padding: 12px 15px;
     gap: 10px;
@@ -1889,7 +1875,6 @@ body {
     width: 100%;
   }
   
-  /* 🔹 هيدر الجدارية */
   .wall-section {
     padding: 15px;
   }
@@ -1908,7 +1893,6 @@ body {
     text-align: center;
   }
   
-  /* 🔹 أزرار التحديد */
   .selection-controls {
     flex-direction: column;
     align-items: stretch;
@@ -1926,7 +1910,6 @@ body {
     font-size: 13px;
   }
   
-  /* 🔹 نافذة البطاقة */
   .share-card-content {
     max-width: 100%;
     width: 100%;
@@ -1947,7 +1930,6 @@ body {
     font-size: 14px;
   }
   
-  /* 🔹 الإشعارات */
   .toast-notification {
     font-size: 13px;
     padding: 10px 18px;
@@ -1964,7 +1946,6 @@ body {
     font-size: 12px;
   }
   
-  /* 🔹 لوحة الصدارة */
   .leaderboard {
     padding: 15px;
     margin: 20px auto;
@@ -1989,7 +1970,6 @@ body {
     height: 28px;
   }
   
-  /* 🔹 الهيدر */
   .topbar {
     padding: 12px 15px;
   }
@@ -1999,7 +1979,6 @@ body {
     font-size: 13px;
   }
   
-  /* 🔹 Hero */
   .hero {
     padding: 15px 15px 25px;
   }
@@ -2026,7 +2005,6 @@ body {
     font-size: 15px;
   }
   
-  /* 🔹 النصائح */
   .hints-section {
     margin-top: 12px;
   }
