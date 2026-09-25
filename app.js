@@ -537,87 +537,96 @@ function drawBookings() {
     }
 
     // ==========================================
-    // ❤️ 5. شارة الإعجابات (Instagram Style)
-    // ==========================================
-    if (isApproved && width > 50 && height > 50) {
-      const liked = hasLiked(booking.id);
-      const likeCount = booking.likes || 0;
-      
-      const badgeW = likeCount > 0 ? 52 : 32;
-      const badgeH = 28;
-      const badgeX = startX + width - badgeW - 6;
-      const badgeY = startY + height - badgeH - 6;
-      
-      // تأثير النبض عند الإعجاب
-      let scale = 1;
-      if (liked) {
-        const pulse = (Math.sin(Date.now() / 300) + 1) / 2;
-        scale = 1 + pulse * 0.12;
-      }
-      
-      ctx.save();
-      ctx.translate(badgeX + badgeW / 2, badgeY + badgeH / 2);
-      ctx.scale(scale, scale);
-      ctx.translate(-(badgeX + badgeW / 2), -(badgeY + badgeH / 2));
-      
-      // خلفية الشارة
-      if (liked) {
-        ctx.shadowColor = 'rgba(255, 51, 102, 0.8)';
-        ctx.shadowBlur = 15;
-        ctx.fillStyle = 'rgba(255, 51, 102, 0.95)';
-      } else {
-        ctx.shadowColor = 'rgba(0, 0, 0, 0.6)';
-        ctx.shadowBlur = 6;
-        ctx.fillStyle = 'rgba(30, 30, 40, 0.9)';
-      }
-      
-      ctx.beginPath();
-      ctx.roundRect(badgeX, badgeY, badgeW, badgeH, badgeH / 2);
-      ctx.fill();
-      ctx.shadowBlur = 0;
-      
-      // حدود
-      ctx.strokeStyle = liked ? 'rgba(255, 200, 220, 1)' : 'rgba(212, 160, 23, 0.6)';
-      ctx.lineWidth = 1.5;
-      ctx.beginPath();
-      ctx.roundRect(badgeX, badgeY, badgeW, badgeH, badgeH / 2);
-      ctx.stroke();
-      
-      // النص
+  // ==========================================
+// ❤️ 5. شارة الإعجابات (قلب أبيض فارغ / أحمر ممتلئ)
+// ==========================================
+if (isApproved && width > 40 && height > 40) {
+  const liked = hasLiked(booking.id);
+  const likeCount = booking.likes || 0;
+  
+  // حجم القلب
+  const heartSize = Math.min(32, Math.max(20, width / 10));
+  const heartX = startX + width - heartSize - 6;
+  const heartY = startY + height - heartSize - 6;
+  
+  // تأثير النبض عند الإعجاب
+  let scale = 1;
+  if (liked) {
+    const pulse = (Math.sin(Date.now() / 250) + 1) / 2;
+    scale = 1 + pulse * 0.15;
+  }
+  
+  ctx.save();
+  ctx.translate(heartX + heartSize / 2, heartY + heartSize / 2);
+  ctx.scale(scale, scale);
+  ctx.translate(-(heartSize / 2), -(heartSize / 2));
+  
+  // ===== رسم القلب =====
+  const heartPath = (cx, cy, size) => {
+    const s = size;
+    ctx.beginPath();
+    ctx.moveTo(cx, cy + s * 0.35);
+    ctx.bezierCurveTo(cx, cy, cx - s * 0.5, cy - s * 0.1, cx - s * 0.5, cy + s * 0.05);
+    ctx.bezierCurveTo(cx - s * 0.5, cy + s * 0.3, cx - s * 0.15, cy + s * 0.5, cx, cy + s * 0.7);
+    ctx.bezierCurveTo(cx + s * 0.15, cy + s * 0.5, cx + s * 0.5, cy + s * 0.3, cx + s * 0.5, cy + s * 0.05);
+    ctx.bezierCurveTo(cx + s * 0.5, cy - s * 0.1, cx, cy, cx, cy + s * 0.35);
+    ctx.closePath();
+  };
+  
+  const cx = heartSize / 2;
+  const cy = heartSize / 2;
+  const pathSize = heartSize * 0.9;
+  
+  if (liked) {
+    // ❤️ قلب أحمر ممتلئ مع توهج
+    ctx.shadowColor = 'rgba(255, 51, 102, 1)';
+    ctx.shadowBlur = 12;
+    ctx.fillStyle = '#ff3366';
+    heartPath(cx, cy, pathSize);
+    ctx.fill();
+    ctx.shadowBlur = 0;
+    
+    // حدود بيضاء رفيعة
+    ctx.strokeStyle = 'rgba(255, 255, 255, 0.9)';
+    ctx.lineWidth = 1.5;
+    heartPath(cx, cy, pathSize);
+    ctx.stroke();
+    
+    // رقم الإعجابات داخل القلب
+    if (likeCount > 0) {
+      ctx.fillStyle = '#ffffff';
+      ctx.font = `bold ${Math.round(heartSize * 0.4)}px Cairo, sans-serif`;
       ctx.textAlign = 'center';
       ctx.textBaseline = 'middle';
-      const centerX = badgeX + badgeW / 2;
-      const centerY = badgeY + badgeH / 2;
-      
-      if (liked) {
-        ctx.fillStyle = '#ffffff';
-        ctx.font = 'bold 14px Cairo, sans-serif';
-        ctx.fillText('❤️', centerX - 10, centerY);
-        
-        ctx.fillStyle = '#ffffff';
-        ctx.font = 'bold 13px Cairo, sans-serif';
-        ctx.fillText(`${likeCount}`, centerX + 10, centerY);
-      } else {
-        if (likeCount > 0) {
-          ctx.fillStyle = 'rgba(255, 255, 255, 0.85)';
-          ctx.font = 'bold 14px Cairo, sans-serif';
-          ctx.fillText('🤍', centerX - 10, centerY);
-          
-          ctx.fillStyle = 'rgba(255, 255, 255, 0.85)';
-          ctx.font = 'bold 13px Cairo, sans-serif';
-          ctx.fillText(`${likeCount}`, centerX + 10, centerY);
-        } else {
-          ctx.fillStyle = 'rgba(255, 255, 255, 0.7)';
-          ctx.font = 'bold 16px Cairo, sans-serif';
-          ctx.fillText('🤍', centerX, centerY);
-        }
-      }
-      
-      ctx.restore();
-      ctx.textBaseline = 'alphabetic';
+      ctx.fillText(`${likeCount}`, cx, cy + heartSize * 0.12);
     }
-  });
+  } else {
+    // 🤍 قلب أبيض فارغ
+    ctx.shadowColor = 'rgba(0, 0, 0, 0.8)';
+    ctx.shadowBlur = 6;
+    ctx.strokeStyle = '#ffffff';
+    ctx.lineWidth = 2;
+    heartPath(cx, cy, pathSize);
+    ctx.stroke();
+    ctx.shadowBlur = 0;
+    
+    // إذا كان هناك إعجابات من آخرين → أضف العدد
+    if (likeCount > 0) {
+      ctx.fillStyle = '#ffffff';
+      ctx.font = `bold ${Math.round(heartSize * 0.38)}px Cairo, sans-serif`;
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      ctx.shadowColor = 'rgba(0, 0, 0, 0.9)';
+      ctx.shadowBlur = 4;
+      ctx.fillText(`${likeCount}`, cx, cy + heartSize * 0.12);
+      ctx.shadowBlur = 0;
+    }
+  }
+  
+  ctx.restore();
+  ctx.textBaseline = 'alphabetic';
 }
+});
 
 // ===== تحميل صور الحجوزات بشكل ذكي =====
 function loadBookingImage(booking) {
