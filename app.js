@@ -1,4 +1,3 @@
-# million-selfies.github.io
 // ===== استيراد Firebase =====
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-app.js";
 import { getFirestore, collection, addDoc, getDocs, query, where, Timestamp, doc, updateDoc } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-firestore.js";
@@ -23,6 +22,7 @@ const CELL_PRICE = 1;
 const BUSINESS_CELL_PRICE = 5;
 const MAX_SQUARES = 400;
 const REFERRAL_TARGET = 10;
+const MAX_IMAGE_CACHE = 100;
 
 let CELL_PIXEL_SIZE = 50;
 let ZOOM_STEP = 3;
@@ -52,11 +52,10 @@ let selectionMode = false;
 let previewImage = null;
 let previewImageUrl = null;
 
-// ===== 🆕 Cache للحجوزات (للبحث السريع) =====
+// ===== Cache للحجوزات =====
 let bookingsIndexCache = new Map();
-let cacheVersion = 0;
 
-// ===== 🆕 متغيرات منع الرسم المكرر =====
+// ===== متغيرات منع الرسم المكرر =====
 let drawGridPending = false;
 const pendingImageLoads = new Set();
 
@@ -202,7 +201,7 @@ function convertToJPG(file) {
   });
 }
 
-// ===== إعداد Canvas (محسّن) =====
+// ===== إعداد Canvas =====
 function resizeCanvas() {
   const container = canvas.parentElement;
   const newWidth = container.clientWidth;
@@ -215,7 +214,7 @@ function resizeCanvas() {
   drawGrid();
 }
 
-// ===== 🆕 بناء Cache الحجوزات (للبحث السريع) =====
+// ===== بناء Cache الحجوزات =====
 function buildBookingsIndex() {
   bookingsIndexCache.clear();
   allBookings.forEach(b => {
@@ -231,7 +230,6 @@ function buildBookingsIndex() {
       }
     }
   });
-  cacheVersion++;
 }
 
 // ===== رسم التهشير الذهبي المتقاطع =====
@@ -284,7 +282,7 @@ function drawGlowingBorder(x, y, width, height, intensity = 1) {
   ctx.restore();
 }
 
-// ===== 🆕 رسم الشبكة (مع requestAnimationFrame) =====
+// ===== رسم الشبكة (مع requestAnimationFrame) =====
 function drawGrid() {
   if (drawGridPending) return;
   drawGridPending = true;
@@ -299,7 +297,6 @@ function drawGridNow() {
   ctx.fillStyle = '#0a0a0f';
   ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-  // ✅ رسم الخطوط المحيطة فقط (Batch Drawing)
   const startX = Math.max(0, Math.floor(offsetX / CELL_PIXEL_SIZE) - 1);
   const startY = Math.max(0, Math.floor(offsetY / CELL_PIXEL_SIZE) - 1);
   const endX = Math.min(GRID_SIZE, startX + Math.ceil(canvas.width / CELL_PIXEL_SIZE) + 3);
@@ -441,7 +438,7 @@ function drawScrollbars() {
   ctx.fillRect(hHandleX, hTrackY, hHandleWidth, scrollbarThickness);
 }
 
-// ===== 🆕 رسم الحجوزات (Viewport Culling) =====
+// ===== رسم الحجوزات (محسّن + Instagram Like) =====
 function drawBookings() {
   approvedBookings.forEach(booking => {
     const startX = (booking.startCell % GRID_SIZE) * CELL_PIXEL_SIZE - offsetX;
@@ -449,7 +446,7 @@ function drawBookings() {
     const width = booking.gridShape.cols * CELL_PIXEL_SIZE;
     const height = booking.gridShape.rows * CELL_PIXEL_SIZE;
 
-    // ✅ Viewport Culling
+    // Viewport Culling
     if (startX + width < -50 || startX > canvas.width + 50 || 
         startY + height < -50 || startY > canvas.height + 50) return;
 
@@ -457,6 +454,7 @@ function drawBookings() {
     const isPending = booking.status === 'pending';
     const isApproved = booking.status === 'approved';
 
+    // ===== 1. الخلفية (Pending فقط) =====
     if (isPending) {
       if (isBusiness) {
         ctx.fillStyle = 'rgba(212, 160, 23, 0.35)';
@@ -468,6 +466,7 @@ function drawBookings() {
       }
     }
 
+    // ===== 2. الصورة (Approved فقط) =====
     if (isApproved && booking.selfieUrl) {
       if (imageCache[booking.id] && imageCache[booking.id].complete) {
         ctx.drawImage(imageCache[booking.id], startX, startY, width, height);
@@ -476,6 +475,7 @@ function drawBookings() {
       }
     }
 
+    // ===== 3. الإطار =====
     if (isPending) {
       if (isBusiness) {
         drawGlowingBorder(startX, startY, width, height);
@@ -507,6 +507,7 @@ function drawBookings() {
       }
     }
 
+    // ===== 4. شارة ⏳ للـ Pending =====
     if (isPending && width > 40 && height > 40) {
       const badgeSize = Math.min(24, Math.max(16, width / 8));
       const badgeX = startX + 6;
@@ -535,27 +536,90 @@ function drawBookings() {
       ctx.textBaseline = 'alphabetic';
     }
 
-    if (isApproved && booking.likes && booking.likes > 0 && width > 60 && height > 60) {
+    // ==========================================
+    // ❤️ 5. شارة الإعجابات (Instagram Style)
+    // ==========================================
+    if (isApproved && width > 50 && height > 50) {
       const liked = hasLiked(booking.id);
-      const badgeX = startX + width - 40;
-      const badgeY = startY + height - 26;
+      const likeCount = booking.likes || 0;
       
-      ctx.fillStyle = liked ? 'rgba(255, 51, 102, 0.9)' : 'rgba(0, 0, 0, 0.75)';
+      const badgeW = likeCount > 0 ? 52 : 32;
+      const badgeH = 28;
+      const badgeX = startX + width - badgeW - 6;
+      const badgeY = startY + height - badgeH - 6;
+      
+      // تأثير النبض عند الإعجاب
+      let scale = 1;
+      if (liked) {
+        const pulse = (Math.sin(Date.now() / 300) + 1) / 2;
+        scale = 1 + pulse * 0.12;
+      }
+      
+      ctx.save();
+      ctx.translate(badgeX + badgeW / 2, badgeY + badgeH / 2);
+      ctx.scale(scale, scale);
+      ctx.translate(-(badgeX + badgeW / 2), -(badgeY + badgeH / 2));
+      
+      // خلفية الشارة
+      if (liked) {
+        ctx.shadowColor = 'rgba(255, 51, 102, 0.8)';
+        ctx.shadowBlur = 15;
+        ctx.fillStyle = 'rgba(255, 51, 102, 0.95)';
+      } else {
+        ctx.shadowColor = 'rgba(0, 0, 0, 0.6)';
+        ctx.shadowBlur = 6;
+        ctx.fillStyle = 'rgba(30, 30, 40, 0.9)';
+      }
+      
       ctx.beginPath();
-      ctx.roundRect(badgeX, badgeY, 36, 22, 11);
+      ctx.roundRect(badgeX, badgeY, badgeW, badgeH, badgeH / 2);
       ctx.fill();
+      ctx.shadowBlur = 0;
       
-      ctx.fillStyle = liked ? '#fff' : '#f5b301';
-      ctx.font = 'bold 12px Cairo, sans-serif';
+      // حدود
+      ctx.strokeStyle = liked ? 'rgba(255, 200, 220, 1)' : 'rgba(212, 160, 23, 0.6)';
+      ctx.lineWidth = 1.5;
+      ctx.beginPath();
+      ctx.roundRect(badgeX, badgeY, badgeW, badgeH, badgeH / 2);
+      ctx.stroke();
+      
+      // النص
       ctx.textAlign = 'center';
       ctx.textBaseline = 'middle';
-      ctx.fillText(`❤️${booking.likes}`, badgeX + 18, badgeY + 11);
+      const centerX = badgeX + badgeW / 2;
+      const centerY = badgeY + badgeH / 2;
+      
+      if (liked) {
+        ctx.fillStyle = '#ffffff';
+        ctx.font = 'bold 14px Cairo, sans-serif';
+        ctx.fillText('❤️', centerX - 10, centerY);
+        
+        ctx.fillStyle = '#ffffff';
+        ctx.font = 'bold 13px Cairo, sans-serif';
+        ctx.fillText(`${likeCount}`, centerX + 10, centerY);
+      } else {
+        if (likeCount > 0) {
+          ctx.fillStyle = 'rgba(255, 255, 255, 0.85)';
+          ctx.font = 'bold 14px Cairo, sans-serif';
+          ctx.fillText('🤍', centerX - 10, centerY);
+          
+          ctx.fillStyle = 'rgba(255, 255, 255, 0.85)';
+          ctx.font = 'bold 13px Cairo, sans-serif';
+          ctx.fillText(`${likeCount}`, centerX + 10, centerY);
+        } else {
+          ctx.fillStyle = 'rgba(255, 255, 255, 0.7)';
+          ctx.font = 'bold 16px Cairo, sans-serif';
+          ctx.fillText('🤍', centerX, centerY);
+        }
+      }
+      
+      ctx.restore();
       ctx.textBaseline = 'alphabetic';
     }
   });
 }
 
-// ===== 🆕 تحميل صور الحجوزات بشكل ذكي =====
+// ===== تحميل صور الحجوزات بشكل ذكي =====
 function loadBookingImage(booking) {
   if (pendingImageLoads.has(booking.id)) return;
   pendingImageLoads.add(booking.id);
@@ -567,7 +631,7 @@ function loadBookingImage(booking) {
     pendingImageLoads.delete(booking.id);
     
     const keys = Object.keys(imageCache);
-    if (keys.length > 100) {
+    if (keys.length > MAX_IMAGE_CACHE) {
       delete imageCache[keys[0]];
     }
     
@@ -593,7 +657,7 @@ function isSelectionValid(x1, y1, x2, y2) {
   return true;
 }
 
-// ===== تحميل الحجوزات (محسّن) =====
+// ===== تحميل الحجوزات =====
 async function loadBookings() {
   try {
     const snapshot = await getDocs(collection(db, "bookings"));
@@ -653,19 +717,23 @@ async function updateLeaderboard() {
     const totalBooked = approvedOnly.reduce((sum, b) => sum + (b.quantity || 0), 0);
     const businessCount = approvedOnly.filter(b => b.isBusiness === true).length;
     
+    const tBooked = currentLang === 'ar' ? 'المربعات المحجوزة' : 'Booked Squares';
+    const tApproved = currentLang === 'ar' ? 'الصور المعتمدة' : 'Approved Photos';
+    const tBusiness = currentLang === 'ar' ? 'حسابات تجارية' : 'Business Accounts';
+    
     const statsEl = document.getElementById('liveStats');
     if (statsEl) {
       statsEl.innerHTML = `
         <div class="lb-item">
-          <span class="name">${currentLang === 'ar' ? 'المربعات المحجوزة' : 'Booked Squares'}</span>
+          <span class="name">${tBooked}</span>
           <span class="count">${totalBooked.toLocaleString('en-US')}</span>
         </div>
         <div class="lb-item">
-          <span class="name">${currentLang === 'ar' ? 'الصور المعتمدة' : 'Approved Photos'}</span>
+          <span class="name">${tApproved}</span>
           <span class="count">${approvedOnly.length.toLocaleString('en-US')}</span>
         </div>
         <div class="lb-item">
-          <span class="name">${currentLang === 'ar' ? 'حسابات تجارية' : 'Business Accounts'}</span>
+          <span class="name">${tBusiness}</span>
           <span class="count">🏢 ${businessCount.toLocaleString('en-US')}</span>
         </div>
       `;
@@ -709,7 +777,7 @@ let velocityY = 0;
 let inertiaFrame = null;
 let lastMoveTime = 0;
 
-// ===== 🆕 القصور الذاتي (محسّن) =====
+// ===== القصور الذاتي =====
 function startInertia() {
   if (inertiaFrame) cancelAnimationFrame(inertiaFrame);
   
@@ -811,7 +879,7 @@ function closeOnboarding() {
 }
 window.closeOnboarding = closeOnboarding;
 
-// ===== التفاعل مع الفأرة (محسّن) =====
+// ===== التفاعل مع الفأرة =====
 canvas.addEventListener('mousemove', (e) => {
   const rect = canvas.getBoundingClientRect();
 
@@ -910,7 +978,7 @@ canvas.addEventListener('mouseleave', () => {
   canvas.style.cursor = selectionMode ? 'cell' : 'crosshair';
 });
 
-// ===== 🆕 عجلة الفأرة (Debounced) =====
+// ===== عجلة الفأرة (Debounced) =====
 let wheelTimer = null;
 let wheelAccum = 0;
 
@@ -2430,7 +2498,7 @@ function preloadImages() {
   });
 }
 
-// ===== التشغيل (محسّن) =====
+// ===== التشغيل =====
 let resizeTimer;
 window.addEventListener('resize', () => {
   clearTimeout(resizeTimer);
@@ -2441,13 +2509,10 @@ resizeCanvas();
 loadBookings();
 trackVisit();
 
-// ✅ تحميل كل 60 ثانية
 setInterval(loadBookings, 60000);
 
-// ✅ تحميل الصور بعد 2 ثانية
 setTimeout(preloadImages, 2000);
 
-// ✅ حلقة الرسم النابض
 let pulseInterval = null;
 function startPulseAnimation() {
   if (pulseInterval) return;
@@ -2464,7 +2529,6 @@ function startPulseAnimation() {
 
 setTimeout(startPulseAnimation, 3000);
 
-// ✅ إيقاف الرسم عند مغادرة الصفحة
 document.addEventListener('visibilitychange', () => {
   if (document.hidden) {
     if (pulseInterval) {
