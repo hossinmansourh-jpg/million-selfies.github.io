@@ -2,6 +2,7 @@ const fs = require('fs');
 const { GoogleGenerativeAI } = require('@google/generative-ai');
 const { Octokit } = require('@octokit/rest');
 
+// ===== الإعدادات =====
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
 const octokit = new Octokit({ auth: process.env.GITHUB_TOKEN });
 
@@ -26,7 +27,7 @@ async function runAgent() {
 
     console.log(`📝 المشكلة: ${issueTitle}`);
 
-    // ===== إعداد Gemini (نسخة مستقرة) =====
+    // ===== إعداد Gemini =====
     const model = genAI.getGenerativeModel({ model: 'gemini-1.5-flash-latest' });
 
     const prompt = `
@@ -137,7 +138,9 @@ ${hossinCode}
           ref: branchName
         });
         fileSha = data.sha;
-      } catch (e) {}
+      } catch (e) {
+        // الملف جديد
+      }
 
       await octokit.repos.createOrUpdateFileContents({
         owner: REPO_OWNER,
@@ -159,7 +162,17 @@ ${hossinCode}
       title: `🤖 ${issueTitle}`,
       head: branchName,
       base: BASE_BRANCH,
-      body: `## 🤖 إصلاح تلقائي بواسطة AI Developer Agent\n\n**الملخص:** ${data.summary || 'بدون ملخص'}\n\n**الملفات المعدّلة:**\n${modifiedFiles.map(f => `- \`${f}\``).join('\n')}\n\n---\n\nCloses #${issueNumber}`
+      body: `## 🤖 إصلاح تلقائي بواسطة AI Developer Agent
+
+**الملخص:** ${data.summary || 'بدون ملخص'}
+
+**الملفات المعدّلة:**
+${modifiedFiles.map(f => `- \`${f}\``).join('\n')}
+
+---
+
+Closes #${issueNumber}
+`
     });
 
     console.log(`🎉 PR: ${pr.html_url}`);
@@ -169,7 +182,10 @@ ${hossinCode}
       owner: REPO_OWNER,
       repo: REPO_NAME,
       issue_number: parseInt(issueNumber),
-      body: `✅ تم إنشاء Pull Request للإصلاح: ${pr.html_url}\n\n**الملفات المعدّلة:**\n${modifiedFiles.map(f => `- \`${f}\``).join('\n')}`
+      body: `✅ تم إنشاء Pull Request للإصلاح: ${pr.html_url}
+
+**الملفات المعدّلة:**
+${modifiedFiles.map(f => `- \`${f}\``).join('\n')}`
     });
 
     console.log('🎊 اكتمل بنجاح!');
