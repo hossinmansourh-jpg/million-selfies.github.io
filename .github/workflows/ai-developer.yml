@@ -22,17 +22,6 @@ jobs:
           fetch-depth: 0
           token: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Debug - List Files
-        run: |
-          echo "📁 الملفات في الجذر:"
-          ls -la
-          echo ""
-          echo "📁 الملفات في .github/scripts:"
-          ls -la .github/scripts/ || echo "❌ المجلد غير موجود!"
-          echo ""
-          echo "🔍 البحث عن ai_agent.js:"
-          find . -name "ai_agent.js" 2>/dev/null || echo "❌ الملف غير موجود!"
-
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
@@ -41,11 +30,11 @@ jobs:
       - name: Install Dependencies
         run: npm install @google/generative-ai @octokit/rest
 
-      - name: Run AI Agent Script
+      - name: Run AI Bot
         env:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           ISSUE_TITLE: ${{ github.event.issue.title }}
           ISSUE_BODY: ${{ github.event.issue.body }}
           ISSUE_NUMBER: ${{ github.event.issue.number }}
-        run: node ai_agent.js
+        run: node ai_bot.js
