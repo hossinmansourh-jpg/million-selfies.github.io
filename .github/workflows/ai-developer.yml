@@ -18,8 +18,20 @@ jobs:
       - name: Checkout Code
         uses: actions/checkout@v4
         with:
+          ref: main
           fetch-depth: 0
           token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Debug - List Files
+        run: |
+          echo "📁 الملفات في الجذر:"
+          ls -la
+          echo ""
+          echo "📁 الملفات في .github/scripts:"
+          ls -la .github/scripts/ || echo "❌ المجلد غير موجود!"
+          echo ""
+          echo "🔍 البحث عن ai_agent.js:"
+          find . -name "ai_agent.js" 2>/dev/null || echo "❌ الملف غير موجود!"
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
