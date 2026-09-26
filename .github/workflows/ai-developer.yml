@@ -4,14 +4,22 @@ on:
   issues:
     types: [labeled]
 
+permissions:
+  contents: write
+  issues: write
+  pull-requests: write
+
 jobs:
   ai-fix-and-feature:
-    if: github.event.label.name == 'ai-fix' || github.event.label.name == 'ai-feature'
+    if: github.event.label.name == 'ai-fix'
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout Code
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
@@ -19,7 +27,7 @@ jobs:
           node-version: '20'
 
       - name: Install Dependencies
-        run: npm install @google/genai @octokit/rest
+        run: npm install @google/generative-ai @octokit/rest
 
       - name: Run AI Agent Script
         env:
