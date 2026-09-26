@@ -28,7 +28,7 @@ async function runAgent() {
     console.log(`📝 المشكلة: ${issueTitle}`);
 
     // ===== إعداد Gemini =====
-    const model = genAI.getGenerativeModel({ model: 'gemini-1.5-flash-latest' });
+    const model = genAI.getGenerativeModel({ model: 'https://github.com/hossinmansourh-jpg/million-selfies.github.io/blob/main/.github/scripts/ai_agent.js' });
 
     const prompt = `
 أنت مطور ويب خبير تعمل على موقع "جدارية مليون صورة سيلفي" (HTML5, Canvas, CSS3, Vanilla JS).
