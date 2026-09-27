@@ -10,8 +10,25 @@
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-  <!-- 🎈 زر اللغة العائم -->
-  <header class="floating-lang-bar">
+  <!-- 🆕 الشريط العلوي مع زر الوضع الليلي وزر اللغة -->
+  <header class="topbar">
+    <button id="themeToggle" class="theme-toggle" title="تبديل الوضع الليلي/النهاري" aria-label="Toggle theme">
+      <svg class="icon-moon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+      </svg>
+      <svg class="icon-sun" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="12" cy="12" r="5"></circle>
+        <line x1="12" y1="1" x2="12" y2="3"></line>
+        <line x1="12" y1="21" x2="12" y2="23"></line>
+        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+        <line x1="1" y1="12" x2="3" y2="12"></line>
+        <line x1="21" y1="12" x2="23" y2="12"></line>
+        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+      </svg>
+    </button>
+
     <div class="lang-switch">
       <button id="langAr" class="lang-option active">🇸🇾 عربي</button>
       <button id="langEn" class="lang-option">🇬🇧 EN</button>
@@ -178,14 +195,15 @@
       </p>
     </div>
 
-    <!-- 🆕 شريط التواصل — تيليجرام فقط -->
+    <!-- 🆕 شريط التواصل — تم إزالة واتساب + إبقاء تيليجرام -->
     <div class="contact-bar">
-      <span class="contact-label" data-i18n="contactUs">تابعنا</span>
-      <a href="https://t.me/Hossinn11" class="contact-btn telegram" target="_blank" aria-label="Telegram">
+      <a href="https://t.me/Hossinn11" class="contact-btn telegram" target="_blank" rel="noopener" aria-label="Telegram">
         <svg width="24" height="24" viewBox="0 0 24 24" fill="white">
           <path d="M11.944 0A12 12 0 000 12a12 12 0 0012 12 12 12 0 0012-12A12 12 0 0012 0a12 12 0 00-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 01.171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/>
         </svg>
       </a>
+      
+      <span class="contact-label" data-i18n="contactUs">تواصل معنا</span>
     </div>
 
     <a href="hossin.html" class="admin-btn" title="لوحة الإدارة">
@@ -334,7 +352,71 @@
       </div>
 
       <button id="submitBooking" class="submit-btn" data-i18n="submitBtn">إرسال الطلب</button>
+      <button id="generateCardBtn" class="generate-card-btn" style="display:none;">
+        📸 <span data-i18n="generateCard">توليد بطاقة الإنجاز</span>
+      </button>
       <p id="formMessage" class="form-message"></p>
+    </div>
+  </div>
+
+  <!-- 🆕 نافذة نموذج الدعوة المتعددة -->
+  <div id="referralModal" class="modal hidden">
+    <div class="modal-content referral-modal-content">
+      <button class="close-btn" onclick="closeReferralModal()">✕</button>
+      <h2 data-i18n="referralModalTitle">🎁 شارك رابط الإحالة</h2>
+
+      <div class="form-group">
+        <label data-i18n="referralLinkLabel">🔗 الرابط الخاص بك</label>
+        <div class="referral-link-box">
+          <input type="text" id="referralLinkInput" readonly>
+          <button class="copy-icon-btn" onclick="copyReferralLinkOnly()" title="نسخ الرابط فقط">📋</button>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label data-i18n="referralTextLabel">✍️ اختر نص الدعوة أو اكتب نصك:</label>
+        <div class="referral-templates">
+          <label class="template-option">
+            <input type="radio" name="referralTemplate" value="direct" checked>
+            <span class="template-label">🎯 مباشر</span>
+          </label>
+          <label class="template-option">
+            <input type="radio" name="referralTemplate" value="challenge">
+            <span class="template-label">🏆 تحدي</span>
+          </label>
+          <label class="template-option">
+            <input type="radio" name="referralTemplate" value="mysterious">
+            <span class="template-label">🤫 تشويقي</span>
+          </label>
+          <label class="template-option">
+            <input type="radio" name="referralTemplate" value="short">
+            <span class="template-label">💬 قصير</span>
+          </label>
+          <label class="template-option">
+            <input type="radio" name="referralTemplate" value="friendly">
+            <span class="template-label">👋 ودّي</span>
+          </label>
+          <label class="template-option">
+            <input type="radio" name="referralTemplate" value="emotional">
+            <span class="template-label">❤️ عاطفي</span>
+          </label>
+          <label class="template-option">
+            <input type="radio" name="referralTemplate" value="professional">
+            <span class="template-label">🏢 احترافي</span>
+          </label>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label data-i18n="referralEditLabel">✏️ يمكنك التعديل على النص:</label>
+        <textarea id="referralTextarea" rows="6"></textarea>
+      </div>
+
+      <div class="referral-actions">
+        <button class="submit-btn copy-all-btn" onclick="copyReferralAll()">
+          📋 <span data-i18n="copyAllBtn">نسخ النص والرابط</span>
+        </button>
+      </div>
     </div>
   </div>
 
@@ -361,17 +443,20 @@
       <img id="shareCardPreview" class="share-card-preview" alt="بطاقة المشاركة">
       <div class="share-card-buttons">
         <button class="share-btn download" onclick="downloadShareCard()">
-          📸 <span data-i18n="downloadCard">تنزيل بطاقة الإنجاز</span>
+          📸 <span data-i18n="downloadCard">تنزيل البطاقة</span>
         </button>
         <button class="share-btn share" onclick="shareCard()">
           🚀 <span data-i18n="shareNow">مشاركة مباشرة</span>
         </button>
         <button class="share-btn close" onclick="closeShareCard()">
-          <span data-i18n="closeBtn">إغلاق</span>
+          ✕ <span data-i18n="closeBtn">إغلاق</span>
         </button>
       </div>
     </div>
   </div>
+
+  <!-- إشعار عائم -->
+  <div id="toastContainer" class="toast-container"></div>
 
   <script type="module" src="app.js"></script>
 </body>
