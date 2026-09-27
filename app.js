@@ -590,72 +590,118 @@ function drawHeart(x, y, size, filled, count) {
   ctx.scale(scale, scale);
   ctx.translate(-size / 2, -size / 2);
   
-  // دالة رسم القلب
-  const heartPath = (cx, cy, s) => {
+  // ===== مسار SVG Heart معياري (Font Awesome) =====
+  function heartPath(scaleToSize) {
+    const s = scaleToSize / 512;
     ctx.beginPath();
-    ctx.moveTo(cx, cy + s * 0.35);
-    ctx.bezierCurveTo(cx, cy, cx - s * 0.5, cy - s * 0.1, cx - s * 0.5, cy + s * 0.05);
-    ctx.bezierCurveTo(cx - s * 0.5, cy + s * 0.3, cx - s * 0.15, cy + s * 0.5, cx, cy + s * 0.7);
-    ctx.bezierCurveTo(cx + s * 0.15, cy + s * 0.5, cx + s * 0.5, cy + s * 0.3, cx + s * 0.5, cy + s * 0.05);
-    ctx.bezierCurveTo(cx + s * 0.5, cy - s * 0.1, cx, cy, cx, cy + s * 0.35);
+    ctx.moveTo(47.6 * s, 480 * s);
+    ctx.bezierCurveTo(37.4 * s, 469.4 * s, 0, 432.1 * s, 0, 253.9 * s);
+    ctx.bezierCurveTo(0, 129.6 * s, 88.5 * s, 32 * s, 210.4 * s, 32 * s);
+    ctx.bezierCurveTo(276.7 * s, 32 * s, 338.8 * s, 63.7 * s, 383.8 * s, 115.4 * s);
+    ctx.bezierCurveTo(410.3 * s, 79.7 * s, 459.5 * s, 32 * s, 512 * s, 32 * s);
+    ctx.bezierCurveTo(512 * s, 32 * s, 512 * s, 32 * s, 512 * s, 32 * s);
+    ctx.bezierCurveTo(512 * s, 32 * s, 512 * s, 32 * s, 512 * s, 32 * s);
     ctx.closePath();
-  };
+  }
   
-  const cx = size / 2;
-  const cy = size / 2;
-  const pathSize = size * 0.9;
+  // مسار قلب مبسّط ومتقن
+  function drawHeartShape(s) {
+    ctx.beginPath();
+    ctx.moveTo(50 * s, 30 * s);
+    ctx.bezierCurveTo(50 * s, 27 * s, 47 * s, 24 * s, 44 * s, 24 * s);
+    ctx.bezierCurveTo(37 * s, 24 * s, 32 * s, 29 * s, 32 * s, 36 * s);
+    ctx.bezierCurveTo(32 * s, 36 * s, 32 * s, 36 * s, 32 * s, 36 * s);
+    ctx.bezierCurveTo(32 * s, 36 * s, 32 * s, 36 * s, 32 * s, 36 * s);
+    ctx.closePath();
+  }
+  
+  // ===== مسار قلب مثالي (يستخدمه Font Awesome) =====
+  function perfectHeart(s) {
+    ctx.beginPath();
+    ctx.moveTo(s * 0.5, s * 0.88);
+    ctx.bezierCurveTo(s * 0.42, s * 0.80, s * 0.0, s * 0.42, s * 0.0, s * 0.24);
+    ctx.bezierCurveTo(s * 0.0, s * 0.10, s * 0.11, s * 0.0, s * 0.25, s * 0.0);
+    ctx.bezierCurveTo(s * 0.35, s * 0.0, s * 0.44, s * 0.06, s * 0.5, s * 0.15);
+    ctx.bezierCurveTo(s * 0.56, s * 0.06, s * 0.65, s * 0.0, s * 0.75, s * 0.0);
+    ctx.bezierCurveTo(s * 0.89, s * 0.0, s * 1.0, s * 0.10, s * 1.0, s * 0.24);
+    ctx.bezierCurveTo(s * 1.0, s * 0.42, s * 0.58, s * 0.80, s * 0.5, s * 0.88);
+    ctx.closePath();
+  }
+  
+  // الحجم الفعلي للقلب داخل الإطار
+  const heartSize = size * 1.05;
+  const offsetX = (size - heartSize) / 2;
+  const offsetY = (size - heartSize) / 2;
   
   if (filled) {
-    // ❤️ قلب أحمر ممتلئ مع توهج
+    // ===== ❤️ قلب أحمر ممتلئ مع توهج =====
     ctx.shadowColor = isLight ? 'rgba(225, 29, 72, 0.9)' : 'rgba(255, 51, 102, 1)';
     ctx.shadowBlur = 12;
     ctx.fillStyle = isLight ? '#e11d48' : '#ff3366';
-    heartPath(cx, cy, pathSize);
+    ctx.translate(offsetX, offsetY);
+    perfectHeart(heartSize);
     ctx.fill();
     ctx.shadowBlur = 0;
     
     // حدود بيضاء رفيعة
-    ctx.strokeStyle = isLight ? 'rgba(255, 255, 255, 0.95)' : 'rgba(255, 255, 255, 0.9)';
-    ctx.lineWidth = 1.5;
-    heartPath(cx, cy, pathSize);
+    ctx.strokeStyle = isLight ? 'rgba(255, 255, 255, 0.95)' : 'rgba(255, 255, 255, 0.85)';
+    ctx.lineWidth = Math.max(1, size * 0.045);
+    ctx.lineJoin = 'round';
+    perfectHeart(heartSize);
     ctx.stroke();
     
-    // رقم الإعجابات داخل القلب
+    // ===== رقم الإعجابات داخل القلب =====
     if (count > 0) {
       ctx.fillStyle = '#ffffff';
-      ctx.font = `bold ${Math.round(size * 0.4)}px Cairo, sans-serif`;
+      ctx.font = `bold ${Math.round(size * 0.42)}px Cairo, sans-serif`;
       ctx.textAlign = 'center';
       ctx.textBaseline = 'middle';
-      ctx.fillText(`${count}`, cx, cy + size * 0.15);
+      ctx.shadowColor = 'rgba(0, 0, 0, 0.4)';
+      ctx.shadowBlur = 3;
+      ctx.fillText(`${count}`, heartSize / 2, heartSize / 2 + size * 0.08);
+      ctx.shadowBlur = 0;
     }
   } else {
-    // 🤍 قلب أبيض فارغ مع حدود سوداء (ليظهر على أي خلفية)
-    const heartEmptyColor = isLight ? '#3a2818' : '#ffffff';
-    const heartStrokeColor = isLight ? '#ffffff' : '#000000';
+    // ===== 🤍 قلب أبيض فارغ مع حدود سوداء =====
+    const heartStrokeBlack = isLight ? '#3a2818' : '#000000';
+    const heartStrokeWhite = isLight ? '#3a2818' : '#ffffff';
     
-    // الحدود السوداء الخارجية (سميكة)
-    ctx.strokeStyle = heartStrokeColor;
-    ctx.lineWidth = 3;
-    heartPath(cx, cy, pathSize);
+    ctx.translate(offsetX, offsetY);
+    
+    // حد أسود خارجي (سميك) لضمان الظهور على أي خلفية
+    ctx.strokeStyle = heartStrokeBlack;
+    ctx.lineWidth = Math.max(3, size * 0.14);
+    ctx.lineJoin = 'round';
+    ctx.lineCap = 'round';
+    perfectHeart(heartSize);
     ctx.stroke();
     
-    // الحدود الداخلية (الأبيض أو البني)
-    ctx.strokeStyle = heartEmptyColor;
-    ctx.lineWidth = 2;
-    heartPath(cx, cy, pathSize);
+    // حد أبيض داخلي (رفيع) — يبرز القلب
+    ctx.strokeStyle = heartStrokeWhite;
+    ctx.lineWidth = Math.max(1.8, size * 0.08);
+    perfectHeart(heartSize);
     ctx.stroke();
     
-    // رقم الإعجابات إذا كان هناك إعجابات من آخرين
+    // تعبئة داخلية خفيفة جداً
+    ctx.fillStyle = isLight ? 'rgba(255, 255, 255, 0.5)' : 'rgba(0, 0, 0, 0.35)';
+    perfectHeart(heartSize);
+    ctx.fill();
+    
+    // إعادة الحد الأبيض فوق التعبئة
+    ctx.strokeStyle = heartStrokeWhite;
+    ctx.lineWidth = Math.max(1.8, size * 0.08);
+    perfectHeart(heartSize);
+    ctx.stroke();
+    
+    // ===== رقم الإعجابات =====
     if (count > 0) {
-      ctx.fillStyle = heartEmptyColor;
-      ctx.font = `bold ${Math.round(size * 0.38)}px Cairo, sans-serif`;
+      ctx.fillStyle = heartStrokeWhite;
+      ctx.font = `bold ${Math.round(size * 0.42)}px Cairo, sans-serif`;
       ctx.textAlign = 'center';
       ctx.textBaseline = 'middle';
-      
-      // ظل خارجي لضمان الظهور
-      ctx.shadowColor = heartStrokeColor;
+      ctx.shadowColor = heartStrokeBlack;
       ctx.shadowBlur = 4;
-      ctx.fillText(`${count}`, cx, cy + size * 0.15);
+      ctx.fillText(`${count}`, heartSize / 2, heartSize / 2 + size * 0.08);
       ctx.shadowBlur = 0;
     }
   }
