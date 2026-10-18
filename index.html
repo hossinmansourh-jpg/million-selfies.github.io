@@ -3,14 +3,15 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>جدارية مليون صورة سيلفي</title>
+  <title>مليون بصمة رقمية</title>
+  <meta name="description" content="اترك بصمتك في أكبر جدارية رقمية في العالم. احجز مربعك بـ 1$ فقط.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700;900&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-  <!-- 🆕 الشريط العلوي مع زر الوضع الليلي وزر اللغة -->
+  <!-- الشريط العلوي -->
   <header class="topbar">
     <button id="themeToggle" class="theme-toggle" title="تبديل الوضع الليلي/النهاري" aria-label="Toggle theme">
       <svg class="icon-moon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -38,9 +39,47 @@
   <!-- القسم الرئيسي -->
   <section class="hero">
     <div class="badge" data-i18n="badge">🚀 تحدي رقمي تاريخي</div>
-    <h1 data-i18n="heroTitle">جدارية مليون<br>صورة سيلفي</h1>
-    <p class="hero-desc" data-i18n="heroSubtitle">كن جزءاً من أكبر لوحة رقمية تفاعلية في العالم. احجز مربعك واترك بصمتك للأبد.</p>
+    <h1 data-i18n="heroTitle">مليون بصمة<br>رقمية</h1>
+    <p class="hero-desc" data-i18n="heroSubtitle">اترك بصمتك في أكبر جدارية رقمية في العالم. احجز مربعك وكن جزءاً من التاريخ.</p>
     <p class="hero-price" data-i18n="priceNote">كل مربع 10×10 بكسل بـ دولار واحد فقط.</p>
+  </section>
+
+  <!-- قسم: كيف تحصل على بطاقتك؟ -->
+  <section class="card-guide-section">
+    <h2 class="card-guide-title" data-i18n="cardGuideTitle">🎁 كيف تحصل على بطاقة الإنجاز الخاصة بك؟</h2>
+    <p class="card-guide-subtitle" data-i18n="cardGuideSubtitle">بعد الموافقة على طلبك، ستحصل على بطاقة رقمية أنيقة يمكنك مشاركتها مع أصدقائك على وسائل التواصل الاجتماعي!</p>
+    
+    <div class="card-guide-steps">
+      <div class="card-guide-step">
+        <div class="card-guide-num">1</div>
+        <div class="card-guide-icon">🖱️</div>
+        <h3 data-i18n="cardGuideStep1Title">احجز مربعك</h3>
+        <p data-i18n="cardGuideStep1Desc">اختر المربعات التي تريدها وارفع صورتك</p>
+      </div>
+      <div class="card-guide-step">
+        <div class="card-guide-num">2</div>
+        <div class="card-guide-icon">⏳</div>
+        <h3 data-i18n="cardGuideStep2Title">انتظر الموافقة</h3>
+        <p data-i18n="cardGuideStep2Desc">سيتم مراجعة طلبك خلال 24-48 ساعة</p>
+      </div>
+      <div class="card-guide-step">
+        <div class="card-guide-num">3</div>
+        <div class="card-guide-icon">🔔</div>
+        <h3 data-i18n="cardGuideStep3Title">ابقَ في الموقع</h3>
+        <p data-i18n="cardGuideStep3Desc">عند الموافقة، سيظهر لك إشعار فوري مع صوت نجاح</p>
+      </div>
+      <div class="card-guide-step highlight">
+        <div class="card-guide-num">4</div>
+        <div class="card-guide-icon">📸</div>
+        <h3 data-i18n="cardGuideStep4Title">استلم بطاقتك</h3>
+        <p data-i18n="cardGuideStep4Desc">اضغط على زر "استلم بطاقتك" وشاركها مع العالم!</p>
+      </div>
+    </div>
+
+    <div class="card-guide-note">
+      <span class="note-icon">💡</span>
+      <p data-i18n="cardGuideNote">نصيحة: احفظ الموقع في المفضلة، وعد إليه بعد الموافقة لاستلام بطاقتك!</p>
+    </div>
   </section>
 
   <!-- كيف يعمل الموقع -->
@@ -57,7 +96,7 @@
         <div class="how-icon">📸</div>
         <div class="how-num">2</div>
         <h3 data-i18n="howStep2Title">ارفع صورتك</h3>
-        <p data-i18n="howStep2Desc">ارفع صورة سيلفي واضحة وأضف رابط حسابك (اختياري)</p>
+        <p data-i18n="howStep2Desc">ارفع صورة سيلفي واضحة أو شعار شركتك</p>
       </div>
       <div class="how-step">
         <div class="how-icon">💰</div>
@@ -110,7 +149,7 @@
     </div>
     <div class="stat-card">
       <span class="stat-value" id="statSelfies">0</span>
-      <span class="stat-label" data-i18n="statSelfies">صورة سيلفي</span>
+      <span class="stat-label" data-i18n="statSelfies">بصمات رقمية</span>
     </div>
   </section>
 
@@ -158,28 +197,32 @@
     </div>
 
     <div class="grid-wrapper">
-      <button id="zoomOut" class="zoom-btn zoom-out" title="تصغير">
-        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-          <circle cx="11" cy="11" r="8"></circle>
-          <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
-          <line x1="8" y1="11" x2="14" y2="11"></line>
-        </svg>
-      </button>
+      <div class="zoom-controls-top">
+        <button id="zoomOut" class="zoom-btn" title="تصغير">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="11" cy="11" r="8"></circle>
+            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+            <line x1="8" y1="11" x2="14" y2="11"></line>
+          </svg>
+        </button>
+
+        <span class="zoom-label">🔍 تكبير / تصغير</span>
+
+        <button id="zoomIn" class="zoom-btn" title="تكبير">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="11" cy="11" r="8"></circle>
+            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+            <line x1="11" y1="8" x2="11" y2="14"></line>
+            <line x1="8" y1="11" x2="14" y2="11"></line>
+          </svg>
+        </button>
+      </div>
 
       <div class="grid-frame">
         <div class="grid-container">
           <canvas id="gridCanvas"></canvas>
         </div>
       </div>
-
-      <button id="zoomIn" class="zoom-btn zoom-in" title="تكبير">
-        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-          <circle cx="11" cy="11" r="8"></circle>
-          <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
-          <line x1="11" y1="8" x2="11" y2="14"></line>
-          <line x1="8" y1="11" x2="14" y2="11"></line>
-        </svg>
-      </button>
     </div>
 
     <div class="hints-section">
@@ -195,7 +238,7 @@
       </p>
     </div>
 
-    <!-- 🆕 شريط التواصل — تم إزالة واتساب + إبقاء تيليجرام -->
+    <!-- 🆕 شريط التواصل + زر مكافآتي -->
     <div class="contact-bar">
       <a href="https://t.me/Hossinn11" class="contact-btn telegram" target="_blank" rel="noopener" aria-label="Telegram">
         <svg width="24" height="24" viewBox="0 0 24 24" fill="white">
@@ -204,6 +247,12 @@
       </a>
       
       <span class="contact-label" data-i18n="contactUs">تواصل معنا</span>
+
+      <!-- 🆕 زر مكافآتي -->
+      <a href="reward.html" class="contact-btn rewards-btn" aria-label="My Rewards">
+        🎁
+      </a>
+      <span class="contact-label rewards-label">مكافآتي</span>
     </div>
 
     <a href="hossin.html" class="admin-btn" title="لوحة الإدارة">
@@ -330,7 +379,7 @@
       <div class="terms-box">
         <h4 data-i18n="termsTitle">📋 الشروط والأحكام</h4>
         <ul class="terms-list">
-          <li data-i18n="term1">• يجب أن تكون الصورة سيلفي شخصية وحقيقية (أو شعار رسمي للشركة).</li>
+          <li data-i18n="term1">• يجب أن تكون الصورة سيلفي شخصية حقيقية (أو شعار رسمي للشركة).</li>
           <li data-i18n="term2">• يُمنع رفع صور مخالفة للقوانين أو الآداب العامة.</li>
           <li data-i18n="term3">• في حال رفض الصورة من قبل الإدارة، يمكنك التواصل معنا لاسترجاع المبلغ كاملاً.</li>
           <li data-i18n="term4">• مدة معالجة الطلب: 24-48 ساعة.</li>
@@ -343,7 +392,7 @@
       </div>
 
       <div class="refund-notice">
-        <p data-i18n="refundNotice">💡 في حال رفض الصورة، يرجى التواصل معنا عبر واتساب أو تيليجرام لاسترجاع المال.</p>
+        <p data-i18n="refundNotice">💡 في حال رفض الصورة، يرجى التواصل معنا عبر تيليجرام لاسترجاع المال.</p>
       </div>
 
       <div class="price-display">
@@ -359,7 +408,7 @@
     </div>
   </div>
 
-  <!-- 🆕 نافذة نموذج الدعوة المتعددة -->
+  <!-- نافذة نموذج الدعوة -->
   <div id="referralModal" class="modal hidden">
     <div class="modal-content referral-modal-content">
       <button class="close-btn" onclick="closeReferralModal()">✕</button>
@@ -369,7 +418,7 @@
         <label data-i18n="referralLinkLabel">🔗 الرابط الخاص بك</label>
         <div class="referral-link-box">
           <input type="text" id="referralLinkInput" readonly>
-          <button class="copy-icon-btn" onclick="copyReferralLinkOnly()" title="نسخ الرابط فقط">📋</button>
+          <button class="copy-icon-btn" onclick="copyReferralLinkOnly()" title="نسخ الرابط فقط"></button>
         </div>
       </div>
 
@@ -458,18 +507,30 @@
   <!-- إشعار عائم -->
   <div id="toastContainer" class="toast-container"></div>
 
-    <script type="module">
-    window.addEventListener('DOMContentLoaded', () => {
-      import('./app.js').catch(err => {
-        console.error('🔴 خطأ في تحميل app.js:', err);
-        const ls = document.getElementById('loadingScreen');
-        if (ls) ls.style.display = 'none';
-        const errDiv = document.createElement('div');
-        errDiv.style.cssText = 'padding:20px;color:red;font-size:14px;position:fixed;top:50px;left:10px;right:10px;background:#000;z-index:99999;border:2px solid red;border-radius:10px;direction:ltr;';
-        errDiv.textContent = 'خطأ: ' + err.message;
-        document.body.appendChild(errDiv);
-      });
-    });
-  </script>
+  <!-- إشعار الموافقة على الطلب -->
+  <div id="approvalNotification" class="approval-notification hidden">
+    <div class="approval-content">
+      <div class="approval-icon">🎉</div>
+      <h3 class="approval-title" data-i18n="approvalTitle">مبروك!</h3>
+      <p class="approval-message" data-i18n="approvalMessage">تم قبول طلبك بنجاح</p>
+      <button id="claimCardBtn" class="claim-card-btn" data-i18n="claimCardBtn">📸 استلم بطاقتك</button>
+    </div>
+  </div>
+
+  <!-- نافذة عرض البطاقة -->
+  <div id="myCardModal" class="my-card-modal hidden">
+    <div class="my-card-content">
+      <button class="my-card-close" onclick="closeMyCard()">✕</button>
+      <h2 class="my-card-title" data-i18n="myCardTitle">🎉 بطاقتك جاهزة!</h2>
+      <img id="myCardPreview" class="my-card-preview" alt="بطاقتي">
+      <div class="my-card-buttons">
+        <button class="my-card-btn download" onclick="downloadMyCard()" data-i18n="downloadCard">📥 تنزيل</button>
+        <button class="my-card-btn share" onclick="shareMyCard()" data-i18n="shareNow">🚀 مشاركة</button>
+        <button class="my-card-btn close" onclick="closeMyCard()" data-i18n="closeBtn">إغلاق</button>
+      </div>
+    </div>
+  </div>
+
+  <script type="module" src="app.js"></script>
 </body>
 </html>
