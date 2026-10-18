@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>بطاقة الإنجاز - جدارية المليون</title>
+  <title>بطاقة الإنجاز - مليون بصمة رقمية</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700;900&display=swap" rel="stylesheet">
@@ -15,6 +15,7 @@
       --gold-light: #f5b301;
       --text: #ffffff;
       --text-muted: #a0a0b0;
+      --red: #9a3a3a;
     }
 
     * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -27,15 +28,15 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      padding: 20px;
+      padding: 12px;
     }
 
     .card-container {
       background: var(--bg-gray);
       border: 2px solid var(--gold);
-      border-radius: 20px;
-      padding: 30px;
-      max-width: 500px;
+      border-radius: 16px;
+      padding: 18px;
+      max-width: 420px;
       width: 100%;
       text-align: center;
     }
@@ -50,14 +51,14 @@
     .card-title {
       color: var(--gold);
       font-weight: 900;
-      font-size: 24px;
-      margin-bottom: 10px;
+      font-size: 18px;
+      margin-bottom: 6px;
     }
 
     .card-subtitle {
       color: var(--text-muted);
-      font-size: 14px;
-      margin-bottom: 20px;
+      font-size: 12px;
+      margin-bottom: 12px;
       font-weight: 700;
     }
 
@@ -65,53 +66,49 @@
       display: inline-block;
       background: linear-gradient(135deg, var(--gold), var(--gold-light));
       color: var(--bg-dark);
-      padding: 6px 16px;
+      padding: 5px 14px;
       border-radius: 20px;
-      font-size: 13px;
+      font-size: 12px;
       font-weight: 900;
-      margin-bottom: 15px;
+      margin-bottom: 10px;
       box-shadow: 0 0 20px rgba(212, 160, 23, 0.5);
       animation: businessPulse 2s infinite;
     }
 
     @keyframes businessPulse {
-      0%, 100% {
-        box-shadow: 0 0 20px rgba(212, 160, 23, 0.5);
-      }
-      50% {
-        box-shadow: 0 0 35px rgba(212, 160, 23, 0.9);
-      }
+      0%, 100% { box-shadow: 0 0 20px rgba(212, 160, 23, 0.5); }
+      50% { box-shadow: 0 0 35px rgba(212, 160, 23, 0.9); }
     }
 
     .card-preview {
       width: 100%;
-      max-width: 300px;
-      margin: 0 auto 20px;
-      border-radius: 15px;
-      box-shadow: 0 10px 40px rgba(212, 160, 23, 0.3);
+      max-width: 210px;
+      margin: 0 auto 12px;
+      border-radius: 12px;
+      box-shadow: 0 8px 30px rgba(212, 160, 23, 0.3);
       display: block;
     }
 
     .card-buttons {
       display: flex;
       flex-direction: column;
-      gap: 10px;
+      gap: 8px;
     }
 
     .card-btn {
       width: 100%;
-      padding: 14px;
+      padding: 11px;
       border: none;
-      border-radius: 12px;
+      border-radius: 10px;
       font-family: 'Cairo', sans-serif;
       font-weight: 900;
-      font-size: 15px;
+      font-size: 13px;
       cursor: pointer;
       transition: 0.3s;
       display: flex;
       align-items: center;
       justify-content: center;
-      gap: 8px;
+      gap: 6px;
     }
 
     .card-btn.download {
@@ -134,11 +131,24 @@
       box-shadow: 0 8px 25px rgba(253, 29, 29, 0.4);
     }
 
+    .card-btn.close {
+      background: transparent;
+      color: var(--text-muted);
+      border: 1.5px solid #2a2a35;
+    }
+
+    .card-btn.close:hover {
+      background: rgba(154, 58, 58, 0.15);
+      color: #ff5555;
+      border-color: var(--red);
+      transform: scale(1.02);
+    }
+
     .loading-msg {
       color: var(--gold-light);
       font-weight: 700;
-      padding: 40px;
-      font-size: 16px;
+      padding: 30px;
+      font-size: 14px;
     }
   </style>
 </head>
@@ -152,10 +162,13 @@
     <img id="cardPreview" class="card-preview" style="display:none;" alt="بطاقة الإنجاز">
     <div class="card-buttons" id="cardButtons" style="display:none;">
       <button class="card-btn download" onclick="downloadCard()">
-        📸 تنزيل بطاقة الإنجاز
+        📸 تنزيل البطاقة
       </button>
       <button class="card-btn share" onclick="shareCardBtn()">
         🚀 مشاركة مباشرة
+      </button>
+      <button class="card-btn close" onclick="closeCardPage()">
+        ✕ إغلاق
       </button>
     </div>
   </div>
@@ -184,7 +197,7 @@
       const badgeWrapper = document.getElementById('businessBadgeWrapper');
       badgeWrapper.innerHTML = '<div class="business-badge">🏢 حساب تجاري معتمد</div>';
       
-      document.title = 'بطاقة تجارية - جدارية المليون';
+      document.title = 'بطاقة تجارية - مليون بصمة رقمية';
     }
 
     function roundRect(ctx, x, y, width, height, radius) {
@@ -311,15 +324,15 @@
 
       ctx.font = 'bold 80px Cairo, sans-serif';
       ctx.fillStyle = '#f5b301';
-      ctx.fillText(isBusiness ? '🏢' : '🎨', WIDTH / 2, 180);
+      ctx.fillText(isBusiness ? '🏢' : '🖐️', WIDTH / 2, 180);
 
       ctx.font = 'bold 52px Cairo, sans-serif';
       ctx.fillStyle = '#d4a017';
-      ctx.fillText('جدارية مليون صورة سيلفي', WIDTH / 2, 260);
+      ctx.fillText('مليون بصمة رقمية', WIDTH / 2, 260);
 
       ctx.font = 'bold 28px Cairo, sans-serif';
       ctx.fillStyle = '#a0a0b0';
-      ctx.fillText('Million Selfies Wall', WIDTH / 2, 310);
+      ctx.fillText('Million Digital Marks', WIDTH / 2, 310);
 
       if (isBusiness) {
         ctx.font = 'bold 24px Cairo, sans-serif';
@@ -384,9 +397,9 @@
       const titleY = isBusiness ? 1100 : 1050;
       if (isBusiness) {
         ctx.fillText('علامة تجارية على', WIDTH / 2, titleY);
-        ctx.fillText('الجدارية الأكبر! 🏢', WIDTH / 2, titleY + 80);
+        ctx.fillText('أكبر جدارية رقمية! 🏢', WIDTH / 2, titleY + 80);
       } else {
-        ctx.fillText('أنا الآن جزء من', WIDTH / 2, titleY);
+        ctx.fillText('بصمتي أصبحت جزءاً من', WIDTH / 2, titleY);
         ctx.fillText('التاريخ الرقمي! 🚀', WIDTH / 2, titleY + 80);
       }
 
@@ -450,7 +463,7 @@
 
       ctx.font = 'bold 22px Cairo, sans-serif';
       ctx.fillStyle = '#a0a0b0';
-      ctx.fillText('hossinmansourh-jpg.github.io/V2-million-selfies', WIDTH / 2, ctaY + 45);
+      ctx.fillText('hossinmansourh-jpg.github.io/million-selfies.github.io', WIDTH / 2, ctaY + 45);
 
       generatedCardDataURL = cardCanvas.toDataURL('image/png', 1.0);
       
@@ -468,7 +481,7 @@
     function downloadCard() {
       if (!generatedCardDataURL) return;
       const link = document.createElement('a');
-      const prefix = bookingData.isBusiness ? 'business-card' : 'million-selfies-card';
+      const prefix = bookingData.isBusiness ? 'business-mark-card' : 'million-digital-marks-card';
       link.download = `${prefix}-${Date.now()}.png`;
       link.href = generatedCardDataURL;
       link.click();
@@ -479,18 +492,18 @@
 
       const isBusiness = bookingData.isBusiness;
       const shareText = isBusiness
-        ? '🏢 علامتي التجارية الآن على جدارية مليون صورة سيلفي! انضم كشركة بـ 5$ فقط 🚀'
-        : '🎨 أنا الآن جزء من جدارية مليون صورة سيلفي! احجز مربعك الآن بـ 1$ فقط 🚀';
+        ? '🏢 علامتي التجارية الآن على مليون بصمة رقمية! انضم كشركة بـ 5$ فقط 🚀'
+        : '🖐️ بصمتي أصبحت جزءاً من مليون بصمة رقمية! احجز مربعك الآن بـ 1$ فقط 🚀';
       
       const shareUrl = window.location.origin + window.location.pathname.replace('card.html', '');
-      const filePrefix = isBusiness ? 'business-card' : 'million-selfies-card';
+      const filePrefix = isBusiness ? 'business-mark-card' : 'million-digital-marks-card';
       const shareFile = new File([generatedCardBlob], `${filePrefix}.png`, { type: 'image/png' });
 
       if (navigator.canShare && navigator.canShare({ files: [shareFile] })) {
         try {
           await navigator.share({
             files: [shareFile],
-            title: isBusiness ? 'بطاقة الشركة - جدارية المليون' : 'جدارية مليون صورة سيلفي',
+            title: isBusiness ? 'بطاقة الشركة - مليون بصمة رقمية' : 'مليون بصمة رقمية',
             text: shareText,
             url: shareUrl
           });
@@ -507,7 +520,7 @@
     function fallbackShare(url, text) {
       if (navigator.share) {
         navigator.share({
-          title: bookingData.isBusiness ? 'بطاقة الشركة - جدارية المليون' : 'جدارية مليون صورة سيلفي',
+          title: bookingData.isBusiness ? 'بطاقة الشركة - مليون بصمة رقمية' : 'مليون بصمة رقمية',
           text: text,
           url: url
         }).catch(() => {
@@ -518,6 +531,13 @@
         navigator.clipboard.writeText(`${text}\n${url}`);
         alert('✅ تم نسخ الرابط!');
       }
+    }
+
+    function closeCardPage() {
+      window.close();
+      setTimeout(() => {
+        window.location.href = window.location.pathname.replace('card.html', '') || 'index.html';
+      }, 300);
     }
 
     generateCard();
